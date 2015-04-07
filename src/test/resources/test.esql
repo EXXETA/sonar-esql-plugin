@@ -1,0 +1,4 @@
+CREATE COMPUTE MODULE AB_Batch_CloseApplication_SUB_ProcessCardAccount
+
+
+END MODULE;

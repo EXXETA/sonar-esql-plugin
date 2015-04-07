@@ -1,0 +1,55 @@
+BROKER SCHEMA a.b.c
+PATH x.y.z, r.t.z
+
+CREATE COMPUTE MODULE ABC
+
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+          CASE chCheckSqlState 
+                  WHEN Const_getSqlDbOk() THEN 
+                          -- do nothing, just come back 
+                  WHEN Const_getSqlDbDed() THEN
+                   SET description = 'medium';
+          END CASE; 
+	END;
+
+  CREATE FUNCTION STD_isWeekendFromDate(IN dtValue DATE) RETURNS BOOLEAN 
+  BEGIN 
+          --see http://publib.boulder.ibm.com/infocenter/wmbhelp/v6r1m0/index.jsp?topic=/com.ibm.etools.mft.doc/ak05420_.htm 
+          DECLARE intDayInWeek        INTEGER EXTRACT(DAYOFWEEK FROM dtValue);
+  
+  
+		IF FALSE THEN
+                -- If we are running on PROD, simply return the given bic 
+                   RETURN ch_bic; 
+           ELSE 
+                   -- If we are NOT running on PROD, replace the 8th Character with '0' 
+                   RETURN OVERLAY(ch_bic PLACING '0' FROM 8 FOR 1);  
+		END IF;
+
+		IF FALSE THEN
+               RETURN chValue; 
+          ELSEIF intLength>intExpectedLength THEN 
+                  RETURN SUBSTRING(chValue FROM 1 FOR intExpectedLength); 
+          ELSE 
+                  RETURN OVERLAY(SPACE(intExpectedLength) PLACING COALESCE(chValue, '') FROM 1);
+          END IF; 
+
+  END;
+
+   CREATE PROCEDURE ThrowDisqualify() 
+   BEGIN 
+           THROW USER EXCEPTION 
+                   SEVERITY Const_getExceptionListSeverityError();
+                   
+          CASE chCheckSqlState 
+              WHEN -1 THEN 
+                   SET refEnvironment.{Const_getEnvironmentName()}.STD_SFL.MRM.XGRZA10_UEBERGABE_BEREICH.XGRZA10_UEBERGABE_HEADER.XGRZA10_SEVERITY_CODE 
+                           = '  '; 
+           WHEN 0 THEN 
+           WHEN 2 THEN 
+          END CASE; 
+                   
+   END; 
+
+END MODULE;

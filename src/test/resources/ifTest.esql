@@ -1,0 +1,20 @@
+CREATE COMPUTE MODULE AB_Batch_CloseApplication_SUB_ProcessCardAccount
+
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		IF FALSE THEN
+			IF FALSE THEN
+				IF FALSE THEN
+					IF FALSE THEN --Non compliant
+						SET OutputRoot=InputRoot;
+					END IF;
+				ELSEIF FALSE THEN --Compliant
+					IF FALSE THEN --Non compliant
+						SET OutputRoot=InputRoot;
+					END IF;
+				END IF;
+			END IF;
+		END IF;
+	END;
+
+END MODULE;
