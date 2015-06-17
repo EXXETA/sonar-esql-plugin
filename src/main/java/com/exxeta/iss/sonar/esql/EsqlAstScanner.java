@@ -18,119 +18,144 @@
 
 package com.exxeta.iss.sonar.esql;
 
-import com.exxeta.iss.sonar.esql.api.EsqlGrammar;
-import com.exxeta.iss.sonar.esql.api.EsqlMetric;
-import com.exxeta.iss.sonar.esql.metrics.ComplexityVisitor;
-import com.exxeta.iss.sonar.esql.parser.EsqlParser;
-import com.google.common.base.Charsets;
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.impl.Parser;
-import com.sonar.sslr.squid.*;
-import com.sonar.sslr.squid.metrics.CommentsVisitor;
-import com.sonar.sslr.squid.metrics.CounterVisitor;
-import com.sonar.sslr.squid.metrics.LinesOfCodeVisitor;
-import com.sonar.sslr.squid.metrics.LinesVisitor;
-
-import org.sonar.squid.api.SourceCode;
-import org.sonar.squid.api.SourceFile;
-import org.sonar.squid.api.SourceFunction;
-import org.sonar.squid.api.SourceProject;
-import org.sonar.squid.indexer.QueryByType;
-
 import java.io.File;
 import java.util.Collection;
 
+import org.sonar.squidbridge.AstScanner;
+import org.sonar.squidbridge.SourceCodeBuilderCallback;
+import org.sonar.squidbridge.SourceCodeBuilderVisitor;
+import org.sonar.squidbridge.SquidAstVisitor;
+import org.sonar.squidbridge.SquidAstVisitorContextImpl;
+import org.sonar.squidbridge.api.SourceCode;
+import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.squidbridge.api.SourceFunction;
+import org.sonar.squidbridge.api.SourceProject;
+import org.sonar.squidbridge.indexer.QueryByType;
+import org.sonar.squidbridge.metrics.CommentsVisitor;
+import org.sonar.squidbridge.metrics.CounterVisitor;
+import org.sonar.squidbridge.metrics.LinesOfCodeVisitor;
+import org.sonar.squidbridge.metrics.LinesVisitor;
+
+import com.exxeta.iss.sonar.esql.api.EsqlGrammar;
+import com.exxeta.iss.sonar.esql.api.EsqlMetric;
+import com.exxeta.iss.sonar.esql.parser.EsqlParser;
+import com.google.common.base.Charsets;
+import com.sonar.sslr.api.AstNode;
+import com.sonar.sslr.api.GenericTokenType;
+import com.sonar.sslr.api.Grammar;
+import com.sonar.sslr.impl.Parser;
+
 public final class EsqlAstScanner {
 
-  private EsqlAstScanner() {
-  }
+	private EsqlAstScanner() {
+	}
 
-  /**
-   * Helper method for testing checks without having to deploy them on a Sonar instance.
-   */
-  public static SourceFile scanSingleFile(File file, SquidAstVisitor<EsqlGrammar>... visitors) {
-    if (!file.isFile()) {
-      throw new IllegalArgumentException("File '" + file + "' not found.");
-    }
-    AstScanner<EsqlGrammar> scanner = create(new EsqlConfiguration(Charsets.UTF_8), visitors);
-    scanner.scanFile(file);
-    
-    Collection<SourceCode> sources = scanner.getIndex().search(new QueryByType(SourceFile.class));
-    if (sources.size() != 1) {
-      throw new IllegalStateException("Only one SourceFile was expected whereas " + sources.size() + " has been returned.");
-    }
-    return (SourceFile) sources.iterator().next();
-  }
+	/**
+	 * Helper method for testing checks without having to deploy them on a Sonar
+	 * instance.
+	 */
+	public static SourceFile scanSingleFile(File file,
+			SquidAstVisitor<Grammar>... visitors) {
+		if (!file.isFile()) {
+			throw new IllegalArgumentException("File '" + file + "' not found.");
+		}
+		AstScanner<Grammar> scanner = create(new EsqlConfiguration(
+				Charsets.UTF_8), visitors);
+		scanner.scanFile(file);
 
-  public static AstScanner<EsqlGrammar> create(EsqlConfiguration conf, SquidAstVisitor<EsqlGrammar>... visitors) {
-    final SquidAstVisitorContextImpl<EsqlGrammar> context = new SquidAstVisitorContextImpl<EsqlGrammar>(new SourceProject("Esql Project"));
-    final Parser<EsqlGrammar> parser = EsqlParser.create(conf);
+		Collection<SourceCode> sources = scanner.getIndex().search(
+				new QueryByType(SourceFile.class));
+		if (sources.size() != 1) {
+			throw new IllegalStateException(
+					"Only one SourceFile was expected whereas "
+							+ sources.size() + " has been returned.");
+		}
+		return (SourceFile) sources.iterator().next();
+	}
 
-    AstScanner.Builder<EsqlGrammar> builder = AstScanner.<EsqlGrammar> builder(context).setBaseParser(parser);
+	public static AstScanner<Grammar> create(EsqlConfiguration conf,
+			SquidAstVisitor<Grammar>... visitors) {
+		final SquidAstVisitorContextImpl<Grammar> context = new SquidAstVisitorContextImpl<Grammar>(
+				new SourceProject("Esql Project"));
+		final Parser<Grammar> parser = EsqlParser.create(conf);
 
-    /* Metrics */
-    builder.withMetrics(EsqlMetric.values());
+		AstScanner.Builder<Grammar> builder = AstScanner.<Grammar> builder(
+				context).setBaseParser(parser);
 
-    /* Comments */
-    builder.setCommentAnalyser(new EsqlCommentAnalyser());
+		/* Metrics */
+		builder.withMetrics(EsqlMetric.values());
 
-    /* Files */
-    builder.setFilesMetric(EsqlMetric.FILES);
+		/* Comments */
+		builder.setCommentAnalyser(new EsqlCommentAnalyser());
 
-    /* Functions */
-    builder.withSquidAstVisitor(CounterVisitor.<EsqlGrammar> builder()
-        .setMetricDef(EsqlMetric.ROUTINES)
-        .subscribeTo(parser.getGrammar().routineDeclaration)
-        .build());
+		/* Files */
+		builder.setFilesMetric(EsqlMetric.FILES);
 
-    builder.withSquidAstVisitor(new SourceCodeBuilderVisitor<EsqlGrammar>(new SourceCodeBuilderCallback() {
-      public SourceCode createSourceCode(SourceCode parentSourceCode, AstNode astNode) {
-        AstNode identifier = astNode.findFirstDirectChild(parser.getGrammar().identifier);
-        final String functionName = identifier == null ? "anonymous" : identifier.getTokenValue();
-        final String fileKey = parentSourceCode.isType(SourceFile.class) ? parentSourceCode.getKey() : parentSourceCode.getParent(SourceFile.class).getKey();
-        SourceFunction function = new SourceFunction(fileKey + ":" + functionName + ":" + astNode.getToken().getLine() + ":" + astNode.getToken().getColumn());
-        function.setStartAtLine(astNode.getTokenLine());
-        return function;
-      }
-    }, parser.getGrammar().routineDeclaration));
+		/* Functions */
+		builder.withSquidAstVisitor(CounterVisitor.<Grammar> builder()
+				.setMetricDef(EsqlMetric.ROUTINES)
+				.subscribeTo(EsqlGrammar.routineDeclaration).build());
 
-    /* Metrics */
-    builder.withSquidAstVisitor(new LinesVisitor<EsqlGrammar>(EsqlMetric.LINES));
-    builder.withSquidAstVisitor(new LinesOfCodeVisitor<EsqlGrammar>(EsqlMetric.LINES_OF_CODE));
-    builder.withSquidAstVisitor(CommentsVisitor.<EsqlGrammar> builder().withCommentMetric(EsqlMetric.COMMENT_LINES)
-        .withBlankCommentMetric(EsqlMetric.COMMENT_BLANK_LINES)
-        .withNoSonar(true)
-        .withIgnoreHeaderComment(conf.getIgnoreHeaderComments())
-        .build());
-    builder.withSquidAstVisitor(CounterVisitor.<EsqlGrammar> builder()
-        .setMetricDef(EsqlMetric.STATEMENTS)
-        .subscribeTo(
-            parser.getGrammar().variableStatement,
-//            parser.getGrammar().emptyStatement,
-//            parser.getGrammar().expressionStatement,
-            parser.getGrammar().ifStatement,
-//            parser.getGrammar().iterationStatement,
-//            parser.getGrammar().continueStatement,
-//            parser.getGrammar().breakStatement,
-            parser.getGrammar().returnStatement)
-//            parser.getGrammar().withStatement,
-//            parser.getGrammar().switchStatement,
-//            parser.getGrammar().throwStatement,
-//            parser.getGrammar().tryStatement,
-//            parser.getGrammar().debuggerStatement)
-        .build());
+		builder.withSquidAstVisitor(new SourceCodeBuilderVisitor<Grammar>(
+				new SourceCodeBuilderCallback() {
+					public SourceCode createSourceCode(
+							SourceCode parentSourceCode, AstNode astNode) {
+						AstNode identifier = astNode
+								.findFirstDirectChild(GenericTokenType.IDENTIFIER);
+						final String functionName = identifier == null ? "anonymous"
+								: identifier.getTokenValue();
+						final String fileKey = parentSourceCode
+								.isType(SourceFile.class) ? parentSourceCode
+								.getKey() : parentSourceCode.getParent(
+								SourceFile.class).getKey();
+						SourceFunction function = new SourceFunction(fileKey
+								+ ":" + functionName + ":"
+								+ astNode.getToken().getLine() + ":"
+								+ astNode.getToken().getColumn());
+						function.setStartAtLine(astNode.getTokenLine());
+						return function;
+					}
+				}, EsqlGrammar.routineDeclaration));
 
-    builder.withSquidAstVisitor(new ComplexityVisitor());
+		/* Metrics */
+		builder.withSquidAstVisitor(new LinesVisitor<Grammar>(EsqlMetric.LINES));
+		builder.withSquidAstVisitor(new LinesOfCodeVisitor<Grammar>(
+				EsqlMetric.LINES_OF_CODE));
+		builder.withSquidAstVisitor(CommentsVisitor
+				.<Grammar> builder()
+				.withCommentMetric(EsqlMetric.COMMENT_LINES)
+				// .withBlankCommentMetric(EsqlMetric.COMMENT_BLANK_LINES)
+				.withNoSonar(true)
+				.withIgnoreHeaderComment(conf.getIgnoreHeaderComments())
+				.build());
+		builder.withSquidAstVisitor(CounterVisitor.<Grammar> builder()
+				.setMetricDef(EsqlMetric.STATEMENTS)
+				.subscribeTo(EsqlGrammar.variableStatement,
+				// parser.getGrammar().emptyStatement,
+				// parser.getGrammar().expressionStatement,
+						EsqlGrammar.ifStatement,
+						// parser.getGrammar().iterationStatement,
+						// parser.getGrammar().continueStatement,
+						// parser.getGrammar().breakStatement,
+						EsqlGrammar.returnStatement)
+				// parser.getGrammar().withStatement,
+				// parser.getGrammar().switchStatement,
+				// parser.getGrammar().throwStatement,
+				// parser.getGrammar().tryStatement,
+				// parser.getGrammar().debuggerStatement)
+				.build());
 
-    /* External visitors (typically Check ones) */
-    for (SquidAstVisitor<EsqlGrammar> visitor : visitors) {
-      if (visitor instanceof CharsetAwareVisitor) {
-        ((CharsetAwareVisitor) visitor).setCharset(conf.getCharset());
-      }
-      builder.withSquidAstVisitor(visitor);
-    }
-    
-    return builder.build();
-  }
+		builder.withSquidAstVisitor(new com.exxeta.iss.sonar.esql.metrics.ComplexityVisitor());
+
+		/* External visitors (typically Check ones) */
+		for (SquidAstVisitor<Grammar> visitor : visitors) {
+			if (visitor instanceof CharsetAwareVisitor) {
+				((CharsetAwareVisitor) visitor).setCharset(conf.getCharset());
+			}
+			builder.withSquidAstVisitor(visitor);
+		}
+
+		return builder.build();
+	}
 
 }

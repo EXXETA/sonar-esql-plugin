@@ -17,12 +17,16 @@
  */
 package com.exxeta.iss.sonar.esql.test;
 
+import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.List;
 
 import org.junit.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
-import org.sonar.api.profiles.AnnotationProfileParser;
 import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.rules.ActiveRule;
 import org.sonar.api.rules.Rule;
@@ -33,11 +37,6 @@ import com.exxeta.iss.sonar.esql.EsqlProfile;
 import com.exxeta.iss.sonar.esql.check.CheckList;
 import com.exxeta.iss.sonar.esql.core.Esql;
 
-import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 public class EsqlProfileTest {
 
   @Test
@@ -45,14 +44,14 @@ public class EsqlProfileTest {
     ValidationMessages validation = ValidationMessages.create();
 
     RuleFinder ruleFinder = ruleFinder();
-    EsqlProfile definition = new EsqlProfile(new AnnotationProfileParser(ruleFinder));
+    EsqlProfile definition = new EsqlProfile(ruleFinder);
     RulesProfile profile = definition.createProfile(validation);
 
     assertThat(profile.getLanguage()).isEqualTo(Esql.KEY);
     assertThat(profile.getName()).isEqualTo(RulesProfile.SONAR_WAY_NAME);
     List<ActiveRule> a = profile.getActiveRulesByRepository(CheckList.REPOSITORY_KEY);
     assertThat(profile.getActiveRulesByRepository(CheckList.REPOSITORY_KEY))
-        .hasSize(4);
+        .hasSize(6);
     assertThat(validation.hasErrors()).isFalse();
   }
 

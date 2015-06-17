@@ -18,25 +18,33 @@
 package com.exxeta.iss.sonar.esql;
 
 
-import org.sonar.api.profiles.AnnotationProfileParser;
 import org.sonar.api.profiles.ProfileDefinition;
 import org.sonar.api.profiles.RulesProfile;
+import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.utils.ValidationMessages;
+import org.sonar.squidbridge.annotations.AnnotationBasedProfileBuilder;
 
 import com.exxeta.iss.sonar.esql.check.CheckList;
 import com.exxeta.iss.sonar.esql.core.Esql;
 
 public class EsqlProfile extends ProfileDefinition {
 
-  private final AnnotationProfileParser annotationProfileParser;
+  private final RuleFinder ruleFinder;
 
-  public EsqlProfile(AnnotationProfileParser annotationProfileParser) {
-    this.annotationProfileParser = annotationProfileParser;
+  public EsqlProfile(RuleFinder ruleFinder) {
+    this.ruleFinder = ruleFinder;
   }
 
   @Override
   public RulesProfile createProfile(ValidationMessages validation) {
-	  RulesProfile profile = annotationProfileParser.parse(CheckList.REPOSITORY_KEY, CheckList.SONAR_WAY_PROFILE, Esql.KEY, CheckList.getChecks(), validation);
+	  AnnotationBasedProfileBuilder annotationBasedProfileBuilder = new AnnotationBasedProfileBuilder(ruleFinder);
+	  
+	  RulesProfile profile = annotationBasedProfileBuilder.build(
+			  CheckList.REPOSITORY_KEY, 
+			  CheckList.SONAR_WAY_PROFILE, 
+			  Esql.KEY, 
+			  CheckList.getChecks(), 
+			  validation);
     return profile;
   }
 

@@ -17,15 +17,13 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
-import com.google.common.collect.ImmutableList;
-
 import java.util.List;
+
+import com.google.common.collect.ImmutableList;
 
 public final class CheckList {
 
   public static final String REPOSITORY_KEY = "esql";
-
-  public static final String REPOSITORY_NAME = "Sonar";
 
   public static final String SONAR_WAY_PROFILE = "Sonar way";
 
@@ -34,57 +32,24 @@ public final class CheckList {
 
   public static List<Class> getChecks() {
     return ImmutableList.<Class> of(
-            LineLengthCheck.class,
-            ParsingErrorCheck.class,
-//        XPathCheck.class,
-//        CommentedCodeCheck.class,
-//        FunctionComplexityCheck.class,
-//        DebuggerStatementCheck.class,
-//        WithStatementCheck.class,
-//        EqEqEqCheck.class,
-//        CommentRegularExpressionCheck.class,
-//        EvalCheck.class,
-        OneStatementPerLineCheck.class,
-//        SemicolonCheck.class,
-//        AlwaysUseCurlyBracesCheck.class,
-//        MultilineStringLiteralsCheck.class,
-//        SingleQuoteStringLiteralsCheck.class,
-//        ArrayAndObjectConstructorsCheck.class,
-//        BitwiseOperatorsCheck.class,
-//        PrimitiveWrappersCheck.class,
-//        ForInCheck.class,
-//        FunctionDeclarationsWithinBlocksCheck.class,
-//        TrailingCommaCheck.class,
-//        AssignmentWithinConditionCheck.class,
-//        LabelPlacementCheck.class,
-//        UnreachableCodeCheck.class,
-//        ConditionalOperatorCheck.class,
-//        ParenthesesCheck.class,
-//        SwitchWithoutDefaultCheck.class,
-//        NonEmptyCaseWithoutBreakCheck.class,
-//        ContinueStatementCheck.class,
-//        HtmlCommentsCheck.class,
-//        EmptyBlockCheck.class,
-//        ElseIfWithoutElseCheck.class,
-//        ExcessiveParameterListCheck.class,
-//        CollapsibleIfStatementsCheck.class,
-//        ConstructorFunctionsForSideEffectsCheck.class,
-//        FutureReservedWordsCheck.class,
-//        DuplicateFunctionArgumentCheck.class,
-//        DuplicatePropertyNameCheck.class,
-//        OctalNumberCheck.class,
-//        StrictModeCheck.class,
-//        ConditionalCommentCheck.class,
-//        TabCharacterCheck.class,
-//        RedeclaredVariableCheck.class,
-//        RedeclaredFunctionCheck.class,
-//        TrailingWhitespaceCheck.class,
-//        TrailingCommentCheck.class,
-//        MissingNewlineAtEndOfFileCheck.class,
-//        BoundOrAssignedEvalOrArgumentsCheck.class,
-//        SameNameForFunctionAndVariableCheck.class,
         CommentRegularExpressionCheck.class,
-        NestedIfDepthCheck.class);
+        ElseIfWithoutElseCheck.class,
+        FileNameCheck.class,
+        FunctionNameCheck.class,
+        IterateStatementCheck.class,
+        LineLengthCheck.class,
+        ModuleNameCheck.class,
+        NestedIfDepthCheck.class,
+        NonReservedKeywordCheck.class,
+        OneStatementPerLineCheck.class,
+        ParsingErrorCheck.class,
+        ProcedureNameCheck.class,
+        TooManyIterateOrLeaveInLoopCheck.class,
+        TooManyLinesInFileCheck.class,
+        UpperCaseKeywordCheck.class,
+        UseBrokerSchemaCheck.class,
+        VariableNameCheck.class
+        );
   }
 
 }

@@ -17,35 +17,21 @@
  */
 package com.exxeta.iss.sonar.esql;
 
-
-import org.sonar.api.resources.Project;
-import org.sonar.commonrules.api.CommonRulesEngine;
-import org.sonar.commonrules.api.CommonRulesEngineProvider;
+import org.sonar.squidbridge.commonrules.api.CommonRulesEngine;
+import org.sonar.squidbridge.commonrules.api.CommonRulesRepository;
 
 import com.exxeta.iss.sonar.esql.core.Esql;
 
+public class EsqlCommonRulesEngine extends CommonRulesEngine {
 
-public class EsqlCommonRulesEngineProvider extends CommonRulesEngineProvider {
+	public EsqlCommonRulesEngine() {
+		super(Esql.KEY);
+	}
 
-  public EsqlCommonRulesEngineProvider() {
-    super();
-  }
-
-  public EsqlCommonRulesEngineProvider(Project project) {
-    super(project);
-  }
-
-  @Override
-  protected void doActivation(CommonRulesEngine engine) {
-    engine.activateRule("DuplicatedBlocks");
-    engine.activateRule("InsufficientCommentDensity");
-    engine.activateRule("InsufficientLineCoverage");
-    engine.activateRule("InsufficientBranchCoverage");
-  }
-
-  @Override
-  protected String getLanguageKey() {
-    return Esql.KEY;
-  }
+	@Override
+	protected void doEnableRules(CommonRulesRepository repository) {
+		repository.enableDuplicatedBlocksRule()
+				.enableInsufficientCommentDensityRule(null);
+	}
 
 }

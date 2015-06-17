@@ -19,28 +19,25 @@ package com.exxeta.iss.sonar.esql;
 
 
 import org.sonar.api.rules.AnnotationRuleParser;
-import org.sonar.api.rules.Rule;
-import org.sonar.api.rules.RuleRepository;
+import org.sonar.api.server.rule.RulesDefinition;
+import org.sonar.squidbridge.annotations.AnnotationBasedRulesDefinition;
 
 import com.exxeta.iss.sonar.esql.check.CheckList;
 import com.exxeta.iss.sonar.esql.core.Esql;
 
-import java.util.List;
+public class EsqlRuleRepository implements RulesDefinition{
 
-public class EsqlRuleRepository extends RuleRepository {
+  public static final String REPOSITORY_NAME = "SonarQube";
 
-  private final AnnotationRuleParser annotationRuleParser;
-
-  public EsqlRuleRepository(AnnotationRuleParser annotationRuleParser) {
-    super(CheckList.REPOSITORY_KEY, Esql.KEY);
-    setName(CheckList.REPOSITORY_NAME);
-    this.annotationRuleParser = annotationRuleParser;
-  }
 
   @Override
-  public List<Rule> createRules() {
-	  List<Rule> rules = annotationRuleParser.parse(CheckList.REPOSITORY_KEY, CheckList.getChecks());
-    return rules;
+  public void define(Context context) {
+  NewRepository repository = context
+  .createRepository(CheckList.REPOSITORY_KEY, Esql.KEY)
+  .setName(REPOSITORY_NAME);
+  AnnotationBasedRulesDefinition.load(repository, Esql.KEY, CheckList.getChecks());
+  repository.done();
   }
-
+  
+  
 }

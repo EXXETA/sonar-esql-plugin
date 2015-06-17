@@ -21,23 +21,21 @@ import static org.fest.assertions.Assertions.assertThat;
 
 import java.io.File;
 
-
-
-
 import org.junit.Test;
+import org.sonar.squidbridge.AstScanner;
+import org.sonar.squidbridge.SquidAstVisitor;
 
 import com.exxeta.iss.sonar.esql.EsqlAstScanner;
 import com.exxeta.iss.sonar.esql.EsqlConfiguration;
-import com.exxeta.iss.sonar.esql.api.EsqlGrammar;
 import com.google.common.base.Charsets;
 import com.sonar.sslr.api.AstAndTokenVisitor;
+import com.sonar.sslr.api.Grammar;
 import com.sonar.sslr.api.Token;
-import com.sonar.sslr.squid.AstScanner;
-import com.sonar.sslr.squid.SquidAstVisitor;
+
 
 public class ParserTest {
 
-	private class Visitor extends SquidAstVisitor<EsqlGrammar> implements AstAndTokenVisitor {
+	private class Visitor extends SquidAstVisitor<Grammar> implements AstAndTokenVisitor {
 		public boolean ok = false;
 
 		public void visitToken(Token token) {
@@ -51,12 +49,12 @@ public class ParserTest {
 
 		Visitor visitor = new Visitor();
 		File dir = new File("src/test/resources");
-		AstScanner<EsqlGrammar> scanner = EsqlAstScanner.create(new EsqlConfiguration(Charsets.UTF_8), visitor);
+		AstScanner<Grammar> scanner = EsqlAstScanner.create(new EsqlConfiguration(Charsets.UTF_8), visitor);
 		parseDirectory(dir, scanner, visitor);
 
 	}
 
-	private void parseDirectory(File dir, AstScanner<EsqlGrammar> scanner, Visitor visitor) {
+	private void parseDirectory(File dir, AstScanner<Grammar> scanner, Visitor visitor) {
 		for (File f : dir.listFiles()) {
 			if (f.isDirectory()){
 				parseDirectory(f, scanner, visitor);
@@ -64,6 +62,7 @@ public class ParserTest {
 				visitor.ok = false;
 				scanner.scanFile(f);
 				assertThat(visitor.ok).isTrue();
+				
 			}
 		}
 	}

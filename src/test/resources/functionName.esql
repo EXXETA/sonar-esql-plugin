@@ -1,0 +1,11 @@
+CREATE COMPUTE MODULE TestFlow_Compute
+	CREATE FUNCTION Badly_Named_Function() RETURNS BOOLEAN
+	BEGIN
+	END;
+	CREATE FUNCTION too_long_function_name_because_it_has_more_than_30_characters() RETURNS BOOLEAN
+	BEGIN
+	END;
+	CREATE FUNCTION functionOk() RETURNS BOOLEAN
+	BEGIN
+	END;
+END MODULE;

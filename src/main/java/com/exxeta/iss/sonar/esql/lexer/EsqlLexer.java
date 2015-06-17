@@ -19,19 +19,18 @@
 package com.exxeta.iss.sonar.esql.lexer;
 
 
+import static com.sonar.sslr.impl.channel.RegexpChannelBuilder.commentRegexp;
+import static com.sonar.sslr.impl.channel.RegexpChannelBuilder.regexp;
+
 import com.exxeta.iss.sonar.esql.EsqlConfiguration;
-import com.exxeta.iss.sonar.esql.api.EsqlKeyword;
 import com.exxeta.iss.sonar.esql.api.EsqlPunctuator;
+import com.exxeta.iss.sonar.esql.api.EsqlReservedKeyword;
 import com.exxeta.iss.sonar.esql.api.EsqlTokenType;
-import com.sonar.sslr.api.GenericTokenType;
 import com.sonar.sslr.impl.Lexer;
 import com.sonar.sslr.impl.channel.BlackHoleChannel;
 import com.sonar.sslr.impl.channel.IdentifierAndKeywordChannel;
 import com.sonar.sslr.impl.channel.PunctuatorChannel;
 import com.sonar.sslr.impl.channel.UnknownCharacterChannel;
-
-import static com.sonar.sslr.impl.channel.RegexpChannelBuilder.commentRegexp;
-import static com.sonar.sslr.impl.channel.RegexpChannelBuilder.regexp;
 
 public final class EsqlLexer {
 
@@ -67,8 +66,7 @@ public final class EsqlLexer {
       + ")";
 
   public static final String LITERAL = "(?:"
-	      + "\"([^\"\\\\]*+(\\\\[\\s\\S])?+)*+\""
-	      + "|'([^']*+('')?+)*+'"
+	      + "'([^']*+('')?+)*+'"
 	      + ")";
   public static final String ORG_LITERAL = "(?:"
 	      + "\"([^\"\\\\]*+(\\\\[\\s\\S])?+)*+\""
@@ -83,6 +81,7 @@ public final class EsqlLexer {
   private static final String HEX_DIGIT = "[0-9a-fA-F]";
   private static final String UNICODE_ESCAPE_SEQUENCE = "u" + HEX_DIGIT + HEX_DIGIT + HEX_DIGIT + HEX_DIGIT;
   public static final String HEX_LITERAL = "(?:X'"+HEX_DIGIT+"*+')";
+  public static final String DATE_LIERAL = "DATE";
 
   private static final String UNICODE_LETTER = "\\p{Lu}\\p{Ll}\\p{Lt}\\p{Lm}\\p{Lo}\\p{Nl}";
   private static final String UNICODE_COMBINING_MARK = "\\p{Mn}\\p{Mc}";
@@ -101,7 +100,12 @@ public final class EsqlLexer {
    */
   public static final String WHITESPACE = "[\\n\\r\\t\\u000B\\f\\u0020\\u00A0\\uFEFF\\p{Zs}]";
 
+  public static final String TIME_LITERAL = "TIME"+WHITESPACE+"+'[0-9]{2}:[0-9]{2}:[0-9]{2}'";
+  public static final String DATE_LITERAL = "DATE"+WHITESPACE+"+'[0-9]{4}-[0-9]{2}-[0-9]{2}'";
+
+  
   public static Lexer create(EsqlConfiguration conf) {
+	  LexerState lexerState = new LexerState();
     return Lexer.builder()
         .withCharset(conf.getCharset())
 
@@ -111,18 +115,24 @@ public final class EsqlLexer {
         // Whitespace character occurs more frequently than any other, and thus come first:
         .withChannel(new BlackHoleChannel(WHITESPACE + "++"))
 
+        .withChannel(new NewLineChannel(lexerState))
+        
         // Comments
         .withChannel(commentRegexp(COMMENT))
 
         // String Literals
-        .withChannel(regexp(GenericTokenType.LITERAL, LITERAL))
+        
+        .withChannel(regexp(EsqlTokenType.STRING, LITERAL))
 
-        .withChannel(regexp(EsqlTokenType.NUMERIC_LITERAL, NUMERIC_LITERAL))
+        .withChannel(regexp(EsqlTokenType.NUMBER, NUMERIC_LITERAL))
+        .withChannel(regexp(EsqlTokenType.HEX, HEX_LITERAL))
+        .withChannel(regexp(EsqlTokenType.TIME, TIME_LITERAL))
+        .withChannel(regexp(EsqlTokenType.DATE, DATE_LITERAL))
 
-        .withChannel(new IdentifierAndKeywordChannel(IDENTIFIER, false, EsqlKeyword.values()))
+        .withChannel(new IdentifierAndKeywordChannel("[a-zA-Z0-9_]+|\"(?:[^\"]|\"\")+\"", false))
         .withChannel(new PunctuatorChannel(EsqlPunctuator.values()))
 
-        .withChannel(new UnknownCharacterChannel(true))
+        .withChannel(new UnknownCharacterChannel())
 
         .build();
   }

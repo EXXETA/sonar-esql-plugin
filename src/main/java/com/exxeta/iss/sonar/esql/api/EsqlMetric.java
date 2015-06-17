@@ -17,8 +17,8 @@
  */
 package com.exxeta.iss.sonar.esql.api;
 
-import org.sonar.squid.measures.CalculatedMetricFormula;
-import org.sonar.squid.measures.MetricDef;
+import org.sonar.squidbridge.measures.CalculatedMetricFormula;
+import org.sonar.squidbridge.measures.MetricDef;
 
 public enum EsqlMetric implements MetricDef{
 	FILES,

@@ -19,47 +19,43 @@
 package com.exxeta.iss.sonar.esql.metrics;
 
 
+import org.sonar.squidbridge.SquidAstVisitor;
+
 import com.exxeta.iss.sonar.esql.api.EsqlGrammar;
-import com.exxeta.iss.sonar.esql.api.EsqlKeyword;
+import com.exxeta.iss.sonar.esql.api.EsqlReservedKeyword;
 import com.exxeta.iss.sonar.esql.api.EsqlMetric;
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.squid.SquidAstVisitor;
+import com.sonar.sslr.api.Grammar;
 
 
 
-public class ComplexityVisitor extends SquidAstVisitor<EsqlGrammar> {
+public class ComplexityVisitor extends SquidAstVisitor<Grammar> {
 
   @Override
   public void init() {
-    EsqlGrammar grammar = getContext().getGrammar();
+    //EsqlGrammar grammar = (EsqlGrammar)getContext().getGrammar();
     subscribeTo(
-        grammar.routineDeclaration,
+    		EsqlGrammar.routineDeclaration,
         // Branching nodes
-        grammar.ifStatement,
+    		EsqlGrammar.ifStatement,
 //        grammar.iterationStatement,
-        grammar.whenClause,
-        grammar.forStatement,
-        grammar.whileStatement,
-        grammar.declareHandlerStatement,
+    		EsqlGrammar.whenClause,
+    		EsqlGrammar.forStatement,
+    		EsqlGrammar.whileStatement,
+    		EsqlGrammar.declareHandlerStatement,
         //grammar.catch_,
-        grammar.returnStatement,
-        grammar.throwStatement,
+    		EsqlGrammar.returnStatement,
+    		EsqlGrammar.throwStatement//,
         // Expressions
         //EsqlPunctuator.QUERY,
-        EsqlKeyword.AND,
-        EsqlKeyword.OR);
+        /*EsqlKeyword.AND,
+        EsqlKeyword.OR*/);
   }
 
   @Override
   public void visitNode(AstNode astNode) {
-    if (astNode.is(getContext().getGrammar().returnStatement) && isLastReturnStatement(astNode)) {
-      return;
-    }
     getContext().peekSourceCode().add(EsqlMetric.COMPLEXITY, 1);
   }
 
-  private boolean isLastReturnStatement(AstNode astNode) {
-    return astNode.nextSibling()==null;
-  }
 
 }

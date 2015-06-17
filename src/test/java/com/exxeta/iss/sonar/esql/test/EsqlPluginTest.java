@@ -38,7 +38,7 @@ public class EsqlPluginTest {
 
   @Test
   public void testGetExtensions() throws Exception {
-    assertThat(plugin.getExtensions().size()).isEqualTo(8);
+    assertThat(plugin.getExtensions().size()).isEqualTo(9);
   }
 
   @Test

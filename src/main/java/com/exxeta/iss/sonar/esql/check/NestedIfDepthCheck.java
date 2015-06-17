@@ -17,15 +17,16 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
-import com.exxeta.iss.sonar.esql.api.EsqlGrammar;
-import com.exxeta.iss.sonar.esql.api.EsqlKeyword;
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.squid.checks.SquidCheck;
-
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.squidbridge.annotations.NoSqale;
+import org.sonar.squidbridge.checks.SquidCheck;
+
+import com.exxeta.iss.sonar.esql.api.EsqlGrammar;
+import com.sonar.sslr.api.AstNode;
+import com.sonar.sslr.api.Grammar;
 
 /**
  * Note that implementation differs from AbstractNestedIfCheck - see SONARPLUGINS-1855 and SONARPLUGINS-2178
@@ -35,7 +36,8 @@ import org.sonar.check.RuleProperty;
   priority = Priority.MINOR,
   description="nested if description")
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MINOR)
-public class NestedIfDepthCheck extends SquidCheck<EsqlGrammar> {
+@NoSqale
+public class NestedIfDepthCheck extends SquidCheck<Grammar> {
 
   private int nestingLevel;
 
@@ -43,6 +45,7 @@ public class NestedIfDepthCheck extends SquidCheck<EsqlGrammar> {
 
   @RuleProperty(
     key = "maximumNestingLevel",
+    description = "the maxmimum if depth.",
     defaultValue = "" + DEFAULT_MAXIMUM_NESTING_LEVEL)
   public int maximumNestingLevel = DEFAULT_MAXIMUM_NESTING_LEVEL;
 
@@ -52,7 +55,7 @@ public class NestedIfDepthCheck extends SquidCheck<EsqlGrammar> {
 
   @Override
   public void init() {
-    subscribeTo(getContext().getGrammar().ifStatement);
+    subscribeTo(EsqlGrammar.ifStatement);
   }
 
   @Override
@@ -81,7 +84,7 @@ public class NestedIfDepthCheck extends SquidCheck<EsqlGrammar> {
 
   private boolean isElseIf(AstNode astNode) {
     return astNode.getParent().getPreviousSibling() != null
-        && astNode.getParent().getPreviousSibling().is(EsqlKeyword.ELSEIF);
+        && astNode.getParent().getPreviousSibling().getTokenValue().equals("ELSEIF");
   }
 
 }

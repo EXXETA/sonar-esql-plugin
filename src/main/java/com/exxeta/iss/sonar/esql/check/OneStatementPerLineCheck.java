@@ -21,50 +21,54 @@ import java.util.Map;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
+import org.sonar.squidbridge.annotations.NoSqale;
+import org.sonar.squidbridge.checks.SquidCheck;
 
 import com.exxeta.iss.sonar.esql.api.EsqlGrammar;
 import com.google.common.collect.Maps;
 import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.squid.checks.SquidCheck;
+import com.sonar.sslr.api.Grammar;
 
-@Rule(
-  key = "OneStatementPerLine",
-  priority = Priority.MAJOR)
+@Rule(key = "OneStatementPerLine", priority = Priority.MAJOR)
 @BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
-public class OneStatementPerLineCheck extends SquidCheck<EsqlGrammar> {
+@NoSqale
+public class OneStatementPerLineCheck extends SquidCheck<Grammar> {
 
-  private final Map<Integer, Integer> statementsPerLine = Maps.newHashMap();
+	private final Map<Integer, Integer> statementsPerLine = Maps.newHashMap();
 
-  @Override
-  public void init() {
-    subscribeTo(getContext().getGrammar().statement);
-  }
+	@Override
+	public void init() {
+		subscribeTo(EsqlGrammar.statement);
+	}
 
-  @Override
-  public void visitFile(AstNode astNode) {
-    statementsPerLine.clear();
-  }
+	@Override
+	public void visitFile(AstNode astNode) {
+		statementsPerLine.clear();
+	}
 
-  @Override
-  public void visitNode(AstNode statementNode) {
-	  
-	  if (!statementNode.hasDirectChildren(getContext().getGrammar().beginEndStatement)){
-		    int line = statementNode.getTokenLine();
-		    if (!statementsPerLine.containsKey(line)) {
-		      statementsPerLine.put(line, 0);
-		    }
-		    statementsPerLine.put(line, statementsPerLine.get(line) + 1);
-	  }
-  }
+	@Override
+	public void visitNode(AstNode statementNode) {
 
-  @Override
-  public void leaveFile(AstNode astNode) {
-    for (Map.Entry<Integer, Integer> statementsAtLine : statementsPerLine.entrySet()) {
-      if (statementsAtLine.getValue() > 1) {
-        getContext().createLineViolation(this, "At most one statement is allowed per line, but {0} statements were found on this line.", statementsAtLine.getKey(),
-            statementsAtLine.getValue());
-      }
-    }
-  }
+		int line = statementNode.getTokenLine();
+		if (!statementsPerLine.containsKey(line)) {
+			statementsPerLine.put(line, 0);
+		}
+		statementsPerLine.put(line, statementsPerLine.get(line) + 1);
+	}
+
+	@Override
+	public void leaveFile(AstNode astNode) {
+		for (Map.Entry<Integer, Integer> statementsAtLine : statementsPerLine
+				.entrySet()) {
+			if (statementsAtLine.getValue() > 1) {
+				getContext()
+						.createLineViolation(
+								this,
+								"At most one statement is allowed per line, but {0} statements were found on this line.",
+								statementsAtLine.getKey(),
+								statementsAtLine.getValue());
+			}
+		}
+	}
 
 }

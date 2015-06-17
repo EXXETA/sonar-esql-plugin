@@ -17,7 +17,8 @@
  */
 package com.exxeta.iss.sonar.esql;
 
-import com.sonar.sslr.api.CommentAnalyser;
+import org.sonar.squidbridge.CommentAnalyser;
+
 
 public class EsqlCommentAnalyser extends CommentAnalyser {
 

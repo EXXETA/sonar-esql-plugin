@@ -18,43 +18,39 @@
 
 package com.exxeta.iss.sonar.esql;
 
+import java.util.List;
+
+import org.sonar.api.SonarPlugin;
+import org.sonar.api.config.PropertyDefinition;
+import org.sonar.api.resources.Qualifiers;
+
 import com.exxeta.iss.sonar.esql.colorizer.EsqlColorizerFormat;
+import com.exxeta.iss.sonar.esql.colorizer.EsqlHighlighter;
 import com.exxeta.iss.sonar.esql.core.Esql;
 import com.exxeta.iss.sonar.esql.core.EsqlSourceImporter;
 import com.exxeta.iss.sonar.esql.cpd.EsqlCpdMapping;
 import com.google.common.collect.ImmutableList;
 
-import org.sonar.api.Extension;
-import org.sonar.api.Properties;
-import org.sonar.api.Property;
-import org.sonar.api.SonarPlugin;
-
-import java.util.List;
-
-@Properties({
-  // Global Esql settings
-  @Property(
-    key = EsqlPlugin.FILE_SUFFIXES_KEY,
-    defaultValue = EsqlPlugin.FILE_SUFFIXES_DEFVALUE,
-    name = "File suffixes",
-    description = "Comma-separated list of suffixes for files to analyze.",
-    global = true,
-    project = true)
- 
-
-})
 public class EsqlPlugin extends SonarPlugin {
 
-  public List<Class<? extends Extension>> getExtensions() {
+	@Override
+  public List  getExtensions() {
     return ImmutableList.of(
+    		PropertyDefinition.builder(FILE_SUFFIXES_KEY).name("File Suffixes")
+    		.description("Comma-separated list of suffixes of Esql files to analyze.")
+    		.category("Esql")
+    		.onQualifiers(Qualifiers.PROJECT)
+    		.defaultValue("esql")
+    		.build(),
         Esql.class,
         EsqlSourceImporter.class,
-        EsqlColorizerFormat.class,
+        //EsqlColorizerFormat.class,
         EsqlProfile.class,
         EsqlCpdMapping.class,
         EsqlRuleRepository.class,
-        EsqlCommonRulesEngineProvider.class,
-        EsqlSquidSensor.class
+        EsqlCommonRulesEngine.class,
+        EsqlSquidSensor.class,
+        EsqlHighlighter.class
 );
   }
 

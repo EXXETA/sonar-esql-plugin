@@ -15,32 +15,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.esql.test.check;
+package com.exxeta.iss.sonar.esql.check;
 
-import com.exxeta.iss.sonar.esql.EsqlAstScanner;
-import com.exxeta.iss.sonar.esql.check.LineLengthCheck;
-import com.sonar.sslr.squid.checks.CheckMessagesVerifier;
-
-
-
-
-
-
-import org.junit.Test;
-import org.sonar.squid.api.SourceFile;
+import static org.hamcrest.Matchers.containsString;
 
 import java.io.File;
 
-public class LineLengthCheckTest {
+import org.junit.Test;
+import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.squidbridge.checks.CheckMessagesVerifier;
+
+import com.exxeta.iss.sonar.esql.EsqlAstScanner;
+import com.exxeta.iss.sonar.esql.check.ParsingErrorCheck;
+
+public class ParsingErrorCheckTest {
 
   @Test
   public void test() {
-    LineLengthCheck check = new LineLengthCheck();
-    check.maximumLineLength = 30;
-
-    SourceFile file =EsqlAstScanner.scanSingleFile(new File("src/test/resources/test.esql"), check);
+    SourceFile file = EsqlAstScanner.scanSingleFile(new File("src/test/resources/parsingError.esql"), new ParsingErrorCheck());
     CheckMessagesVerifier.verify(file.getCheckMessages())
-        .next().atLine(1).withMessage("The line contains 76 characters which is greater than 30 authorized.")
+        .next().atLine(6).withMessageThat(containsString("Parse error"))
         .noMore();
   }
 

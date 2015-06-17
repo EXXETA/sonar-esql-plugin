@@ -19,25 +19,20 @@ package com.exxeta.iss.sonar.esql.parser;
 
 import java.util.ArrayList;
 
-
-
-
-import org.sonar.sslr.parser.ParserAdapter;
-import org.sonar.sslr.text.PreprocessorsChain;
-
+import com.sonar.sslr.api.Grammar;
+import com.sonar.sslr.impl.Parser;
 import com.exxeta.iss.sonar.esql.EsqlConfiguration;
 import com.exxeta.iss.sonar.esql.api.EsqlGrammar;
-import com.sonar.sslr.impl.Parser;
-import com.sonar.sslr.impl.events.ParsingEventListener;
+import com.exxeta.iss.sonar.esql.lexer.EsqlLexer;
 
 
-public class EsqlParser {
+public final class EsqlParser {
 	  private EsqlParser() {
 	  }
-	public static Parser<EsqlGrammar> create(EsqlConfiguration conf, ParsingEventListener... parsingEventListeners) {
-		ArrayList<org.sonar.sslr.text.Preprocessor> list  = new ArrayList<org.sonar.sslr.text.Preprocessor>();
-		list.add(new EsqlPreprocessor());
-		return new ParserAdapter<EsqlGrammar>(conf.getCharset(), new EsqlGrammarImpl(),new PreprocessorsChain(list));	
+	  
+	public static Parser<Grammar> create(EsqlConfiguration conf) {
+		return Parser.builder(EsqlGrammar.create().build()).withLexer(EsqlLexer.create(conf)).build();
+		
 		}
 
 }

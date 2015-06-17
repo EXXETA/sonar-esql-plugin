@@ -18,7 +18,8 @@
 
 package com.exxeta.iss.sonar.esql.colorizer;
 
-import com.exxeta.iss.sonar.esql.api.EsqlKeyword;
+import com.exxeta.iss.sonar.esql.api.EsqlNonReservedKeyword;
+import com.exxeta.iss.sonar.esql.api.EsqlReservedKeyword;
 import com.exxeta.iss.sonar.esql.core.Esql;
 import com.exxeta.iss.sonar.esql.lexer.EsqlLexer;
 import com.google.common.collect.ImmutableList;
@@ -42,7 +43,8 @@ public class EsqlColorizerFormat extends CodeColorizerFormat {
         new CDocTokenizer("<span class=\"cd\">", "</span>"),
         new JavadocTokenizer("<span class=\"cppd\">", "</span>"),
         new CppDocTokenizer("<span class=\"cppd\">", "</span>"),
-        new CaseInsensitiveKeywordsTokenizer("<span class=\"k\">", "</span>", EsqlKeyword.keywordValues()));
+        new CaseInsensitiveKeywordsTokenizer("<span class=\"k\">", "</span>", EsqlReservedKeyword.keywordValues()),
+        new CaseInsensitiveKeywordsTokenizer("<span class=\"k\">", "</span>", EsqlNonReservedKeyword.keywordValues()));
   }
 
 }

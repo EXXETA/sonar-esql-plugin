@@ -17,28 +17,35 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
-import com.exxeta.iss.sonar.esql.api.EsqlGrammar;
-import com.sonar.sslr.api.AstAndTokenVisitor;
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Token;
-import com.sonar.sslr.squid.checks.SquidCheck;
-
+import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
+import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
+import org.sonar.squidbridge.checks.SquidCheck;
+
+import com.sonar.sslr.api.AstAndTokenVisitor;
+import com.sonar.sslr.api.AstNode;
+import com.sonar.sslr.api.Grammar;
+import com.sonar.sslr.api.Token;
 
 @BelongsToProfile(title=CheckList.SONAR_WAY_PROFILE,priority=Priority.MINOR)
 @Rule(
   key = "LineLength",
   priority = Priority.MINOR,
-  description = "Line Length Description")
-public class LineLengthCheck extends SquidCheck<EsqlGrammar> implements AstAndTokenVisitor {
+  description = "Line Length should not be too long.",
+  tags=Tags.CONVENTION)
+@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
+@SqaleConstantRemediation("1min")
+public class LineLengthCheck extends SquidCheck<Grammar> implements AstAndTokenVisitor {
 
   private static final int DEFAULT_MAXIMUM_LINE_LENHGTH = 120;
 
   @RuleProperty(
     key = "maximumLineLength",
+    description="The maximum athorized line length.",
     defaultValue = "" + DEFAULT_MAXIMUM_LINE_LENHGTH)
   public int maximumLineLength = DEFAULT_MAXIMUM_LINE_LENHGTH;
 

@@ -21,8 +21,11 @@ import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.TokenType;
 
 public enum EsqlTokenType implements TokenType {
-	NUMERIC_LITERAL,
-	  REGULAR_EXPRESSION_LITERAL;
+	
+	  REGULAR_EXPRESSION_LITERAL,
+	  NEWLINE,
+	  NUMBER,
+	  STRING, HEX, TIME, DATE;
 	
 	 public String getName() {
 		    return name();

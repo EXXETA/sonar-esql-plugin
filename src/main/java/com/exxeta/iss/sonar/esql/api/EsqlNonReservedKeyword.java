@@ -20,25 +20,10 @@ package com.exxeta.iss.sonar.esql.api;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.TokenType;
 
-public enum EsqlKeyword implements TokenType {
+public enum EsqlNonReservedKeyword implements TokenType {
 	
-	// Reserved words
-
-	ALL("ALL"),
-	ASYMMETRIC("ASYMMETRIC"),
-	BOTH("BOTH"),
-	CASE("CASE"),
-	DISTINCT("DISTINCT"),
-	FROM("FROM"),
-	ITEM("ITEM"),
-	LEADING("LEADING"),
-	NOT("NOT"),
-	SYMMETRIC("SYMMETRIC"),
-	TRAILING("TRAILING"),
-	WHEN("WHEN"),
-
-// Keywords
-	ND("ND"),
+	
+	AND("AND"),
 	ANY("ANY"),
 	AS("AS"),
 	ATOMIC("ATOMIC"),
@@ -67,7 +52,7 @@ public enum EsqlKeyword implements TokenType {
 	CURRENT_GMTTIMESTAMP("CURRENT_GMTTIMESTAMP"),
 	CURRENT_TIME("CURRENT_TIME"),
 	CURRENT_TIMESTAMP("CURRENT_TIMESTAMP"),
-	DATA("DATA"),
+	//DATA("DATA"),
 	DATABASE("DATABASE"),
 	DATE("DATE"),
 	DAY("DAY"),
@@ -218,30 +203,11 @@ public enum EsqlKeyword implements TokenType {
 	WEEKS("WEEKS"),
 	WHERE("WHERE"),
 	WHILE("WHILE"),
-	YEAR("YEAR"),
-	
-	
-	SINGULAR("SINGULAR"),
-	AND("AND"),
-	CAST("CAST"),
-	UPPER("UPPER"),
-	UCASE("UCASE"),
-	STARTSWITH("STARTSWITH"),
-	SUBSTRING("SUBSTRING"),
-	BEFORE("BEFORE"),
-	AFTER("AFTER"),
-	TRIM("TRIM"),
-	PARENT("PARENT"),
-	POSITION("POSITION"),
-	ASBITSTREAM("ASBITSTREAM"),
-	BROKER("BROKER"),
-	EXTRACT("EXTRACT"),
-	OVERLAY("OVERLAY"),
-	QUARTER("QUARTER");
+	YEAR("YEAR");
 	
 private final String value;
 
-private EsqlKeyword(String value) {
+private EsqlNonReservedKeyword(String value) {
   this.value = value;
 }
 
@@ -258,7 +224,7 @@ public boolean hasToBeSkippedFromAst(AstNode node) {
 }
 
 public static String[] keywordValues() {
-  EsqlKeyword[] keywordsEnum = EsqlKeyword.values();
+  EsqlNonReservedKeyword[] keywordsEnum = EsqlNonReservedKeyword.values();
   String[] keywords = new String[keywordsEnum.length];
   for (int i = 0; i < keywords.length; i++) {
     keywords[i] = keywordsEnum[i].getValue();

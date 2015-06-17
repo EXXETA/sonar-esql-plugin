@@ -15,29 +15,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.esql.test;
+package com.exxeta.iss.sonar.esql.check;
 
+import java.io.File;
 
 import org.junit.Test;
-import org.sonar.api.rules.AnnotationRuleParser;
-import org.sonar.api.rules.Rule;
+import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.squidbridge.checks.CheckMessagesVerifier;
 
-import com.exxeta.iss.sonar.esql.EsqlRuleRepository;
-import com.exxeta.iss.sonar.esql.check.CheckList;
+import com.exxeta.iss.sonar.esql.EsqlAstScanner;
+import com.exxeta.iss.sonar.esql.check.LineLengthCheck;
 
-import java.util.List;
-
-import static org.fest.assertions.Assertions.assertThat;
-
-public class EsqlRuleRepositoryTest {
+public class LineLengthCheckTest {
 
   @Test
   public void test() {
-    EsqlRuleRepository ruleRepository = new EsqlRuleRepository(new AnnotationRuleParser());
-    assertThat(ruleRepository.getKey()).isEqualTo("esql");
-    assertThat(ruleRepository.getName()).isEqualTo("Sonar");
-    List<Rule> rules = ruleRepository.createRules();
-    assertThat(rules.size()).isEqualTo(CheckList.getChecks().size());
+    LineLengthCheck check = new LineLengthCheck();
+    check.maximumLineLength = 30;
+
+    SourceFile file =EsqlAstScanner.scanSingleFile(new File("src/test/resources/test.esql"), check);
+    CheckMessagesVerifier.verify(file.getCheckMessages())
+        .next().atLine(1).withMessage("The line contains 32 characters which is greater than 30 authorized.")
+        .noMore();
   }
 
 }

@@ -15,27 +15,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.esql.test.check;
+package com.exxeta.iss.sonar.esql.test;
 
-import static org.hamcrest.Matchers.containsString;
 
-import java.io.File;
+import static org.fest.assertions.Assertions.assertThat;
 
 import org.junit.Test;
-import org.sonar.squid.api.SourceFile;
 
-import com.exxeta.iss.sonar.esql.EsqlAstScanner;
-import com.exxeta.iss.sonar.esql.check.ParsingErrorCheck;
-import com.sonar.sslr.squid.checks.CheckMessagesVerifier;
+import com.exxeta.iss.sonar.esql.EsqlCommonRulesEngine;
 
-public class ParsingErrorCheckTest {
+public class EsqlCommonRulesEngineTest {
 
   @Test
-  public void test() {
-    SourceFile file = EsqlAstScanner.scanSingleFile(new File("src/test/resources/parsingError.esql"), new ParsingErrorCheck());
-    CheckMessagesVerifier.verify(file.getCheckMessages())
-        .next().atLine(6).withMessageThat(containsString("Parse error"))
-        .noMore();
+  public void shouldProvideExpectedExtensions() {
+    EsqlCommonRulesEngine engine= new EsqlCommonRulesEngine();
+    assertThat(engine.provide()).isNotEmpty();
+
+    
   }
+  
 
 }

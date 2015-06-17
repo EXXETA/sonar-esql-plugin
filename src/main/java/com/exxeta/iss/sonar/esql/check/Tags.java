@@ -14,26 +14,21 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
-package com.exxeta.iss.sonar.esql.parser;
+ */package com.exxeta.iss.sonar.esql.check;
 
-import org.sonar.sslr.internal.text.LocatedText;
-import org.sonar.sslr.internal.text.PlainText;
-import org.sonar.sslr.text.Preprocessor;
-import org.sonar.sslr.text.PreprocessorContext;
-import org.sonar.sslr.text.Text;
+public class Tags {
+	public static final String BRAIN_OVERLOAD = "brain-overload";
+	public static final String BUG = "bug";
+	public static final String CLUMSY = "clumsy";
+	public static final String CONVENTION = "convention";
+	public static final String OBSOLETE = "obsolete";
+	public static final String SECURITY = "security";
+	public static final String UNUSED = "unused";
+	public static final String CERT = "cert";
+	public static final String PITFALL = "pitfall";
+	public static final String CONFUSING = "confusing";
 
-public class EsqlPreprocessor implements Preprocessor {
-
-	public Text process(PreprocessorContext arg0) {
-		Text result;
-		if (arg0.getInput() instanceof LocatedText) {
-			result = new EsqlLocatedText((LocatedText)arg0.getInput());
-		} else {
-			result = new PlainText(arg0.getInput().sequence().toString()
-					.toUpperCase().toCharArray());
-		}
-		return result;
+	private Tags() {
+		// This class only defines constants
 	}
-
 }

@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.esql.test.check;
+package com.exxeta.iss.sonar.esql.check;
 
 import java.io.File;
 
@@ -23,23 +23,24 @@ import java.io.File;
 
 
 
+
+
 import org.junit.Test;
-import org.sonar.squid.api.SourceFile;
+import org.sonar.squidbridge.api.SourceFile;
+import org.sonar.squidbridge.checks.CheckMessagesVerifier;
 
 import com.exxeta.iss.sonar.esql.EsqlAstScanner;
 import com.exxeta.iss.sonar.esql.check.NestedIfDepthCheck;
-import com.sonar.sslr.squid.checks.CheckMessagesVerifier;
 
-public class NestedIfCheckTest {
+public class TooManyIterateOrLeaveInLoopCheckTest {
 	 @Test
 	  public void test() {
-	    NestedIfDepthCheck check = new NestedIfDepthCheck();
-	    check.maximumNestingLevel=3;
+	    TooManyIterateOrLeaveInLoopCheck check = new TooManyIterateOrLeaveInLoopCheck();
 	    
-	    SourceFile file =EsqlAstScanner.scanSingleFile(new File("src/test/resources/ifTest.esql"), check);
+	    SourceFile file =EsqlAstScanner.scanSingleFile(new File("src/test/resources/leaveIterate.esql"), check);
 	    CheckMessagesVerifier.verify(file.getCheckMessages())
-	        .next().atLine(8).withMessage("This if has a nesting level of 4, which is higher than the maximum allowed 3.")
-	        .next().atLine(12).withMessage("This if has a nesting level of 4, which is higher than the maximum allowed 3.")
+	        .next().atLine(7).withMessage("Loops should not contain more than a single \"ITERATE\" or \"LEAVE\" statement.")
+	        .next().atLine(25).withMessage("Loops should not contain more than a single \"ITERATE\" or \"LEAVE\" statement.")
 	        .noMore();
 	  }
 }
