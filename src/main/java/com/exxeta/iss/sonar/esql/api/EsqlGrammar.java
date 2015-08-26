@@ -336,8 +336,8 @@ public enum EsqlGrammar implements GrammarRuleKey {
 		b.rule(pathElement).is(
 				b.optional(b.sequence("(", primaryExpression, b.zeroOrMore(b.sequence(".", primaryExpression)), ")")),
 				b.optional(b.sequence(b.optional(b.firstOf(namespace, b.sequence("{", expression, "}"), "*")), ":")),
-				b.firstOf(FIELD_NAME, b.sequence("{", expression, "}"), "*")
-				,b.optional(index));
+				b.firstOf(b.sequence(b.firstOf(FIELD_NAME, b.sequence("{", expression, "}"), "*")
+				,b.optional(index)),index) );
 		b.rule(index).is("[", b.sequence(b.optional(b.firstOf("<", ">")), b.optional(expression)), "]");
 
 		b.rule(callExpression)

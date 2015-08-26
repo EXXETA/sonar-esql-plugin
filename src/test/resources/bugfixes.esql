@@ -105,11 +105,13 @@ ATTACH bpFSAAssocRef TO OutputRoot.XMLNSC.ens:Envelope.ens:Body.tns:TFeed.tns:Bu
    DECLARE a DECIMAL ROUND(CAST(b AS DECIMAL(18,4)), 2 MODE ROUND_HALF_UP);
    
    
+	SET CacheFile.AccountTypeRecords[] = refAccountType.[];
+	SET OutputRoot.XMLNSC.Error.ExceptionList.[I] = InputExceptionList.*[I];
+	SET OutputLocalEnvironment.a = ASBITSTREAM( OutputRoot.[<] OPTIONS FolderBitStream CCSID 1208 ) ;
+   
    -- Not yet parseable
    --SET duration = (stateRef.Endtime - stateRef.Starttime) HOUR TO SECOND;
    --DECLARE midnight TIME '00:00:00';
---SET CacheFile.AccountTypeRecords[] = refAccountType.[];
---SET OutputRoot.XMLNSC.Error.ExceptionList.[I] = InputExceptionList.*[I];
 
    END;
    
