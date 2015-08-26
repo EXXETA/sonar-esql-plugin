@@ -14,21 +14,21 @@ import com.sonar.sslr.api.Grammar;
 public class UseBrokerSchemaCheck extends SquidCheck<Grammar> {
 	public static final String CHECK_KEY = "UseBrokerSchema";
 	private boolean brokerSchemaStatementFound = false;
-	private boolean violationCreated = false;
+	//private boolean violationCreated = false;
 
 	@Override
 	public void init() {
 		brokerSchemaStatementFound = false;
-		violationCreated = false;
+		//violationCreated = false;
 		subscribeTo(EsqlGrammar.BROKER_SCHEMA_STATEMENT);
 	}
 
 	@Override
 	public void leaveFile(AstNode astNode) {
-		if (!brokerSchemaStatementFound && !violationCreated) {
+		if (!brokerSchemaStatementFound /*&& !violationCreated*/) {
 			String message = "The default Schema should not be used. Move the file to a broker schema.";
 			getContext().createFileViolation(this, message);
-			violationCreated = true;
+			//violationCreated = true;
 		}
 	}
 
