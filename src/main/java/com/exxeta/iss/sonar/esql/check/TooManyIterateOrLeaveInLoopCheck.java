@@ -1,6 +1,7 @@
 package com.exxeta.iss.sonar.esql.check;
 
 import org.sonar.api.server.rule.RulesDefinition;
+import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
@@ -16,6 +17,7 @@ import com.sonar.sslr.api.Grammar;
 @ActivatedByDefault
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.UNDERSTANDABILITY)
 @SqaleConstantRemediation("20min")
+@BelongsToProfile(title=CheckList.SONAR_WAY_PROFILE,priority=Priority.MAJOR)
 public class TooManyIterateOrLeaveInLoopCheck extends SquidCheck<Grammar> {
 
 	@Override

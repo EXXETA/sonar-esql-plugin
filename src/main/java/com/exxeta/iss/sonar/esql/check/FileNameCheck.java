@@ -2,6 +2,7 @@ package com.exxeta.iss.sonar.esql.check;
 
 import java.util.regex.Pattern;
 
+import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
@@ -14,6 +15,7 @@ import com.sonar.sslr.api.Grammar;
 
 @Rule(key = FileNameCheck.CHECK_KEY, priority = Priority.MAJOR, name = "File names should comply with a naming convention", tags = Tags.CONVENTION)
 @NoSqale
+@BelongsToProfile(title=CheckList.SONAR_WAY_PROFILE,priority=Priority.MAJOR)
 public class FileNameCheck extends SquidCheck<Grammar> {
 	
 	public static final String CHECK_KEY = "FileName";

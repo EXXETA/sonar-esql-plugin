@@ -1,5 +1,6 @@
 package com.exxeta.iss.sonar.esql.check;
 
+import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.squidbridge.annotations.NoSqale;
@@ -15,6 +16,7 @@ import com.sonar.sslr.api.Grammar;
 		priority = Priority.MAJOR, 
 		tags = { Tags.CERT })
 @NoSqale
+@BelongsToProfile(title=CheckList.SONAR_WAY_PROFILE,priority=Priority.MAJOR)
 public class ElseIfWithoutElseCheck extends SquidCheck<Grammar> {
 
 	@Override

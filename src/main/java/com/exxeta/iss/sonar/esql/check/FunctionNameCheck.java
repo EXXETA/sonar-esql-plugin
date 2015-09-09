@@ -18,6 +18,7 @@
 package com.exxeta.iss.sonar.esql.check;
 
 import org.sonar.api.server.rule.RulesDefinition;
+import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
@@ -32,6 +33,7 @@ import com.sonar.sslr.api.AstNodeType;
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
 @SqaleConstantRemediation("10min")
 @ActivatedByDefault
+@BelongsToProfile(title=CheckList.SONAR_WAY_PROFILE,priority=Priority.MAJOR)
 public class FunctionNameCheck extends AbstractNameCheck {
 	public static final String CHECK_KEY = "FunctionName";
 

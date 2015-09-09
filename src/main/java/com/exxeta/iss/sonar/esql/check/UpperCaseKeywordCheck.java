@@ -2,6 +2,7 @@ package com.exxeta.iss.sonar.esql.check;
 
 import java.util.Set;
 
+import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.squidbridge.annotations.NoSqale;
@@ -17,6 +18,7 @@ import com.sonar.sslr.api.Grammar;
 
 @Rule(key = UpperCaseKeywordCheck.CHECK_KEY, priority = Priority.MINOR, name = "ESQL keywords should be uppercase", tags = Tags.CONVENTION)
 @NoSqale
+@BelongsToProfile(title=CheckList.SONAR_WAY_PROFILE,priority=Priority.MINOR)
 public class UpperCaseKeywordCheck extends SquidCheck<Grammar> {
 	public static final String CHECK_KEY = "UpperCaseKeyword";
 	private static final Set<String> nonResewrvedKeywords = ImmutableSet.copyOf(EsqlNonReservedKeyword.keywordValues());

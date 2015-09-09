@@ -6,7 +6,7 @@
 	<groupId>com.exxeta.iss</groupId>
 	<artifactId>sonar-esql-plugin</artifactId>
 	<packaging>sonar-plugin</packaging>
-	<version>0.4</version>
+	<version>1.0</version>
 	<licenses>
 		<license>
 			<name>Apache</name>
@@ -135,6 +135,6 @@
 		<url>http://www.exxxeta.com</url>
 	</organization>
 	<scm>
-		<url>https://github.com/ThomasPohl/sonar-esql-plugin</url>
+		<url>https://github.com/EXXETA/sonar-esql-plugin</url>
 	</scm>
 </project>

@@ -41,7 +41,7 @@ public class NestedIfDepthCheck extends SquidCheck<Grammar> {
 
   private int nestingLevel;
 
-  private static final int DEFAULT_MAXIMUM_NESTING_LEVEL = 3;
+  private static final int DEFAULT_MAXIMUM_NESTING_LEVEL = 5;
 
   @RuleProperty(
     key = "maximumNestingLevel",
