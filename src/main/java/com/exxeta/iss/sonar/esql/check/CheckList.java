@@ -48,7 +48,8 @@ public final class CheckList {
         TooManyLinesInFileCheck.class,
         UpperCaseKeywordCheck.class,
         UseBrokerSchemaCheck.class,
-        VariableNameCheck.class
+        VariableNameCheck.class,
+        PropagateToLabelCheck.class
         );
   }
 
