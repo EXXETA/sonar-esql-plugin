@@ -109,11 +109,14 @@ ATTACH bpFSAAssocRef TO OutputRoot.XMLNSC.ens:Envelope.ens:Body.tns:TFeed.tns:Bu
 	SET OutputRoot.XMLNSC.Error.ExceptionList.[I] = InputExceptionList.*[I];
 	SET OutputLocalEnvironment.a = ASBITSTREAM( OutputRoot.[<] OPTIONS FolderBitStream CCSID 1208 ) ;
    
+   DECLARE midnight TIME '00:00:00';
+	SET A = FOR ALL Body.Invoice.Purchases."Item"[] AS I (I.Quantity <= 50);
+	DELETE FROM Database.{Source}.{Schema}.{Table} As R WHERE R.Name = 'Joe';
+
    -- Not yet parseable
    --SET duration = (stateRef.Endtime - stateRef.Starttime) HOUR TO SECOND;
-   --DECLARE midnight TIME '00:00:00';
-
    END;
    
 
 END MODULE;
+
