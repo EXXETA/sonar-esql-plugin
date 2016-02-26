@@ -6,7 +6,7 @@
 	<groupId>com.exxeta.iss</groupId>
 	<artifactId>sonar-esql-plugin</artifactId>
 	<packaging>sonar-plugin</packaging>
-	<version>1.0</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<licenses>
 		<license>
 			<name>Apache</name>
@@ -30,6 +30,7 @@
 		<developer>
 			<id>thpo</id>
 			<name>Thomas Pohl</name>
+			<email>thomas.pohl@exxeta.com</email>
 		</developer>
 	</developers>
 

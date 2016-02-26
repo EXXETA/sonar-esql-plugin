@@ -26,7 +26,7 @@ import org.sonar.sslr.grammar.LexerfulGrammarBuilder;
 public enum EsqlGrammar implements GrammarRuleKey {
 	PROGRAM, SOURCEELEMENTS, EOS, LITERAL, BOOLEAN_LITERAL, NULL_LITERAL
 
-	, listLiteral
+	, listLiteral, dateLiteral, timeLiteral
 
 	// , letterOrDigit
 	, sourceElements, sourceElement, keyword, dataType, intervalDataType, intervalQualifier
@@ -37,7 +37,7 @@ public enum EsqlGrammar implements GrammarRuleKey {
 
 	, qualifier
 
-	, function, complexFunction, caseFunction, simpleWhenClause, searchedWhenClause, fieldFunction, listFunction, asbitstreamFunction, bitStreamOptions, castFunction, extractFunction, datetimeFunction, miscellaneousFunction, numericFunction, databaseStateFunction, stringManipulationFunction, overlayFunction, positionFunction, ucaseFunction, startswithFunction, substringFunction, trimFunction, theFunction, intervalLiteral
+	, function, complexFunction, caseFunction, simpleWhenClause, searchedWhenClause, fieldFunction, listFunction, asbitstreamFunction, bitStreamOptions, forFunction, castFunction, extractFunction, datetimeFunction, miscellaneousFunction, numericFunction, databaseStateFunction, stringManipulationFunction, overlayFunction, positionFunction, ucaseFunction, startswithFunction, substringFunction, translateFunction, trimFunction, theFunction, intervalLiteral
 
 	, beginEndStatement, callStatement, caseStatement, whenClause, leaveStatement, setStatement, declareStatement, returnStatement, whileStatement, ifStatement, throwStatement
 
@@ -53,7 +53,9 @@ public enum EsqlGrammar implements GrammarRuleKey {
 
 	, moduleDeclaration, moduleBody, routineDeclaration, qualificationIdentifier, primaryExpression, arrayLiteral, callExpression, expression, condition, leftHandSideExpression, unaryExpression, multiplicativeExpression, additiveExpression, relationalExpression, relationalExpressionNoIn, equalityExpression, equalityExpressionNoIn, logicalAndExpression, logicalAndExpressionNoIn, logicalOrExpression, logicalOrExpressionNoIn/*, assignmentExpression, assignmentExpressionNoIn*/ 
 	// , sqlExpression
-	, selectFunction, selectClause, whereClause
+	, selectFunction, rowConstructorFunction, selectClause, whereClause
+	
+	, passthruFunction
 
 	, index
 
@@ -66,8 +68,7 @@ public enum EsqlGrammar implements GrammarRuleKey {
 		lexical(b);
 		expression(b);
 		b.rule(LITERAL)
-				.is(b.firstOf(NULL_LITERAL, BOOLEAN_LITERAL, EsqlTokenType.NUMBER, EsqlTokenType.HEX,
-						EsqlTokenType.TIME, EsqlTokenType.DATE, EsqlTokenType.STRING));
+				.is(b.firstOf(NULL_LITERAL, BOOLEAN_LITERAL, EsqlTokenType.NUMBER, EsqlTokenType.HEX, EsqlTokenType.STRING));
 		b.rule(NULL_LITERAL).is("NULL");
 		b.rule(BOOLEAN_LITERAL).is(b.firstOf("TRUE", "FALSE"));
 		functionsAndPrograms(b);
@@ -111,6 +112,8 @@ public enum EsqlGrammar implements GrammarRuleKey {
 		// regexp(EsqlLexer.HEX_LITERAL)), SPACING);
 		b.rule(listLiteral).is("(", LITERAL, b.zeroOrMore(b.sequence(",", LITERAL)), ")");
 		b.rule(intervalLiteral).is("INTERVAL", LITERAL, intervalQualifier);
+		b.rule(dateLiteral).is(EsqlTokenType.DATE);
+		b.rule(timeLiteral).is(EsqlTokenType.TIME);
 
 	}
 
@@ -119,7 +122,7 @@ public enum EsqlGrammar implements GrammarRuleKey {
 	 */
 	private static void functionsAndPrograms(LexerfulGrammarBuilder b) {
 		b.rule(PROGRAM).is(b.optional(BROKER_SCHEMA_STATEMENT),
-				b.optional(b.sequence("PATH", fieldReference, b.zeroOrMore(",", fieldReference))), sourceElements, EOF);
+				b.optional(b.sequence("PATH", fieldReference, b.zeroOrMore(",", fieldReference), b.optional(";"))), sourceElements, EOF);
 		b.rule(BROKER_SCHEMA_STATEMENT).is(b.sequence("BROKER", "SCHEMA", fieldReference));
 		b.rule(sourceElements).is(b.zeroOrMore(sourceElement));
 		b.rule(sourceElement).is(b.firstOf(moduleDeclaration, routineDeclaration, declareStatement), EOS);
@@ -175,7 +178,7 @@ public enum EsqlGrammar implements GrammarRuleKey {
 	}
 
 	private static void otherStatements(LexerfulGrammarBuilder b) {
-		b.rule(otherStatement).is(b.firstOf(declareHandlerStatement, logStatement, resignalStatement));// TODO
+		b.rule(otherStatement).is(b.firstOf(declareHandlerStatement, logStatement, resignalStatement));
 		b.rule(declareHandlerStatement).is("DECLARE", b.firstOf("CONTINUE", "EXIT"), "HANDLER", "FOR", sqlState,
 				b.zeroOrMore(",", sqlState), statement);
 		b.rule(sqlState).is(
@@ -204,7 +207,7 @@ public enum EsqlGrammar implements GrammarRuleKey {
 	}
 
 	private static void databaseUpdateStatements(LexerfulGrammarBuilder b) {
-		b.rule(databaseUpdateStatement).is(b.firstOf(passthruExpression, insertExpression, updateExpression));// TODO
+		b.rule(databaseUpdateStatement).is(b.firstOf(insertExpression, passthruExpression, updateExpression)); //DELETE FROM is already covered by DELETE
 		b.rule(updateExpression).is("UPDATE", expression, b.optional(b.sequence("AS", expression)), "SET",
 				fieldReference, "=", expression, b.zeroOrMore(b.sequence(",", fieldReference, "=", expression)),
 				b.optional(whereClause));
@@ -213,9 +216,9 @@ public enum EsqlGrammar implements GrammarRuleKey {
 				b.zeroOrMore(",", expression), ")");
 		b.rule(passthruExpression).is(
 				"PASSTHRU",
-				b.firstOf(b.sequence("(", expression, b.zeroOrMore(",", expression), ")"), expression,
+				b.firstOf(b.sequence("(", expression, b.zeroOrMore(",", expression), ")"), b.sequence(b.optional("("),expression,
 						b.optional(b.sequence("TO", expression, ".", expression)),
-						b.optional("VALUES", "(", expression, b.zeroOrMore(",", expression), ")")));
+						b.optional("VALUES", "(", expression, b.zeroOrMore(",", expression), ")"), b.optional(")"))));
 	}
 
 	private static void messageTreeManipulationStatements(LexerfulGrammarBuilder b) {
@@ -230,7 +233,7 @@ public enum EsqlGrammar implements GrammarRuleKey {
 		b.rule(qualificationIdentifier).is(
 				b.firstOf("FIELD",
 						b.sequence(b.firstOf("PREVIOUSSIBLING", "NEXTSIBLING", "FIRSTCHILD", "LASTCHILD"), "OF")));
-		b.rule(repeatClause).is(b.sequence("REPEAT", b.optional("VALUE", IDENTIFIER)));
+		b.rule(repeatClause).is(b.sequence("REPEAT", b.optional("VALUE", expression)));
 		b.rule(valuesClauses).is(b.firstOf(b.sequence(namesClauses, b.optional(valueExpression)), valueExpression));
 		b.rule(namesClauses).is(
 				b.firstOf(
@@ -290,7 +293,7 @@ public enum EsqlGrammar implements GrammarRuleKey {
 		b.rule(qualifier).is(b.firstOf(b.sequence("IN", fieldReference), b.sequence("EXTERNAL", "SCHEMA", IDENTIFIER)));
 		b.rule(declareStatement).is("DECLARE", NAME, b.zeroOrMore(b.sequence(",", NAME)),
 				b.optional(b.firstOf("SHARED", "EXTERNAL")),
-				b.firstOf(b.sequence(b.optional("CONSTANT"), dataType), "NAMESPACE", "NAME"), b.optional(expression));
+				b.firstOf(b.sequence(b.optional("CONSTANT"), b.firstOf(dateLiteral, timeLiteral, dataType)), "NAMESPACE", "NAME"), b.optional(expression));
 		b.rule(setStatement).is("SET", fieldReference, b.optional(b.firstOf("TYPE","NAMESPACE", "NAME", "VALUE")), "=", expression);
 		b.rule(returnStatement).is("RETURN", b.optional(logicalOrExpression));
 		b.rule(ifStatement).is("IF", expression, "THEN", b.zeroOrMore(statement),
@@ -329,7 +332,7 @@ public enum EsqlGrammar implements GrammarRuleKey {
 	private static void expression(LexerfulGrammarBuilder b) {
 		b.rule(primaryExpression).is(
 				b.firstOf(intervalLiteral, LITERAL, IDENTIFIER, arrayLiteral,
-						b.sequence("(",expression, "-", expression, ")", intervalQualifier), listLiteral,
+						b.sequence("(",expression, "-", expression, ")", intervalQualifier), listLiteral, timeLiteral, dateLiteral,
 						b.sequence("(", expression, ")")));
 		b.rule(arrayLiteral).is("[", b.zeroOrMore(b.firstOf(",", expression)), "]");
 		b.rule(fieldReference).is(primaryExpression, b.zeroOrMore(b.sequence(".", pathElement)));
@@ -407,7 +410,7 @@ public enum EsqlGrammar implements GrammarRuleKey {
 						fieldFunction, listFunction, complexFunction, miscellaneousFunction));
 		b.rule(numericFunction).is(ROUND_FUNCTION);
 		b.rule(databaseStateFunction).is(b.nothing());
-		b.rule(miscellaneousFunction).is(b.nothing());
+		b.rule(miscellaneousFunction).is(passthruFunction);
 		// intervalFunction
 		databaseStateFunction(b);
 		datetimeFunctions(b);
@@ -416,6 +419,7 @@ public enum EsqlGrammar implements GrammarRuleKey {
 		fieldFunctions(b);
 		complexFunctions(b);
 		stringManipulationFunctions(b);
+		miscellaneousFunctions(b);
 
 	}
 
@@ -489,9 +493,10 @@ public enum EsqlGrammar implements GrammarRuleKey {
 	}
 
 	private static void fieldFunctions(LexerfulGrammarBuilder b) {
-		b.rule(fieldFunction).is(asbitstreamFunction);
+		b.rule(fieldFunction).is(b.firstOf(asbitstreamFunction, forFunction));
 		b.rule(asbitstreamFunction).is("ASBITSTREAM", "(", fieldReference, b.zeroOrMore(bitStreamOptions), ")");
 		b.rule(bitStreamOptions).is(b.firstOf("OPTIONS", "ENCODING", "CCSID", "SET", "TYPE", "FORMAT"), expression);
+		b.rule(forFunction).is("FOR", b.optional(b.firstOf("ALL", "ANY", "SOME")), fieldReference, b.optional("AS", IDENTIFIER), b.zeroOrMore(",", fieldReference, b.optional("AS", IDENTIFIER)), "(", expression ,")");
 	}
 
 	private static void stringManipulationFunctions(LexerfulGrammarBuilder b) {
@@ -506,10 +511,9 @@ public enum EsqlGrammar implements GrammarRuleKey {
 															 * , rightFunction
 															 * rtrimFunction,
 															 * spaceFunction,
-															 */startswithFunction, substringFunction, /*
-																									 * translateFunction
-																									 * ,
-																									 */trimFunction, /*
+															 */startswithFunction, substringFunction, translateFunction
+																									  ,
+																									 trimFunction, /*
 																													 * upperFunction
 																													 * ,
 																													 */
@@ -528,10 +532,11 @@ public enum EsqlGrammar implements GrammarRuleKey {
 		b.rule(startswithFunction).is("STARTSWITH", "(", expression, ",", expression, ")");
 		b.rule(substringFunction).is("SUBSTRING", "(", expression, b.firstOf("FROM", "BEFORE", "AFTER"), expression,
 				b.optional(b.sequence("FOR", expression)), ")");
+		b.rule(translateFunction).is("TRANSLATE", "(",expression,",",expression,b.optional(expression),")");
 	}
 
 	private static void complexFunctions(LexerfulGrammarBuilder b) {
-		b.rule(complexFunction).is(b.firstOf(castFunction, caseFunction, selectFunction));
+		b.rule(complexFunction).is(b.firstOf(castFunction, caseFunction, selectFunction, rowConstructorFunction));
 		b.rule(castFunction).is("CAST", "(", expression, b.zeroOrMore(",", expression), "AS", dataType,
 				b.optional(b.sequence("CCSID", expression)), b.optional(b.sequence("ENCODING", expression)),
 				b.optional(b.sequence("FORMAT", expression)), b.optional(b.sequence("DEFAULT", expression)), ")");
@@ -552,5 +557,9 @@ public enum EsqlGrammar implements GrammarRuleKey {
 								b.zeroOrMore(",", b.firstOf(expression, "*"),
 										b.optional(b.firstOf(b.sequence("AS", fieldReference), "INSERT"))))));
 		b.rule(whereClause).is("WHERE", expression);
+		b.rule(rowConstructorFunction).is("ROW", "(", expression , b.optional("AS", fieldReference), b.zeroOrMore(",", expression , b.optional("AS", fieldReference)), ")");
+	}
+	private static void miscellaneousFunctions(LexerfulGrammarBuilder b) {
+		b.rule(passthruFunction).is("PASSTHRU", "(", expression, b.optional("TO", expression, ".", expression), "VALUES", "(", expression,b.zeroOrMore(",", expression), ")", ")");
 	}
 }
