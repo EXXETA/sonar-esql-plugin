@@ -6,7 +6,7 @@
 	<groupId>com.exxeta.iss</groupId>
 	<artifactId>sonar-esql-plugin</artifactId>
 	<packaging>sonar-plugin</packaging>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.1</version>
 	<licenses>
 		<license>
 			<name>Apache</name>
