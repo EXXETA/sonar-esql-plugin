@@ -17,6 +17,8 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
+import java.util.List;
+
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
 import org.sonar.check.Priority;
@@ -27,7 +29,9 @@ import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 
 import com.exxeta.iss.sonar.esql.api.EsqlGrammar;
+import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.AstNodeType;
+import com.sonar.sslr.api.GenericTokenType;
 
 @Rule(key = VariableNameCheck.CHECK_KEY, priority = Priority.MAJOR, name = "Variable names should comply with a naming convention", tags = Tags.CONVENTION)
 @SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
@@ -57,6 +61,18 @@ public class VariableNameCheck extends AbstractNameCheck {
 	public AstNodeType getType() {
 		return EsqlGrammar.declareStatement;
 	}
-	
+	@Override
+	public void visitNode(AstNode astNode) {
+		boolean isConstant = false;
+		List<AstNode> children = astNode.getChildren(GenericTokenType.IDENTIFIER);
+		for (AstNode child:children){
+			if ("CONSTANT".equals(child.getTokenValue())){
+				isConstant=true;
+			}
+		}
+		if (!isConstant){
+			super.visitNode(astNode);
+		}
+	}
 
 }
