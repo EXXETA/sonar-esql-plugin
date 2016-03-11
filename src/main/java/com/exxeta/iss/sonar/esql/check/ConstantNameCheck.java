@@ -68,6 +68,8 @@ public class ConstantNameCheck extends AbstractNameCheck {
 		for (AstNode child:children){
 			if ("CONSTANT".equals(child.getTokenValue())){
 				isConstant=true;
+			}else if ("EXTERNAL".equals(child.getTokenValue())){
+				isConstant=true;
 			}
 		}
 		if (isConstant){

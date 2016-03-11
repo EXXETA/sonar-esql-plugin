@@ -40,15 +40,11 @@ public class ConstantNameCheckTest {
 				.next()
 				.atLine(9)
 				.withMessage(
-						"Rename constant \"a\" to match the regular expression ^[A-Z_]{0,30}$.")
-				.next()
-				.atLine(9)
-				.withMessage(
-						"Rename constant \"c\" to match the regular expression ^[A-Z_]{0,30}$.")
-				.next()
-				.atLine(9)
-				.withMessage(
 						"Rename constant \"b777_777\" to match the regular expression ^[A-Z_]{0,30}$.")
+				.next()
+				.atLine(12)
+				.withMessage(
+						"Rename constant \"wrong\" to match the regular expression ^[A-Z_]{0,30}$.")
 				.noMore();
 	}
 }
