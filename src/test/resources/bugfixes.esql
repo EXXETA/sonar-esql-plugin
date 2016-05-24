@@ -82,6 +82,7 @@ CREATE COMPUTE MODULE ABC
 	                       LEAVE HOUSENR_LOOP;
 	               END IF;
 	               SET pos = pos +1;
+	               SET pos = pos -1;
 	               IF pos > strLength THEN
 	                       LEAVE HOUSENR_LOOP;
 	               END IF;
@@ -113,8 +114,7 @@ ATTACH bpFSAAssocRef TO OutputRoot.XMLNSC.ens:Envelope.ens:Body.tns:TFeed.tns:Bu
 	SET A = FOR ALL Body.Invoice.Purchases."Item"[] AS I (I.Quantity <= 50);
 	DELETE FROM Database.{Source}.{Schema}.{Table} As R WHERE R.Name = 'Joe';
 
-   -- Not yet parseable
-   --SET duration = (stateRef.Endtime - stateRef.Starttime) HOUR TO SECOND;
+	SET duration = (stateRef.Endtime - stateRef.Starttime) HOUR TO SECOND;
    END;
    
 
