@@ -51,7 +51,7 @@ public enum EsqlGrammar implements GrammarRuleKey {
 
 	, returnType, language, resultSet, routineBody
 
-	, moduleDeclaration, moduleBody, routineDeclaration, qualificationIdentifier, primaryExpression, arrayLiteral, callExpression, expression, condition, leftHandSideExpression, unaryExpression, multiplicativeExpression, additiveExpression, relationalExpression, relationalExpressionNoIn, equalityExpression, equalityExpressionNoIn, logicalAndExpression, logicalAndExpressionNoIn, logicalOrExpression, logicalOrExpressionNoIn/*, assignmentExpression, assignmentExpressionNoIn*/ 
+	, moduleDeclaration, moduleBody, routineDeclaration, qualificationIdentifier, primaryExpression, arrayLiteral, callExpression, expression, condition, leftHandSideExpression, unaryExpression, multiplicativeExpression, additiveExpression, subtractiveExpression, relationalExpression, relationalExpressionNoIn, equalityExpression, equalityExpressionNoIn, logicalAndExpression, logicalAndExpressionNoIn, logicalOrExpression, logicalOrExpressionNoIn/*, assignmentExpression, assignmentExpressionNoIn*/ 
 	// , sqlExpression
 	, selectFunction, rowConstructorFunction, selectClause, whereClause
 	
@@ -237,7 +237,7 @@ public enum EsqlGrammar implements GrammarRuleKey {
 		b.rule(valuesClauses).is(b.firstOf(b.sequence(namesClauses, b.optional(valueExpression)), valueExpression));
 		b.rule(namesClauses).is(
 				b.firstOf(
-						b.sequence("IDENTITY", IDENTIFIER),
+						b.sequence("IDENTITY", pathElement),
 						b.firstOf(
 								b.sequence("TYPE", expression, b.optional("NAMESPACE", expression),
 										b.optional("NAME", expression)),
@@ -320,7 +320,7 @@ public enum EsqlGrammar implements GrammarRuleKey {
 																				 */)), condition, "DO",
 						b.zeroOrMore(statement), "END", "WHILE", b.optional(IDENTIFIER)));
 		b.rule(namespace).is(IDENTIFIER, b.optional(b.sequence(".", IDENTIFIER)));
-		b.rule(caseStatement).is("CASE", b.optional(expression), b.oneOrMore(whenClause),
+		b.rule(caseStatement).is("CASE", b.firstOf(b.oneOrMore(whenClause), b.sequence(fieldReference, b.oneOrMore(whenClause))), 
 				b.optional(b.sequence("ELSE", b.zeroOrMore(statement))), "END", "CASE");
 		b.rule(whenClause).is("WHEN", expression, "THEN", b.zeroOrMore(statement));
 		b.rule(leaveStatement).is("LEAVE", LABEL);
@@ -332,7 +332,7 @@ public enum EsqlGrammar implements GrammarRuleKey {
 	private static void expression(LexerfulGrammarBuilder b) {
 		b.rule(primaryExpression).is(
 				b.firstOf(intervalLiteral, LITERAL, IDENTIFIER, arrayLiteral,
-						b.sequence("(",expression, "-", expression, ")", intervalQualifier), listLiteral, timeLiteral, dateLiteral,
+						b.sequence("(",subtractiveExpression, ")", intervalQualifier), listLiteral, timeLiteral, dateLiteral,
 						b.sequence("(", expression, ")")));
 		b.rule(arrayLiteral).is("[", b.zeroOrMore(b.firstOf(",", expression)), "]");
 		b.rule(fieldReference).is(primaryExpression, b.zeroOrMore(b.sequence(".", pathElement)));
@@ -354,17 +354,20 @@ public enum EsqlGrammar implements GrammarRuleKey {
 		b.rule(multiplicativeExpression).is(unaryExpression, b.zeroOrMore(b.firstOf("*", "/"), leftHandSideExpression))
 				.skipIfOneChild();
 		b.rule(additiveExpression)
-				.is(multiplicativeExpression, b.zeroOrMore(b.firstOf("+", "-", "||"), multiplicativeExpression))
-				.skipIfOneChild();
+		.is(multiplicativeExpression, b.zeroOrMore(b.firstOf("+", "-", "||"), multiplicativeExpression))
+		.skipIfOneChild();
+		b.rule(subtractiveExpression)
+		.is(multiplicativeExpression, "-", multiplicativeExpression)
+		.skipIfOneChild();
 		b.rule(relationalExpression)
-				.is(additiveExpression,
+				.is(b.firstOf(additiveExpression, subtractiveExpression),
 						b.firstOf(
-								b.sequence(b.firstOf(b.sequence("NOT", "IN"), "IN"), "(", additiveExpression,
-										b.zeroOrMore(b.sequence(",", additiveExpression)), ")"),
-										b.sequence(b.firstOf(b.sequence("NOT", "BETWEEN"), "BETWEEN"), b.optional(b.firstOf("ASYMMETRIC", "SYMMETRIC")), additiveExpression, "AND", additiveExpression),
+								b.sequence(b.firstOf(b.sequence("NOT", "IN"), "IN"), "(", b.firstOf(additiveExpression, subtractiveExpression),
+										b.zeroOrMore(b.sequence(",", b.firstOf(additiveExpression, subtractiveExpression))), ")"),
+										b.sequence(b.firstOf(b.sequence("NOT", "BETWEEN"), "BETWEEN"), b.optional(b.firstOf("ASYMMETRIC", "SYMMETRIC")), b.firstOf(additiveExpression, subtractiveExpression), "AND", b.firstOf(additiveExpression, subtractiveExpression)),
 								b.zeroOrMore(
 										b.firstOf("<", ">", "<=", ">=", b.sequence("IS", b.optional("NOT")),
-												b.sequence(b.optional("NOT"), "LIKE")), additiveExpression)))
+												b.sequence(b.optional("NOT"), "LIKE")), b.firstOf(additiveExpression, subtractiveExpression))))
 				.skipIfOneChild();
 //		b.rule(relationalExpressionNoIn)
 //				.is(additiveExpression,
@@ -540,12 +543,12 @@ public enum EsqlGrammar implements GrammarRuleKey {
 		b.rule(castFunction).is("CAST", "(", expression, b.zeroOrMore(",", expression), "AS", dataType,
 				b.optional(b.sequence("CCSID", expression)), b.optional(b.sequence("ENCODING", expression)),
 				b.optional(b.sequence("FORMAT", expression)), b.optional(b.sequence("DEFAULT", expression)), ")");
-		b.rule(caseFunction).is("CASE", b.firstOf(simpleWhenClause, searchedWhenClause),
+		b.rule(caseFunction).is("CASE", b.firstOf(searchedWhenClause, simpleWhenClause),
 				b.optional(b.sequence("ELSE", b.firstOf("NULL", expression))), "END");
 		b.rule(simpleWhenClause).is(expression,
 				b.oneOrMore(b.sequence("WHEN", expression, "THEN", b.firstOf(expression, "NULL"))));
 		b.rule(searchedWhenClause).is(
-				b.oneOrMore(b.sequence("WHEN", expression, "THEN", b.firstOf(expression, "NULL"))));
+				b.oneOrMore(b.sequence("WHEN", condition, "THEN", b.firstOf(expression, "NULL"))));
 		b.rule(selectFunction).is("SELECT", selectClause, fromClause, b.optional(whereClause));
 		b.rule(selectClause).is(
 				b.firstOf(

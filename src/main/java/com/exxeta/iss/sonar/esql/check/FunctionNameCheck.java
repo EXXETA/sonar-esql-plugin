@@ -59,5 +59,13 @@ public class FunctionNameCheck extends AbstractNameCheck {
 	}
 
 	
+	@Override
+	protected boolean isValidName(String nameToCheck) {
+		//Issue 8
+		if ("Main".equals(nameToCheck)){
+			return true;
+		}
+		return super.isValidName(nameToCheck);
+	}
 
 }

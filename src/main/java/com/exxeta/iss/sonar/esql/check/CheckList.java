@@ -49,7 +49,8 @@ public final class CheckList {
         UpperCaseKeywordCheck.class,
         UseBrokerSchemaCheck.class,
         VariableNameCheck.class,
-        PropagateToLabelCheck.class
+        PropagateToLabelCheck.class,
+        ConstantNameCheck.class
         );
   }
 

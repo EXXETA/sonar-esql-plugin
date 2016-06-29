@@ -41,12 +41,16 @@ public abstract class AbstractNameCheck extends SquidCheck<Grammar> {
 	public void visitNode(AstNode astNode) {
 		for (AstNode nameNode : astNode.getChildren(EsqlGrammar.NAME)){
 			String name = nameNode.getTokenOriginalValue();
-			if (!pattern.matcher(name).matches()) {
+			if (!isValidName(name)) {
 				getContext().createLineViolation(this,
 						"Rename {0} \"{1}\" to match the regular expression {2}.",
 						nameNode, typeName(), name, getFormat());
 			}
 		}
+	}
+	
+	protected boolean isValidName(String nameToCheck){
+		return pattern.matcher(nameToCheck).matches();
 	}
 
 	public abstract String typeName();
