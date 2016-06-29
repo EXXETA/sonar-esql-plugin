@@ -20,9 +20,10 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<sonar.buildVersion>4.5.2</sonar.buildVersion>
+		<sonar.version>5.4</sonar.version>
+    	<sslr.version>1.21</sslr.version>
+    	<orchestrator.version>3.10.1</orchestrator.version>
 		<jdk.min.version>1.7</jdk.min.version>
-		<sslr.version>1.21</sslr.version>
 	</properties>
 
 
@@ -36,22 +37,17 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.codehaus.sonar</groupId>
+			<groupId>org.sonarsource.sonarqube</groupId>
 			<artifactId>sonar-plugin-api</artifactId>
-			<version>${sonar.buildVersion}</version>
+			<version>${sonar.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.codehaus.sonar</groupId>
-			<artifactId>sonar-deprecated</artifactId>
-			<version>${sonar.buildVersion}</version>
-			<scope>provided</scope>
-		</dependency>
+
 		<!-- unit tests -->
 		<dependency>
-			<groupId>org.codehaus.sonar</groupId>
+			<groupId>org.sonarsource.sonarqube</groupId>
 			<artifactId>sonar-testing-harness</artifactId>
-			<version>${sonar.buildVersion}</version>
+			<version>${sonar.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -70,49 +66,87 @@
 			<groupId>org.sonarsource.sslr-squid-bridge</groupId>
 			<artifactId>sslr-squid-bridge</artifactId>
 			<version>2.6.1</version>
-		</dependency>
+			<exclusions>
+          <exclusion>
+            <groupId>org.codehaus.sonar.sslr</groupId>
+            <artifactId>sslr-core</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.codehaus.sonar.sslr</groupId>
+            <artifactId>sslr-xpath</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.codehaus.sonar</groupId>
+            <artifactId>sonar-plugin-api</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.picocontainer</groupId>
+            <artifactId>picocontainer</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+          </exclusion>
+          <exclusion>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+          </exclusion>
+        </exclusions>
+        		</dependency>
 		<dependency>
 			<groupId>org.sonarsource.sslr</groupId>
 			<artifactId>sslr-core</artifactId>
 			<version>${sslr.version}</version>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.sonarsource.sslr</groupId>
 			<artifactId>sslr-toolkit</artifactId>
 			<version>${sslr.version}</version>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>org.sonarsource.sslr</groupId>
 			<artifactId>sslr-testing-harness</artifactId>
 			<version>${sslr.version}</version>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.codehaus.sonar.common-rules</groupId>
 			<artifactId>sonar-common-rules</artifactId>
 			<version>1.2</version>
-		</dependency>
+		</dependency> -->
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
 			<version>1.9.0</version>
 		</dependency>
 		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>0.9.15</version>
-		</dependency>
-		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.5.6</version>
+			<version>1.7.21</version>
 		</dependency>
+		<dependency>
+        <groupId>org.hamcrest</groupId>
+        <artifactId>hamcrest-all</artifactId>
+        <version>1.1</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.easytesting</groupId>
+        <artifactId>fest-assert</artifactId>
+        <version>1.4</version>
+      </dependency>
+
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>1.0.13</version>
+      </dependency>
 	</dependencies>
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.codehaus.sonar</groupId>
+				<groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
 				<artifactId>sonar-packaging-maven-plugin</artifactId>
-				<version>1.12.1</version>
+				<version>1.15</version>
 				<extensions>true</extensions>
 				<configuration>
 					<pluginClass>com.exxeta.iss.sonar.esql.EsqlPlugin</pluginClass>

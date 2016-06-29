@@ -33,7 +33,7 @@ import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.rule.CheckFactory;
 import org.sonar.api.batch.rule.Checks;
-import org.sonar.api.checks.NoSonarFilter;
+import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.component.Perspective;
 import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.config.Settings;
@@ -64,6 +64,7 @@ import com.exxeta.iss.sonar.esql.core.Esql;
 import com.exxeta.iss.sonar.esql.metrics.FileLinesVisitor;
 import com.google.common.collect.Lists;
 import com.sonar.sslr.api.Grammar;
+import com.sonar.sslr.api.typed.ActionParser;
 
 public class EsqlSquidSensor implements Sensor {
 
@@ -75,22 +76,22 @@ public class EsqlSquidSensor implements Sensor {
 	private final FileLinesContextFactory fileLinesContextFactory;
 	private final FilePredicate mainFilePredicate;
 	private final FileSystem fileSystem;
-	private final ResourcePerspectives resourcePerspectives;
+	//private final ResourcePerspectives resourcePerspectives;
 	private final Settings settings;
 	private final NoSonarFilter noSonarFilter;
-	private final PathResolver pathResolver;
+	//private final PathResolver pathResolver;
+	private final ActionParser<Tree> parser;
 
 	private SensorContext context;
 	private AstScanner<Grammar> scanner;
 
 	public EsqlSquidSensor(CheckFactory checkFactory, FileLinesContextFactory fileLinesContextFactory,
-			ResourcePerspectives perspectives, FileSystem fileSystem, NoSonarFilter noSonarFilter,
-			PathResolver pathResolver, Settings settings) {
+			FileSystem fileSystem, NoSonarFilter noSonarFilter,
+			 Settings settings) {
 		this.checks = checkFactory.<SquidAstVisitor<Grammar>> create(CheckList.REPOSITORY_KEY).addAnnotatedChecks(
 				CheckList.getChecks());
 		this.fileLinesContextFactory = fileLinesContextFactory;
 		this.fileSystem = fileSystem;
-		this.resourcePerspectives = perspectives;
 		this.noSonarFilter = noSonarFilter;
 		this.pathResolver = pathResolver;
 		this.settings = settings;
