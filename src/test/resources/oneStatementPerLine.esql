@@ -1,9 +1,0 @@
-CREATE COMPUTE MODULE testModule
-
-	CREATE FUNCTION Main() RETURNS BOOLEAN
-	BEGIN
-		SET OutputRoot=InputRoot;	SET OutputRoot=InputRoot;
-		SET OutputRoot=InputRoot;	SET OutputRoot=InputRoot; SET OutputRoot=InputRoot;
-	END;
-
-END MODULE;

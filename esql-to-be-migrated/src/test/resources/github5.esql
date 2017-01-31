@@ -1,0 +1,29 @@
+--Test-code for bugfixes of githib issue #5
+
+PATH com.pag.eai.common, com.pag.eai.common.cs, com.pag.eai.common.logger;
+--The smicolon is not required by IBM but is accepted
+
+
+CREATE COMPUTE MODULE ABC
+
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		SET refControlRecord_ = ROW(
+			'a' ,
+			'b',
+			'c'
+		);
+		SET refControlRecord_ = ROW(
+			TRIM(SUBSTRING(cIdocHeader FROM 19 FOR 3)) AS LogicalMessageCode ,
+			TRIM(SUBSTRING(cIdocHeader FROM 163 FOR 10)) AS PartnerNumberOfSender,
+			TRIM(SUBSTRING(cIdocHeader FROM 100 FOR 30))
+		);
+		SET blResult = TRANSLATE(blSource,x'00');
+		CALL PASSTHRU('kbhhkhjbk');
+		SET a = PASSTHRU('kbhhkhjbk');
+		SET a = PASSTHRU('aaaaa' VALUES ('aaaa'));
+		SET rowResult.result[] = PASSTHRU('UPDATE EAI_SST.INTERFACE_DATA SET EAI_KEY = ?, EAI_VALUE = ? WHERE INTERFACE_NR = ?' VALUES('S', Environment.Variables.lastChangeId, '22202' ));
+		CREATE NEXTSIBLING OF refCol AS refCol REPEAT VALUE '';
+		DECLARE dAlertDate DATE '1970-01-01';
+	END;
+END MODULE;

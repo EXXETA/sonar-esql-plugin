@@ -1,1 +1,4 @@
 /target/
+/bin/
+esql-plugin/.settings/
+esql-frontend/.settings/
