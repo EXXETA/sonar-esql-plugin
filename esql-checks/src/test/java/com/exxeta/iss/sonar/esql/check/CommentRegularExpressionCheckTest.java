@@ -32,6 +32,7 @@ public class CommentRegularExpressionCheckTest {
 	 @Test
 	 public void test() {
 		 CommentRegularExpressionCheck check = new CommentRegularExpressionCheck();
+	 
 		 check.setRegularExpression( "(?i).*TODO.*");
 		 check.message = "Avoid TODO";
 		 

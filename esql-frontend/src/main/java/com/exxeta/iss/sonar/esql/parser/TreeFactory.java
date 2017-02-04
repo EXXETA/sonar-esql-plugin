@@ -500,7 +500,7 @@ public class TreeFactory {
 
 	public ProgramTreeImpl program(Optional<BrokerSchemaStatementTree> brokerSchema,
 			Optional<PathClauseTree> pathClause, Optional<InternalSyntaxToken> semi, EsqlContentsTree esqlContents,
-			InternalSyntaxToken eof) {
+			Tree spacing, InternalSyntaxToken eof) {
 		return new ProgramTreeImpl(brokerSchema.isPresent() ? brokerSchema.get() : null,
 				pathClause.isPresent() ? pathClause.get() : null, semi.isPresent() ? semi.get() : null, esqlContents,
 				eof);
@@ -627,11 +627,7 @@ public class TreeFactory {
 	}
 
 	public EsqlContentsTreeImpl esqlContents(Optional<List<StatementTree>> zeroOrMore) {
-		if (zeroOrMore.isPresent()) {
-			return new EsqlContentsTreeImpl(zeroOrMore.get());
-		} else {
-			return new EsqlContentsTreeImpl(null);
-		}
+		return new EsqlContentsTreeImpl(optionalList(zeroOrMore));
 
 	}
 

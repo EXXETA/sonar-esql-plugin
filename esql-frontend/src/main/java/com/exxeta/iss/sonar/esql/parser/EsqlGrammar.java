@@ -85,7 +85,9 @@ public class EsqlGrammar {
 
 		return b.<ProgramTreeImpl>nonterminal(EsqlLegacyGrammar.PROGRAM)
 				.is(f.program(b.optional(BROKER_SCHEMA_STATEMENT()), b.optional(PATH_CLAUSE()),
-						b.optional(b.token(SEMI)), ESQL_CONTENTS(), b.token(EsqlLegacyGrammar.EOF)));
+						b.optional(b.token(SEMI)), ESQL_CONTENTS(), 
+						b.token(EsqlLegacyGrammar.SPACING_NOT_SKIPPED),
+						b.token(EsqlLegacyGrammar.EOF)));
 
 	}
 
@@ -171,7 +173,8 @@ public class EsqlGrammar {
 								b.token(EsqlNonReservedKeyword.FILTER)),
 						b.token(EsqlNonReservedKeyword.MODULE), b.token(EsqlLegacyGrammar.IDENTIFIER),
 						b.zeroOrMore(b.firstOf(ROUTINE_DECLARATION(), DECLARE_STATEMENT())),
-						b.token(EsqlNonReservedKeyword.END), b.token(EsqlNonReservedKeyword.MODULE), b.token(EsqlLegacyGrammar.EOS)));
+						b.token(EsqlNonReservedKeyword.END), b.token(EsqlNonReservedKeyword.MODULE),
+						b.token(EsqlLegacyGrammar.EOS)));
 
 	}
 
@@ -256,10 +259,8 @@ public class EsqlGrammar {
 						b.optional(f.newTuple19(b.optional(b.token(EsqlNonReservedKeyword.NOT)),
 								b.token(EsqlNonReservedKeyword.ATOMIC))),
 						b.zeroOrMore(STATEMENT()), b.token(EsqlNonReservedKeyword.END),
-						b.optional(b.token(EsqlLegacyGrammar.IDENTIFIER)),b.token(EsqlLegacyGrammar.EOS)));
+						b.optional(b.token(EsqlLegacyGrammar.IDENTIFIER)), b.token(EsqlLegacyGrammar.EOS)));
 	}
-	
-	
 
 	public DeclareStatementTreeImpl DECLARE_STATEMENT() {
 		return b.<DeclareStatementTreeImpl>nonterminal(EsqlLegacyGrammar.declareStatement)
@@ -277,10 +278,10 @@ public class EsqlGrammar {
 	public IfStatementTreeImpl IF_STATEMENT() {
 		return b.<IfStatementTreeImpl>nonterminal(Kind.IF_STATEMENT).is(
 
-				f.ifStatement(b.token(EsqlNonReservedKeyword.IF), EXPRESSION(),
-						b.token(EsqlNonReservedKeyword.THEN), b.zeroOrMore(STATEMENT()), b.zeroOrMore(ELSEIF_CLAUSE()),
-						b.optional(ELSE_CLAUSE()), b.token(EsqlNonReservedKeyword.END),
-						b.token(EsqlNonReservedKeyword.IF), b.token(EsqlLegacyGrammar.EOS)));
+				f.ifStatement(b.token(EsqlNonReservedKeyword.IF), EXPRESSION(), b.token(EsqlNonReservedKeyword.THEN),
+						b.zeroOrMore(STATEMENT()), b.zeroOrMore(ELSEIF_CLAUSE()), b.optional(ELSE_CLAUSE()),
+						b.token(EsqlNonReservedKeyword.END), b.token(EsqlNonReservedKeyword.IF),
+						b.token(EsqlLegacyGrammar.EOS)));
 	}
 
 	public ElseClauseTreeImpl ELSE_CLAUSE() {
@@ -290,17 +291,18 @@ public class EsqlGrammar {
 
 	public ElseifClauseTreeImpl ELSEIF_CLAUSE() {
 		return b.<ElseifClauseTreeImpl>nonterminal(Kind.ELSEIF_CLAUSE)
-				.is(f.elseifClause(b.token(EsqlNonReservedKeyword.ELSEIF),EXPRESSION(),
-						b.token(EsqlNonReservedKeyword.THEN),b.zeroOrMore(STATEMENT())));
+				.is(f.elseifClause(b.token(EsqlNonReservedKeyword.ELSEIF), EXPRESSION(),
+						b.token(EsqlNonReservedKeyword.THEN), b.zeroOrMore(STATEMENT())));
 	}
 
-	public SetStatementTreeImpl SET_STATEMENT(){
+	public SetStatementTreeImpl SET_STATEMENT() {
 		return b.<SetStatementTreeImpl>nonterminal(Kind.SET_STATEMENT).is(f.setStatement(
-				b.token(EsqlNonReservedKeyword.SET), FIELD_REFERENCE(), b.optional(b.firstOf(b.token(EsqlNonReservedKeyword.TYPE), b.token(EsqlNonReservedKeyword.NAMESPACE), b.token(EsqlNonReservedKeyword.NAME), b.token(EsqlNonReservedKeyword.VALUE))), b.token(EsqlPunctuator.EQUAL),
-						EXPRESSION(), b.token(EsqlLegacyGrammar.EOS)
-				));
+				b.token(EsqlNonReservedKeyword.SET), FIELD_REFERENCE(),
+				b.optional(b.firstOf(b.token(EsqlNonReservedKeyword.TYPE), b.token(EsqlNonReservedKeyword.NAMESPACE),
+						b.token(EsqlNonReservedKeyword.NAME), b.token(EsqlNonReservedKeyword.VALUE))),
+				b.token(EsqlPunctuator.EQUAL), EXPRESSION(), b.token(EsqlLegacyGrammar.EOS)));
 	}
-	
+
 	public StatementTree PROPAGATE_STATEMENT() {
 		return b.<PropagateStatementTreeImpl>nonterminal(Kind.PROPAGATE_STATEMENT)
 				.is(f.propagateStatement(b.token(EsqlNonReservedKeyword.PROPAGATE),
@@ -360,10 +362,8 @@ public class EsqlGrammar {
 	}
 
 	public ExpressionTree CALL_EXPRESSION() {
-		return b.<ExpressionTree>nonterminal(Kind.CALL_EXPRESSION)
-				.is(f.callExpression(b.firstOf(FUNCTION(),
-						f.newTuple24(FIELD_REFERENCE(), ARGUMENT_CLAUSE()),
-						FIELD_REFERENCE())));
+		return b.<ExpressionTree>nonterminal(Kind.CALL_EXPRESSION).is(f.callExpression(
+				b.firstOf(FUNCTION(), f.newTuple24(FIELD_REFERENCE(), ARGUMENT_CLAUSE()), FIELD_REFERENCE())));
 	}
 
 	public ParameterListTreeImpl ARGUMENT_CLAUSE() {
@@ -474,14 +474,14 @@ public class EsqlGrammar {
 
 	public ExpressionTree PRIMARY_EXPRESSION() {
 		return b.<ExpressionTree>nonterminal(EsqlLegacyGrammar.primaryExpression)
-				.is(b.firstOf(INTERVAL_LITERAL(), LITERAL(),
-						ARRAY_LITERAL(), INTERVAL_EXPRESSION(), LIST_LITERAL(), TIME_LITERAL(), DATE_LITERAL(),
-						PARENTHESISED_EXPRESSION()));
+				.is(b.firstOf(INTERVAL_LITERAL(), LITERAL(), ARRAY_LITERAL(), INTERVAL_EXPRESSION(), LIST_LITERAL(),
+						TIME_LITERAL(), DATE_LITERAL(), PARENTHESISED_EXPRESSION()));
 	}
 
 	public FieldReferenceTreeImpl FIELD_REFERENCE() {
-		return b.<FieldReferenceTreeImpl>nonterminal(Kind.FIELD_REFERENCE).is(f.fieldReference(b.firstOf(PRIMARY_EXPRESSION(),b.token(EsqlLegacyGrammar.IDENTIFIER)),
-				b.zeroOrMore(f.newTuple21(b.token(EsqlPunctuator.DOT), PATH_ELEMENT()))));
+		return b.<FieldReferenceTreeImpl>nonterminal(Kind.FIELD_REFERENCE)
+				.is(f.fieldReference(b.firstOf(PRIMARY_EXPRESSION(), b.token(EsqlLegacyGrammar.IDENTIFIER)),
+						b.zeroOrMore(f.newTuple21(b.token(EsqlPunctuator.DOT), PATH_ELEMENT()))));
 	}
 
 	public NamespaceTreeImpl NAMESPACE() {
@@ -493,7 +493,7 @@ public class EsqlGrammar {
 				Kind.PATH_ELEMENT).is(
 						f.pathElement(
 								b.optional(f.newTriple1(b.token(EsqlPunctuator.LPARENTHESIS),
-										f.newTuple30(PRIMARY_EXPRESSION	(),
+										f.newTuple30(PRIMARY_EXPRESSION(),
 												b.zeroOrMore(f.newTuple20(b.token(EsqlPunctuator.DOT),
 														PRIMARY_EXPRESSION()))),
 										b.token(EsqlPunctuator.RPARENTHESIS))),
@@ -552,54 +552,52 @@ public class EsqlGrammar {
 						b.token(EsqlPunctuator.RPARENTHESIS)));
 	}
 
-	
-	public DataTypeTreeImpl DATA_TYPE(){
-		return b.<DataTypeTreeImpl>nonterminal(EsqlLegacyGrammar.dataType).is(f.dataType(
-				b.firstOf(
-						b.token(EsqlNonReservedKeyword.BOOLEAN), 
-						b.token(EsqlNonReservedKeyword.INT), 
-						b.token(EsqlNonReservedKeyword.INTEGER), 
-						b.token(EsqlNonReservedKeyword.FLOAT),
-						DECIMAL_DATA_TYPE(), 
-						b.token(EsqlNonReservedKeyword.DATE),
-						b.token(EsqlNonReservedKeyword.TIME), 
-						b.token(EsqlNonReservedKeyword.TIMESTAMP), 
-						b.token(EsqlNonReservedKeyword.GMTTIME), 
-						b.token(EsqlNonReservedKeyword.GMTTIMESTAMP), 
-						INTERVAL_DATA_TYPE(), 
-						b.token(EsqlNonReservedKeyword.CHARACTER), 
-						b.token(EsqlNonReservedKeyword.CHAR),  
-						b.token(EsqlNonReservedKeyword.BLOB),
-						b.token(EsqlNonReservedKeyword.BIT),
-						b.token(EsqlNonReservedKeyword.ROW), 
-						f.newTuple33(b.token(EsqlNonReservedKeyword.REFERENCE), b.optional(b.token(EsqlNonReservedKeyword.TO))))));
-		
+	public DataTypeTreeImpl DATA_TYPE() {
+		return b.<DataTypeTreeImpl>nonterminal(EsqlLegacyGrammar.dataType)
+				.is(f.dataType(b.firstOf(b.token(EsqlNonReservedKeyword.BOOLEAN), b.token(EsqlNonReservedKeyword.INT),
+						b.token(EsqlNonReservedKeyword.INTEGER), b.token(EsqlNonReservedKeyword.FLOAT),
+						DECIMAL_DATA_TYPE(), b.token(EsqlNonReservedKeyword.DATE), b.token(EsqlNonReservedKeyword.TIME),
+						b.token(EsqlNonReservedKeyword.TIMESTAMP), b.token(EsqlNonReservedKeyword.GMTTIME),
+						b.token(EsqlNonReservedKeyword.GMTTIMESTAMP), INTERVAL_DATA_TYPE(),
+						b.token(EsqlNonReservedKeyword.CHARACTER), b.token(EsqlNonReservedKeyword.CHAR),
+						b.token(EsqlNonReservedKeyword.BLOB), b.token(EsqlNonReservedKeyword.BIT),
+						b.token(EsqlNonReservedKeyword.ROW), f.newTuple33(b.token(EsqlNonReservedKeyword.REFERENCE),
+								b.optional(b.token(EsqlNonReservedKeyword.TO))))));
+
 	}
-	
-	public IntervalDataTypeTreeImpl INTERVAL_DATA_TYPE(){
-		return b.<IntervalDataTypeTreeImpl>nonterminal(Kind.INTERVAL_DATA_TYPE).is(f.intervalDataType(
-				b.token(EsqlNonReservedKeyword.INTERVAL), b.optional(INTERVAL_QUALIFIER())
-				));
-				
+
+	public IntervalDataTypeTreeImpl INTERVAL_DATA_TYPE() {
+		return b.<IntervalDataTypeTreeImpl>nonterminal(Kind.INTERVAL_DATA_TYPE)
+				.is(f.intervalDataType(b.token(EsqlNonReservedKeyword.INTERVAL), b.optional(INTERVAL_QUALIFIER())));
+
 	}
-	
-	public IntervalQualifierTreeImpl INTERVAL_QUALIFIER(){
-		return b.<IntervalQualifierTreeImpl>nonterminal(EsqlLegacyGrammar.intervalQualifier).is(f.intervalQualifier(
-				b.firstOf(
-						f.newTuple35(b.token(EsqlNonReservedKeyword.YEAR), b.optional(f.newTuple34(b.token(EsqlNonReservedKeyword.TO), b.token(EsqlNonReservedKeyword.MONTH)))), 
-								b.token(EsqlNonReservedKeyword.MONTH),
-						f.newTuple37(b.token(EsqlNonReservedKeyword.DAY), f.newTuple36(b.token(EsqlNonReservedKeyword.TO), b.firstOf(b.token(EsqlNonReservedKeyword.HOUR), b.token(EsqlNonReservedKeyword.MINUTE), b.token(EsqlNonReservedKeyword.SECOND)))),
-						f.newTuple38(b.token(EsqlNonReservedKeyword.HOUR), b.optional(f.newTuple39(b.token(EsqlNonReservedKeyword.TO), b.firstOf(b.token(EsqlNonReservedKeyword.MINUTE), b.token(EsqlNonReservedKeyword.SECOND))))),
-						f.newTuple41(b.token(EsqlNonReservedKeyword.MINUTE), b.optional(f.newTuple40(b.token(EsqlNonReservedKeyword.TO), b.token(EsqlNonReservedKeyword.SECOND)))), 
-								b.token(EsqlNonReservedKeyword.SECOND))
-				));
+
+	public IntervalQualifierTreeImpl INTERVAL_QUALIFIER() {
+		return b.<IntervalQualifierTreeImpl>nonterminal(EsqlLegacyGrammar.intervalQualifier)
+				.is(f.intervalQualifier(b.firstOf(
+						f.newTuple35(b.token(EsqlNonReservedKeyword.YEAR),
+								b.optional(f.newTuple34(b.token(EsqlNonReservedKeyword.TO),
+										b.token(EsqlNonReservedKeyword.MONTH)))),
+						b.token(EsqlNonReservedKeyword.MONTH),
+						f.newTuple37(b.token(EsqlNonReservedKeyword.DAY), f.newTuple36(
+								b.token(EsqlNonReservedKeyword.TO), b.firstOf(b.token(EsqlNonReservedKeyword.HOUR),
+										b.token(EsqlNonReservedKeyword.MINUTE), b
+												.token(EsqlNonReservedKeyword.SECOND)))),
+						f.newTuple38(b.token(EsqlNonReservedKeyword.HOUR),
+								b.optional(f.newTuple39(b.token(EsqlNonReservedKeyword.TO),
+										b.firstOf(b.token(EsqlNonReservedKeyword.MINUTE),
+												b.token(EsqlNonReservedKeyword.SECOND))))),
+						f.newTuple41(b.token(EsqlNonReservedKeyword.MINUTE),
+								b.optional(f.newTuple40(b.token(EsqlNonReservedKeyword.TO),
+										b.token(EsqlNonReservedKeyword.SECOND)))),
+						b.token(EsqlNonReservedKeyword.SECOND))));
 	}
-	
-	public DecimalDataTypeTreeImpl DECIMAL_DATA_TYPE(){
-		return b.<DecimalDataTypeTreeImpl>nonterminal(Kind.DECIMAL_DATA_TYPE).is(f.decimalDataType(
-				b.token(EsqlNonReservedKeyword.DECIMAL), b.optional(
-						f.decimalSize(b.token(EsqlPunctuator.LPARENTHESIS), b.token(EsqlLegacyGrammar.NUMERIC_LITERAL), b.token(EsqlPunctuator.COMMA), b.token(EsqlLegacyGrammar.NUMERIC_LITERAL), b.token(EsqlPunctuator.RPARENTHESIS))
-					)
-				));
+
+	public DecimalDataTypeTreeImpl DECIMAL_DATA_TYPE() {
+		return b.<DecimalDataTypeTreeImpl>nonterminal(Kind.DECIMAL_DATA_TYPE)
+				.is(f.decimalDataType(b.token(EsqlNonReservedKeyword.DECIMAL),
+						b.optional(f.decimalSize(b.token(EsqlPunctuator.LPARENTHESIS),
+								b.token(EsqlLegacyGrammar.NUMERIC_LITERAL), b.token(EsqlPunctuator.COMMA),
+								b.token(EsqlLegacyGrammar.NUMERIC_LITERAL), b.token(EsqlPunctuator.RPARENTHESIS)))));
 	}
 }

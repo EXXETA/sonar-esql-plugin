@@ -16,23 +16,27 @@
  * limitations under the License.
  */package com.exxeta.iss.sonar.esql.check;
 
-import org.sonar.check.Priority;
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.util.List;
+import java.util.regex.Pattern;
+
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.squidbridge.annotations.NoSqale;
 import org.sonar.squidbridge.annotations.RuleTemplate;
-import org.sonar.squidbridge.checks.AbstractCommentRegularExpressionCheck;
 
-import com.sonar.sslr.api.Grammar;
+import com.exxeta.iss.sonar.esql.api.tree.Tree;
+import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
+import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxTrivia;
+import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
+import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitorCheck;
+import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableList;
 
-@Rule(
-  key = "CommentRegularExpression",
-  priority = Priority.MAJOR,
-  name="Regular expression on comment"
-  )
-@NoSqale
+@Rule(  key = "CommentRegularExpression" )
 @RuleTemplate
-public class CommentRegularExpressionCheck extends AbstractCommentRegularExpressionCheck<Grammar> {
+public class CommentRegularExpressionCheck  extends SubscriptionVisitorCheck {
 
   private static final String DEFAULT_REGULAR_EXPRESSION = "";
   private static final String DEFAULT_MESSAGE = "The regular expression matches this comment";
@@ -49,14 +53,47 @@ public class CommentRegularExpressionCheck extends AbstractCommentRegularExpress
     defaultValue = "" + DEFAULT_MESSAGE)
   public String message = DEFAULT_MESSAGE;
 
-  @Override
-  public String getRegularExpression() {
-    return regularExpression;
+  private Pattern pattern = null;
+
+  public void init() {
+    checkNotNull(regularExpression, "getRegularExpression() should not return null");
+
+    if (!Strings.isNullOrEmpty(regularExpression)) {
+      try {
+        pattern = Pattern.compile(regularExpression, Pattern.DOTALL);
+      } catch (RuntimeException e) {
+        throw new IllegalStateException("Unable to compile regular expression: " + regularExpression, e);
+      }
+
+    } else {
+      pattern = null;
+    }
+  }
+
+  public void setMessage(String message) {
+    this.message = message;
+  }
+
+  public void setRegularExpression(String regularExpression) {
+    this.regularExpression = regularExpression;
+    init();
   }
 
   @Override
-  public String getMessage() {
-    return message;
+  public void visitNode(Tree tree) {
+    if (pattern != null) {
+      SyntaxToken token = (SyntaxToken) tree;
+      for (SyntaxTrivia trivia : token.trivias()) {
+        if (pattern.matcher(trivia.text()).matches()) {
+          addIssue(new LineIssue(this, trivia.line(), message));
+        }
+      }
+    }
+  }
+
+  @Override
+  public List<Kind> nodesToVisit() {
+    return ImmutableList.of(Kind.TOKEN);
   }
 
 }
