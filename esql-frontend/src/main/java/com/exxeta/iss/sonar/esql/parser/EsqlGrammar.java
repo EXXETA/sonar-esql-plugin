@@ -62,6 +62,8 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.ElseClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ElseifClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ExternalRoutineBodyTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.IfStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.IterateStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.LabelTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.LanguageTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.MessageSourceTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ParameterTreeImpl;
@@ -247,24 +249,32 @@ public class EsqlGrammar {
 	}
 
 	private StatementTree BASIC_STATEMENT() {
-		// TODO Auto-generated method stub
-		return b.firstOf(BEGIN_END_STATEMENT(), DECLARE_STATEMENT(), IF_STATEMENT(), SET_STATEMENT());
+		return b.firstOf(BEGIN_END_STATEMENT(), DECLARE_STATEMENT(), IF_STATEMENT(), ITERATE_STATEMENT(), SET_STATEMENT());
 	}
 
 	public BeginEndStatementTreeImpl BEGIN_END_STATEMENT() {
 		return b.<BeginEndStatementTreeImpl>nonterminal(Kind.BEGIN_END_STATEMENT)
 				.is(f.beginEndStatement(
-						b.optional(f.newTuple18(b.token(EsqlLegacyGrammar.IDENTIFIER), b.token(EsqlPunctuator.COLON))),
+						b.optional(f.newTuple18(LABEL(), b.token(EsqlPunctuator.COLON))),
 						b.token(EsqlNonReservedKeyword.BEGIN),
 						b.optional(f.newTuple19(b.optional(b.token(EsqlNonReservedKeyword.NOT)),
 								b.token(EsqlNonReservedKeyword.ATOMIC))),
 						b.zeroOrMore(STATEMENT()), b.token(EsqlNonReservedKeyword.END),
-						b.optional(b.token(EsqlLegacyGrammar.IDENTIFIER)), b.token(EsqlLegacyGrammar.EOS)));
+						b.optional(LABEL()), b.token(EsqlLegacyGrammar.EOS)));
+	}
+	public LabelTreeImpl LABEL(){
+		return b.<LabelTreeImpl>nonterminal(Kind.LABEL).is(f.label(b.token(EsqlLegacyGrammar.IDENTIFIER)));
 	}
 
 	public DeclareStatementTreeImpl DECLARE_STATEMENT() {
 		return b.<DeclareStatementTreeImpl>nonterminal(EsqlLegacyGrammar.declareStatement)
-				.is(f.declareStatement(b.token(EsqlNonReservedKeyword.DECLARE)));
+				.is(f.declareStatement(
+						b.token(EsqlNonReservedKeyword.DECLARE), b.token(EsqlLegacyGrammar.IDENTIFIER),
+						b.zeroOrMore(f.newTuple42(b.token(COMMA),b.token(EsqlLegacyGrammar.IDENTIFIER))),
+						b.optional(b.firstOf(b.token(EsqlNonReservedKeyword.SHARED),b.token(EsqlNonReservedKeyword.EXTERNAL))),
+						b.firstOf(f.newTuple43(b.optional(b.token(EsqlNonReservedKeyword.CONSTANT)),  DATA_TYPE()),b.token(EsqlNonReservedKeyword.NAMESPACE), b.token(EsqlNonReservedKeyword.NAME)),
+						b.optional(EXPRESSION()), b.token(EsqlLegacyGrammar.EOS)
+				));
 
 		// rule(declareStatement).is("DECLARE", NAME,
 		// b.zeroOrMore(b.sequence(",", NAME)),
@@ -293,6 +303,12 @@ public class EsqlGrammar {
 		return b.<ElseifClauseTreeImpl>nonterminal(Kind.ELSEIF_CLAUSE)
 				.is(f.elseifClause(b.token(EsqlNonReservedKeyword.ELSEIF), EXPRESSION(),
 						b.token(EsqlNonReservedKeyword.THEN), b.zeroOrMore(STATEMENT())));
+	}
+	
+	public IterateStatementTreeImpl ITERATE_STATEMENT(){
+		return b.<IterateStatementTreeImpl>nonterminal(Kind.ITERATE_STATEMENT).is(f.iterateStatement(
+				b.token(EsqlNonReservedKeyword.ITERATE), LABEL(), b.token(EsqlLegacyGrammar.EOS)
+				));
 	}
 
 	public SetStatementTreeImpl SET_STATEMENT() {

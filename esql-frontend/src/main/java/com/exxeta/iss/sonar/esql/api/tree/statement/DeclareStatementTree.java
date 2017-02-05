@@ -1,28 +1,19 @@
 package com.exxeta.iss.sonar.esql.api.tree.statement;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
-import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
+import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
+import com.exxeta.iss.sonar.esql.tree.impl.declaration.DataTypeTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 
 public interface DeclareStatementTree extends StatementTree {
-	SyntaxToken ifKeyword();
 
-	ExpressionTree condition();
-
-	List<StatementTree> statements();
-
-	SyntaxToken thenToken();
-
-	List<ElseifClauseTree> elseifClauses();
-
-	@Nullable
-	ElseClauseTree elseClause();
-
-	SyntaxToken endKeyword();
-
-	SyntaxToken ifKeyword2();
+	InternalSyntaxToken declareToken();
+	SeparatedList<InternalSyntaxToken> nameList();
+	InternalSyntaxToken sharedExt();
+	InternalSyntaxToken namesapce();
+	InternalSyntaxToken constantKeyword();
+	DataTypeTreeImpl dataType();
+	ExpressionTree initialValueExpression();
+	InternalSyntaxToken semi();
 
 }

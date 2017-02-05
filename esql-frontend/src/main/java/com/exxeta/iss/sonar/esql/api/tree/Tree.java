@@ -19,6 +19,8 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.ElseClauseTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ElseifClauseTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ExternalRoutineBodyTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.IfStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.IterateStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.LabelTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.LanguageTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.MessageSourceTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ParameterListTree;
@@ -99,7 +101,9 @@ public interface Tree {
 		INTERVAL_DATA_TYPE(IntervalDataTypeTree.class), 
 		DECIMAL_DATA_TYPE(DecimalDataTypeTree.class), 
 		Data_TYPE(DataTypeTree.class), 
-		SET_STATEMENT(SetStatementTree.class);
+		SET_STATEMENT(SetStatementTree.class),
+		ITERATE_STATEMENT(IterateStatementTree.class), 
+		LABEL(LabelTree.class);
 
 		final Class<? extends Tree> associatedInterface;
 

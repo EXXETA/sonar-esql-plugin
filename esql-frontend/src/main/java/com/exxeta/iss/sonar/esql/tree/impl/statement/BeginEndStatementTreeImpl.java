@@ -13,19 +13,19 @@ import com.google.common.collect.Iterators;
 
 public class BeginEndStatementTreeImpl extends EsqlTree implements BeginEndStatementTree {
 
-	private InternalSyntaxToken labelName1;
+	private LabelTreeImpl labelName1;
 	private InternalSyntaxToken colon;
 	private InternalSyntaxToken beginKeyword;
 	private InternalSyntaxToken notKeyword;
 	private InternalSyntaxToken atomicKeyword;
 	private List<StatementTree> statements;
 	private InternalSyntaxToken endKeyword;
-	private InternalSyntaxToken labelName2;
+	private LabelTreeImpl labelName2;
 	private InternalSyntaxToken semiToken;
 
-	public BeginEndStatementTreeImpl(InternalSyntaxToken labelName1, InternalSyntaxToken colon,
+	public BeginEndStatementTreeImpl(LabelTreeImpl labelName1, InternalSyntaxToken colon,
 			InternalSyntaxToken beginKeyword, InternalSyntaxToken notKeyword, InternalSyntaxToken atomicKeyword,
-			List<StatementTree> statements, InternalSyntaxToken endKeyword, InternalSyntaxToken labelName2, InternalSyntaxToken semiToken) {
+			List<StatementTree> statements, InternalSyntaxToken endKeyword, LabelTreeImpl labelName2, InternalSyntaxToken semiToken) {
 		super();
 		this.labelName1 = labelName1;
 		this.colon = colon;
@@ -49,7 +49,7 @@ public class BeginEndStatementTreeImpl extends EsqlTree implements BeginEndState
 		this.semiToken=semiToken;
 	}
 
-	public InternalSyntaxToken labelName1() {
+	public LabelTreeImpl labelName1() {
 		return labelName1;
 	}
 
@@ -77,7 +77,7 @@ public class BeginEndStatementTreeImpl extends EsqlTree implements BeginEndState
 		return endKeyword;
 	}
 
-	public InternalSyntaxToken labelName2() {
+	public LabelTreeImpl labelName2() {
 		return labelName2;
 	}
 

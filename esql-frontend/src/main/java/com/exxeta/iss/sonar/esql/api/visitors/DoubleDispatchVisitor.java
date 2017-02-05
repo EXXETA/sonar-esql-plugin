@@ -40,6 +40,8 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.ElseClauseTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ElseifClauseTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ExternalRoutineBodyTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.IfStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.IterateStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.LabelTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.LanguageTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.MessageSourceTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ParameterListTree;
@@ -284,5 +286,15 @@ public abstract class DoubleDispatchVisitor implements TreeVisitor {
 	public void visitSetStatement(SetStatementTree tree) {
 		scanChildren(tree);
 	}
+
+	public void visitLabel(LabelTree tree) {
+		scanChildren(tree);
+	}
+
+	public void visitIterateStatement(IterateStatementTree tree) {
+		scanChildren(tree);
+		
+	}
+
 
 }

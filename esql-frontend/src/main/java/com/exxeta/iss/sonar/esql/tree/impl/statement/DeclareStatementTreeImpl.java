@@ -1,111 +1,129 @@
 package com.exxeta.iss.sonar.esql.tree.impl.statement;
 
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 
-import javax.annotation.Nullable;
+import org.sonar.api.internal.google.common.collect.Iterators;
 
+import com.exxeta.iss.sonar.esql.api.tree.PathElementTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
-import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.api.tree.statement.DeclareStatementTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.ElseClauseTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.ElseifClauseTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.IfStatementTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
-import com.google.common.collect.Iterators;
+import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
+import com.exxeta.iss.sonar.esql.tree.impl.declaration.DataTypeTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
+import com.google.common.base.Functions;
 
 public class DeclareStatementTreeImpl  extends EsqlTree implements DeclareStatementTree {
 
-	private final SyntaxToken ifKeyword;
-	private final ExpressionTree condition;
-	private final SyntaxToken thenKeyword;
-	private final List<StatementTree> statements;
-	private final List<ElseifClauseTree> elseifClauses;
-	private final ElseClauseTree elseClause;
-	private final SyntaxToken endKeyword;
-	private final SyntaxToken ifKeyword2;
+	private InternalSyntaxToken declareToken;
+	private SeparatedList<InternalSyntaxToken> nameList;
+	private InternalSyntaxToken sharedExt;
+	private InternalSyntaxToken namesapce;
+	private InternalSyntaxToken constantKeyword;
+	private DataTypeTreeImpl dataType;
+	private ExpressionTree initialValueExpression;
+	private InternalSyntaxToken semi;
 
-	
-	  public DeclareStatementTreeImpl(SyntaxToken ifKeyword, ExpressionTree condition, SyntaxToken thenKeyword,
-			List<StatementTree> statements, List<ElseifClauseTree> elseifClauses, ElseClauseTree elseClause,
-			SyntaxToken endKeyword, SyntaxToken ifKeyword2) {
+
+	public DeclareStatementTreeImpl(InternalSyntaxToken declareToken, SeparatedList<InternalSyntaxToken> nameList,
+			InternalSyntaxToken sharedExt, InternalSyntaxToken namesapce, ExpressionTree initialValueExpression,
+			InternalSyntaxToken semi) {
 		super();
-		this.ifKeyword = ifKeyword;
-		this.condition = condition;
-		this.thenKeyword = thenKeyword;
-		this.statements = statements==null?Collections.emptyList():statements;
-		this.elseifClauses = elseifClauses==null?Collections.emptyList():elseifClauses;
-		this.elseClause = elseClause;
-		this.endKeyword = endKeyword;
-		this.ifKeyword2 = ifKeyword2;
+		this.declareToken = declareToken;
+		this.nameList = nameList;
+		this.sharedExt = sharedExt;
+		this.namesapce = namesapce;
+		this.initialValueExpression = initialValueExpression;
+		this.semi = semi;
+	}
+	
+	
+
+	public DeclareStatementTreeImpl(InternalSyntaxToken declareToken, SeparatedList<InternalSyntaxToken> nameList,
+			InternalSyntaxToken sharedExt, InternalSyntaxToken constantKeyword, DataTypeTreeImpl dataType,
+			ExpressionTree initialValueExpression, InternalSyntaxToken semi) {
+		super();
+		this.declareToken = declareToken;
+		this.nameList = nameList;
+		this.sharedExt = sharedExt;
+		this.constantKeyword = constantKeyword;
+		this.dataType = dataType;
+		this.initialValueExpression = initialValueExpression;
+		this.semi = semi;
 	}
 
 
 
+	@Override
+	public InternalSyntaxToken declareToken() {
+		return declareToken;
+	}
+
+
 
 	@Override
-	  public SyntaxToken ifKeyword() {
-	    return ifKeyword;
-	  }
+	public SeparatedList<InternalSyntaxToken> nameList() {
+		return nameList;
+	}
 
-	
-	  @Override
-	  public ExpressionTree condition() {
-	    return condition;
-	  }
 
-	  @Override
-	  public SyntaxToken thenToken() {
-		  return thenKeyword;
-	  }
-	
-	  @Override
-	  public List<StatementTree> statements() {
-	    return statements;
-	  }
 
-	  @Override
-	  public List<ElseifClauseTree> elseifClauses() {
-	    return elseifClauses;
-	  }
+	@Override
+	public InternalSyntaxToken sharedExt() {
+		return sharedExt;
+	}
 
-	  @Nullable
-	  @Override
-	  public ElseClauseTree elseClause() {
-	    return elseClause;
-	  }
-	  
-	  @Override
-	  public SyntaxToken endKeyword(){
-		  return endKeyword;
-	  }
 
-	  @Override
-	  public SyntaxToken ifKeyword2(){
-		  return ifKeyword2;
-	  }
 
-	  public boolean hasElse() {
-	    return elseClause != null;
-	  }
+	@Override
+	public InternalSyntaxToken namesapce() {
+		return namesapce;
+	}
 
-	  @Override
+
+
+	@Override
+	public InternalSyntaxToken constantKeyword() {
+		return constantKeyword;
+	}
+
+
+
+	@Override
+	public DataTypeTreeImpl dataType() {
+		return dataType;
+	}
+
+
+
+	@Override
+	public ExpressionTree initialValueExpression() {
+		return initialValueExpression;
+	}
+
+
+
+	@Override
+	public InternalSyntaxToken semi() {
+		return semi;
+	}
+
+
+
+	@Override
 	  public Kind getKind() {
-	    return Kind.IF_STATEMENT;
+	    return Kind.DECLARE_STATEMENT;
 	  }
 
 	  @Override
 	  public Iterator<Tree> childrenIterator() {
-		  return Iterators.<Tree>concat(
-				  Iterators.forArray(ifKeyword,condition,thenKeyword),
-			      statements.iterator(),
-			      elseifClauses.iterator(),
-			      Iterators.forArray(elseClause,endKeyword,ifKeyword2)
-			      );
+		  return Iterators.concat(
+				  	Iterators.singletonIterator(declareToken),
+				  	nameList.elementsAndSeparators(Functions.<InternalSyntaxToken>identity()),
+				  	Iterators.forArray(sharedExt, namesapce, constantKeyword, dataType, initialValueExpression, semi)
+				  );
 	  }
 
 	  @Override

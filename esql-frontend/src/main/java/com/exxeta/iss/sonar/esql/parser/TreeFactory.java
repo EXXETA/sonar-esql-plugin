@@ -75,6 +75,8 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.ElseClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ElseifClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ExternalRoutineBodyTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.IfStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.IterateStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.LabelTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.LanguageTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.MessageSourceTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ParameterTreeImpl;
@@ -206,8 +208,14 @@ public class TreeFactory {
 				elseClause.isPresent() ? elseClause.get() : null, endToken, ifToken2, semiToken);
 	}
 
-	public DeclareStatementTreeImpl declareStatement(InternalSyntaxToken declareToken) {
-		return new DeclareStatementTreeImpl(declareToken, null, null, null, null, null, null, null);
+	public DeclareStatementTreeImpl declareStatement(InternalSyntaxToken declareToken, InternalSyntaxToken name, Optional<List<Tuple<InternalSyntaxToken, InternalSyntaxToken>>> restNames, 
+			Optional<InternalSyntaxToken> sharedExt, Object dataType, Optional<ExpressionTree> initialValue, InternalSyntaxToken semi) {
+		if (dataType instanceof Tuple){
+			Tuple<Optional<InternalSyntaxToken>,DataTypeTreeImpl> dt = (Tuple)dataType;
+			return new DeclareStatementTreeImpl(declareToken, nameList(name, restNames), sharedExt.isPresent()?sharedExt.get():null, dt.first().isPresent()?dt.first().get():null, dt.second(), initialValue.isPresent()?initialValue.get():null, semi);
+		}else {
+			return new DeclareStatementTreeImpl(declareToken, nameList(name, restNames), sharedExt.isPresent()?sharedExt.get():null, (InternalSyntaxToken)dataType, initialValue.isPresent()?initialValue.get():null, semi);
+		}
 	}
 
 	public static class Tuple<T, U> {
@@ -438,6 +446,14 @@ public class TreeFactory {
 		return newTuple(first, second);
 	}
 
+	public <T, U> Tuple<T, U> newTuple42(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple43(T first, U second) {
+		return newTuple(first, second);
+	}
+
 	public <T, U> Tuple<T, U> newTuple48(T first, U second) {
 		return newTuple(first, second);
 	}
@@ -616,6 +632,26 @@ public class TreeFactory {
 		return new SeparatedList<>(elements.build(), commas.build());
 	}
 
+	private static SeparatedList<InternalSyntaxToken> nameList(InternalSyntaxToken element,
+			Optional<List<Tuple<InternalSyntaxToken, InternalSyntaxToken>>> rest) {
+
+		ImmutableList.Builder<InternalSyntaxToken> elements = ImmutableList.builder();
+		ImmutableList.Builder<InternalSyntaxToken> commas = ImmutableList.builder();
+
+		elements.add(element);
+
+		if (rest.isPresent()) {
+			for (Tuple<InternalSyntaxToken, InternalSyntaxToken> pair : rest.get()) {
+				InternalSyntaxToken commaToken = pair.first();
+
+				commas.add(commaToken);
+				elements.add(pair.second());
+			}
+		}
+
+		return new SeparatedList<>(elements.build(), commas.build());
+	}
+
 	public BrokerSchemaStatementTreeImpl brokerSchema(InternalSyntaxToken brokerToken, InternalSyntaxToken schemaToken,
 			SchemaNameTree schemaNameTree) {
 		return new BrokerSchemaStatementTreeImpl(brokerToken, schemaToken, schemaNameTree);
@@ -766,11 +802,11 @@ public class TreeFactory {
 				delete.isPresent() ? delete.get().second() : null);
 	}
 
-	public BeginEndStatementTreeImpl beginEndStatement(Optional<Tuple<InternalSyntaxToken, InternalSyntaxToken>> label1,
+	public BeginEndStatementTreeImpl beginEndStatement(Optional<Tuple<LabelTreeImpl, InternalSyntaxToken>> label1,
 			InternalSyntaxToken beginKeyword,
 			Optional<Tuple<Optional<InternalSyntaxToken>, InternalSyntaxToken>> atomic,
 			Optional<List<StatementTree>> statements, InternalSyntaxToken endKeyword,
-			Optional<InternalSyntaxToken> label2, InternalSyntaxToken semiToken) {
+			Optional<LabelTreeImpl> label2, InternalSyntaxToken semiToken) {
 		if (label1.isPresent()) {
 			return new BeginEndStatementTreeImpl(label1.get().first(), label1.get().second(), beginKeyword,
 					atomic.isPresent() && atomic.get().first().isPresent() ? atomic.get().first().get() : null,
@@ -1030,6 +1066,15 @@ public class TreeFactory {
 	public SetStatementTreeImpl setStatement(InternalSyntaxToken setKeyword, FieldReferenceTreeImpl fieldReference,
 			Optional<InternalSyntaxToken> type, InternalSyntaxToken equal, ExpressionTree expression, InternalSyntaxToken semiToken) {
 		return new SetStatementTreeImpl(setKeyword, fieldReference, type.isPresent()?type.get():null, equal, expression, semiToken);
+	}
+
+	public LabelTreeImpl label(InternalSyntaxToken labelName) {
+		return new LabelTreeImpl(labelName);
+	}
+
+	public IterateStatementTreeImpl iterateStatement(InternalSyntaxToken iterateKeyword, LabelTreeImpl label,
+			InternalSyntaxToken semi) {
+		return new IterateStatementTreeImpl(iterateKeyword, label, semi);
 	}
 
 }
