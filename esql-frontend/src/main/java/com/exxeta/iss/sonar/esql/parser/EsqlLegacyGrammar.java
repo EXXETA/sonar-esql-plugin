@@ -160,13 +160,13 @@ public enum EsqlLegacyGrammar implements GrammarRuleKey {
 		// "LEADING", "NOT", "SYMMETRIC",
 		// "TRAILING", "WHEN"), nextNot(letterOrDigit));
 		// b.rule(letterOrDigit).is(b.regexp("\\p{javaJavaIdentifierPart}"));
-		b.rule(NUMERIC_LITERAL).is(b.token(EsqlTokenType.NUMBER, b.regexp(EsqlLexer.NUMERIC_LITERAL)), SPACING);
-		b.rule(STRING_LITERAL).is(b.token(EsqlTokenType.STRING, b.regexp(EsqlLexer.LITERAL)), SPACING);
-		b.rule(HEX_LITERAL).is(b.token(EsqlTokenType.HEX, b.regexp(EsqlLexer.HEX_LITERAL)), SPACING);
-		b.rule(listLiteral).is("(", LITERAL, b.zeroOrMore(b.sequence(",", LITERAL)), ")");
-		b.rule(intervalLiteral).is("INTERVAL", LITERAL, intervalQualifier);
-		b.rule(dateLiteral).is(b.regexp(EsqlLexer.DATE_LIERAL));
-		b.rule(timeLiteral).is(b.regexp(EsqlLexer.TIME_LITERAL));
+		b.rule(NUMERIC_LITERAL).is(SPACING, b.token(EsqlTokenType.NUMBER, b.regexp(EsqlLexer.NUMERIC_LITERAL)), SPACING);
+		b.rule(STRING_LITERAL).is(SPACING, b.token(EsqlTokenType.STRING, b.regexp(EsqlLexer.LITERAL)), SPACING);
+		b.rule(HEX_LITERAL).is(SPACING, b.token(EsqlTokenType.HEX, b.regexp(EsqlLexer.HEX_LITERAL)), SPACING);
+		b.rule(listLiteral).is(SPACING, "(", LITERAL, b.zeroOrMore(b.sequence(",", LITERAL)), ")");
+		b.rule(intervalLiteral).is(SPACING, "INTERVAL", LITERAL, intervalQualifier);
+		b.rule(dateLiteral).is(SPACING, b.regexp(EsqlLexer.DATE_LIERAL));
+		b.rule(timeLiteral).is(SPACING, b.regexp(EsqlLexer.TIME_LITERAL));
 		punctuators(b);
 		//datatypes(b);
 		//expression(b);

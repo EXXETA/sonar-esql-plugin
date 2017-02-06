@@ -6,16 +6,14 @@ import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.parser.EsqlLegacyGrammar;
 
-public class PrimaryExpressionTest {
+public class ExpressionTest {
 
 	@Test
-	public void realLife() {
+	public void expression() {
 		assertThat(EsqlLegacyGrammar.expression)
-			.matches("'sss'")
-			.matches("1")
-			.matches("TRUE")
-			.matches("1 + 1")
-			.matches("0")				;
+		.matches("b")
+		.matches("b.c")
+		.matches("0");
 	}
-
+	
 }
