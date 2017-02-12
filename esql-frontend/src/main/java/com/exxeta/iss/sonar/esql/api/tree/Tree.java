@@ -10,6 +10,7 @@ import com.exxeta.iss.sonar.esql.api.tree.function.TheFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxTrivia;
 import com.exxeta.iss.sonar.esql.api.tree.statement.BeginEndStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.CallStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ControlsTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateFunctionStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateModuleStatementTree;
@@ -103,7 +104,8 @@ public interface Tree {
 		Data_TYPE(DataTypeTree.class), 
 		SET_STATEMENT(SetStatementTree.class),
 		ITERATE_STATEMENT(IterateStatementTree.class), 
-		LABEL(LabelTree.class);
+		LABEL(LabelTree.class), 
+		CALL_STATEMENT(CallStatementTree.class);
 
 		final Class<? extends Tree> associatedInterface;
 

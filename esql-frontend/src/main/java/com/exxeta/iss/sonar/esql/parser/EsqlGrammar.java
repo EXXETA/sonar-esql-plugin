@@ -20,6 +20,8 @@ package com.exxeta.iss.sonar.esql.parser;
 import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.COMMA;
 import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.DOT;
 import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.SEMI;
+import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.LPARENTHESIS;
+import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.RPARENTHESIS;
 
 import com.exxeta.iss.sonar.esql.api.EsqlNonReservedKeyword;
 import com.exxeta.iss.sonar.esql.api.tree.PathClauseTree;
@@ -54,6 +56,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.expression.LiteralTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.ParenthesisedExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.BeginEndStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.CallStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ControlsTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateFunctionStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateModuleStatementTreeImpl;
@@ -249,7 +252,7 @@ public class EsqlGrammar {
 	}
 
 	private StatementTree BASIC_STATEMENT() {
-		return b.firstOf(BEGIN_END_STATEMENT(), DECLARE_STATEMENT(), IF_STATEMENT(), ITERATE_STATEMENT(), SET_STATEMENT());
+		return b.firstOf(BEGIN_END_STATEMENT(), CALL_STATEMENT(), DECLARE_STATEMENT(), IF_STATEMENT(), ITERATE_STATEMENT(), SET_STATEMENT());
 	}
 
 	public BeginEndStatementTreeImpl BEGIN_END_STATEMENT() {
@@ -264,6 +267,24 @@ public class EsqlGrammar {
 	}
 	public LabelTreeImpl LABEL(){
 		return b.<LabelTreeImpl>nonterminal(Kind.LABEL).is(f.label(b.token(EsqlLegacyGrammar.IDENTIFIER)));
+	}
+	
+	public CallStatementTreeImpl CALL_STATEMENT() {
+		return b.<CallStatementTreeImpl>nonterminal(Kind.CALL_STATEMENT)
+				.is(f.callStatement(
+						b.token(EsqlNonReservedKeyword.CALL), 
+						b.optional(f.newTuple44(SCHEMA_NAME(),b.token(DOT))),
+						b.token(EsqlLegacyGrammar.IDENTIFIER),
+						b.token(LPARENTHESIS),b.optional(f.newTuple45(EXPRESSION(),b.zeroOrMore(f.newTuple46(b.token(COMMA),EXPRESSION())))),
+						b.token(RPARENTHESIS), 
+						b.optional(b.firstOf(
+								f.newTuple47(b.token(EsqlNonReservedKeyword.IN), FIELD_REFERENCE()),
+								f.newTriple4(b.token(EsqlNonReservedKeyword.EXTERNAL),b.token(EsqlNonReservedKeyword.SCHEMA), b.token(EsqlLegacyGrammar.IDENTIFIER))
+						)),
+						b.optional(f.newTuple48(b.token(EsqlNonReservedKeyword.INTO), FIELD_REFERENCE())),
+						b.token(EsqlLegacyGrammar.EOS)
+						
+				));
 	}
 
 	public DeclareStatementTreeImpl DECLARE_STATEMENT() {

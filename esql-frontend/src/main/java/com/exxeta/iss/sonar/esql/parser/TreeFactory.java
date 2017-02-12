@@ -41,6 +41,7 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.ElseifClauseTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ParameterTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
 import com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator;
+import com.exxeta.iss.sonar.esql.parser.TreeFactory.Tuple;
 import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.BrokerSchemaStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.DataTypeTreeImpl;
@@ -66,6 +67,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.expression.PrefixExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.TheFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.BeginEndStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.CallStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ControlsTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateFunctionStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateModuleStatementTreeImpl;
@@ -454,6 +456,22 @@ public class TreeFactory {
 		return newTuple(first, second);
 	}
 
+	public <T, U> Tuple<T, U> newTuple44(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple45(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple46(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple47(T first, U second) {
+		return newTuple(first, second);
+	}
+
 	public <T, U> Tuple<T, U> newTuple48(T first, U second) {
 		return newTuple(first, second);
 	}
@@ -511,6 +529,10 @@ public class TreeFactory {
 	}
 
 	public <T, U, V> Triple<T, U, V> newTriple3(T first, U second, V third) {
+		return newTriple(first, second, third);
+	}
+
+	public <T, U, V> Triple<T, U, V> newTriple4(T first, U second, V third) {
 		return newTriple(first, second, third);
 	}
 
@@ -1075,6 +1097,37 @@ public class TreeFactory {
 	public IterateStatementTreeImpl iterateStatement(InternalSyntaxToken iterateKeyword, LabelTreeImpl label,
 			InternalSyntaxToken semi) {
 		return new IterateStatementTreeImpl(iterateKeyword, label, semi);
+	}
+
+	public CallStatementTreeImpl callStatement(InternalSyntaxToken callKeyword,
+			Optional<Tuple<SchemaNameTree, InternalSyntaxToken>> schemaName, InternalSyntaxToken routineName,
+			InternalSyntaxToken openParen,
+			Optional<Tuple<ExpressionTree, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>>>> parameterList,
+			InternalSyntaxToken closeParen, Optional<Object> qualifiers,
+			Optional<Tuple<InternalSyntaxToken, FieldReferenceTreeImpl>> intoClause, InternalSyntaxToken semi) {
+		
+			CallStatementTreeImpl result = new CallStatementTreeImpl(
+					callKeyword, 
+					schemaName.isPresent()?schemaName.get().first():null,
+					schemaName.isPresent()?schemaName.get().second():null,
+					routineName,
+					openParen,
+					parameterList.isPresent()?expressionList(parameterList.get().first(), parameterList.get().second()):new SeparatedList<>(Collections.<ExpressionTree>emptyList(), Collections.<InternalSyntaxToken>emptyList()),
+					closeParen,
+					semi);
+			/*if (qualifiers.isPresent()){
+				if (qualifiers.get() instanceof Tuple){
+					Tuple<InternalSyntaxToken,FieldReferenceTreeImpl> inClause = (Tuple)qualifiers.get();
+					result.inClause(inClause.first(), inClause.second());
+				}else {
+					Triple<InternalSyntaxToken,InternalSyntaxToken,InternalSyntaxToken> externalSchemaClause = (Triple)qualifiers.get();
+					result.externalSchema(externalSchemaClause.first(), externalSchemaClause.second(), externalSchemaClause.third());
+				}
+			}*/
+			if (intoClause.isPresent()){
+				result.intoClause(intoClause.get().first(), intoClause.get().second());
+			}
+			return result;
 	}
 
 }

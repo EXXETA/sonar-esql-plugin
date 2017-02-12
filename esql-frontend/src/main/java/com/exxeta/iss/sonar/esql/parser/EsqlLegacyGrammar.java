@@ -211,12 +211,12 @@ public enum EsqlLegacyGrammar implements GrammarRuleKey {
 		Object[] rest = new Object[EsqlReservedKeyword.values().length + EsqlNonReservedKeyword.values().length];
 		int i = 0;
 		for (EsqlReservedKeyword tokenType : EsqlReservedKeyword.values()) {
-			b.rule(tokenType).is(SPACING, tokenType.getValue());
+			b.rule(tokenType).is(SPACING, tokenType.getValue(), b.nextNot(LETTER_OR_DIGIT));
 			rest[i++] = tokenType.getValue();
 		}
 
 		for (EsqlNonReservedKeyword tokenType : EsqlNonReservedKeyword.values()) {
-			b.rule(tokenType).is(SPACING, tokenType.getValue());
+			b.rule(tokenType).is(SPACING, tokenType.getValue(), b.nextNot(LETTER_OR_DIGIT));
 			rest[i++] = tokenType.getValue();
 		}
 		Object[] rest2 = new Object[rest.length-2];
