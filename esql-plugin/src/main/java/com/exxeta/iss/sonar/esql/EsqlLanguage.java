@@ -11,7 +11,7 @@ public class EsqlLanguage extends AbstractLanguage {
   private Settings settings;
 
   public EsqlLanguage(Settings configuration) {
-    super(KEY, "JavaScript");
+    super(KEY, "Esql");
     this.settings = configuration;
   }
 

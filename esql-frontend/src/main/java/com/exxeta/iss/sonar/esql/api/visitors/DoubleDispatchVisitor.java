@@ -32,6 +32,7 @@ import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxTrivia;
 import com.exxeta.iss.sonar.esql.api.tree.statement.BeginEndStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.BlockTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CallStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.CaseStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ControlsTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateFunctionStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateModuleStatementTree;
@@ -52,6 +53,7 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.ResultSetTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ReturnTypeTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.RoutineBodyTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.SetStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.WhenClauseTree;
 import com.exxeta.iss.sonar.esql.tree.expression.LiteralTree;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
 import com.google.common.base.Preconditions;
@@ -298,6 +300,14 @@ public abstract class DoubleDispatchVisitor implements TreeVisitor {
 	}
 
 	public void visitCallStatement(CallStatementTree tree) {
+		scanChildren(tree);
+	}
+
+	public void visitCaseStatement(CaseStatementTree tree) {
+		scanChildren(tree);
+	}
+
+	public void visitWhenClause(WhenClauseTree tree) {
 		scanChildren(tree);
 	}
 

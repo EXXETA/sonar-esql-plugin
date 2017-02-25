@@ -11,6 +11,7 @@ import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxTrivia;
 import com.exxeta.iss.sonar.esql.api.tree.statement.BeginEndStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CallStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.CaseStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ControlsTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateFunctionStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateModuleStatementTree;
@@ -31,7 +32,9 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.ResultSetTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ReturnTypeTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.RoutineBodyTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.SetStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.WhenClauseTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
+import com.exxeta.iss.sonar.esql.tree.Kinds;
 import com.exxeta.iss.sonar.esql.tree.expression.LiteralTree;
 
 public interface Tree {
@@ -39,7 +42,7 @@ public interface Tree {
 
 	void accept(DoubleDispatchVisitor visitor);
 
-	public enum Kind implements GrammarRuleKey {
+	public enum Kind implements GrammarRuleKey, Kinds {
 	    TOKEN(SyntaxToken.class),
 		TRIVIA(SyntaxTrivia.class), 
 		ELSE_CLAUSE(ElseClauseTree.class), 
@@ -105,7 +108,9 @@ public interface Tree {
 		SET_STATEMENT(SetStatementTree.class),
 		ITERATE_STATEMENT(IterateStatementTree.class), 
 		LABEL(LabelTree.class), 
-		CALL_STATEMENT(CallStatementTree.class);
+		CALL_STATEMENT(CallStatementTree.class), 
+		CASE_STATEMENT(CaseStatementTree.class), 
+		WHEN_CLAUSE(WhenClauseTree.class);
 
 		final Class<? extends Tree> associatedInterface;
 
@@ -116,5 +121,11 @@ public interface Tree {
 		public Class<? extends Tree> getAssociatedInterface() {
 			return associatedInterface;
 		}
+		
+	    @Override
+	    public boolean contains(Kinds other) {
+	      return this.equals(other);
+	    }
+
 	}
 }

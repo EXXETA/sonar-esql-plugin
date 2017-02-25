@@ -55,7 +55,7 @@ public enum EsqlLegacyGrammar implements GrammarRuleKey {
 	, listLiteral, dateLiteral, timeLiteral
 
 	// , letterOrDigit
-	, sourceElements, sourceElement, keyword, dataType, intervalDataType, intervalQualifier
+	, sourceElements, sourceElement, keyword, nonReservedKeyword, reservedKeyword, dataType, intervalDataType, intervalQualifier
 
 	, statement, basicStatement, messageTreeManipulationStatement, databaseUpdateStatement, nodeInteractionStatement, propagateStatement, messageSource, controlElement, otherStatement, declareHandlerStatement, resignalStatement, sqlState, repeatStatement, logStatement, logOptions, loopStatement
 
@@ -116,42 +116,35 @@ public enum EsqlLegacyGrammar implements GrammarRuleKey {
 	 * A.1 Lexical
 	 */
 	private static void lexical(LexerlessGrammarBuilder b) {
-	    b.rule(SPACING_NO_LINE_BREAK_NOT_FOLLOWED_BY_LINE_BREAK).is(SPACING_NO_LB, NEXT_NOT_LB);
+		b.rule(SPACING_NO_LINE_BREAK_NOT_FOLLOWED_BY_LINE_BREAK).is(SPACING_NO_LB, NEXT_NOT_LB);
 
-	    b.rule(SPACING).is(
-	      b.skippedTrivia(b.regexp("[" + EsqlLexer.LINE_TERMINATOR + EsqlLexer.WHITESPACE + "]*+")),
-	      b.zeroOrMore(
-	        b.commentTrivia(b.regexp(EsqlLexer.COMMENT)),
-	        b.skippedTrivia(b.regexp("[" + EsqlLexer.LINE_TERMINATOR + EsqlLexer.WHITESPACE + "]*+")))).skip();
-	    b.rule(SPACING_NOT_SKIPPED).is(SPACING);
+		b.rule(SPACING).is(b.skippedTrivia(b.regexp("[" + EsqlLexer.LINE_TERMINATOR + EsqlLexer.WHITESPACE + "]*+")),
+				b.zeroOrMore(b.commentTrivia(b.regexp(EsqlLexer.COMMENT)),
+						b.skippedTrivia(b.regexp("[" + EsqlLexer.LINE_TERMINATOR + EsqlLexer.WHITESPACE + "]*+"))))
+				.skip();
+		b.rule(SPACING_NOT_SKIPPED).is(SPACING);
 
-	    b.rule(SPACING_NO_LB).is(
-	      b.zeroOrMore(
-	        b.firstOf(
-	          b.skippedTrivia(b.regexp("[" + EsqlLexer.WHITESPACE + "]++")),
-	          b.commentTrivia(b.regexp("(?:" + EsqlLexer.SINGLE_LINE_COMMENT + "|" + EsqlLexer.MULTI_LINE_COMMENT_NO_LB + ")"))))).skip();
-	    b.rule(NEXT_NOT_LB).is(b.nextNot(b.regexp("(?:" + EsqlLexer.MULTI_LINE_COMMENT + "|[" + EsqlLexer.LINE_TERMINATOR + "])"))).skip();
+		b.rule(SPACING_NO_LB).is(b.zeroOrMore(b.firstOf(b.skippedTrivia(b.regexp("[" + EsqlLexer.WHITESPACE + "]++")),
+				b.commentTrivia(b.regexp(
+						"(?:" + EsqlLexer.SINGLE_LINE_COMMENT + "|" + EsqlLexer.MULTI_LINE_COMMENT_NO_LB + ")")))))
+				.skip();
+		b.rule(NEXT_NOT_LB)
+				.is(b.nextNot(b.regexp("(?:" + EsqlLexer.MULTI_LINE_COMMENT + "|[" + EsqlLexer.LINE_TERMINATOR + "])")))
+				.skip();
 
-	    b.rule(LINE_TERMINATOR_SEQUENCE).is(b.skippedTrivia(b.regexp(EsqlLexer.LINE_TERMINATOR_SEQUENCE))).skip();
+		b.rule(LINE_TERMINATOR_SEQUENCE).is(b.skippedTrivia(b.regexp(EsqlLexer.LINE_TERMINATOR_SEQUENCE))).skip();
 
-	    b.rule(EOS).is(b.firstOf(
-	      b.sequence(SPACING, SEMI),
-	      b.sequence(SPACING_NO_LB, LINE_TERMINATOR_SEQUENCE),
-	      b.sequence(SPACING_NO_LB, b.next("}")),
-	      b.sequence(SPACING, b.endOfInput())));
+		b.rule(EOS).is(b.firstOf(b.sequence(SPACING, SEMI), b.sequence(SPACING_NO_LB, LINE_TERMINATOR_SEQUENCE),
+				b.sequence(SPACING_NO_LB, b.next("}")), b.sequence(SPACING, b.endOfInput())));
 
-	    b.rule(EOS_NO_LB).is(b.firstOf(
-	      b.sequence(SPACING_NO_LB, NEXT_NOT_LB, SEMI),
-	      b.sequence(SPACING_NO_LB, LINE_TERMINATOR_SEQUENCE),
-	      b.sequence(SPACING_NO_LB, b.next("}")),
-	      b.sequence(SPACING_NO_LB, b.endOfInput())));
+		b.rule(EOS_NO_LB)
+				.is(b.firstOf(b.sequence(SPACING_NO_LB, NEXT_NOT_LB, SEMI),
+						b.sequence(SPACING_NO_LB, LINE_TERMINATOR_SEQUENCE), b.sequence(SPACING_NO_LB, b.next("}")),
+						b.sequence(SPACING_NO_LB, b.endOfInput())));
 
-	    b.rule(EOF).is(b.token(GenericTokenType.EOF, b.endOfInput())).skip();
+		b.rule(EOF).is(b.token(GenericTokenType.EOF, b.endOfInput())).skip();
 
-	    
-	    
-		b.rule(IDENTIFIER).is(/* b.nextNot(KEYWORD), */
-				SPACING, b.regexp(EsqlLexer.IDENTIFIER));
+		b.rule(IDENTIFIER).is(b.nextNot(reservedKeyword), SPACING, b.regexp(EsqlLexer.IDENTIFIER));
 		b.rule(FIELD_NAME).is(IDENTIFIER);
 		// b.rule(keyword).is(
 		// b.firstOf(
@@ -160,7 +153,8 @@ public enum EsqlLegacyGrammar implements GrammarRuleKey {
 		// "LEADING", "NOT", "SYMMETRIC",
 		// "TRAILING", "WHEN"), nextNot(letterOrDigit));
 		// b.rule(letterOrDigit).is(b.regexp("\\p{javaJavaIdentifierPart}"));
-		b.rule(NUMERIC_LITERAL).is(SPACING, b.token(EsqlTokenType.NUMBER, b.regexp(EsqlLexer.NUMERIC_LITERAL)), SPACING);
+		b.rule(NUMERIC_LITERAL).is(SPACING, b.token(EsqlTokenType.NUMBER, b.regexp(EsqlLexer.NUMERIC_LITERAL)),
+				SPACING);
 		b.rule(STRING_LITERAL).is(SPACING, b.token(EsqlTokenType.STRING, b.regexp(EsqlLexer.LITERAL)), SPACING);
 		b.rule(HEX_LITERAL).is(SPACING, b.token(EsqlTokenType.HEX, b.regexp(EsqlLexer.HEX_LITERAL)), SPACING);
 		b.rule(listLiteral).is(SPACING, "(", LITERAL, b.zeroOrMore(b.sequence(",", LITERAL)), ")");
@@ -168,8 +162,8 @@ public enum EsqlLegacyGrammar implements GrammarRuleKey {
 		b.rule(dateLiteral).is(SPACING, b.regexp(EsqlLexer.DATE_LIERAL));
 		b.rule(timeLiteral).is(SPACING, b.regexp(EsqlLexer.TIME_LITERAL));
 		punctuators(b);
-		//datatypes(b);
-		//expression(b);
+		// datatypes(b);
+		// expression(b);
 		keywords(b);
 	}
 
@@ -208,29 +202,43 @@ public enum EsqlLegacyGrammar implements GrammarRuleKey {
 
 	private static void keywords(LexerlessGrammarBuilder b) {
 		b.rule(LETTER_OR_DIGIT).is(b.regexp("\\p{javaJavaIdentifierPart}"));
-		Object[] rest = new Object[EsqlReservedKeyword.values().length + EsqlNonReservedKeyword.values().length];
-		int i = 0;
-		for (EsqlReservedKeyword tokenType : EsqlReservedKeyword.values()) {
-			b.rule(tokenType).is(SPACING, tokenType.getValue(), b.nextNot(LETTER_OR_DIGIT));
-			rest[i++] = tokenType.getValue();
+		b.rule(keyword).is(b.firstOf(nonReservedKeyword, reservedKeyword));
+		{
+			// RESERVED
+			Object[] rest = new Object[EsqlReservedKeyword.values().length];
+			int i = 0;
+			for (EsqlReservedKeyword tokenType : EsqlReservedKeyword.values()) {
+				b.rule(tokenType).is(SPACING, b.regexp("(?i)"+tokenType.getValue()), b.nextNot(LETTER_OR_DIGIT));
+				rest[i++] = b.regexp("(?i)" + tokenType.getValue());
+			}
+
+			Object[] rest2 = new Object[rest.length - 2];
+			System.arraycopy(rest, 2, rest2, 0, rest2.length);
+			b.rule(reservedKeyword).is(
+					b.firstOf(EsqlReservedKeyword.keywordValues()[0], EsqlReservedKeyword.keywordValues()[1], rest),
+					b.nextNot(LETTER_OR_DIGIT));
 		}
 
-		for (EsqlNonReservedKeyword tokenType : EsqlNonReservedKeyword.values()) {
-			b.rule(tokenType).is(SPACING, tokenType.getValue(), b.nextNot(LETTER_OR_DIGIT));
-			rest[i++] = tokenType.getValue();
+		{
+			// NON RESERVED
+			Object[] rest = new Object[EsqlNonReservedKeyword.values().length];
+			int i = 0;
+			for (EsqlNonReservedKeyword tokenType : EsqlNonReservedKeyword.values()) {
+				b.rule(tokenType).is(SPACING, b.regexp("(?i)"+tokenType.getValue()), b.nextNot(LETTER_OR_DIGIT));
+				rest[i++] = b.regexp("(?i)" + tokenType.getValue());
+			}
+			Object[] rest2 = new Object[rest.length - 2];
+			System.arraycopy(rest, 2, rest2, 0, rest2.length);
+			b.rule(nonReservedKeyword).is(b.firstOf(EsqlNonReservedKeyword.keywordValues()[0],
+					EsqlNonReservedKeyword.keywordValues()[1], rest), b.nextNot(LETTER_OR_DIGIT));
 		}
-		Object[] rest2 = new Object[rest.length-2];
-		System.arraycopy(rest, 2, rest2, 0, rest2.length);
-		b.rule(keyword).is(b.firstOf(EsqlReservedKeyword.keywordValues()[0],EsqlReservedKeyword.keywordValues()[1],rest)
-				, b.nextNot(LETTER_OR_DIGIT));
 
 	}
 
 	private static void functionsAndPrograms(LexerlessGrammarBuilder b) {
-		b.rule(PROGRAM)
-				.is(b.optional(BROKER_SCHEMA_STATEMENT), b.optional(
-						b.sequence("PATH", fieldReference, b.zeroOrMore(COMMA, fieldReference), b.optional(SEMI))),
-						sourceElements, b.endOfInput());
+		b.rule(PROGRAM).is(b.optional(BROKER_SCHEMA_STATEMENT),
+				b.optional(b.sequence("PATH", fieldReference, b.zeroOrMore(COMMA, fieldReference), b.optional(SEMI))),
+				sourceElements, b.endOfInput());
 		b.rule(BROKER_SCHEMA_STATEMENT).is(b.sequence("BROKER", "SCHEMA", fieldReference));
 		b.rule(sourceElements).is(b.zeroOrMore(sourceElement));
 		b.rule(sourceElement).is(b.firstOf(moduleDeclaration, routineDeclaration, declareStatement), EOS);
@@ -263,7 +271,7 @@ public enum EsqlLegacyGrammar implements GrammarRuleKey {
 		b.rule(dataType)
 				.is(b.firstOf("BOOLEAN", "INT", "INTEGER", "FLOAT",
 						b.sequence("DECIMAL", b.optional("(", NUMERIC_LITERAL, ",", NUMERIC_LITERAL, ")")), "DATE",
-						"TIME", "TIMESTAMP", "GMTTIME", "GMTTIMESTAMP", intervalDataType, "CHARACTER", "CHAR",  "BLOB",
+						"TIME", "TIMESTAMP", "GMTTIME", "GMTTIMESTAMP", intervalDataType, "CHARACTER", "CHAR", "BLOB",
 						"BIT", "ROW", b.sequence("REFERENCE", b.optional("TO"))));
 		b.rule(intervalDataType).is("INTERVAL", b.optional(intervalQualifier));
 		b.rule(intervalQualifier)
@@ -341,13 +349,9 @@ public enum EsqlLegacyGrammar implements GrammarRuleKey {
 				b.sequence(b.firstOf("PREVIOUSSIBLING", "NEXTSIBLING", "FIRSTCHILD", "LASTCHILD"), "OF")));
 		b.rule(repeatClause).is(b.sequence("REPEAT", b.optional("VALUE", expression)));
 		b.rule(valuesClauses).is(b.firstOf(b.sequence(namesClauses, b.optional(valueExpression)), valueExpression));
-		b.rule(namesClauses)
-				.is(b.firstOf(b.sequence("IDENTITY", pathElement),
-						b.firstOf(
-								b.sequence("TYPE", expression, b.optional("NAMESPACE", expression),
-										b.optional("NAME", expression)),
-								b.sequence("NAMESPACE", expression, b.optional("NAME", expression)),
-								b.sequence("NAME", expression))));
+		b.rule(namesClauses).is(b.firstOf(b.sequence("IDENTITY", pathElement), b.firstOf(
+				b.sequence("TYPE", expression, b.optional("NAMESPACE", expression), b.optional("NAME", expression)),
+				b.sequence("NAMESPACE", expression, b.optional("NAME", expression)), b.sequence("NAME", expression))));
 		b.rule(valueExpression).is(b.sequence("VALUE", expression)); // TODO
 		// optional(namesClause),optional(
 		b.rule(fromClause).is("FROM", fieldReference, b.optional(b.sequence("AS", IDENTIFIER),
@@ -366,13 +370,14 @@ public enum EsqlLegacyGrammar implements GrammarRuleKey {
 								b.optional(b.sequence("NAMESPACE", b.firstOf("*", expression))),
 								b.optional(b.sequence("NAME", expression))),
 						b.sequence("IDENTITY", pathElement)));
-		b.rule(deleteStatement).is("DELETE",
-				b.firstOf(b.sequence("FROM", fieldReference, b.optional(b.sequence("AS", expression)),
-						b.optional(
-								b.sequence("WHERE", expression))),
-						b.sequence(b.firstOf("FIELD", b.sequence(
-								b.firstOf("FIRSTCHILD", "LASTCHILD", "PREVIOUSSIBLING", "NEXTSIBLING"), "OF")),
-								fieldReference)));
+		b.rule(deleteStatement)
+				.is("DELETE",
+						b.firstOf(
+								b.sequence("FROM", fieldReference, b.optional(b.sequence("AS", expression)),
+										b.optional(b.sequence("WHERE", expression))),
+								b.sequence(b.firstOf("FIELD", b.sequence(
+										b.firstOf("FIRSTCHILD", "LASTCHILD", "PREVIOUSSIBLING", "NEXTSIBLING"), "OF")),
+										fieldReference)));
 	}
 
 	// http://www-01.ibm.com/support/knowledgecenter/SSMKHH_9.0.0/com.ibm.etools.mft.doc/ak04900_.htm?lang=en
@@ -460,15 +465,13 @@ public enum EsqlLegacyGrammar implements GrammarRuleKey {
 								.firstOf(
 										b.sequence(b.firstOf(b.sequence("NOT", "IN"), "IN"), "(",
 												b.firstOf(additiveExpression, subtractiveExpression),
-												b.zeroOrMore(b.sequence(
-														",", b.firstOf(additiveExpression, subtractiveExpression))),
+												b.zeroOrMore(b.sequence(",",
+														b.firstOf(additiveExpression, subtractiveExpression))),
 												")"),
 										b.sequence(b.firstOf(b.sequence("NOT", "BETWEEN"), "BETWEEN"),
 												b.optional(b.firstOf("ASYMMETRIC", "SYMMETRIC")),
-												b.firstOf(additiveExpression, subtractiveExpression),
-												"AND", b
-														.firstOf(additiveExpression,
-																subtractiveExpression)),
+												b.firstOf(additiveExpression, subtractiveExpression), "AND",
+												b.firstOf(additiveExpression, subtractiveExpression)),
 										b.zeroOrMore(
 												b.firstOf("<", ">", "<=", ">=", b.sequence("IS", b.optional("NOT")),
 														b.sequence(b.optional("NOT"), "LIKE")),

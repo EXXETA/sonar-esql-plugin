@@ -13,7 +13,9 @@ public class ExpressionTest {
 		assertThat(EsqlLegacyGrammar.expression)
 		.matches("b")
 		.matches("b.c")
-		.matches("0");
+		.matches("0")
+		.notMatches("WHEN.a")
+		.notMatches("when.a");
 	}
 	
 }
