@@ -17,25 +17,18 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
-import org.sonar.api.server.rule.RulesDefinition;
-import org.sonar.check.BelongsToProfile;
-import org.sonar.check.Priority;
+import java.util.regex.Pattern;
+
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 
-import com.exxeta.iss.sonar.esql.api.EsqlGrammar;
-import com.sonar.sslr.api.AstNodeType;
+import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree;
+import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
+import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
+import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
 
-@Rule(key = ProcedureNameCheck.CHECK_KEY, priority = Priority.MAJOR, name = "Procedure names should comply with a naming convention", tags = Tags.CONVENTION)
-@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
-@SqaleConstantRemediation("10min")
-@ActivatedByDefault
-@BelongsToProfile(title=CheckList.SONAR_WAY_PROFILE,priority=Priority.MAJOR)
-public class ProcedureNameCheck extends AbstractNameCheck {
-	public static final String CHECK_KEY = "ProcedureName";
+@Rule(key = "ProcedureName")
+public class ProcedureNameCheck extends DoubleDispatchVisitorCheck {
 	
 	private static final String DEFAULT_FORMAT = "^[a-z][a-zA-Z0-9]{1,30}$";
 	
@@ -44,18 +37,27 @@ public class ProcedureNameCheck extends AbstractNameCheck {
 			defaultValue = "" + DEFAULT_FORMAT)
 	public String format = DEFAULT_FORMAT;
 
+	private Pattern pattern;
+
+	
+	
 	public String getFormat() {
 		return format;
 	}
 
-	@Override
-	public String typeName() {
-		return "procedure";
-	}
 
+	public ProcedureNameCheck() {
+		pattern = Pattern.compile(getFormat());
+	}
+	
 	@Override
-	public AstNodeType getType() {
-		return EsqlGrammar.PROCEDURE_DECLARATION;
+	public void visitCreateProcedureStatement(CreateProcedureStatementTree tree) {
+		super.visitCreateProcedureStatement(tree);
+		if (!pattern.matcher(tree.identifier().text()).matches()){
+			 addIssue(new PreciseIssue(this, new IssueLocation(tree.identifier(), tree.identifier(), "Rename procedure \""+tree.identifier().text()+"\" to match the regular expression "+format+".")));
+			 
+		}
+		
 	}
 	
 

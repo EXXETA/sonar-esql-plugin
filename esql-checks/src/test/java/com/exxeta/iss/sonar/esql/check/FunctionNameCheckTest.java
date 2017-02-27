@@ -20,29 +20,20 @@ package com.exxeta.iss.sonar.esql.check;
 import java.io.File;
 
 import org.junit.Test;
-import org.sonar.squidbridge.api.SourceFile;
-import org.sonar.squidbridge.checks.CheckMessagesVerifier;
 
-import com.exxeta.iss.sonar.esql.EsqlAstScanner;
-import com.exxeta.iss.sonar.esql.check.FunctionNameCheck;
+import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
 
 public class FunctionNameCheckTest {
 	@Test
 	public void test() throws Exception {
 		FunctionNameCheck check = new FunctionNameCheck();
-		SourceFile file = EsqlAstScanner.scanSingleFile(new File(
-				"src/test/resources/functionName.esql"), check);
-		CheckMessagesVerifier
-				.verify(file.getCheckMessages())
-				.next()
-				.atLine(2)
+
+		EsqlCheckVerifier.issues(check, new File("src/test/resources/functionName.esql")).next().atLine(2)
 				.withMessage(
 						"Rename function \"Badly_Named_Function\" to match the regular expression ^[a-z][a-zA-Z0-9]{1,30}$.")
-				.next()
-				.atLine(5)
-				.withMessage(
-						"Rename function \"too_long_function_name_because_it_has_more_than_30_characters\" "
-								+ "to match the regular expression ^[a-z][a-zA-Z0-9]{1,30}$.")
+				.next().atLine(5)
+				.withMessage("Rename function \"too_long_function_name_because_it_has_more_than_30_characters\" "
+						+ "to match the regular expression ^[a-z][a-zA-Z0-9]{1,30}$.")
 				.noMore();
 	}
 }

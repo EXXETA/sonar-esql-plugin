@@ -17,23 +17,41 @@
  */
 package com.exxeta.iss.sonar.esql;
 
+import com.exxeta.iss.sonar.esql.api.CustomEsqlRulesDefinition;
+import com.exxeta.iss.sonar.esql.api.EsqlCheck;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
+import com.exxeta.iss.sonar.esql.api.visitors.FileIssue;
+import com.exxeta.iss.sonar.esql.api.visitors.Issue;
+import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
+import com.exxeta.iss.sonar.esql.api.visitors.TreeVisitor;
+import com.exxeta.iss.sonar.esql.api.visitors.TreeVisitorContext;
 import com.exxeta.iss.sonar.esql.check.CheckList;
+import com.exxeta.iss.sonar.esql.check.ParsingErrorCheck;
+import com.exxeta.iss.sonar.esql.parser.EsqlParserBuilder;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import com.sonar.sslr.api.RecognitionException;
 import com.sonar.sslr.api.typed.ActionParser;
+
 import java.io.File;
 import java.io.InterruptedIOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
 import javax.annotation.Nullable;
+
+import org.sonar.api.SonarProduct;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
@@ -53,6 +71,7 @@ import org.sonar.api.rule.RuleKey;
 import org.sonar.api.utils.Version;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
+import org.sonar.squidbridge.ProgressReport;
 
 public class EsqlSquidSensor implements Sensor {
 
@@ -209,5 +228,188 @@ public class EsqlSquidSensor implements Sensor {
 //	public String toString() {
 //		return getClass().getSimpleName();
 //	}
+
+
+	  @Override
+	  public void describe(SensorDescriptor descriptor) {
+	    descriptor
+	      .onlyOnLanguage(EsqlLanguage.KEY)
+	      .name("Esql Squid Sensor")
+	      .onlyOnFileType(Type.MAIN);
+	  }
+
+	  @Override
+	  public void execute(SensorContext context) {
+	    ProductDependentExecutor executor = createProductDependentExecutor(context);
+
+	    List<TreeVisitor> treeVisitors = Lists.newArrayList();
+	    treeVisitors.addAll(executor.getProductDependentTreeVisitors());
+	    treeVisitors.add(new SeChecksDispatcher(checks.seChecks()));
+	    treeVisitors.addAll(checks.visitorChecks());
+
+	    for (TreeVisitor check : treeVisitors) {
+	      if (check instanceof ParsingErrorCheck) {
+	        parsingErrorRuleKey = checks.ruleKeyFor((EsqlCheck) check);
+	        break;
+	      }
+	    }
+
+	    Iterable<CompatibleInputFile> inputFiles = wrap(fileSystem.inputFiles(mainFilePredicate), context);
+	    Collection<File> files = StreamSupport.stream(inputFiles.spliterator(), false)
+	      .map(CompatibleInputFile::file)
+	      .collect(Collectors.toList());
+
+	    ProgressReport progressReport = new ProgressReport("Report about progress of Javascript analyzer", TimeUnit.SECONDS.toMillis(10));
+	    progressReport.start(files);
+
+	    analyseFiles(context, treeVisitors, inputFiles, executor, progressReport);
+
+	    executor.executeCoverageSensors();
+	  }
+
+	  @VisibleForTesting
+	  protected interface ProductDependentExecutor {
+	    List<TreeVisitor> getProductDependentTreeVisitors();
+
+	    void highlightSymbols(InputFile inputFile, TreeVisitorContext treeVisitorContext);
+
+	    void executeCoverageSensors();
+	  }
+
+	  private static class SonarQubeProductExecutor implements ProductDependentExecutor {
+	    private final SensorContext context;
+	    private final NoSonarFilter noSonarFilter;
+	    private final FileLinesContextFactory fileLinesContextFactory;
+	    private final boolean isAtLeastSq62;
+	    private MetricsVisitor metricsVisitor;
+
+	    SonarQubeProductExecutor(SensorContext context, NoSonarFilter noSonarFilter, FileLinesContextFactory fileLinesContextFactory) {
+	      this.context = context;
+	      this.noSonarFilter = noSonarFilter;
+	      this.fileLinesContextFactory = fileLinesContextFactory;
+	      this.isAtLeastSq62 = context.getSonarQubeVersion().isGreaterThanOrEqual(V6_2);
+	    }
+
+	    @Override
+	    public List<TreeVisitor> getProductDependentTreeVisitors() {
+	      metricsVisitor = new MetricsVisitor(
+	        context,
+	        noSonarFilter,
+	        context.settings().getBoolean(JavaScriptPlugin.IGNORE_HEADER_COMMENTS),
+	        fileLinesContextFactory,
+	        isAtLeastSq62);
+	      return Arrays.asList(metricsVisitor, new HighlighterVisitor(context), new CpdVisitor(context));
+	    }
+
+	    @Override
+	    public void highlightSymbols(InputFile inputFile, TreeVisitorContext treeVisitorContext) {
+	      NewSymbolTable newSymbolTable = context.newSymbolTable().onFile(inputFile);
+	      HighlightSymbolTableBuilder.build(newSymbolTable, treeVisitorContext);
+	    }
+
+	    @Override
+	    public void executeCoverageSensors() {
+	      if (metricsVisitor == null) {
+	        throw new IllegalStateException("Before starting coverage computation, metrics should have been calculated.");
+	      }
+	      executeCoverageSensors(context, metricsVisitor.linesOfCode(), isAtLeastSq62);
+	    }
+
+	    private static void executeCoverageSensors(SensorContext context, Map<InputFile, Set<Integer>> linesOfCode, boolean isAtLeastSq62) {
+	      Settings settings = context.settings();
+	      if (isAtLeastSq62 && settings.getBoolean(EsqlPlugin.FORCE_ZERO_COVERAGE_KEY)) {
+	        LOG.warn("Since SonarQube 6.2 property 'sonar.javascript.forceZeroCoverage' is removed and its value is not used during analysis");
+	      }
+
+	      if (isAtLeastSq62) {
+	        logDeprecationForReportProperty(settings, EsqlPlugin.LCOV_UT_REPORT_PATH);
+	        logDeprecationForReportProperty(settings, EsqlPlugin.LCOV_IT_REPORT_PATH);
+
+	        String lcovReports = settings.getString(EsqlPlugin.LCOV_REPORT_PATHS);
+
+	        if (lcovReports == null || lcovReports.isEmpty()) {
+	          executeDeprecatedCoverageSensors(context, linesOfCode, true);
+
+	        } else {
+	          LOG.info("Test Coverage Sensor is started");
+	          (new LCOVCoverageSensor()).execute(context, linesOfCode, true);
+	        }
+
+	      } else {
+	        executeDeprecatedCoverageSensors(context, linesOfCode, false);
+	      }
+	    }
+
+	    private static void logDeprecationForReportProperty(Settings settings, String propertyKey) {
+	      String value = settings.getString(propertyKey);
+	      if (value != null && !value.isEmpty()) {
+	        LOG.warn("Since SonarQube 6.2 property '" + propertyKey + "' is deprecated. Use 'sonar.javascript.lcov.reportPaths' instead.");
+	      }
+	    }
+
+	    private static void executeDeprecatedCoverageSensors(SensorContext context, Map<InputFile, Set<Integer>> linesOfCode, boolean isAtLeastSq62) {
+	      LOG.info("Unit Test Coverage Sensor is started");
+	      (new UTCoverageSensor()).execute(context, linesOfCode, isAtLeastSq62);
+	      LOG.info("Integration Test Coverage Sensor is started");
+	      (new ITCoverageSensor()).execute(context, linesOfCode, isAtLeastSq62);
+	      LOG.info("Overall Coverage Sensor is started");
+	      (new OverallCoverageSensor()).execute(context, linesOfCode, isAtLeastSq62);
+	    }
+	  }
+
+	  @VisibleForTesting
+	  protected static class SonarLintProductExecutor implements ProductDependentExecutor {
+	    @Override
+	    public List<TreeVisitor> getProductDependentTreeVisitors() {
+	      return Collections.emptyList();
+	    }
+
+	    @Override
+	    public void highlightSymbols(InputFile inputFile, TreeVisitorContext treeVisitorContext) {
+	      // unnecessary in SonarLint context
+	    }
+
+	    @Override
+	    public void executeCoverageSensors() {
+	      // unnecessary in SonarLint context
+	    }
+	  }
+
+	  private static boolean isSonarLint(SensorContext context) {
+	    return context.getSonarQubeVersion().isGreaterThanOrEqual(V6_0) && context.runtime().getProduct() == SonarProduct.SONARLINT;
+	  }
+
+	  private static void saveLineIssue(SensorContext sensorContext, InputFile inputFile, RuleKey ruleKey, LineIssue issue) {
+	    NewIssue newIssue = sensorContext.newIssue();
+
+	    NewIssueLocation primaryLocation = newIssue.newLocation()
+	      .message(issue.message())
+	      .on(inputFile)
+	      .at(inputFile.selectLine(issue.line()));
+
+	    saveIssue(newIssue, primaryLocation, ruleKey, issue);
+	  }
+
+	  private static void saveFileIssue(SensorContext sensorContext, InputFile inputFile, RuleKey ruleKey, FileIssue issue) {
+	    NewIssue newIssue = sensorContext.newIssue();
+
+	    NewIssueLocation primaryLocation = newIssue.newLocation()
+	      .message(issue.message())
+	      .on(inputFile);
+
+	    saveIssue(newIssue, primaryLocation, ruleKey, issue);
+	  }
+
+	  private static void saveIssue(NewIssue newIssue, NewIssueLocation primaryLocation, RuleKey ruleKey, Issue issue) {
+	    newIssue
+	      .forRule(ruleKey)
+	      .at(primaryLocation);
+
+	    if (issue.cost() != null) {
+	      newIssue.gap(issue.cost());
+	    }
+
+	    newIssue.save();
+	  }
 
 }

@@ -9,9 +9,9 @@ import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
 import com.sonar.sslr.api.typed.ActionParser;
 
 public final class EsqlParser extends ActionParser<Tree>{
-	  public EsqlParser(Charset charset) {
+	  public EsqlParser() {
 		    super(
-		      charset,
+		      Charset.defaultCharset(),
 		      EsqlLegacyGrammar.createGrammarBuilder(),
 		      EsqlGrammar.class,
 		      new TreeFactory(),

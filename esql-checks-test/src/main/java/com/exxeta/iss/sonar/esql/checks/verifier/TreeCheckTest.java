@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.squidbridge.api.CheckMessage;
 
 import com.exxeta.iss.sonar.esql.api.EsqlCheck;
@@ -20,7 +21,7 @@ class TreeCheckTest {
 	  }
 
 	  public static Collection<CheckMessage> getIssues(String relativePath, EsqlCheck check) {
-	    File file = new File(relativePath);
+		InputFile file = new TestInputFile(relativePath);
 
 	    EsqlVisitorContext context = TestUtils.createContext(file);
 	    List<Issue> issues = check.scanFile(context);

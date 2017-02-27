@@ -18,6 +18,7 @@
 package com.exxeta.iss.sonar.esql.check;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.check.BelongsToProfile;
@@ -28,55 +29,51 @@ import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
 import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 
-import com.exxeta.iss.sonar.esql.api.EsqlGrammar;
+import com.exxeta.iss.sonar.esql.api.tree.statement.DeclareStatementTree;
+import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
+import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
+import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.AstNodeType;
 import com.sonar.sslr.api.GenericTokenType;
 
-@Rule(key = ConstantNameCheck.CHECK_KEY, priority = Priority.MAJOR, name = "Constant names should comply with a naming convention", tags = Tags.CONVENTION)
-@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
-@SqaleConstantRemediation("10min")
-@ActivatedByDefault
-@BelongsToProfile(title=CheckList.SONAR_WAY_PROFILE,priority=Priority.MAJOR)
-public class ConstantNameCheck extends AbstractNameCheck {
+@Rule(key = ConstantNameCheck.CHECK_KEY)
+public class ConstantNameCheck extends DoubleDispatchVisitorCheck {
 	public static final String CHECK_KEY = "ConstantName";
-	
+
 	private static final String DEFAULT_FORMAT = "^[A-Z_]{0,30}$";
-	
-	@RuleProperty(key = "format", 
-			description="regular expression",
-			defaultValue = "" + DEFAULT_FORMAT)
+
+	@RuleProperty(key = "format", description = "regular expression", defaultValue = "" + DEFAULT_FORMAT)
 	public String format = DEFAULT_FORMAT;
+
+	private Pattern pattern;
 
 	public String getFormat() {
 		return format;
 	}
 
-	@Override
-	public String typeName() {
-		return "constant";
+	public ConstantNameCheck() {
+		pattern = Pattern.compile(getFormat());
 	}
 
 	@Override
-	public AstNodeType getType() {
-		return EsqlGrammar.declareStatement;
-	}
-	@Override
-	public void visitNode(AstNode astNode) {
-		boolean isConstant = false;
-		List<AstNode> children = astNode.getChildren(GenericTokenType.IDENTIFIER);
-		for (AstNode child:children){
-			if ("CONSTANT".equals(child.getTokenValue())){
-				isConstant=true;
-			}else if ("EXTERNAL".equals(child.getTokenValue())){
-				isConstant=true;
+	public void visitDeclareStatement(DeclareStatementTree tree) {
+		super.visitDeclareStatement(tree);
+
+		boolean isConstant = (tree.constantKeyword() != null) || (tree.sharedExt()!=null && tree.sharedExt().text().equalsIgnoreCase("EXTERNAL"));
+
+		if (isConstant) {
+			for (int i = 0; i < tree.nameList().size(); i++) {
+				if (!pattern.matcher(tree.nameList().get(i).text()).matches()) {
+					addIssue(new PreciseIssue(this,
+							new IssueLocation(tree.nameList().get(i), tree.nameList().get(i),
+									"Rename constant \"" + tree.nameList().get(i).text()
+											+ "\" to match the regular expression " + format + ".")));
+
+				}
 			}
 		}
-		if (isConstant){
-			super.visitNode(astNode);
-		}
-	}
 
-	
+	}
 
 }

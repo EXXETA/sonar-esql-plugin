@@ -16,59 +16,77 @@
  * limitations under the License.
  */package com.exxeta.iss.sonar.esql.check;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.sonar.check.BelongsToProfile;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
-import org.sonar.squidbridge.annotations.NoSqale;
-import org.sonar.squidbridge.checks.SquidCheck;
 
-import com.exxeta.iss.sonar.esql.api.EsqlGrammar;
-import com.google.common.collect.Maps;
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Grammar;
+import com.exxeta.iss.sonar.esql.api.tree.Tree;
+import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
+import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
+import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
+import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitorCheck;
+import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ListMultimap;
 
-@Rule(key = "OneStatementPerLine", priority = Priority.MAJOR)
-@BelongsToProfile(title = CheckList.SONAR_WAY_PROFILE, priority = Priority.MAJOR)
-@NoSqale
-public class OneStatementPerLineCheck extends SquidCheck<Grammar> {
+@Rule(key = "OneStatementPerLine")
+public class OneStatementPerLineCheck extends SubscriptionVisitorCheck {
 
-	private final Map<Integer, Integer> statementsPerLine = Maps.newHashMap();
+	
+	
+	private static final String MESSAGE = "Reformat the code to have only one statement per line.";
 
-	@Override
-	public void init() {
-		subscribeTo(EsqlGrammar.statement);
-	}
+	  private ListMultimap<Integer, StatementTree> statementsPerLine = ArrayListMultimap.create();
 
-	@Override
-	public void visitFile(AstNode astNode) {
-		statementsPerLine.clear();
-	}
+	  @Override
+	  public List<Kind> nodesToVisit() {
+	    return ImmutableList.of(
+	        Kind.IF_STATEMENT,
+	        Kind.BEGIN_END_STATEMENT,
+	        Kind.SET_STATEMENT,
+	        Kind.PROGRAM);
+	  }
 
-	@Override
-	public void visitNode(AstNode statementNode) {
+	  @Override
+	  public void visitFile(Tree scriptTree) {
+	    statementsPerLine.clear();
+	  }
 
-		int line = statementNode.getTokenLine();
-		if (!statementsPerLine.containsKey(line)) {
-			statementsPerLine.put(line, 0);
-		}
-		statementsPerLine.put(line, statementsPerLine.get(line) + 1);
-	}
+	  @Override
+	  public void visitNode(Tree tree) {
+	   
 
-	@Override
-	public void leaveFile(AstNode astNode) {
-		for (Map.Entry<Integer, Integer> statementsAtLine : statementsPerLine
-				.entrySet()) {
-			if (statementsAtLine.getValue() > 1) {
-				getContext()
-						.createLineViolation(
-								this,
-								"At most one statement is allowed per line, but {0} statements were found on this line.",
-								statementsAtLine.getKey(),
-								statementsAtLine.getValue());
-			}
-		}
-	}
+		  if (!tree.is(Kind.PROGRAM)){
+		      statementsPerLine.put(((EsqlTree) tree).getLine(), (StatementTree) tree);
+		    }
+	  }
+
+
+
+	  @Override
+	  public void leaveNode(Tree tree) {
+	    if (tree.is(Kind.PROGRAM)){
+	      for (int line : statementsPerLine.keys().elementSet()) {
+	        List<StatementTree> statementsAtLine = statementsPerLine.get(line);
+
+	        if (statementsAtLine.size() > 1) {
+	          addIssue(statementsAtLine);
+	        }
+	      }
+	    }
+	  }
+
+	  private void addIssue(List<StatementTree> statementsAtLine) {
+	    PreciseIssue issue = addIssue(statementsAtLine.get(1), MESSAGE);
+
+	    for (int i = 2; i < statementsAtLine.size(); i++) {
+	      issue.secondary(new IssueLocation(statementsAtLine.get(i)));
+	    }
+	  }
+	
+	
 
 }

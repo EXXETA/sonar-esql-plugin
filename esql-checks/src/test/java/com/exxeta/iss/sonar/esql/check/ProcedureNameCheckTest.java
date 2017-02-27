@@ -20,20 +20,16 @@ package com.exxeta.iss.sonar.esql.check;
 import java.io.File;
 
 import org.junit.Test;
-import org.sonar.squidbridge.api.SourceFile;
-import org.sonar.squidbridge.checks.CheckMessagesVerifier;
 
-import com.exxeta.iss.sonar.esql.EsqlAstScanner;
-import com.exxeta.iss.sonar.esql.check.ProcedureNameCheck;
+import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
 
 public class ProcedureNameCheckTest {
 	@Test
 	public void test() throws Exception {
 		ProcedureNameCheck check = new ProcedureNameCheck();
-		SourceFile file = EsqlAstScanner.scanSingleFile(new File(
-				"src/test/resources/procedureName.esql"), check);
-		CheckMessagesVerifier
-				.verify(file.getCheckMessages())
+		
+		
+		EsqlCheckVerifier.issues(check, new File("src/test/resources/procedureName.esql"))
 				.next()
 				.atLine(2)
 				.withMessage(

@@ -17,55 +17,46 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
-import org.sonar.api.server.rule.RulesDefinition;
-import org.sonar.check.BelongsToProfile;
+import java.util.regex.Pattern;
+
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 
-import com.exxeta.iss.sonar.esql.api.EsqlGrammar;
-import com.sonar.sslr.api.AstNodeType;
+import com.exxeta.iss.sonar.esql.api.tree.statement.CreateFunctionStatementTree;
+import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
+import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
+import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
 
 @Rule(key = FunctionNameCheck.CHECK_KEY, priority = Priority.MAJOR, name = "Function names should comply with a naming convention", tags = Tags.CONVENTION)
-@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
-@SqaleConstantRemediation("10min")
-@ActivatedByDefault
-@BelongsToProfile(title=CheckList.SONAR_WAY_PROFILE,priority=Priority.MAJOR)
-public class FunctionNameCheck extends AbstractNameCheck {
+public class FunctionNameCheck extends DoubleDispatchVisitorCheck {
 	public static final String CHECK_KEY = "FunctionName";
 
 	private static final String DEFAULT_FORMAT = "^[a-z][a-zA-Z0-9]{1,30}$";
-	
-	@RuleProperty(key = "format", 
-			description="regular expression",
-			defaultValue = "" + DEFAULT_FORMAT)
+
+	@RuleProperty(key = "format", description = "regular expression", defaultValue = "" + DEFAULT_FORMAT)
 	public String format = DEFAULT_FORMAT;
+
+	private Pattern pattern;
 
 	public String getFormat() {
 		return format;
 	}
 
-	@Override
-	public String typeName() {
-		return "function";
+	public FunctionNameCheck() {
+		pattern = Pattern.compile(getFormat());
 	}
 
 	@Override
-	public AstNodeType getType() {
-		return EsqlGrammar.FUNCTION_DECLARATION;
-	}
+	public void visitCreateFunctionStatement(CreateFunctionStatementTree tree) {
+		super.visitCreateFunctionStatement(tree);
+		if (!pattern.matcher(tree.identifier().text()).matches()) {
+			addIssue(
+					new PreciseIssue(this, new IssueLocation(tree.identifier(), tree.identifier(), "Rename function \""
+							+ tree.identifier().text() + "\" to match the regular expression " + format + ".")));
 
-	
-	@Override
-	protected boolean isValidName(String nameToCheck) {
-		//Issue 8
-		if ("Main".equals(nameToCheck)){
-			return true;
 		}
-		return super.isValidName(nameToCheck);
+
 	}
 
 }

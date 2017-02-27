@@ -733,7 +733,7 @@ public class TreeFactory {
 					resultSet.isPresent() ? resultSet.get() : null, routineBody);
 		} else {
 			return new CreateProcedureStatementTreeImpl(createKeyword, procedureKeyword, identifier, openingParenthesis,
-					null, closingParenthesis, returnType.isPresent() ? returnType.get() : null,
+					new SeparatedList<>(Collections.<ParameterTree>emptyList(), Collections.<InternalSyntaxToken>emptyList()), closingParenthesis, returnType.isPresent() ? returnType.get() : null,
 					language.isPresent() ? language.get() : null, resultSet.isPresent() ? resultSet.get() : null,
 					routineBody);
 		}

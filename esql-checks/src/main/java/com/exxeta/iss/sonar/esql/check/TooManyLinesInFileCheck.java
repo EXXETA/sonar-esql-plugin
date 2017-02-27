@@ -17,6 +17,8 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
+import java.util.List;
+
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
@@ -24,33 +26,48 @@ import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.NoSqale;
 import org.sonar.squidbridge.checks.SquidCheck;
 
+import com.exxeta.iss.sonar.esql.api.tree.Tree;
+import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
+import com.exxeta.iss.sonar.esql.api.visitors.FileIssue;
+import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitorCheck;
+import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
+import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.GenericTokenType;
 import com.sonar.sslr.api.Grammar;
 
-@Rule(key = TooManyLinesInFileCheck.CHECK_KEY, priority = Priority.MAJOR, name = "Files should not have too many lines", tags = Tags.BRAIN_OVERLOAD)
+@Rule(key = "TooManyLinesInFile")
 @NoSqale
 @ActivatedByDefault
-public class TooManyLinesInFileCheck extends SquidCheck<Grammar> {
-	public static final String CHECK_KEY = "TooManyLinesInFile";
+public class TooManyLinesInFileCheck extends SubscriptionVisitorCheck {
 	private static final int DEFAULT = 2000;
+	private static final String MESSAGE = "File \"%s\" has %d lines, which is greater than %d authorized. Split it into smaller files.";
 	@RuleProperty(key = "maximum",
-			description = "the maximum allowed lines",
+			description = "the maximum authorized lines",
 			defaultValue = "" + DEFAULT)
 	public int maximum = DEFAULT;
 
-	@Override
-	public void init() {
-		subscribeTo(GenericTokenType.EOF);
-	}
 
-	@Override
-	public void visitNode(AstNode astNode) {
-		int lines = astNode.getTokenLine();
-		if (lines > maximum) {
-			String message = "File \"{0}\" has {1} lines, which is greater than {2} authorized. Split it into smaller files.";
-			getContext().createFileViolation(this, message,
-					getContext().getFile().getName(), lines, maximum);
-		}
-	}
+
+	
+
+	  @Override
+	  public void visitNode(Tree tree) {
+	    if (!((InternalSyntaxToken) tree).isEOF()) {
+	      return;
+	    }
+
+	    SyntaxToken token = (SyntaxToken) tree;
+	    int lines = token.line();
+
+	    if (lines > maximum) {
+	      String fileName = getContext().getEsqlFile().fileName();
+	      addIssue(new FileIssue(this, String.format(MESSAGE, fileName, lines, maximum)));
+	    }
+	  }
+
+	  @Override
+	  public List<Tree.Kind> nodesToVisit() {
+	    return ImmutableList.of(Tree.Kind.TOKEN);
+	  }
 }

@@ -1,7 +1,9 @@
 package com.exxeta.iss.sonar.esql;
 
+import com.exxeta.iss.sonar.esql.api.CustomEsqlRulesDefinition;
 import com.exxeta.iss.sonar.esql.api.EsqlCheck;
 import com.exxeta.iss.sonar.esql.api.visitors.TreeVisitor;
+import com.exxeta.iss.sonar.esql.se.SeCheck;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import java.util.ArrayList;
@@ -20,7 +22,7 @@ public class EsqlChecks {
 	    this.checkFactory = checkFactory;
 	  }
 
-	  public static EsqlChecks createJavaScriptCheck(CheckFactory checkFactory) {
+	  public static EsqlChecks createEsqlCheck(CheckFactory checkFactory) {
 	    return new EsqlChecks(checkFactory);
 	  }
 
