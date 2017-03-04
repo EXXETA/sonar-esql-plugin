@@ -20,20 +20,14 @@ package com.exxeta.iss.sonar.esql.check;
 import java.io.File;
 
 import org.junit.Test;
-import org.sonar.squidbridge.api.SourceFile;
-import org.sonar.squidbridge.checks.CheckMessagesVerifier;
 
-import com.exxeta.iss.sonar.esql.EsqlAstScanner;
-import com.exxeta.iss.sonar.esql.check.NonReservedKeywordCheck;
+import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
 
 public class NonReservedKeywordCheckTest {
 	@Test
 	public void test() throws Exception {
 		NonReservedKeywordCheck check = new NonReservedKeywordCheck();
-		SourceFile file = EsqlAstScanner.scanSingleFile(new File(
-				"src/test/resources/lowerCaseKeyword.esql"), check);
-		CheckMessagesVerifier
-				.verify(file.getCheckMessages())
+		 EsqlCheckVerifier.issues(check, new File("src/test/resources/lowerCaseKeyword.esql"))
 				.next()
 				.atLine(2)
 				.withMessage(
