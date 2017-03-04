@@ -34,10 +34,8 @@ import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import com.sonar.sslr.api.RecognitionException;
 import com.sonar.sslr.api.typed.ActionParser;
-
 import java.io.File;
 import java.io.InterruptedIOException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -48,9 +46,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
-
 import javax.annotation.Nullable;
-
 import org.sonar.api.SonarProduct;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FileSystem;
@@ -72,344 +68,396 @@ import org.sonar.api.utils.Version;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.squidbridge.ProgressReport;
+import org.sonar.squidbridge.api.AnalysisException;
+
+import static com.exxeta.iss.sonar.esql.compat.CompatibilityHelper.wrap;
 
 public class EsqlSquidSensor implements Sensor {
 
-	  private static final Logger LOG = Loggers.get(EsqlSquidSensor.class);
+  private static final Logger LOG = Loggers.get(EsqlSquidSensor.class);
 
-	  private final Number[] FUNCTIONS_DISTRIB_BOTTOM_LIMITS = { 1, 2, 4, 6, 8, 10, 12, 20, 30 };
-	private final Number[] FILES_DISTRIB_BOTTOM_LIMITS = { 0, 5, 10, 20, 30, 60, 90 };
+  private static final Version V6_0 = Version.create(6, 0);
+  private static final Version V6_2 = Version.create(6, 2);
 
-	  private final EsqlChecks checks;
-	  private final FileLinesContextFactory fileLinesContextFactory;
-	  private final FileSystem fileSystem;
-	  private final NoSonarFilter noSonarFilter;
-	  private final FilePredicate mainFilePredicate;
-	  private final ActionParser<Tree> parser;
-	  // parsingErrorRuleKey equals null if ParsingErrorCheck is not activated
-	  private RuleKey parsingErrorRuleKey = null;
+  private final EsqlChecks checks;
+  private final FileLinesContextFactory fileLinesContextFactory;
+  private final FileSystem fileSystem;
+  private final NoSonarFilter noSonarFilter;
+  private final FilePredicate mainFilePredicate;
+  private final ActionParser<Tree> parser;
+  // parsingErrorRuleKey equals null if ParsingErrorCheck is not activated
+  private RuleKey parsingErrorRuleKey = null;
 
-	  public EsqlSquidSensor(
-	    CheckFactory checkFactory, FileLinesContextFactory fileLinesContextFactory, FileSystem fileSystem, NoSonarFilter noSonarFilter) {
-	    this(checkFactory, fileLinesContextFactory, fileSystem, noSonarFilter, null);
-	  }
+  public EsqlSquidSensor(
+    CheckFactory checkFactory, FileLinesContextFactory fileLinesContextFactory, FileSystem fileSystem, NoSonarFilter noSonarFilter) {
+    this(checkFactory, fileLinesContextFactory, fileSystem, noSonarFilter, null);
+  }
 
-	  public EsqlSquidSensor(
-	    CheckFactory checkFactory, FileLinesContextFactory fileLinesContextFactory, FileSystem fileSystem, NoSonarFilter noSonarFilter,
-	    @Nullable CustomEsqlRulesDefinition[] customRulesDefinition
-	  ) {
+  public EsqlSquidSensor(
+    CheckFactory checkFactory, FileLinesContextFactory fileLinesContextFactory, FileSystem fileSystem, NoSonarFilter noSonarFilter,
+    @Nullable CustomEsqlRulesDefinition[] customRulesDefinition
+  ) {
 
-	    this.checks = EsqlChecks.createEsqlCheck(checkFactory)
-	      .addChecks(CheckList.REPOSITORY_KEY, CheckList.getChecks())
-	      .addCustomChecks(customRulesDefinition);
-	    this.fileLinesContextFactory = fileLinesContextFactory;
-	    this.fileSystem = fileSystem;
-	    this.noSonarFilter = noSonarFilter;
-	    this.mainFilePredicate = fileSystem.predicates().and(
-	      fileSystem.predicates().hasType(InputFile.Type.MAIN),
-	      fileSystem.predicates().hasLanguage(EsqlLanguage.KEY));
-	    this.parser = EsqlParserBuilder.createParser(getEncoding());
-	  }
+    this.checks = EsqlChecks.createEsqlCheck(checkFactory)
+      .addChecks(CheckList.REPOSITORY_KEY, CheckList.getChecks())
+      .addCustomChecks(customRulesDefinition);
+    this.fileLinesContextFactory = fileLinesContextFactory;
+    this.fileSystem = fileSystem;
+    this.noSonarFilter = noSonarFilter;
+    this.mainFilePredicate = fileSystem.predicates().and(
+      fileSystem.predicates().hasType(InputFile.Type.MAIN),
+      fileSystem.predicates().hasLanguage(EsqlLanguage.KEY));
+    this.parser = EsqlParserBuilder.createParser();
+  }
 
-	  
-	  private Charset getEncoding() {
-	    return fileSystem.encoding();
-	  }
-//	@Override
-//	public boolean shouldExecuteOnProject(Project project) {
-//		FilePredicates p = fileSystem.predicates();
-//		return fileSystem.hasFiles(p.and(p.hasType(InputFile.Type.MAIN), p.hasLanguage(Esql.KEY)));
-//	}
-//
-//	@Override
-//	public void analyse(Project project, SensorContext context) {
-//		this.context = context;
-//		List<SquidAstVisitor<Grammar>> visitors = Lists.newArrayList(checks.all());
-//
-//		visitors.add(new FileLinesVisitor(fileLinesContextFactory, fileSystem));
-//
-//		scanner = EsqlAstScanner.create(createConfiguration(), visitors.toArray(new SquidAstVisitor[visitors.size()]));
-//		FilePredicates p = fileSystem.predicates();
-//		scanner.scanFiles(Lists.newArrayList(fileSystem.files(mainFilePredicate)));
-//
-//		Collection<SourceCode> squidSourceFiles = scanner.getIndex().search(new QueryByType(SourceFile.class));
-//		save(squidSourceFiles);
-//		highlight();
-//	}
-//
-//	private void highlight() {
-//		EsqlHighlighter highlighter = new EsqlHighlighter(createConfiguration());
-//		for (InputFile inputFile : fileSystem.inputFiles(mainFilePredicate)) {
-//			highlighter.highlight(perspective(Highlightable.class, inputFile), inputFile.file());
-//		}
-//	}
-//
-//	<P extends Perspective<?>> P perspective(Class<P> clazz, @Nullable InputFile file) {
-//		if (file == null) {
-//			throw new IllegalArgumentException("Cannot get " + clazz.getCanonicalName() + "for a null file");
-//		}
-//		P result = resourcePerspectives.as(clazz, file);
-//		if (result == null) {
-//			throw new IllegalStateException("Could not get " + clazz.getCanonicalName() + " for " + file);
-//		}
-//		return result;
-//	}
-//
-//	private EsqlConfiguration createConfiguration() {
-//		return new EsqlConfiguration(fileSystem.encoding());
-//	}
-//
-//	private void save(Collection<SourceCode> squidSourceFiles) {
-//		for (SourceCode squidSourceFile : squidSourceFiles) {
-//			SourceFile squidFile = (SourceFile) squidSourceFile;
-//			File sonarFile = context.getResource(File.create(pathResolver.relativePath(fileSystem.baseDir(),
-//					new java.io.File(squidFile.getKey()))));
-//
-//			if (sonarFile != null) {
-//				noSonarFilter.addResource(sonarFile, squidFile.getNoSonarTagLines());
-//				saveFilesComplexityDistribution(sonarFile, squidFile);
-//				saveFunctionsComplexityDistribution(sonarFile, squidFile);
-//				saveMeasures(sonarFile, squidFile);
-//				saveIssues(sonarFile, squidFile);
-//			} else {
-//				LOG.warn(
-//						"Cannot save analysis information for file {}. Unable to retrieve the associated sonar resource.",
-//						squidFile.getKey());
-//			}
-//
-//			InputFile inputFile = fileSystem
-//					.inputFile(fileSystem.predicates().is(new java.io.File(squidFile.getKey())));
-//		}
-//	}
-//
-//	private void saveMeasures(File sonarFile, SourceFile squidFile) {
-//		context.saveMeasure(sonarFile, CoreMetrics.FILES, squidFile.getDouble(EsqlMetric.FILES));
-//		context.saveMeasure(sonarFile, CoreMetrics.LINES, squidFile.getDouble(EsqlMetric.LINES));
-//		context.saveMeasure(sonarFile, CoreMetrics.NCLOC, squidFile.getDouble(EsqlMetric.LINES_OF_CODE));
-//		context.saveMeasure(sonarFile, CoreMetrics.STATEMENTS, squidFile.getDouble(EsqlMetric.STATEMENTS));
-//		context.saveMeasure(sonarFile, CoreMetrics.COMPLEXITY, squidFile.getDouble(EsqlMetric.COMPLEXITY));
-//		context.saveMeasure(sonarFile, CoreMetrics.COMMENT_LINES, squidFile.getDouble(EsqlMetric.COMMENT_LINES));
-//		context.saveMeasure(sonarFile, CoreMetrics.FUNCTIONS, squidFile.getDouble(EsqlMetric.ROUTINES));
-//
-//	}
-//
-//	private void saveFunctionsComplexityDistribution(File sonarFile, SourceFile squidFile) {
-//		Collection<SourceCode> squidFunctionsInFile = scanner.getIndex().search(new QueryByParent(squidFile),
-//				new QueryByType(SourceFunction.class));
-//		RangeDistributionBuilder complexityDistribution = new RangeDistributionBuilder(
-//				CoreMetrics.FUNCTION_COMPLEXITY_DISTRIBUTION, FUNCTIONS_DISTRIB_BOTTOM_LIMITS);
-//		for (SourceCode squidFunction : squidFunctionsInFile) {
-//			complexityDistribution.add(squidFunction.getDouble(EsqlMetric.COMPLEXITY));
-//		}
-//		context.saveMeasure(sonarFile, complexityDistribution.build().setPersistenceMode(PersistenceMode.MEMORY));
-//	}
-//
-//	private void saveFilesComplexityDistribution(File sonarFile, SourceFile squidFile) {
-//		RangeDistributionBuilder complexityDistribution = new RangeDistributionBuilder(
-//				CoreMetrics.FILE_COMPLEXITY_DISTRIBUTION, FILES_DISTRIB_BOTTOM_LIMITS);
-//		complexityDistribution.add(squidFile.getDouble(EsqlMetric.COMPLEXITY));
-//		context.saveMeasure(sonarFile, complexityDistribution.build().setPersistenceMode(PersistenceMode.MEMORY));
-//	}
-//
-//	private void saveIssues(File sonarFile, SourceFile squidFile) {
-//		Collection<CheckMessage> messages = squidFile.getCheckMessages();
-//		for (CheckMessage message : messages) {
-//			RuleKey ruleKey = checks.ruleKey((SquidAstVisitor<Grammar>) message.getCheck());
-//			Issuable issuable = resourcePerspectives.as(Issuable.class, sonarFile);
-//			if (issuable != null) {
-//				Issue issue = issuable.newIssueBuilder().ruleKey(ruleKey).line(message.getLine())
-//						.message(message.getText(Locale.ENGLISH)).build();
-//				issuable.addIssue(issue);
-//			}
-//		}
-//	}
-//
-//	@Override
-//	public String toString() {
-//		return getClass().getSimpleName();
-//	}
+  @VisibleForTesting
+  protected void analyseFiles(
+    SensorContext context, List<TreeVisitor> treeVisitors, Iterable<CompatibleInputFile> inputFiles,
+    ProductDependentExecutor executor, ProgressReport progressReport
+  ) {
+    boolean success = false;
+    try {
+      for (CompatibleInputFile inputFile : inputFiles) {
+        // check for cancellation of the analysis (by SonarQube or SonarLint). See SONARJS-761.
+        if (context.getSonarQubeVersion().isGreaterThanOrEqual(V6_0) && context.isCancelled()) {
+          throw new CancellationException("Analysis interrupted because the SensorContext is in cancelled state");
+        }
+				analyse(context, inputFile, executor, treeVisitors);
+		        progressReport.nextFile();
+      }
+      success = true;
+    } catch (CancellationException e) {
+      // do not propagate the exception
+      LOG.debug(e.toString());
+    } finally {
+      stopProgressReport(progressReport, success);
+    }
+  }
+
+  private static void stopProgressReport(ProgressReport progressReport, boolean success) {
+    if (success) {
+      progressReport.stop();
+    } else {
+      progressReport.cancel();
+    }
+  }
+
+  private void analyse(SensorContext sensorContext, CompatibleInputFile inputFile, ProductDependentExecutor executor, List<TreeVisitor> visitors) {
+    ProgramTree programTree;
+
+    try {
+      programTree = (ProgramTree) parser.parse(inputFile.contents());
+      scanFile(sensorContext, inputFile, executor, visitors, programTree);
+    } catch (RecognitionException e) {
+      checkInterrupted(e);
+      LOG.error("Unable to parse file: " + inputFile.absolutePath());
+      LOG.error(e.getMessage());
+      processRecognitionException(e, sensorContext, inputFile);
+    } catch (Exception e) {
+      checkInterrupted(e);
+      processException(e, sensorContext, inputFile);
+      throw new AnalysisException("Unable to analyse file: " + inputFile.absolutePath(), e);
+    }
+  }
+
+  private static void checkInterrupted(Exception e) {
+    Throwable cause = Throwables.getRootCause(e);
+    if (cause instanceof InterruptedException || cause instanceof InterruptedIOException) {
+      throw new AnalysisException("Analysis cancelled", e);
+    }
+  }
+
+  private void processRecognitionException(RecognitionException e, SensorContext sensorContext, CompatibleInputFile inputFile) {
+    if (parsingErrorRuleKey != null) {
+      NewIssue newIssue = sensorContext.newIssue();
+
+      NewIssueLocation primaryLocation = newIssue.newLocation()
+        .message(e.getMessage())
+        .on(inputFile.wrapped())
+        .at(inputFile.selectLine(e.getLine()));
+
+      newIssue
+        .forRule(parsingErrorRuleKey)
+        .at(primaryLocation)
+        .save();
+    }
+
+    if (sensorContext.getSonarQubeVersion().isGreaterThanOrEqual(V6_0)) {
+      sensorContext.newAnalysisError()
+        .onFile(inputFile.wrapped())
+        .at(inputFile.newPointer(e.getLine(), 0))
+        .message(e.getMessage())
+        .save();
+    }
+  }
+
+  private static void processException(Exception e, SensorContext sensorContext, CompatibleInputFile inputFile) {
+    if (sensorContext.getSonarQubeVersion().isGreaterThanOrEqual(V6_0)) {
+      sensorContext.newAnalysisError()
+        .onFile(inputFile.wrapped())
+        .message(e.getMessage())
+        .save();
+    }
+  }
+
+  private void scanFile(SensorContext sensorContext, CompatibleInputFile inputFile, ProductDependentExecutor executor, List<TreeVisitor> visitors, ProgramTree programTree) {
+    EsqlVisitorContext context = new EsqlVisitorContext(programTree, inputFile, sensorContext.settings());
+
+    List<Issue> fileIssues = new ArrayList<>();
+
+    for (TreeVisitor visitor : visitors) {
+      if (visitor instanceof EsqlCheck) {
+        fileIssues.addAll(((EsqlCheck) visitor).scanFile(context));
+      } else {
+        visitor.scanTree(context);
+      }
+    }
+
+    saveFileIssues(sensorContext, fileIssues, inputFile.wrapped());
+    executor.highlightSymbols(inputFile.wrapped(), context);
+  }
+
+  private void saveFileIssues(SensorContext sensorContext, List<Issue> fileIssues, InputFile inputFile) {
+    for (Issue issue : fileIssues) {
+      RuleKey ruleKey = ruleKey(issue.check());
+      if (issue instanceof FileIssue) {
+        saveFileIssue(sensorContext, inputFile, ruleKey, (FileIssue) issue);
+      } else if (issue instanceof LineIssue) {
+        saveLineIssue(sensorContext, inputFile, ruleKey, (LineIssue) issue);
+      } else {
+        savePreciseIssue(sensorContext, inputFile, ruleKey, (PreciseIssue) issue);
+      }
+    }
+  }
+
+  private static void savePreciseIssue(SensorContext sensorContext, InputFile inputFile, RuleKey ruleKey, PreciseIssue issue) {
+    NewIssue newIssue = sensorContext.newIssue();
+
+    newIssue
+      .forRule(ruleKey)
+      .at(newLocation(inputFile, newIssue, issue.primaryLocation()));
+
+    if (issue.cost() != null) {
+      newIssue.gap(issue.cost());
+    }
+
+    for (IssueLocation secondary : issue.secondaryLocations()) {
+      newIssue.addLocation(newLocation(inputFile, newIssue, secondary));
+    }
+    newIssue.save();
+  }
+
+  private static NewIssueLocation newLocation(InputFile inputFile, NewIssue issue, IssueLocation location) {
+    TextRange range = inputFile.newRange(
+      location.startLine(), location.startLineOffset(), location.endLine(), location.endLineOffset());
+
+    NewIssueLocation newLocation = issue.newLocation()
+      .on(inputFile)
+      .at(range);
+
+    if (location.message() != null) {
+      newLocation.message(location.message());
+    }
+    return newLocation;
+  }
+
+  private RuleKey ruleKey(EsqlCheck check) {
+    Preconditions.checkNotNull(check);
+    RuleKey ruleKey = checks.ruleKeyFor(check);
+    if (ruleKey == null) {
+      throw new IllegalStateException("No rule key found for a rule");
+    }
+    return ruleKey;
+  }
 
 
-	  @Override
-	  public void describe(SensorDescriptor descriptor) {
-	    descriptor
-	      .onlyOnLanguage(EsqlLanguage.KEY)
-	      .name("Esql Squid Sensor")
-	      .onlyOnFileType(Type.MAIN);
-	  }
+  @Override
+  public void describe(SensorDescriptor descriptor) {
+    descriptor
+      .onlyOnLanguage(EsqlLanguage.KEY)
+      .name("ESQL Squid Sensor")
+      .onlyOnFileType(Type.MAIN);
+  }
 
-	  @Override
-	  public void execute(SensorContext context) {
-	    ProductDependentExecutor executor = createProductDependentExecutor(context);
+  @Override
+  public void execute(SensorContext context) {
+    ProductDependentExecutor executor = createProductDependentExecutor(context);
 
-	    List<TreeVisitor> treeVisitors = Lists.newArrayList();
-	    treeVisitors.addAll(executor.getProductDependentTreeVisitors());
-	    treeVisitors.add(new SeChecksDispatcher(checks.seChecks()));
-	    treeVisitors.addAll(checks.visitorChecks());
+    List<TreeVisitor> treeVisitors = Lists.newArrayList();
+    treeVisitors.addAll(executor.getProductDependentTreeVisitors());
+    treeVisitors.add(new SeChecksDispatcher(checks.seChecks()));
+    treeVisitors.addAll(checks.visitorChecks());
 
-	    for (TreeVisitor check : treeVisitors) {
-	      if (check instanceof ParsingErrorCheck) {
-	        parsingErrorRuleKey = checks.ruleKeyFor((EsqlCheck) check);
-	        break;
-	      }
-	    }
+    for (TreeVisitor check : treeVisitors) {
+      if (check instanceof ParsingErrorCheck) {
+        parsingErrorRuleKey = checks.ruleKeyFor((EsqlCheck) check);
+        break;
+      }
+    }
 
-	    Iterable<CompatibleInputFile> inputFiles = wrap(fileSystem.inputFiles(mainFilePredicate), context);
-	    Collection<File> files = StreamSupport.stream(inputFiles.spliterator(), false)
-	      .map(CompatibleInputFile::file)
-	      .collect(Collectors.toList());
+    Iterable<CompatibleInputFile> inputFiles = wrap(fileSystem.inputFiles(mainFilePredicate), context);
+    Collection<File> files = StreamSupport.stream(inputFiles.spliterator(), false)
+      .map(CompatibleInputFile::file)
+      .collect(Collectors.toList());
 
-	    ProgressReport progressReport = new ProgressReport("Report about progress of Javascript analyzer", TimeUnit.SECONDS.toMillis(10));
-	    progressReport.start(files);
+    ProgressReport progressReport = new ProgressReport("Report about progress of Javascript analyzer", TimeUnit.SECONDS.toMillis(10));
+    progressReport.start(files);
 
-	    analyseFiles(context, treeVisitors, inputFiles, executor, progressReport);
+    analyseFiles(context, treeVisitors, inputFiles, executor, progressReport);
 
-	    executor.executeCoverageSensors();
-	  }
+    executor.executeCoverageSensors();
+  }
 
-	  @VisibleForTesting
-	  protected interface ProductDependentExecutor {
-	    List<TreeVisitor> getProductDependentTreeVisitors();
+  private ProductDependentExecutor createProductDependentExecutor(SensorContext context) {
+    if (isSonarLint(context)) {
+      return new SonarLintProductExecutor();
+    }
+    return new SonarQubeProductExecutor(context, noSonarFilter, fileLinesContextFactory);
+  }
 
-	    void highlightSymbols(InputFile inputFile, TreeVisitorContext treeVisitorContext);
+  @VisibleForTesting
+  protected interface ProductDependentExecutor {
+    List<TreeVisitor> getProductDependentTreeVisitors();
 
-	    void executeCoverageSensors();
-	  }
+    void highlightSymbols(InputFile inputFile, TreeVisitorContext treeVisitorContext);
 
-	  private static class SonarQubeProductExecutor implements ProductDependentExecutor {
-	    private final SensorContext context;
-	    private final NoSonarFilter noSonarFilter;
-	    private final FileLinesContextFactory fileLinesContextFactory;
-	    private final boolean isAtLeastSq62;
-	    private MetricsVisitor metricsVisitor;
+    void executeCoverageSensors();
+  }
 
-	    SonarQubeProductExecutor(SensorContext context, NoSonarFilter noSonarFilter, FileLinesContextFactory fileLinesContextFactory) {
-	      this.context = context;
-	      this.noSonarFilter = noSonarFilter;
-	      this.fileLinesContextFactory = fileLinesContextFactory;
-	      this.isAtLeastSq62 = context.getSonarQubeVersion().isGreaterThanOrEqual(V6_2);
-	    }
+  private static class SonarQubeProductExecutor implements ProductDependentExecutor {
+    private final SensorContext context;
+    private final NoSonarFilter noSonarFilter;
+    private final FileLinesContextFactory fileLinesContextFactory;
+    private final boolean isAtLeastSq62;
+    private MetricsVisitor metricsVisitor;
 
-	    @Override
-	    public List<TreeVisitor> getProductDependentTreeVisitors() {
-	      metricsVisitor = new MetricsVisitor(
-	        context,
-	        noSonarFilter,
-	        context.settings().getBoolean(JavaScriptPlugin.IGNORE_HEADER_COMMENTS),
-	        fileLinesContextFactory,
-	        isAtLeastSq62);
-	      return Arrays.asList(metricsVisitor, new HighlighterVisitor(context), new CpdVisitor(context));
-	    }
+    SonarQubeProductExecutor(SensorContext context, NoSonarFilter noSonarFilter, FileLinesContextFactory fileLinesContextFactory) {
+      this.context = context;
+      this.noSonarFilter = noSonarFilter;
+      this.fileLinesContextFactory = fileLinesContextFactory;
+      this.isAtLeastSq62 = context.getSonarQubeVersion().isGreaterThanOrEqual(V6_2);
+    }
 
-	    @Override
-	    public void highlightSymbols(InputFile inputFile, TreeVisitorContext treeVisitorContext) {
-	      NewSymbolTable newSymbolTable = context.newSymbolTable().onFile(inputFile);
-	      HighlightSymbolTableBuilder.build(newSymbolTable, treeVisitorContext);
-	    }
+    @Override
+    public List<TreeVisitor> getProductDependentTreeVisitors() {
+      metricsVisitor = new MetricsVisitor(
+        context,
+        noSonarFilter,
+        context.settings().getBoolean(EsqlPlugin.IGNORE_HEADER_COMMENTS),
+        fileLinesContextFactory,
+        isAtLeastSq62);
+      return Arrays.asList(metricsVisitor, new HighlighterVisitor(context), new CpdVisitor(context));
+    }
 
-	    @Override
-	    public void executeCoverageSensors() {
-	      if (metricsVisitor == null) {
-	        throw new IllegalStateException("Before starting coverage computation, metrics should have been calculated.");
-	      }
-	      executeCoverageSensors(context, metricsVisitor.linesOfCode(), isAtLeastSq62);
-	    }
+    @Override
+    public void highlightSymbols(InputFile inputFile, TreeVisitorContext treeVisitorContext) {
+      NewSymbolTable newSymbolTable = context.newSymbolTable().onFile(inputFile);
+      HighlightSymbolTableBuilder.build(newSymbolTable, treeVisitorContext);
+    }
 
-	    private static void executeCoverageSensors(SensorContext context, Map<InputFile, Set<Integer>> linesOfCode, boolean isAtLeastSq62) {
-	      Settings settings = context.settings();
-	      if (isAtLeastSq62 && settings.getBoolean(EsqlPlugin.FORCE_ZERO_COVERAGE_KEY)) {
-	        LOG.warn("Since SonarQube 6.2 property 'sonar.javascript.forceZeroCoverage' is removed and its value is not used during analysis");
-	      }
+    @Override
+    public void executeCoverageSensors() {
+      if (metricsVisitor == null) {
+        throw new IllegalStateException("Before starting coverage computation, metrics should have been calculated.");
+      }
+      executeCoverageSensors(context, metricsVisitor.linesOfCode(), isAtLeastSq62);
+    }
 
-	      if (isAtLeastSq62) {
-	        logDeprecationForReportProperty(settings, EsqlPlugin.LCOV_UT_REPORT_PATH);
-	        logDeprecationForReportProperty(settings, EsqlPlugin.LCOV_IT_REPORT_PATH);
+    private static void executeCoverageSensors(SensorContext context, Map<InputFile, Set<Integer>> linesOfCode, boolean isAtLeastSq62) {
+      Settings settings = context.settings();
+      if (isAtLeastSq62 && settings.getBoolean(EsqlPlugin.FORCE_ZERO_COVERAGE_KEY)) {
+        LOG.warn("Since SonarQube 6.2 property 'sonar.javascript.forceZeroCoverage' is removed and its value is not used during analysis");
+      }
 
-	        String lcovReports = settings.getString(EsqlPlugin.LCOV_REPORT_PATHS);
+      if (isAtLeastSq62) {
+        logDeprecationForReportProperty(settings, EsqlPlugin.LCOV_UT_REPORT_PATH);
+        logDeprecationForReportProperty(settings, EsqlPlugin.LCOV_IT_REPORT_PATH);
 
-	        if (lcovReports == null || lcovReports.isEmpty()) {
-	          executeDeprecatedCoverageSensors(context, linesOfCode, true);
+        String lcovReports = settings.getString(EsqlPlugin.LCOV_REPORT_PATHS);
 
-	        } else {
-	          LOG.info("Test Coverage Sensor is started");
-	          (new LCOVCoverageSensor()).execute(context, linesOfCode, true);
-	        }
+        if (lcovReports == null || lcovReports.isEmpty()) {
+          executeDeprecatedCoverageSensors(context, linesOfCode, true);
 
-	      } else {
-	        executeDeprecatedCoverageSensors(context, linesOfCode, false);
-	      }
-	    }
+        } else {
+          LOG.info("Test Coverage Sensor is started");
+          (new LCOVCoverageSensor()).execute(context, linesOfCode, true);
+        }
 
-	    private static void logDeprecationForReportProperty(Settings settings, String propertyKey) {
-	      String value = settings.getString(propertyKey);
-	      if (value != null && !value.isEmpty()) {
-	        LOG.warn("Since SonarQube 6.2 property '" + propertyKey + "' is deprecated. Use 'sonar.javascript.lcov.reportPaths' instead.");
-	      }
-	    }
+      } else {
+        executeDeprecatedCoverageSensors(context, linesOfCode, false);
+      }
+    }
 
-	    private static void executeDeprecatedCoverageSensors(SensorContext context, Map<InputFile, Set<Integer>> linesOfCode, boolean isAtLeastSq62) {
-	      LOG.info("Unit Test Coverage Sensor is started");
-	      (new UTCoverageSensor()).execute(context, linesOfCode, isAtLeastSq62);
-	      LOG.info("Integration Test Coverage Sensor is started");
-	      (new ITCoverageSensor()).execute(context, linesOfCode, isAtLeastSq62);
-	      LOG.info("Overall Coverage Sensor is started");
-	      (new OverallCoverageSensor()).execute(context, linesOfCode, isAtLeastSq62);
-	    }
-	  }
+    private static void logDeprecationForReportProperty(Settings settings, String propertyKey) {
+      String value = settings.getString(propertyKey);
+      if (value != null && !value.isEmpty()) {
+        LOG.warn("Since SonarQube 6.2 property '" + propertyKey + "' is deprecated. Use 'sonar.javascript.lcov.reportPaths' instead.");
+      }
+    }
 
-	  @VisibleForTesting
-	  protected static class SonarLintProductExecutor implements ProductDependentExecutor {
-	    @Override
-	    public List<TreeVisitor> getProductDependentTreeVisitors() {
-	      return Collections.emptyList();
-	    }
+    private static void executeDeprecatedCoverageSensors(SensorContext context, Map<InputFile, Set<Integer>> linesOfCode, boolean isAtLeastSq62) {
+      LOG.info("Unit Test Coverage Sensor is started");
+      (new UTCoverageSensor()).execute(context, linesOfCode, isAtLeastSq62);
+      LOG.info("Integration Test Coverage Sensor is started");
+      (new ITCoverageSensor()).execute(context, linesOfCode, isAtLeastSq62);
+      LOG.info("Overall Coverage Sensor is started");
+      (new OverallCoverageSensor()).execute(context, linesOfCode, isAtLeastSq62);
+    }
+  }
 
-	    @Override
-	    public void highlightSymbols(InputFile inputFile, TreeVisitorContext treeVisitorContext) {
-	      // unnecessary in SonarLint context
-	    }
+  @VisibleForTesting
+  protected static class SonarLintProductExecutor implements ProductDependentExecutor {
+    @Override
+    public List<TreeVisitor> getProductDependentTreeVisitors() {
+      return Collections.emptyList();
+    }
 
-	    @Override
-	    public void executeCoverageSensors() {
-	      // unnecessary in SonarLint context
-	    }
-	  }
+    @Override
+    public void highlightSymbols(InputFile inputFile, TreeVisitorContext treeVisitorContext) {
+      // unnecessary in SonarLint context
+    }
 
-	  private static boolean isSonarLint(SensorContext context) {
-	    return context.getSonarQubeVersion().isGreaterThanOrEqual(V6_0) && context.runtime().getProduct() == SonarProduct.SONARLINT;
-	  }
+    @Override
+    public void executeCoverageSensors() {
+      // unnecessary in SonarLint context
+    }
+  }
 
-	  private static void saveLineIssue(SensorContext sensorContext, InputFile inputFile, RuleKey ruleKey, LineIssue issue) {
-	    NewIssue newIssue = sensorContext.newIssue();
+  private static boolean isSonarLint(SensorContext context) {
+    return context.getSonarQubeVersion().isGreaterThanOrEqual(V6_0) && context.runtime().getProduct() == SonarProduct.SONARLINT;
+  }
 
-	    NewIssueLocation primaryLocation = newIssue.newLocation()
-	      .message(issue.message())
-	      .on(inputFile)
-	      .at(inputFile.selectLine(issue.line()));
+  private static void saveLineIssue(SensorContext sensorContext, InputFile inputFile, RuleKey ruleKey, LineIssue issue) {
+    NewIssue newIssue = sensorContext.newIssue();
 
-	    saveIssue(newIssue, primaryLocation, ruleKey, issue);
-	  }
+    NewIssueLocation primaryLocation = newIssue.newLocation()
+      .message(issue.message())
+      .on(inputFile)
+      .at(inputFile.selectLine(issue.line()));
 
-	  private static void saveFileIssue(SensorContext sensorContext, InputFile inputFile, RuleKey ruleKey, FileIssue issue) {
-	    NewIssue newIssue = sensorContext.newIssue();
+    saveIssue(newIssue, primaryLocation, ruleKey, issue);
+  }
 
-	    NewIssueLocation primaryLocation = newIssue.newLocation()
-	      .message(issue.message())
-	      .on(inputFile);
+  private static void saveFileIssue(SensorContext sensorContext, InputFile inputFile, RuleKey ruleKey, FileIssue issue) {
+    NewIssue newIssue = sensorContext.newIssue();
 
-	    saveIssue(newIssue, primaryLocation, ruleKey, issue);
-	  }
+    NewIssueLocation primaryLocation = newIssue.newLocation()
+      .message(issue.message())
+      .on(inputFile);
 
-	  private static void saveIssue(NewIssue newIssue, NewIssueLocation primaryLocation, RuleKey ruleKey, Issue issue) {
-	    newIssue
-	      .forRule(ruleKey)
-	      .at(primaryLocation);
+    saveIssue(newIssue, primaryLocation, ruleKey, issue);
+  }
 
-	    if (issue.cost() != null) {
-	      newIssue.gap(issue.cost());
-	    }
+  private static void saveIssue(NewIssue newIssue, NewIssueLocation primaryLocation, RuleKey ruleKey, Issue issue) {
+    newIssue
+      .forRule(ruleKey)
+      .at(primaryLocation);
 
-	    newIssue.save();
-	  }
+    if (issue.cost() != null) {
+      newIssue.gap(issue.cost());
+    }
+
+    newIssue.save();
+  }
 
 }

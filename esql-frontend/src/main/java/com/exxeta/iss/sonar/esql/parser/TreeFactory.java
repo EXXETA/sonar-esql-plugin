@@ -81,6 +81,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.IfStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.IterateStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.LabelTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.LanguageTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.LeaveStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.MessageSourceTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ParameterTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.PropagateStatementTreeImpl;
@@ -1107,6 +1108,11 @@ public class TreeFactory {
 	public IterateStatementTreeImpl iterateStatement(InternalSyntaxToken iterateKeyword, LabelTreeImpl label,
 			InternalSyntaxToken semi) {
 		return new IterateStatementTreeImpl(iterateKeyword, label, semi);
+	}
+	
+	public LeaveStatementTreeImpl leaveStatement(InternalSyntaxToken leaveKeyword, LabelTreeImpl label,
+			InternalSyntaxToken semi) {
+		return new LeaveStatementTreeImpl(leaveKeyword, label, semi);
 	}
 
 	public CallStatementTreeImpl callStatement(InternalSyntaxToken callKeyword,

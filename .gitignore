@@ -13,3 +13,5 @@ esql-checks-test/.settings/
 esql-frontend/.classpath
 esql-frontend/.gitignore
 esql-frontend/.project
+.settings/
+.classpath

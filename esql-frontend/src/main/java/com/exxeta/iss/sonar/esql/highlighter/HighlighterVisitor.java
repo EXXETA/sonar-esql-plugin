@@ -30,7 +30,6 @@ import com.sonar.sslr.impl.Lexer;
 public class HighlighterVisitor extends SubscriptionVisitor{
 
 	  private final SensorContext sensorContext;
-	  private final FileSystem fileSystem;
 	  private NewHighlighting highlighting;
 
 	  private static final Kind[] METHODS = {
@@ -40,10 +39,9 @@ public class HighlighterVisitor extends SubscriptionVisitor{
 	    Kind.SET_METHOD
 	  };
 
-	  public HighlighterVisitor(SensorContext sensorContext, FileSystem fileSystem) {
-	    this.sensorContext = sensorContext;
-	    this.fileSystem = fileSystem;
-	  }
+	  public HighlighterVisitor(SensorContext sensorContext) {
+		    this.sensorContext = sensorContext;
+		  }
 
 	  @Override
 	  public List<Kind> nodesToVisit() {

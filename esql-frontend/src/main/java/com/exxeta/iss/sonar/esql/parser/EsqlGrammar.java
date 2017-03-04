@@ -70,6 +70,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.IfStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.IterateStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.LabelTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.LanguageTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.LeaveStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.MessageSourceTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ParameterTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.PropagateStatementTreeImpl;
@@ -256,7 +257,7 @@ public class EsqlGrammar {
 
 	private StatementTree BASIC_STATEMENT() {
 		return b.firstOf(BEGIN_END_STATEMENT(), CALL_STATEMENT(), CASE_STATEMENT(), DECLARE_STATEMENT(), IF_STATEMENT(), 
-				ITERATE_STATEMENT(), SET_STATEMENT());
+				ITERATE_STATEMENT(), LEAVE_STATEMENT(), SET_STATEMENT());
 	}
 
 	public BeginEndStatementTreeImpl BEGIN_END_STATEMENT() {
@@ -344,6 +345,12 @@ public class EsqlGrammar {
 	public IterateStatementTreeImpl ITERATE_STATEMENT(){
 		return b.<IterateStatementTreeImpl>nonterminal(Kind.ITERATE_STATEMENT).is(f.iterateStatement(
 				b.token(EsqlNonReservedKeyword.ITERATE), LABEL(), b.token(EsqlLegacyGrammar.EOS)
+				));
+	}
+	
+	public LeaveStatementTreeImpl LEAVE_STATEMENT(){
+		return b.<LeaveStatementTreeImpl>nonterminal(Kind.LEAVE_STATEMENT).is(f.leaveStatement(
+				b.token(EsqlNonReservedKeyword.LEAVE), LABEL(), b.token(EsqlLegacyGrammar.EOS)
 				));
 	}
 
