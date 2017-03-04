@@ -17,28 +17,18 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
-import java.util.List;
+import java.util.regex.Pattern;
 
-import org.sonar.api.server.rule.RulesDefinition;
-import org.sonar.check.BelongsToProfile;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 
-import com.exxeta.iss.sonar.esql.api.EsqlGrammar;
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.AstNodeType;
-import com.sonar.sslr.api.GenericTokenType;
+import com.exxeta.iss.sonar.esql.api.tree.statement.DeclareStatementTree;
+import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
+import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
+import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
 
-@Rule(key = VariableNameCheck.CHECK_KEY, priority = Priority.MAJOR, name = "Variable names should comply with a naming convention", tags = Tags.CONVENTION)
-@SqaleSubCharacteristic(RulesDefinition.SubCharacteristics.READABILITY)
-@SqaleConstantRemediation("10min")
-@ActivatedByDefault
-@BelongsToProfile(title=CheckList.SONAR_WAY_PROFILE,priority=Priority.MAJOR)
-public class VariableNameCheck extends AbstractNameCheck {
+@Rule(key = VariableNameCheck.CHECK_KEY)
+public class VariableNameCheck extends DoubleDispatchVisitorCheck {
 	public static final String CHECK_KEY = "VariableName";
 	
 	private static final String DEFAULT_FORMAT = "^[a-z][a-zA-Z0-9]{0,30}$";
@@ -48,32 +38,31 @@ public class VariableNameCheck extends AbstractNameCheck {
 			defaultValue = "" + DEFAULT_FORMAT)
 	public String format = DEFAULT_FORMAT;
 
+	private Pattern pattern;
+
 	public String getFormat() {
 		return format;
 	}
-
-	@Override
-	public String typeName() {
-		return "variable";
+	public VariableNameCheck() {
+		pattern = Pattern.compile(getFormat());
 	}
 
 	@Override
-	public AstNodeType getType() {
-		return EsqlGrammar.declareStatement;
-	}
-	@Override
-	public void visitNode(AstNode astNode) {
-		boolean isConstant = false;
-		List<AstNode> children = astNode.getChildren(GenericTokenType.IDENTIFIER);
-		for (AstNode child:children){
-			if ("CONSTANT".equals(child.getTokenValue())){
-				isConstant=true;
-			}else if ("EXTERNAL".equals(child.getTokenValue())){
-				isConstant=true;
+	public void visitDeclareStatement(DeclareStatementTree tree) {
+		super.visitDeclareStatement(tree);
+
+		boolean isConstant = (tree.constantKeyword() != null) || (tree.sharedExt()!=null && tree.sharedExt().text().equalsIgnoreCase("EXTERNAL"));
+
+		if (!isConstant) {
+			for (int i = 0; i < tree.nameList().size(); i++) {
+				if (!pattern.matcher(tree.nameList().get(i).text()).matches()) {
+					addIssue(new PreciseIssue(this,
+							new IssueLocation(tree.nameList().get(i), tree.nameList().get(i),
+									"Rename variable \"" + tree.nameList().get(i).text()
+											+ "\" to match the regular expression " + format + ".")));
+
+				}
 			}
-		}
-		if (!isConstant){
-			super.visitNode(astNode);
 		}
 	}
 
