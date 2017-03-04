@@ -19,18 +19,9 @@ package com.exxeta.iss.sonar.esql.check;
 
 import java.io.File;
 
-
-
-
-
-
-
 import org.junit.Test;
-import org.sonar.squidbridge.api.SourceFile;
-import org.sonar.squidbridge.checks.CheckMessagesVerifier;
 
-import com.exxeta.iss.sonar.esql.EsqlAstScanner;
-import com.exxeta.iss.sonar.esql.check.NestedIfDepthCheck;
+import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
 
 public class NestedIfDepthCheckTest {
 	 @Test
@@ -38,8 +29,7 @@ public class NestedIfDepthCheckTest {
 	    NestedIfDepthCheck check = new NestedIfDepthCheck();
 	    check.maximumNestingLevel=3;
 	    
-	    SourceFile file =EsqlAstScanner.scanSingleFile(new File("src/test/resources/ifTest.esql"), check);
-	    CheckMessagesVerifier.verify(file.getCheckMessages())
+		 EsqlCheckVerifier.issues(check, new File("src/test/resources/ifTest.esql"))
 	        .next().atLine(8).withMessage("This if has a nesting level of 4, which is higher than the maximum allowed 3.")
 	        .next().atLine(12).withMessage("This if has a nesting level of 4, which is higher than the maximum allowed 3.")
 	        .noMore();
