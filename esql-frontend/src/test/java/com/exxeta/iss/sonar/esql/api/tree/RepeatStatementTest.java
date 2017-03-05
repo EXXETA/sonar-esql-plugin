@@ -6,11 +6,11 @@ import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 
-public class LoopStatementTest {
+public class RepeatStatementTest {
 	@Test
-	public void loopStatement(){
-		assertThat(Kind.LOOP_STATEMENT)
-		.matches("X : LOOP  IF i>= 4 THEN LEAVE X; END IF;  SET i = i + 1;END LOOP X;");
+	public void repeatStatement(){
+		assertThat(Kind.REPEAT_STATEMENT)
+		.matches("X : REPEAT SET i = i + 1; UNTIL  i>= 3 END REPEAT X;");
 
 	}
 	

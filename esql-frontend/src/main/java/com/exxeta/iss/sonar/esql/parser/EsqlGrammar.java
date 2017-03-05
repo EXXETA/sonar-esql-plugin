@@ -21,6 +21,9 @@ import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.COMMA;
 import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.COLON;
 import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.DOT;
 import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.SEMI;
+
+import org.hamcrest.text.pattern.internal.ast.ZeroOrMore;
+
 import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.LPARENTHESIS;
 import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.RPARENTHESIS;
 
@@ -76,6 +79,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.LoopStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.MessageSourceTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ParameterTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.PropagateStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.RepeatStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ResultSetTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ReturnTypeTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.RoutineBodyTreeImpl;
@@ -259,7 +263,7 @@ public class EsqlGrammar {
 
 	private StatementTree BASIC_STATEMENT() {
 		return b.firstOf(BEGIN_END_STATEMENT(), CALL_STATEMENT(), CASE_STATEMENT(), DECLARE_STATEMENT(), IF_STATEMENT(), 
-				ITERATE_STATEMENT(), LEAVE_STATEMENT(), LOOP_STATEMENT(), SET_STATEMENT());
+				ITERATE_STATEMENT(), LEAVE_STATEMENT(), LOOP_STATEMENT(), REPEAT_STATEMENT(),  SET_STATEMENT());
 	}
 
 	public BeginEndStatementTreeImpl BEGIN_END_STATEMENT() {
@@ -375,6 +379,29 @@ public class EsqlGrammar {
 						b.token(EsqlNonReservedKeyword.LOOP), LABEL(), b.token(EsqlLegacyGrammar.EOS)
 
 		));
+	}
+	
+	public RepeatStatementTreeImpl REPEAT_STATEMENT() {
+		return b.<RepeatStatementTreeImpl>nonterminal(Kind.REPEAT_STATEMENT)
+				.is(b.firstOf(REPEAT_STATEMENT_WO_LABEL(), REPEAT_STATEMENT_WITH_LABEL()));
+	}
+
+	public RepeatStatementTreeImpl REPEAT_STATEMENT_WITH_LABEL() {
+		return b.<RepeatStatementTreeImpl>nonterminal()
+				.is(f.repeatStatementWithLabel(
+						LABEL(), b.token(COLON), b.token(EsqlNonReservedKeyword.REPEAT), b.zeroOrMore(STATEMENT()), 
+						b.token(EsqlNonReservedKeyword.UNTIL), EXPRESSION(), b.token(EsqlNonReservedKeyword.END), 
+						b.token(EsqlNonReservedKeyword.REPEAT), LABEL(), b.token(EsqlLegacyGrammar.EOS)
+						));
+	}
+
+	public RepeatStatementTreeImpl REPEAT_STATEMENT_WO_LABEL() {
+		return b.<RepeatStatementTreeImpl>nonterminal()
+				.is(f.repeatStatementWoLabel(
+						b.token(EsqlNonReservedKeyword.REPEAT), b.zeroOrMore(STATEMENT()), 
+						b.token(EsqlNonReservedKeyword.UNTIL), EXPRESSION(), b.token(EsqlNonReservedKeyword.END), 
+						b.token(EsqlNonReservedKeyword.REPEAT), b.token(EsqlLegacyGrammar.EOS)
+						));
 	}
 
 	public SetStatementTreeImpl SET_STATEMENT() {

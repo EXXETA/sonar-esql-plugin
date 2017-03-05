@@ -86,6 +86,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.LoopStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.MessageSourceTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ParameterTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.PropagateStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.RepeatStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ResultSetTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ReturnTypeTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.RoutineBodyTreeImpl;
@@ -1193,6 +1194,32 @@ public class TreeFactory {
 			return new LoopStatementTreeImpl(label, colon, loopKeyword, statements.get(), endKeyword, loopKeyword2, label2, semi);
 		}else{
 			return new LoopStatementTreeImpl(label, colon, loopKeyword, Collections.emptyList(), endKeyword, loopKeyword2, label2, semi);
+		}
+	}
+
+	public RepeatStatementTreeImpl repeatStatementWithLabel(LabelTreeImpl label, InternalSyntaxToken colon,
+			InternalSyntaxToken repeatKeyword, Optional<List<StatementTree>> statements,
+			InternalSyntaxToken untilKeyword, ExpressionTree condition, InternalSyntaxToken endKeyword,
+			InternalSyntaxToken repeatKeyword2, LabelTreeImpl label2, InternalSyntaxToken semi) {
+		if (statements.isPresent()) {
+			return new RepeatStatementTreeImpl(label, colon, repeatKeyword, statements.get(), untilKeyword, condition,
+					endKeyword, repeatKeyword2, label2, semi);
+		} else {
+			return new RepeatStatementTreeImpl(label, colon, repeatKeyword, Collections.emptyList(), untilKeyword,
+					condition, endKeyword, repeatKeyword2, label2, semi);
+		}
+	}
+
+	public RepeatStatementTreeImpl repeatStatementWoLabel(
+			InternalSyntaxToken repeatKeyword, Optional<List<StatementTree>> statements, InternalSyntaxToken untilKeyword,
+			ExpressionTree condition, InternalSyntaxToken endKeyword, InternalSyntaxToken repeatKeyword2, 
+			InternalSyntaxToken semi) {
+		if (statements.isPresent()) {
+			return new RepeatStatementTreeImpl(repeatKeyword, statements.get(), untilKeyword, condition,
+					endKeyword, repeatKeyword2, semi);
+		} else {
+			return new RepeatStatementTreeImpl(repeatKeyword, Collections.emptyList(), untilKeyword,
+					condition, endKeyword, repeatKeyword2, semi);
 		}
 	}
 

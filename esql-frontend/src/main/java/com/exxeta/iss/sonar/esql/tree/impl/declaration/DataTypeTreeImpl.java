@@ -58,7 +58,7 @@ public class DataTypeTreeImpl extends EsqlTree implements DataTypeTree{
 
 	@Override
 	public Kind getKind() {
-		return Kind.Data_TYPE;
+		return Kind.DATA_TYPE;
 	}
 
 	@Override

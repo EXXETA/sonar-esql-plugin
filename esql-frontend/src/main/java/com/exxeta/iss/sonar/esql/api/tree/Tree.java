@@ -30,6 +30,7 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.MessageSourceTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ParameterListTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ParameterTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.PropagateStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.RepeatStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ResultSetTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ReturnTypeTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.RoutineBodyTree;
@@ -106,7 +107,7 @@ public interface Tree {
 		INTERVAL_QUALIFIER(IntervalQualifierTree.class), 
 		INTERVAL_DATA_TYPE(IntervalDataTypeTree.class), 
 		DECIMAL_DATA_TYPE(DecimalDataTypeTree.class), 
-		Data_TYPE(DataTypeTree.class), 
+		DATA_TYPE(DataTypeTree.class), 
 		SET_STATEMENT(SetStatementTree.class),
 		ITERATE_STATEMENT(IterateStatementTree.class), 
 		LABEL(LabelTree.class), 
@@ -114,7 +115,8 @@ public interface Tree {
 		CASE_STATEMENT(CaseStatementTree.class), 
 		WHEN_CLAUSE(WhenClauseTree.class), 
 		LEAVE_STATEMENT(LeaveStatementTree.class), 
-		LOOP_STATEMENT(LoopStatementTree.class);
+		LOOP_STATEMENT(LoopStatementTree.class), 
+		REPEAT_STATEMENT(RepeatStatementTree.class);
 
 		final Class<? extends Tree> associatedInterface;
 
