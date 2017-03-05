@@ -82,6 +82,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.IterateStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.LabelTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.LanguageTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.LeaveStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.LoopStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.MessageSourceTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ParameterTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.PropagateStatementTreeImpl;
@@ -1173,6 +1174,26 @@ public class TreeFactory {
 	public WhenClauseTreeImpl whenClause(InternalSyntaxToken whenKeyword, ExpressionTree expression,
 			InternalSyntaxToken thenKeyword, Optional<List<StatementTree>> statements) {
 		return new WhenClauseTreeImpl(whenKeyword, expression, thenKeyword, statements.isPresent()?statements.get():Collections.emptyList());
+	}
+
+	public LoopStatementTreeImpl loopStatementWoLabel(InternalSyntaxToken loopKeyword,
+			Optional<List<StatementTree>> statements, InternalSyntaxToken endKeyword, InternalSyntaxToken loopKeyword2,
+			InternalSyntaxToken semi) {
+		if (statements.isPresent()){
+			return new LoopStatementTreeImpl(loopKeyword, statements.get(), endKeyword, loopKeyword2, semi);
+		}else{
+			return new LoopStatementTreeImpl(loopKeyword, Collections.emptyList(), endKeyword, loopKeyword2, semi);
+		}
+	}
+
+	public LoopStatementTreeImpl loopStatementWithLabel(LabelTreeImpl label, InternalSyntaxToken colon, InternalSyntaxToken loopKeyword,
+			Optional<List<StatementTree>> statements, InternalSyntaxToken endKeyword, InternalSyntaxToken loopKeyword2,
+			LabelTreeImpl label2, InternalSyntaxToken semi) {
+		if (statements.isPresent()){
+			return new LoopStatementTreeImpl(label, colon, loopKeyword, statements.get(), endKeyword, loopKeyword2, label2, semi);
+		}else{
+			return new LoopStatementTreeImpl(label, colon, loopKeyword, Collections.emptyList(), endKeyword, loopKeyword2, label2, semi);
+		}
 	}
 
 

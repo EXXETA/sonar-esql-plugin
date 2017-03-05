@@ -17,26 +17,26 @@
  */
 package com.exxeta.iss.sonar.esql.parser;
 
-import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.COMMA;
-import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.SEMI;
-import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.DOT;
-import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.LPARENTHESIS;
-import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.RPARENTHESIS;
 import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.COLON;
-import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.EQUAL;
-import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.LT;
-import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.GT;
-import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.NOTEQUAL;
-import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.STAR;
+import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.COMMA;
 import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.DIV;
-import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.PLUS;
-import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.MINUS;
-import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.LE;
+import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.DOT;
+import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.EQUAL;
 import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.GE;
+import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.GT;
 import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.LBRACKET;
-import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.RBRACKET;
 import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.LCURLYBRACE;
+import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.LE;
+import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.LPARENTHESIS;
+import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.LT;
+import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.MINUS;
+import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.NOTEQUAL;
+import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.PLUS;
+import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.RBRACKET;
 import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.RCURLYBRACE;
+import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.RPARENTHESIS;
+import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.SEMI;
+import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.STAR;
 
 import org.sonar.sslr.grammar.GrammarRuleKey;
 import org.sonar.sslr.grammar.LexerlessGrammarBuilder;
@@ -176,8 +176,8 @@ public enum EsqlLegacyGrammar implements GrammarRuleKey {
 		punctuator(b, COLON, ":");
 		punctuator(b, EQUAL, "=");
 		punctuator(b, NOTEQUAL, "<>");
-		punctuator(b, LT, "<");
-		punctuator(b, GT, ">");
+		punctuator(b, LT, "<", b.nextNot(b.firstOf("=", ">")));
+		punctuator(b, GT, ">", b.nextNot("="));
 		punctuator(b, STAR, "*");
 		punctuator(b, DIV, "/");
 		punctuator(b, PLUS, "+");
@@ -199,6 +199,16 @@ public enum EsqlLegacyGrammar implements GrammarRuleKey {
 		}
 		throw new IllegalStateException(value);
 	}
+	
+	  private static void punctuator(LexerlessGrammarBuilder b, GrammarRuleKey ruleKey, String value, Object element) {
+		    for (EsqlPunctuator tokenType : EsqlPunctuator.values()) {
+		      if (value.equals(tokenType.getValue())) {
+		        b.rule(tokenType).is(SPACING, value, element);
+		        return;
+		      }
+		    }
+		    throw new IllegalStateException(value);
+		  }
 
 	private static void keywords(LexerlessGrammarBuilder b) {
 		b.rule(LETTER_OR_DIGIT).is(b.regexp("\\p{javaJavaIdentifierPart}"));
