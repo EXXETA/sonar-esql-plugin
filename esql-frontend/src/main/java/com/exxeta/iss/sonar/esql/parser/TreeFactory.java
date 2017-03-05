@@ -88,6 +88,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.ParameterTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.PropagateStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.RepeatStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ResultSetTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.ReturnStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ReturnTypeTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.RoutineBodyTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.SetStatementTreeImpl;
@@ -1221,6 +1222,11 @@ public class TreeFactory {
 			return new RepeatStatementTreeImpl(repeatKeyword, Collections.emptyList(), untilKeyword,
 					condition, endKeyword, repeatKeyword2, semi);
 		}
+	}
+
+	public ReturnStatementTreeImpl returnStatement(InternalSyntaxToken returnKeyword, Optional<ExpressionTree> expression,
+			InternalSyntaxToken semi) {
+		return new ReturnStatementTreeImpl(returnKeyword, expression.isPresent()?expression.get():null, semi);
 	}
 
 

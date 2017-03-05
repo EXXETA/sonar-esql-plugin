@@ -81,6 +81,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.ParameterTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.PropagateStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.RepeatStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ResultSetTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.ReturnStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ReturnTypeTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.RoutineBodyTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.SetStatementTreeImpl;
@@ -263,7 +264,7 @@ public class EsqlGrammar {
 
 	private StatementTree BASIC_STATEMENT() {
 		return b.firstOf(BEGIN_END_STATEMENT(), CALL_STATEMENT(), CASE_STATEMENT(), DECLARE_STATEMENT(), IF_STATEMENT(), 
-				ITERATE_STATEMENT(), LEAVE_STATEMENT(), LOOP_STATEMENT(), REPEAT_STATEMENT(),  SET_STATEMENT());
+				ITERATE_STATEMENT(), LEAVE_STATEMENT(), LOOP_STATEMENT(), REPEAT_STATEMENT(), RETURN_STATEMENT(), SET_STATEMENT());
 	}
 
 	public BeginEndStatementTreeImpl BEGIN_END_STATEMENT() {
@@ -404,6 +405,13 @@ public class EsqlGrammar {
 						));
 	}
 
+	public ReturnStatementTreeImpl RETURN_STATEMENT() {
+		return b.<ReturnStatementTreeImpl>nonterminal(Kind.RETURN_STATEMENT).is(
+				f.returnStatement(
+				b.token(EsqlNonReservedKeyword.RETURN), b.optional(EXPRESSION()), b.token(EsqlLegacyGrammar.EOS)
+				));
+	}
+	
 	public SetStatementTreeImpl SET_STATEMENT() {
 		return b.<SetStatementTreeImpl>nonterminal(Kind.SET_STATEMENT).is(f.setStatement(
 				b.token(EsqlNonReservedKeyword.SET), FIELD_REFERENCE(),
