@@ -95,6 +95,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.RoutineBodyTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.SetStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ThrowStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.WhenClauseTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.WhileStatementTreeImpl;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -1235,6 +1236,32 @@ public class TreeFactory {
 		} else {
 			return new RepeatStatementTreeImpl(repeatKeyword, Collections.emptyList(), untilKeyword,
 					condition, endKeyword, repeatKeyword2, semi);
+		}
+	}
+
+	public WhileStatementTreeImpl whileStatementWithLabel(LabelTreeImpl label, InternalSyntaxToken colon,
+			InternalSyntaxToken whileKeyword, ExpressionTree condition, InternalSyntaxToken doKeyword,
+			Optional<List<StatementTree>> statements, InternalSyntaxToken endKeyword,
+			InternalSyntaxToken whileKeyword2, LabelTreeImpl label2, InternalSyntaxToken semi) {
+		if (statements.isPresent()) {
+			return new WhileStatementTreeImpl(label, colon, whileKeyword, condition, doKeyword, statements.get(),
+					endKeyword, whileKeyword2, label2, semi);
+		} else {
+			return new WhileStatementTreeImpl(label, colon, whileKeyword, condition, doKeyword, Collections.emptyList(), 
+					endKeyword, whileKeyword2, label2, semi);
+		}
+	}
+
+	public WhileStatementTreeImpl whileStatementWoLabel(
+			InternalSyntaxToken whileKeyword, ExpressionTree condition, InternalSyntaxToken doKeyword, Optional<List<StatementTree>> statements, 
+			InternalSyntaxToken endKeyword, InternalSyntaxToken whileKeyword2, 
+			InternalSyntaxToken semi) {
+		if (statements.isPresent()) {
+			return new WhileStatementTreeImpl(whileKeyword, condition, doKeyword, statements.get(),
+					endKeyword, whileKeyword2, semi);
+		} else {
+			return new WhileStatementTreeImpl(whileKeyword, condition, doKeyword, Collections.emptyList(),
+					endKeyword, whileKeyword2, semi);
 		}
 	}
 

@@ -84,6 +84,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.RoutineBodyTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.SetStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ThrowStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.WhenClauseTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.WhileStatementTreeImpl;
 import com.sonar.sslr.api.typed.GrammarBuilder;
 
 public class EsqlGrammar {
@@ -263,7 +264,7 @@ public class EsqlGrammar {
 	private StatementTree BASIC_STATEMENT() {
 		return b.firstOf(BEGIN_END_STATEMENT(), CALL_STATEMENT(), CASE_STATEMENT(), DECLARE_STATEMENT(), IF_STATEMENT(), 
 				ITERATE_STATEMENT(), LEAVE_STATEMENT(), LOOP_STATEMENT(), REPEAT_STATEMENT(), RETURN_STATEMENT(), SET_STATEMENT(), 
-				THROW_STATEMENT());
+				THROW_STATEMENT(), WHILE_STATEMENT());
 	}
 
 	public BeginEndStatementTreeImpl BEGIN_END_STATEMENT() {
@@ -428,6 +429,29 @@ public class EsqlGrammar {
 				b.optional(f.newTuple65(b.token(EsqlNonReservedKeyword.VALUES), ARGUMENT_CLAUSE())),
 				b.token(EsqlLegacyGrammar.EOS)
 				));
+	}
+	
+	public WhileStatementTreeImpl WHILE_STATEMENT() {
+		return b.<WhileStatementTreeImpl>nonterminal(Kind.WHILE_STATEMENT)
+				.is(b.firstOf(WHILE_STATEMENT_WO_LABEL(), WHILE_STATEMENT_WITH_LABEL()));
+	}
+
+	public WhileStatementTreeImpl WHILE_STATEMENT_WITH_LABEL() {
+		return b.<WhileStatementTreeImpl>nonterminal()
+				.is(f.whileStatementWithLabel(
+						LABEL(), b.token(COLON), b.token(EsqlNonReservedKeyword.WHILE), EXPRESSION(), 
+						b.token(EsqlNonReservedKeyword.DO), b.zeroOrMore(STATEMENT()), b.token(EsqlNonReservedKeyword.END), 
+						b.token(EsqlNonReservedKeyword.WHILE), LABEL(), b.token(EsqlLegacyGrammar.EOS)
+						));
+	}
+
+	public WhileStatementTreeImpl WHILE_STATEMENT_WO_LABEL() {
+		return b.<WhileStatementTreeImpl>nonterminal()
+				.is(f.whileStatementWoLabel(
+						b.token(EsqlNonReservedKeyword.WHILE), EXPRESSION(), 
+						b.token(EsqlNonReservedKeyword.DO), b.zeroOrMore(STATEMENT()), b.token(EsqlNonReservedKeyword.END), 
+						b.token(EsqlNonReservedKeyword.WHILE), b.token(EsqlLegacyGrammar.EOS)
+						));
 	}
 
 	public StatementTree PROPAGATE_STATEMENT() {

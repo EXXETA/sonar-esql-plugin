@@ -60,9 +60,9 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.RoutineBodyTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.SetStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ThrowStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.WhenClauseTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.WhileStatementTree;
 import com.exxeta.iss.sonar.esql.tree.expression.LiteralTree;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
-import com.exxeta.iss.sonar.esql.tree.impl.statement.LeaveStatementTreeImpl;
 import com.google.common.base.Preconditions;
 
 public abstract class DoubleDispatchVisitor implements TreeVisitor {
@@ -340,6 +340,11 @@ public abstract class DoubleDispatchVisitor implements TreeVisitor {
 
 	public void visitThrowStatement(ThrowStatementTree tree) {
 		scanChildren(tree);
+	}
+
+	public void visitWhileStatement(WhileStatementTree tree) {
+	scanChildren(tree);
+		
 	}
 
 
