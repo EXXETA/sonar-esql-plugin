@@ -23,6 +23,7 @@ import com.exxeta.iss.sonar.esql.api.tree.expression.ArrayLiteralTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.BinaryExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.CallExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.InExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.IntervalExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ParenthesisedExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.UnaryExpressionTree;
@@ -45,6 +46,7 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.IfStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.IterateStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.LabelTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.LanguageTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.LeaveStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.LoopStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.MessageSourceTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ParameterListTree;
@@ -56,6 +58,7 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.ReturnStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ReturnTypeTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.RoutineBodyTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.SetStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.ThrowStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.WhenClauseTree;
 import com.exxeta.iss.sonar.esql.tree.expression.LiteralTree;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
@@ -315,7 +318,7 @@ public abstract class DoubleDispatchVisitor implements TreeVisitor {
 		scanChildren(tree);
 	}
 
-	public void visitLeaveStatement(LeaveStatementTreeImpl tree) {
+	public void visitLeaveStatement(LeaveStatementTree tree) {
 		scanChildren(tree);
 	}
 
@@ -328,6 +331,14 @@ public abstract class DoubleDispatchVisitor implements TreeVisitor {
 	}
 
 	public void visitReturnStatement(ReturnStatementTree tree) {
+		scanChildren(tree);
+	}
+
+	public void visitInExpression(InExpressionTree tree) {
+		scanChildren(tree);
+	}
+
+	public void visitThrowStatement(ThrowStatementTree tree) {
 		scanChildren(tree);
 	}
 

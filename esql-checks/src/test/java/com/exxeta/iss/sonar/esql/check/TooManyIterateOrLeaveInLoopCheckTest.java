@@ -19,26 +19,16 @@ package com.exxeta.iss.sonar.esql.check;
 
 import java.io.File;
 
-
-
-
-
-
-
 import org.junit.Test;
-import org.sonar.squidbridge.api.SourceFile;
-import org.sonar.squidbridge.checks.CheckMessagesVerifier;
 
-import com.exxeta.iss.sonar.esql.EsqlAstScanner;
-import com.exxeta.iss.sonar.esql.check.NestedIfDepthCheck;
+import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
 
 public class TooManyIterateOrLeaveInLoopCheckTest {
 	 @Test
 	  public void test() {
 	    TooManyIterateOrLeaveInLoopCheck check = new TooManyIterateOrLeaveInLoopCheck();
 	    
-	    SourceFile file =EsqlAstScanner.scanSingleFile(new File("src/test/resources/leaveIterate.esql"), check);
-	    CheckMessagesVerifier.verify(file.getCheckMessages())
+		 EsqlCheckVerifier.issues(check, new File("src/test/resources/leaveIterate.esql"))
 	        .next().atLine(7).withMessage("Loops should not contain more than a single \"ITERATE\" or \"LEAVE\" statement.")
 	        .next().atLine(25).withMessage("Loops should not contain more than a single \"ITERATE\" or \"LEAVE\" statement.")
 	        .noMore();

@@ -27,6 +27,7 @@ import com.exxeta.iss.sonar.esql.api.visitors.TreeVisitor;
 import com.exxeta.iss.sonar.esql.api.visitors.TreeVisitorContext;
 import com.exxeta.iss.sonar.esql.check.CheckList;
 import com.exxeta.iss.sonar.esql.check.ParsingErrorCheck;
+import com.exxeta.iss.sonar.esql.compat.CompatibleInputFile;
 import com.exxeta.iss.sonar.esql.parser.EsqlParserBuilder;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;

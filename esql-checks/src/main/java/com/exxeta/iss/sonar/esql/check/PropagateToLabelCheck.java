@@ -17,22 +17,24 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
-import java.util.List;
-
 import org.sonar.check.Rule;
 
+import com.exxeta.iss.sonar.esql.api.tree.statement.PropagateStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.GenericTokenType;
+import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
+import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
 
 @Rule(key = "PropagateToLabel")
 public class PropagateToLabelCheck extends DoubleDispatchVisitorCheck {
 
-	@Overrride
-	public void visitPropagateStatement(AstNode node) {
-		List<AstNode> children = node.getChildren(GenericTokenType.IDENTIFIER);
-		if (children.size() >= 3 && "LABEL".equals(children.get(2).getTokenValue())) {
-			getContext().createLineViolation(this, "Do not use PROPAGATE TO LABEL.", node);
+	
+	private static final String MESSAGE = "Do not use PROPAGATE TO LABEL.";
+
+	@Override
+	public void visitPropagateStatement(PropagateStatementTree tree) {
+		super.visitPropagateStatement(tree);
+		if ("LABEL".equalsIgnoreCase(tree.targetType().text())){
+			addIssue(new PreciseIssue(this, new IssueLocation(tree, tree, MESSAGE)));
 		}
 	}
 

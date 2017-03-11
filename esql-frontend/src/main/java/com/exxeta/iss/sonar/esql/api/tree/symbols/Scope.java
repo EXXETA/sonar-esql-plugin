@@ -64,7 +64,7 @@ public class Scope {
 	  }
 
 	  public boolean isGlobal() {
-	    return tree.is(Tree.Kind.SCRIPT);
+	    return tree.is(Tree.Kind.PROGRAM);
 	  }
 
 	  public void addSymbol(Symbol symbol) {

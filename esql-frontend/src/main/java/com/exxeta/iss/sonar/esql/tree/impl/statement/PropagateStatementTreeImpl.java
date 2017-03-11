@@ -3,6 +3,7 @@ package com.exxeta.iss.sonar.esql.tree.impl.statement;
 import java.util.Iterator;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.PropagateStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
@@ -14,31 +15,34 @@ public class PropagateStatementTreeImpl extends EsqlTree implements PropagateSta
 	private InternalSyntaxToken propagateKeyword;
 	private InternalSyntaxToken toKeyword;
 	private InternalSyntaxToken targetType;
-	private InternalSyntaxToken targetName;
+	private ExpressionTree target;
 	private MessageSourceTreeImpl messageSource;
 	private ControlsTreeImpl controls;
+	private InternalSyntaxToken semi;
 
 	public PropagateStatementTreeImpl(InternalSyntaxToken propagateKeyword, MessageSourceTreeImpl messageSource,
-			ControlsTreeImpl controls) {
+			ControlsTreeImpl controls, InternalSyntaxToken semi) {
 		this.propagateKeyword = propagateKeyword;
 		this.toKeyword = null;
 		this.targetType = null;
-		this.targetName = null;
+		this.target = null;
 		this.messageSource = messageSource;
 		this.controls = controls;
+		this.semi=semi;
 	}
 
 	public PropagateStatementTreeImpl(InternalSyntaxToken propagateKeyword, InternalSyntaxToken toKeyword,
-			InternalSyntaxToken targetType, InternalSyntaxToken targetName, MessageSourceTreeImpl messageSource,
-			ControlsTreeImpl controls) {
+			InternalSyntaxToken targetType, ExpressionTree target, MessageSourceTreeImpl messageSource,
+			ControlsTreeImpl controls, InternalSyntaxToken semi) {
 		this.propagateKeyword = propagateKeyword;
 
 		this.toKeyword = toKeyword;
 		this.toKeyword = toKeyword;
 		this.targetType = targetType;
-		this.targetName = targetName;
+		this.target = target;
 		this.messageSource = messageSource;
 		this.controls = controls;
+		this.semi=semi;
 	}
 
 	public InternalSyntaxToken propagateKeyword() {
@@ -53,8 +57,8 @@ public class PropagateStatementTreeImpl extends EsqlTree implements PropagateSta
 		return targetType;
 	}
 
-	public InternalSyntaxToken targetName() {
-		return targetName;
+	public ExpressionTree target() {
+		return target;
 	}
 
 	public MessageSourceTreeImpl messageSource() {
@@ -64,6 +68,10 @@ public class PropagateStatementTreeImpl extends EsqlTree implements PropagateSta
 	public ControlsTreeImpl controls() {
 		return controls;
 	}
+	
+	public InternalSyntaxToken semi() {
+		return semi;
+	}
 
 	  @Override
 	  public Kind getKind() {
@@ -72,7 +80,7 @@ public class PropagateStatementTreeImpl extends EsqlTree implements PropagateSta
 
 	  @Override
 	  public Iterator<Tree> childrenIterator() {
-		  return Iterators.forArray(propagateKeyword, toKeyword, targetType, targetName, messageSource, controls);
+		  return Iterators.forArray(propagateKeyword, toKeyword, targetType, target, messageSource, controls, semi);
 	  }
 
 	  @Override

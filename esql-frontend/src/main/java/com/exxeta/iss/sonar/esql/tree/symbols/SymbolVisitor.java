@@ -12,9 +12,6 @@ import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.BlockTree;
 import com.exxeta.iss.sonar.esql.api.tree.symbols.Scope;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
-import com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator;
-import com.exxeta.iss.sonar.esql.tree.TreeKinds;
-import com.exxeta.iss.sonar.esql.tree.impl.expression.AssignmentExpressionTree;
 
 /**
  * This visitor creates new symbols for not hoisted variables (like class name) and implicitly declared variables (declared without keyword).
@@ -54,7 +51,12 @@ public class SymbolVisitor extends DoubleDispatchVisitor {
   }
 
 
-
+  @Override
+  public void visitIdentifier(IdentifierTree tree) {
+    if (tree.is(Tree.Kind.FIELD_REFERENCE, Kind.THIS)) {
+      addUsageFor(tree, Usage.Kind.READ);
+    }
+  }
 
 
   private void leaveScope() {

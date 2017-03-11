@@ -4,8 +4,10 @@ import org.sonar.sslr.grammar.GrammarRuleKey;
 
 import com.exxeta.iss.sonar.esql.api.tree.expression.BinaryExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.CallExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.InExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.IntervalExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ParenthesisedExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.UnaryExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.TheFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxTrivia;
@@ -36,6 +38,7 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.ReturnStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ReturnTypeTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.RoutineBodyTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.SetStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.ThrowStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.WhenClauseTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.Kinds;
@@ -105,6 +108,7 @@ public interface Tree {
 		PATH_ELEMENT(PathElementTree.class), 
 		INDEX(IndexTree.class), 
 		CALL_EXPRESSION(CallExpressionTree.class), 
+		IN_EXPRESSION(InExpressionTree.class),
 		INTERVAL_QUALIFIER(IntervalQualifierTree.class), 
 		INTERVAL_DATA_TYPE(IntervalDataTypeTree.class), 
 		DECIMAL_DATA_TYPE(DecimalDataTypeTree.class), 
@@ -118,7 +122,9 @@ public interface Tree {
 		LEAVE_STATEMENT(LeaveStatementTree.class), 
 		LOOP_STATEMENT(LoopStatementTree.class), 
 		REPEAT_STATEMENT(RepeatStatementTree.class), 
-		RETURN_STATEMENT(ReturnStatementTree.class);
+		RETURN_STATEMENT(ReturnStatementTree.class),
+		THROW_STATEMENT(ThrowStatementTree.class), 
+		LOGICAL_COMPLEMENT(UnaryExpressionTree.class);
 
 		final Class<? extends Tree> associatedInterface;
 

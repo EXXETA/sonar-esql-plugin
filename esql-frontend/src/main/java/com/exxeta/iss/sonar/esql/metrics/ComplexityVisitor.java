@@ -4,21 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
+import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.api.tree.expression.BinaryExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.FunctionTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.CaseStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.CreateFunctionStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.CreateModuleStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.IfStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.LoopStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.RepeatStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 
 
 public class ComplexityVisitor extends DoubleDispatchVisitor {
 
-  private boolean mustAnalyseNestedFunctions;
-
   private List<Tree> complexityTrees;
-
-  private boolean isInsideFunction;
-
-  public ComplexityVisitor(boolean mustAnalyseNestedFunctions) {
-    this.mustAnalyseNestedFunctions = mustAnalyseNestedFunctions;
-  }
 
   public int getComplexity(Tree tree) {
     return complexityTrees(tree).size();
@@ -26,82 +27,50 @@ public class ComplexityVisitor extends DoubleDispatchVisitor {
 
   public List<Tree> complexityTrees(Tree tree) {
     this.complexityTrees = new ArrayList<>();
-    this.isInsideFunction = false;
     scan(tree);
     return this.complexityTrees;
   }
 
-  private void visitFunction(FunctionTree functionTree, Tree complexityTree) {
-    if (mustAnalyse()) {
-      add(complexityTree);
-
-      isInsideFunction = true;
-      scanChildren(functionTree);
-      isInsideFunction = false;
-    }
-  }
-
   @Override
-  public void visitMethodDeclaration(MethodDeclarationTree tree) {
-    visitFunction(tree, tree.name());
-  }
-
+	public void visitCreateFunctionStatement(CreateFunctionStatementTree tree) {
+		add(tree.createKeyword());
+		super.visitCreateFunctionStatement(tree);
+	}
+  
   @Override
-  public void visitFunctionDeclaration(FunctionDeclarationTree tree) {
-    visitFunction(tree, tree.functionKeyword());
-  }
-
+	public void visitCreateProcedureStatement(CreateProcedureStatementTree tree) {
+		add(tree.createKeyword());
+		super.visitCreateProcedureStatement(tree);
+	}
+  
   @Override
-  public void visitFunctionExpression(FunctionExpressionTree tree) {
-    visitFunction(tree, tree.functionKeyword());
-  }
-
-  @Override
-  public void visitArrowFunction(ArrowFunctionTree tree) {
-    visitFunction(tree, tree.doubleArrow());
-  }
+	public void visitCreateModuleStatement(CreateModuleStatementTree tree) {
+		add(tree.createKeyword());
+		super.visitCreateModuleStatement(tree);
+	}
 
   @Override
   public void visitIfStatement(IfStatementTree tree) {
     add(tree.ifKeyword());
     super.visitIfStatement(tree);
   }
+  
+  @Override
+	public void visitRepeatStatement(RepeatStatementTree tree) {
+		add(tree.repeatKeyword());
+		super.visitRepeatStatement(tree);
+	}
+  @Override
+	public void visitLoopStatement(LoopStatementTree tree) {
+		add(tree.loopKeyword());
+		super.visitLoopStatement(tree);
+	}
 
   @Override
-  public void visitWhileStatement(WhileStatementTree tree) {
-    add(tree.whileKeyword());
-    super.visitWhileStatement(tree);
-  }
-
-  @Override
-  public void visitDoWhileStatement(DoWhileStatementTree tree) {
-    add(tree.doKeyword());
-    super.visitDoWhileStatement(tree);
-  }
-
-  @Override
-  public void visitForStatement(ForStatementTree tree) {
-    add(tree.forKeyword());
-    super.visitForStatement(tree);
-  }
-
-  @Override
-  public void visitForObjectStatement(ForObjectStatementTree tree) {
-    add(tree.forKeyword());
-    super.visitForObjectStatement(tree);
-  }
-
-  @Override
-  public void visitCaseClause(CaseClauseTree tree) {
-    add(tree.keyword());
-    super.visitCaseClause(tree);
-  }
-
-  @Override
-  public void visitConditionalExpression(ConditionalExpressionTree tree) {
-    add(tree.query());
-    super.visitConditionalExpression(tree);
-  }
+	public void visitCaseStatement(CaseStatementTree tree) {
+		add(tree.caseKeyword());
+		super.visitCaseStatement(tree);
+	}
 
   @Override
   public void visitBinaryExpression(BinaryExpressionTree tree) {
@@ -109,10 +78,6 @@ public class ComplexityVisitor extends DoubleDispatchVisitor {
       add(tree.operator());
     }
     super.visitBinaryExpression(tree);
-  }
-
-  private boolean mustAnalyse() {
-    return mustAnalyseNestedFunctions || !isInsideFunction;
   }
 
   private void add(Tree tree) {

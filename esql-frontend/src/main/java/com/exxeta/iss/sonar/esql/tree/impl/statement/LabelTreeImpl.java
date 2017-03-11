@@ -12,15 +12,15 @@ import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 
 public class LabelTreeImpl extends EsqlTree implements LabelTree {
 
-	private final InternalSyntaxToken labelName;
+	private final InternalSyntaxToken name;
 
 	public LabelTreeImpl(InternalSyntaxToken labelName) {
-		this.labelName = labelName;
+		this.name = labelName;
 	}
 
 	@Override
-	public InternalSyntaxToken lLabelName() {
-		return labelName;
+	public InternalSyntaxToken name() {
+		return name;
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class LabelTreeImpl extends EsqlTree implements LabelTree {
 
 	@Override
 	public Iterator<Tree> childrenIterator() {
-		return Iterators.singletonIterator(labelName);
+		return Iterators.singletonIterator(name);
 	}
 	
 	

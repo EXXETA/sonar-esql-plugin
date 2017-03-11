@@ -60,6 +60,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.declaration.SchemaNameTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.ArrayLiteralTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.BinaryExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.CallExpressionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.expression.InExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.IntervalExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.LiteralTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.ParenthesisedExpressionTreeImpl;
@@ -92,6 +93,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.ReturnStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ReturnTypeTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.RoutineBodyTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.SetStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.ThrowStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.WhenClauseTreeImpl;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -119,18 +121,7 @@ public class TreeFactory {
 	}
 
 	private static final Map<String, Kind> PREFIX_KIND_BY_VALUE = ImmutableMap.<String, Tree.Kind>builder()
-			// .put(JavaScriptPunctuator.INC.getValue(), Kind.PREFIX_INCREMENT)
-			// .put(JavaScriptPunctuator.DEC.getValue(), Kind.PREFIX_DECREMENT)
-			// .put(JavaScriptPunctuator.PLUS.getValue(), Kind.UNARY_PLUS)
-			// .put(JavaScriptPunctuator.MINUS.getValue(), Kind.UNARY_MINUS)
-			// .put(JavaScriptPunctuator.TILDA.getValue(),
-			// Kind.BITWISE_COMPLEMENT)
-			// .put(JavaScriptPunctuator.BANG.getValue(),
-			// Kind.LOGICAL_COMPLEMENT)
-			// .put(JavaScriptKeyword.DELETE.getValue(), Kind.DELETE)
-			// .put(JavaScriptKeyword.VOID.getValue(), Kind.VOID)
-			// .put(JavaScriptKeyword.TYPEOF.getValue(), Kind.TYPEOF)
-			// .put(JavaScriptKeyword.AWAIT.getValue(), Kind.AWAIT)
+			.put(EsqlNonReservedKeyword.NOT.getValue(), Kind.LOGICAL_COMPLEMENT)
 			.build();
 
 	private static ExpressionTree buildBinaryExpression(ExpressionTree expression,
@@ -534,6 +525,22 @@ public class TreeFactory {
 		return newTuple(first, second);
 	}
 
+	public <T, U> Tuple<T, U> newTuple62(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple63(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple64(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple65(T first, U second) {
+		return newTuple(first, second);
+	}
+
 	public <T, U, V> Triple<T, U, V> newTriple1(T first, U second, V third) {
 		return newTriple(first, second, third);
 	}
@@ -806,17 +813,17 @@ public class TreeFactory {
 	}
 
 	public PropagateStatementTreeImpl propagateStatement(InternalSyntaxToken propagateKeyword,
-			Optional<Tuple<InternalSyntaxToken, Tuple<InternalSyntaxToken, InternalSyntaxToken>>> target,
-			Optional<MessageSourceTreeImpl> messageSource, Optional<ControlsTreeImpl> controls) {
+			Optional<Tuple<InternalSyntaxToken, Tuple<InternalSyntaxToken, ExpressionTree>>> target,
+			Optional<MessageSourceTreeImpl> messageSource, Optional<ControlsTreeImpl> controls, InternalSyntaxToken semi) {
 
 		if (target.isPresent()) {
 			return new PropagateStatementTreeImpl(propagateKeyword, target.get().first(), target.get().second().first(),
 					target.get().second().second(), messageSource.isPresent() ? messageSource.get() : null,
-					controls.isPresent() ? controls.get() : null);
+					controls.isPresent() ? controls.get() : null, semi);
 		} else {
 			return new PropagateStatementTreeImpl(propagateKeyword,
 					messageSource.isPresent() ? messageSource.get() : null,
-					controls.isPresent() ? controls.get() : null);
+					controls.isPresent() ? controls.get() : null, semi);
 		}
 
 	}
@@ -893,6 +900,13 @@ public class TreeFactory {
 			return new CallExpressionTreeImpl((FieldReferenceTreeImpl) firstOf);
 		}
 	}
+	
+	public InExpressionTreeImpl inExpression(FieldReferenceTreeImpl fieldReference, InternalSyntaxToken inKeyword,
+			SeparatedList<Tree> argumentList) {
+		return new InExpressionTreeImpl(fieldReference, inKeyword, argumentList);
+	}
+
+
 
 	public LiteralTreeImpl listLiteral(InternalSyntaxToken listToken) {
 		return new LiteralTreeImpl(Kind.LIST_LITERAL, listToken);
@@ -1229,5 +1243,16 @@ public class TreeFactory {
 		return new ReturnStatementTreeImpl(returnKeyword, expression.isPresent()?expression.get():null, semi);
 	}
 
+	public ThrowStatementTreeImpl throwStatement(InternalSyntaxToken throwKeyword, Optional<InternalSyntaxToken> userKeyword,
+			InternalSyntaxToken exceptionKeyword, Optional<Tuple<InternalSyntaxToken, ExpressionTree>> severity,
+			Optional<Tuple<InternalSyntaxToken, ExpressionTree>> catalog,Optional<Tuple<InternalSyntaxToken, ExpressionTree>> message,
+			Optional<Tuple<InternalSyntaxToken, ParameterListTreeImpl>> values, InternalSyntaxToken semi) {
+		return new ThrowStatementTreeImpl(throwKeyword, userKeyword.orNull(), exceptionKeyword, 
+				severity.isPresent()?severity.get().first():null, severity.isPresent()?severity.get().second():null, 
+				catalog.isPresent()?catalog.get().first():null, catalog.isPresent()?catalog.get().second():null, 
+				message.isPresent()?message.get().first():null, message.isPresent()?message.get().second():null, 
+				values.isPresent()?values.get().first():null, values.isPresent()?values.get().second():null,
+				semi);
+	}
 
 }

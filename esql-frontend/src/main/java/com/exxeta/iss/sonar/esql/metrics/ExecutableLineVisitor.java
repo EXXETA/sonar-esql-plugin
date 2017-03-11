@@ -20,23 +20,21 @@ public class ExecutableLineVisitor extends SubscriptionVisitorCheck {
   @Override
   public List<Kind> nodesToVisit() {
     return ImmutableList.of(
-      Kind.DEBUGGER_STATEMENT,
-      Kind.VARIABLE_STATEMENT,
-      Kind.LABELLED_STATEMENT,
-      Kind.RETURN_STATEMENT,
-      Kind.CONTINUE_STATEMENT,
-      Kind.BREAK_STATEMENT,
-      Kind.THROW_STATEMENT,
-      Kind.WITH_STATEMENT,
-      Kind.TRY_STATEMENT,
-      Kind.SWITCH_STATEMENT,
-      Kind.IF_STATEMENT,
-      Kind.WHILE_STATEMENT,
-      Kind.DO_WHILE_STATEMENT,
-      Kind.EXPRESSION_STATEMENT,
-      Kind.FOR_OF_STATEMENT,
-      Kind.FOR_STATEMENT,
-      Kind.FOR_IN_STATEMENT);
+    		Kind.BEGIN_END_STATEMENT,
+    		Kind.CALL_STATEMENT,
+    		Kind.CASE_STATEMENT,
+    		Kind.DECLARE_STATEMENT,
+    		Kind.IF_STATEMENT,
+    		Kind.ITERATE_STATEMENT,
+    		Kind.LEAVE_STATEMENT,
+    		Kind.LOOP_STATEMENT,
+    		Kind.PROPAGATE_STATEMENT,
+    		Kind.REPEAT_STATEMENT,
+    		Kind.RETURN_STATEMENT,
+    		Kind.SET_STATEMENT,
+    		Kind.CREATE_FUNCTION_STATEMENT,
+    		Kind.CREATE_MODULE_STATEMENT,
+    		Kind.CREATE_PROCEDURE_STATEMENT);
   }
 
   @Override

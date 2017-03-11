@@ -51,7 +51,7 @@ public class TypeVisitor extends DoubleDispatchVisitor {
   }
 
   @Override
-  public void visitLiteral(LiteralTree tree) {
+  public void visitLiteral(KeywordTree tree) {
     if (tree.is(Tree.Kind.NUMERIC_LITERAL)) {
       addType(tree, PrimitiveType.NUMBER);
 

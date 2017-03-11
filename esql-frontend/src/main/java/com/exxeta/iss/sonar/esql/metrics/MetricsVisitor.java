@@ -15,13 +15,12 @@ import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.measures.Metric;
-import org.sonar.squidbridge.metrics.ComplexityVisitor;
-import org.sonar.squidbridge.metrics.CounterVisitor;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitor;
 import com.exxeta.iss.sonar.esql.api.visitors.TreeVisitorContext;
+import com.exxeta.iss.sonar.esql.compat.CompatibleInputFile;
 import com.exxeta.iss.sonar.esql.tree.KindSet;
 
 public class MetricsVisitor extends SubscriptionVisitor {
@@ -42,7 +41,7 @@ public class MetricsVisitor extends SubscriptionVisitor {
   private FileLinesContextFactory fileLinesContextFactory;
   private Map<InputFile, Set<Integer>> projectLinesOfCode;
 
-  private int classComplexity;
+  private int moduleComplexity;
   private int functionComplexity;
   private RangeDistributionBuilder functionComplexityDistribution;
   private RangeDistributionBuilder fileComplexityDistribution;
@@ -68,8 +67,8 @@ public class MetricsVisitor extends SubscriptionVisitor {
 
   @Override
   public List<Kind> nodesToVisit() {
-    List<Kind> result = new ArrayList<>(KindSet.FUNCTION_KINDS.getSubKinds());
-    result.addAll(Arrays.asList(CLASS_NODES));
+    List<Kind> result = new ArrayList<>();
+    result.add(Kind.CREATE_MODULE_STATEMENT);
     return result;
   }
 
@@ -82,41 +81,36 @@ public class MetricsVisitor extends SubscriptionVisitor {
 
   @Override
   public void visitNode(Tree tree) {
-    if (tree.is(CLASS_NODES)) {
-      classComplexity += new ComplexityVisitor(true).getComplexity(tree);
+    if (tree.is(Kind.CREATE_MODULE_STATEMENT)) {
+      moduleComplexity += new ComplexityVisitor().getComplexity(tree);
 
-    } else if (tree.is(KindSet.FUNCTION_KINDS)) {
-      int currentFunctionComplexity = new ComplexityVisitor(false).getComplexity(tree);
-      this.functionComplexity += currentFunctionComplexity;
-      functionComplexityDistribution.add(currentFunctionComplexity);
     }
   }
 
   @Override
   public void visitFile(Tree scriptTree) {
-    this.inputFile = ((CompatibleInputFile) getContext().getJavaScriptFile()).wrapped();
+    this.inputFile = ((CompatibleInputFile) getContext().getEsqlFile()).wrapped();
     init();
   }
 
   private void init() {
-    classComplexity = 0;
-    functionComplexity = 0;
+    moduleComplexity = 0;
     functionComplexityDistribution = new RangeDistributionBuilder(LIMITS_COMPLEXITY_FUNCTIONS);
     fileComplexityDistribution = new RangeDistributionBuilder(FILES_DISTRIB_BOTTOM_LIMITS);
   }
 
   private void saveCounterMetrics(TreeVisitorContext context) {
     CounterVisitor counter = new CounterVisitor(context.getTopTree());
-    saveMetricOnFile(CoreMetrics.FUNCTIONS, counter.getFunctionNumber());
+    saveMetricOnFile(CoreMetrics.FUNCTIONS, counter.getFunctionsNumber());
     saveMetricOnFile(CoreMetrics.STATEMENTS, counter.getStatementsNumber());
-    saveMetricOnFile(CoreMetrics.CLASSES, counter.getClassNumber());
+    saveMetricOnFile(EsqlMetrics.MODULES, counter.getModulesNumber());
+    saveMetricOnFile(EsqlMetrics.PROCEDURES, counter.getProceduresNumber());
   }
 
   private void saveComplexityMetrics(TreeVisitorContext context) {
-    int fileComplexity = new ComplexityVisitor(true).getComplexity(context.getTopTree());
+    int fileComplexity = new ComplexityVisitor().getComplexity(context.getTopTree());
 
     saveMetricOnFile(CoreMetrics.COMPLEXITY, fileComplexity);
-    saveMetricOnFile(CoreMetrics.COMPLEXITY_IN_CLASSES, classComplexity);
     saveMetricOnFile(CoreMetrics.COMPLEXITY_IN_FUNCTIONS, functionComplexity);
 
     sensorContext.<String>newMeasure()
@@ -167,10 +161,6 @@ public class MetricsVisitor extends SubscriptionVisitor {
       .forMetric(metric)
       .on(inputFile)
       .save();
-  }
-
-  public static Kind[] getClassNodes() {
-    return CLASS_NODES;
   }
 
 }

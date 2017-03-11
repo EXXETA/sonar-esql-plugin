@@ -1,25 +1,23 @@
 package com.exxeta.iss.sonar.esql.check;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Pattern;
 
-import org.sonar.check.BelongsToProfile;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.squidbridge.annotations.NoSqale;
-import org.sonar.squidbridge.checks.SquidCheck;
 
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.GenericTokenType;
-import com.sonar.sslr.api.Grammar;
+import com.exxeta.iss.sonar.esql.api.tree.Tree;
+import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.api.visitors.FileIssue;
+import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitorCheck;
 
-@Rule(key = FileNameCheck.CHECK_KEY, priority = Priority.MAJOR, name = "File names should comply with a naming convention", tags = Tags.CONVENTION)
-@NoSqale
-@BelongsToProfile(title=CheckList.SONAR_WAY_PROFILE,priority=Priority.MAJOR)
-public class FileNameCheck extends SquidCheck<Grammar> {
+@Rule(key = FileNameCheck.CHECK_KEY)
+public class FileNameCheck extends SubscriptionVisitorCheck {
 	
 	public static final String CHECK_KEY = "FileName";
 	private static final String DEFAULT_FORMAT = "^[A-Z][a-zA-Z]{1,30}\\.esql$";
+	private static final String MESSAGE = "Rename file \"%s\"  to match the regular expression %s.";
 	
 	@RuleProperty(key = "format",
 			description="regular expression",
@@ -27,18 +25,22 @@ public class FileNameCheck extends SquidCheck<Grammar> {
 	public String format = DEFAULT_FORMAT;
 	
 	private Pattern pattern;
+	public FileNameCheck() {
+	}
+	
+	
 	@Override
-	public void init() {
-		pattern = Pattern.compile(format);
-		subscribeTo(GenericTokenType.EOF);
+	public List<Kind> nodesToVisit() {
+		return Collections.emptyList();
 	}
 
 	@Override
-	public void visitNode(AstNode astNode) {
-		String filename = getContext().getFile().getName();
-		if (!pattern.matcher(filename).matches()){
-			String message = "Rename file \"{0}\"  to match the regular expression {1}.";
-			getContext().createFileViolation(this, message, filename, format);
+	public void visitFile(Tree scriptTree) {
+		if (!Pattern.compile(format).matcher(getContext().getEsqlFile().fileName()).matches()){
+			addIssue(new FileIssue(this, String.format(MESSAGE, getContext().getEsqlFile().fileName(), format)));
 		}
+		super.visitFile(scriptTree);
 	}
+	
+	
 }

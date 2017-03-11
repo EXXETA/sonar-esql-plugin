@@ -17,12 +17,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.javascript.checks.verifier.ExpectedIssuesParser;
-import org.sonar.javascript.checks.verifier.TestInputFile;
-import org.sonar.javascript.checks.verifier.TestIssue;
-import org.sonar.javascript.checks.verifier.TestUtils;
-import org.sonar.javascript.visitors.JavaScriptVisitorContext;
-import org.sonar.plugins.javascript.api.JavaScriptCheck;
 import org.sonar.squidbridge.checks.CheckMessagesVerifier;
 
 import static org.assertj.core.api.Assertions.assertThat;

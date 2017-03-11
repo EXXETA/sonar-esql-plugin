@@ -17,15 +17,12 @@
  */
 package com.exxeta.iss.sonar.esql.parser;
 
-import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.COMMA;
 import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.COLON;
+import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.COMMA;
 import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.DOT;
-import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.SEMI;
-
-import org.hamcrest.text.pattern.internal.ast.ZeroOrMore;
-
 import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.LPARENTHESIS;
 import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.RPARENTHESIS;
+import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.SEMI;
 
 import com.exxeta.iss.sonar.esql.api.EsqlNonReservedKeyword;
 import com.exxeta.iss.sonar.esql.api.tree.PathClauseTree;
@@ -85,6 +82,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.ReturnStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ReturnTypeTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.RoutineBodyTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.SetStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.ThrowStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.WhenClauseTreeImpl;
 import com.sonar.sslr.api.typed.GrammarBuilder;
 
@@ -264,7 +262,8 @@ public class EsqlGrammar {
 
 	private StatementTree BASIC_STATEMENT() {
 		return b.firstOf(BEGIN_END_STATEMENT(), CALL_STATEMENT(), CASE_STATEMENT(), DECLARE_STATEMENT(), IF_STATEMENT(), 
-				ITERATE_STATEMENT(), LEAVE_STATEMENT(), LOOP_STATEMENT(), REPEAT_STATEMENT(), RETURN_STATEMENT(), SET_STATEMENT());
+				ITERATE_STATEMENT(), LEAVE_STATEMENT(), LOOP_STATEMENT(), REPEAT_STATEMENT(), RETURN_STATEMENT(), SET_STATEMENT(), 
+				THROW_STATEMENT());
 	}
 
 	public BeginEndStatementTreeImpl BEGIN_END_STATEMENT() {
@@ -419,6 +418,17 @@ public class EsqlGrammar {
 						b.token(EsqlNonReservedKeyword.NAME), b.token(EsqlNonReservedKeyword.VALUE))),
 				b.token(EsqlPunctuator.EQUAL), EXPRESSION(), b.token(EsqlLegacyGrammar.EOS)));
 	}
+	
+	public ThrowStatementTreeImpl THROW_STATEMENT() {
+		return b.<ThrowStatementTreeImpl>nonterminal(Kind.THROW_STATEMENT).is(f.throwStatement(
+				b.token(EsqlNonReservedKeyword.THROW), b.optional(b.token(EsqlNonReservedKeyword.USER)), b.token(EsqlNonReservedKeyword.EXCEPTION),
+				b.optional(f.newTuple62(b.token(EsqlNonReservedKeyword.SEVERITY), EXPRESSION())),
+				b.optional(f.newTuple63(b.token(EsqlNonReservedKeyword.CATALOG), EXPRESSION())), 
+				b.optional(f.newTuple64(b.token(EsqlNonReservedKeyword.MESSAGE), EXPRESSION())),
+				b.optional(f.newTuple65(b.token(EsqlNonReservedKeyword.VALUES), ARGUMENT_CLAUSE())),
+				b.token(EsqlLegacyGrammar.EOS)
+				));
+	}
 
 	public StatementTree PROPAGATE_STATEMENT() {
 		return b.<PropagateStatementTreeImpl>nonterminal(Kind.PROPAGATE_STATEMENT)
@@ -427,8 +437,8 @@ public class EsqlGrammar {
 								f.newTuple2(
 										b.firstOf(b.token(EsqlNonReservedKeyword.TERMINAL),
 												b.token(EsqlNonReservedKeyword.LABEL)),
-										b.token(EsqlLegacyGrammar.expression)))),
-						b.optional(MESSAGE_SOURCE()), b.optional(CONTROLS())));
+										EXPRESSION()))),
+						b.optional(MESSAGE_SOURCE()), b.optional(CONTROLS()), b.token(EsqlLegacyGrammar.EOS) ));
 
 	}
 
@@ -475,9 +485,14 @@ public class EsqlGrammar {
 	}
 
 	public ExpressionTree LEFT_HAND_SIDE_EXPRESSION() {
-		return b.<ExpressionTree>nonterminal(EsqlLegacyGrammar.leftHandSideExpression).is(b.firstOf(CALL_EXPRESSION()));
+		return b.<ExpressionTree>nonterminal(EsqlLegacyGrammar.leftHandSideExpression).is(b.firstOf(IN_EXPRESSION(), CALL_EXPRESSION()));
 	}
 
+	public ExpressionTree IN_EXPRESSION(){
+		return b.<ExpressionTree>nonterminal(Kind.IN_EXPRESSION).is(f.inExpression(FIELD_REFERENCE(), b.token(EsqlNonReservedKeyword.IN), ARGUMENT_LIST())
+				);
+	}
+	
 	public ExpressionTree CALL_EXPRESSION() {
 		return b.<ExpressionTree>nonterminal(Kind.CALL_EXPRESSION).is(f.callExpression(
 				b.firstOf(FUNCTION(), f.newTuple24(FIELD_REFERENCE(), ARGUMENT_CLAUSE()), FIELD_REFERENCE())));
@@ -503,12 +518,12 @@ public class EsqlGrammar {
 		return b.<ExpressionTree>nonterminal(EsqlLegacyGrammar.relationalExpression)
 				.is(f.newRelational(ADDITIVE_EXPRESSION(),
 						b.zeroOrMore(f.newTuple14(b.firstOf(b.token(EsqlPunctuator.LT), b.token(EsqlPunctuator.GT),
-								b.token(EsqlPunctuator.LE), b.token(EsqlPunctuator.GE),
+								b.token(EsqlPunctuator.LE), b.token(EsqlPunctuator.GE)
 								// f.newTuple20(b.optional(b.token(EsqlNonReservedKeyword.NOT)),
 								// b.token(EsqlNonReservedKeyword.IN)),
 								// f.newTuple21(b.optional(b.token(EsqlNonReservedKeyword.NOT)),
 								// b.token(EsqlNonReservedKeyword.BETWEEN)),
-								b.token(EsqlNonReservedKeyword.IN)), ADDITIVE_EXPRESSION()))));
+								), ADDITIVE_EXPRESSION()))));
 
 		// FIXME
 
@@ -717,4 +732,6 @@ public class EsqlGrammar {
 								b.token(EsqlLegacyGrammar.NUMERIC_LITERAL), b.token(EsqlPunctuator.COMMA),
 								b.token(EsqlLegacyGrammar.NUMERIC_LITERAL), b.token(EsqlPunctuator.RPARENTHESIS)))));
 	}
+	
+
 }

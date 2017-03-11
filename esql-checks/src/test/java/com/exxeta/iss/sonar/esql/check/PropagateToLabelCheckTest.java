@@ -29,13 +29,8 @@ public class PropagateToLabelCheckTest {
   public void test() {
     PropagateToLabelCheck check = new PropagateToLabelCheck();
 
-//    SourceFile file =EsqlAstScanner.scanSingleFile(new File("src/test/resources/propagateToLabel.esql"), check);
-//    CheckMessagesVerifier.verify(file.getCheckMessages())
-//        .next().atLine(4).withMessage("Do not use PROPAGATE TO LABEL.")
-//        .noMore();
-    
     EsqlCheckVerifier.issues(check, new File("src/test/resources/propagateToLabel.esql"))
-    .next().atLine(4).withMessage("Parse error")
+    .next().atLine(4).withMessage("Do not use PROPAGATE TO LABEL.")
     .noMore();
 
   }

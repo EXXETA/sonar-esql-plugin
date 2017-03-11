@@ -124,7 +124,7 @@ public class ExpressionStack {
       case STRING_LITERAL:
       case BOOLEAN_LITERAL:
       case REGULAR_EXPRESSION_LITERAL:
-        newStack.push(LiteralSymbolicValue.get((LiteralTree) expression));
+        newStack.push(LiteralSymbolicValue.get((KeywordTree) expression));
         break;
       case LOGICAL_COMPLEMENT:
         SymbolicValue negatedValue = newStack.pop();
