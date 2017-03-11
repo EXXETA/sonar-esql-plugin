@@ -11,6 +11,7 @@ import com.exxeta.iss.sonar.esql.api.tree.expression.UnaryExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.TheFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxTrivia;
+import com.exxeta.iss.sonar.esql.api.tree.statement.AttachStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.BeginEndStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CallStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CaseStatementTree;
@@ -126,7 +127,8 @@ public interface Tree {
 		RETURN_STATEMENT(ReturnStatementTree.class),
 		THROW_STATEMENT(ThrowStatementTree.class), 
 		LOGICAL_COMPLEMENT(UnaryExpressionTree.class), 
-		WHILE_STATEMENT(WhileStatementTree.class);
+		WHILE_STATEMENT(WhileStatementTree.class), 
+		ATTACH_STATEMENT(AttachStatementTree.class);
 
 		final Class<? extends Tree> associatedInterface;
 

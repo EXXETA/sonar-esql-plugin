@@ -67,6 +67,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.expression.ParenthesisedExpressionTre
 import com.exxeta.iss.sonar.esql.tree.impl.expression.PrefixExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.TheFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.AttachStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.BeginEndStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CallStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CaseStatementTreeImpl;
@@ -1280,6 +1281,12 @@ public class TreeFactory {
 				message.isPresent()?message.get().first():null, message.isPresent()?message.get().second():null, 
 				values.isPresent()?values.get().first():null, values.isPresent()?values.get().second():null,
 				semi);
+	}
+
+	public AttachStatementTreeImpl attachStatement(InternalSyntaxToken attachKeyword, FieldReferenceTreeImpl dynamicReference,
+			InternalSyntaxToken toKeyword, FieldReferenceTreeImpl fieldReference, InternalSyntaxToken asKeyword,
+			InternalSyntaxToken location, InternalSyntaxToken semi) {
+		return new AttachStatementTreeImpl(attachKeyword, dynamicReference, toKeyword, fieldReference, asKeyword, location, semi);
 	}
 
 }

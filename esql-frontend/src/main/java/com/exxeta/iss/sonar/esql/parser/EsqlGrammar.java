@@ -57,6 +57,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.expression.IntervalExpressionTreeImpl
 import com.exxeta.iss.sonar.esql.tree.impl.expression.LiteralTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.ParenthesisedExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.AttachStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.BeginEndStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CallStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CaseStatementTreeImpl;
@@ -219,9 +220,7 @@ public class EsqlGrammar {
 
 	public StatementTree STATEMENT() {
 		return b.<StatementTree>nonterminal(EsqlLegacyGrammar.statement).is(b.firstOf(
-				BASIC_STATEMENT()/*
-									 * , MESSAGE_TREE_MANIPULATION_STATEMENT()
-									 */,
+				BASIC_STATEMENT() , MESSAGE_TREE_MANIPULATION_STATEMENT(),
 				NODE_INTERACTION_STATEMENT()/*
 											 * , DATABASE_UPDATE_STATEMENT(),
 											 * OTHER_STATEMENT()
@@ -257,8 +256,7 @@ public class EsqlGrammar {
 	}
 
 	private StatementTree MESSAGE_TREE_MANIPULATION_STATEMENT() {
-		// TODO Auto-generated method stub
-		return null;
+		return ATTACH_STATEMENT();
 	}
 
 	private StatementTree BASIC_STATEMENT() {
@@ -757,5 +755,19 @@ public class EsqlGrammar {
 								b.token(EsqlLegacyGrammar.NUMERIC_LITERAL), b.token(EsqlPunctuator.RPARENTHESIS)))));
 	}
 	
+
+	public AttachStatementTreeImpl ATTACH_STATEMENT() {
+		return b.<AttachStatementTreeImpl>nonterminal(Kind.ATTACH_STATEMENT).is(f.attachStatement(
+				b.token(EsqlNonReservedKeyword.ATTACH), FIELD_REFERENCE(), b.token(EsqlNonReservedKeyword.TO), FIELD_REFERENCE(),
+						b.token(EsqlNonReservedKeyword.AS), 
+						b.firstOf(
+								b.token(EsqlNonReservedKeyword.FIRSTCHILD),
+								b.token(EsqlNonReservedKeyword.LASTCHILD),
+								b.token(EsqlNonReservedKeyword.PREVIOUSSIBLING),
+								b.token(EsqlNonReservedKeyword.NEXTSIBLING)),
+						b.token(EsqlLegacyGrammar.EOS)
+		));
+	}
+
 
 }
