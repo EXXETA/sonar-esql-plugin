@@ -84,6 +84,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.ParseClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.PropagateStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.RepeatClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.RepeatStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.ResignalStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ResultSetTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ReturnStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ReturnTypeTreeImpl;
@@ -250,7 +251,7 @@ public class EsqlGrammar {
 
 	private StatementTree OTHER_STATEMENT() {
 		// TODO Auto-generated method stub
-		return null;
+		return RESIGNAL(); /*DECLARE HANDLER, EVAL, LOG*/
 	}
 
 	private StatementTree DATABASE_UPDATE_STATEMENT() {
@@ -263,7 +264,7 @@ public class EsqlGrammar {
 	}
 
 	private StatementTree MESSAGE_TREE_MANIPULATION_STATEMENT() {
-		return b.firstOf(ATTACH_STATEMENT(), CREATE_STATEMENT(), DELETE_STATEMENT(), DETACH_STATEMENT());
+		return b.firstOf(ATTACH_STATEMENT(), CREATE_STATEMENT(), DELETE_STATEMENT(), DETACH_STATEMENT()/*FOR, MOVE*/);
 	}
 
 
@@ -840,6 +841,12 @@ public class EsqlGrammar {
 		return b.<DetachStatementTreeImpl>nonterminal(Kind.DETACH_STATEMENT).is(
 				f.detachStatement(
 				b.token(EsqlNonReservedKeyword.DETACH), FIELD_REFERENCE(), b.token(EsqlLegacyGrammar.EOS)
+				));
+	}
+	
+	public ResignalStatementTreeImpl RESIGNAL(){
+		return b.<ResignalStatementTreeImpl>nonterminal(Kind.RESIGNAL_STATEMENT).is(f.resignalStatement(
+				b.token(EsqlNonReservedKeyword.RESIGNAL), b.token(EsqlLegacyGrammar.EOS)
 				));
 	}
 }

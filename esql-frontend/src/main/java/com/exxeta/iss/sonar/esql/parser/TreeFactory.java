@@ -97,6 +97,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.ParseClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.PropagateStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.RepeatClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.RepeatStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.ResignalStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ResultSetTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ReturnStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ReturnTypeTreeImpl;
@@ -1487,6 +1488,10 @@ public class TreeFactory {
 			InternalSyntaxToken semi) {
 		
 		return new DetachStatementTreeImpl(detachKeyword, fieldReference, semi);
+	}
+
+	public ResignalStatementTreeImpl resignalStatement(InternalSyntaxToken resignalKeyword, InternalSyntaxToken semi) {
+		return new ResignalStatementTreeImpl(resignalKeyword, semi);
 	}
 
 }

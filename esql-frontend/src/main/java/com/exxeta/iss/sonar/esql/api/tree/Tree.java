@@ -40,6 +40,7 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.ParseClauseTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.PropagateStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.RepeatClauseTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.RepeatStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.ResignalStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ResultSetTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ReturnStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ReturnTypeTree;
@@ -142,7 +143,8 @@ public interface Tree {
 		FROM_CLAUSE(FromClauseTree.class), 
 		PARSE_CLAUSE(ParseClauseTree.class), 
 		DELETE_STATEMENT(DeleteStatementTree.class), 
-		DETACH_STATEMENT(DetachStatementTree.class);
+		DETACH_STATEMENT(DetachStatementTree.class), 
+		RESIGNAL_STATEMENT(ResignalStatementTree.class);
 
 		final Class<? extends Tree> associatedInterface;
 
