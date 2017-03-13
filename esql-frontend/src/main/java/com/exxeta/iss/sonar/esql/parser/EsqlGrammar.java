@@ -64,10 +64,12 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.CaseStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ControlsTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateFunctionStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateModuleStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.DeclareStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ElseClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ElseifClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ExternalRoutineBodyTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.FromClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.IfStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.IterateStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.LabelTreeImpl;
@@ -76,7 +78,9 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.LeaveStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.LoopStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.MessageSourceTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ParameterTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.ParseClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.PropagateStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.RepeatClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.RepeatStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ResultSetTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ReturnStatementTreeImpl;
@@ -84,6 +88,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.ReturnTypeTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.RoutineBodyTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.SetStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ThrowStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.ValuesClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.WhenClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.WhileStatementTreeImpl;
 import com.sonar.sslr.api.typed.GrammarBuilder;
@@ -256,7 +261,7 @@ public class EsqlGrammar {
 	}
 
 	private StatementTree MESSAGE_TREE_MANIPULATION_STATEMENT() {
-		return ATTACH_STATEMENT();
+		return b.firstOf(ATTACH_STATEMENT(), CREATE_STATEMENT());
 	}
 
 	private StatementTree BASIC_STATEMENT() {
@@ -634,7 +639,7 @@ public class EsqlGrammar {
 
 	public FieldReferenceTreeImpl FIELD_REFERENCE() {
 		return b.<FieldReferenceTreeImpl>nonterminal(Kind.FIELD_REFERENCE)
-				.is(f.fieldReference(b.firstOf(PRIMARY_EXPRESSION(), b.token(EsqlLegacyGrammar.IDENTIFIER)),
+				.is(f.fieldReference(b.firstOf(PATH_ELEMENT(), PRIMARY_EXPRESSION(), b.token(EsqlLegacyGrammar.IDENTIFIER) ),
 						b.zeroOrMore(f.newTuple21(b.token(EsqlPunctuator.DOT), PATH_ELEMENT()))));
 	}
 
@@ -647,9 +652,9 @@ public class EsqlGrammar {
 				Kind.PATH_ELEMENT).is(
 						f.pathElement(
 								b.optional(f.newTriple1(b.token(EsqlPunctuator.LPARENTHESIS),
-										f.newTuple30(PRIMARY_EXPRESSION(),
+										f.newTuple30(b.token(EsqlLegacyGrammar.IDENTIFIER),
 												b.zeroOrMore(f.newTuple20(b.token(EsqlPunctuator.DOT),
-														PRIMARY_EXPRESSION()))),
+														b.token(EsqlLegacyGrammar.IDENTIFIER)))),
 										b.token(EsqlPunctuator.RPARENTHESIS))),
 								b.optional(f.newTuple31(b.optional(b.firstOf(NAMESPACE(),
 										f.newTriple2(b.token(EsqlPunctuator.LCURLYBRACE), EXPRESSION(),
@@ -768,6 +773,53 @@ public class EsqlGrammar {
 						b.token(EsqlLegacyGrammar.EOS)
 		));
 	}
+	
+	public CreateStatementTreeImpl CREATE_STATEMENT()  {
+		return b.<CreateStatementTreeImpl>nonterminal(Kind.CREATE_STATEMENT).is(f.createStatement(
+				b.token(EsqlNonReservedKeyword.CREATE), b.firstOf(b.token(EsqlNonReservedKeyword.FIELD), 
+						f.newTuple66(b.firstOf(b.token(EsqlNonReservedKeyword.PREVIOUSSIBLING),b.token(EsqlNonReservedKeyword.NEXTSIBLING),b.token(EsqlNonReservedKeyword.FIRSTCHILD),b.token(EsqlNonReservedKeyword.LASTCHILD)),b.token(EsqlNonReservedKeyword.OF))),
+				FIELD_REFERENCE(),
+				b.optional(f.newTuple67(b.token(EsqlNonReservedKeyword.AS), FIELD_REFERENCE())),
+				b.optional(f.newTuple68(b.token(EsqlNonReservedKeyword.DOMAIN), EXPRESSION())),
+				b.optional(b.firstOf(REPEAT_CLAUSE(), VALUES_CLAUSE(), FROM_CLAUSE(), PARSE_CLAUSE())),
+				b.token(EsqlLegacyGrammar.EOS)
+				));
+	}
+	
+	public RepeatClauseTreeImpl REPEAT_CLAUSE() {
+		return b.<RepeatClauseTreeImpl>nonterminal(Kind.REPEAT_CLAUSE). is(f.repeatClause(
+				b.token(EsqlNonReservedKeyword.REPEAT), 
+				b.optional(f.newTuple69(b.token(EsqlNonReservedKeyword.VALUE), EXPRESSION()))
+				));
+	}
+	
+	public ValuesClauseTreeImpl VALUES_CLAUSE() {
+		return b.<ValuesClauseTreeImpl>nonterminal(Kind.VALUES_CLAUSE). is(f.valuesClause(
+				b.optional(f.newTuple70(b.token(EsqlNonReservedKeyword.IDENTITY), FIELD_REFERENCE())),
+				b.optional(f.newTuple71(b.token(EsqlNonReservedKeyword.TYPE), EXPRESSION())),
+				b.optional(f.newTuple72(b.token(EsqlNonReservedKeyword.NAMESPACE), EXPRESSION())),
+				b.optional(f.newTuple73(b.token(EsqlNonReservedKeyword.NAME), EXPRESSION())),
+				b.optional(f.newTuple74(b.token(EsqlNonReservedKeyword.VALUE), EXPRESSION()))
+						
+		));
+	}
 
-
+	public FromClauseTreeImpl FROM_CLAUSE() {
+		return b.<FromClauseTreeImpl>nonterminal(Kind.FROM_CLAUSE). is(f.fromClause(
+				b.token(EsqlReservedKeyword.FROM), FIELD_REFERENCE()
+		));
+	}
+	
+	public ParseClauseTreeImpl PARSE_CLAUSE(){
+		return b.<ParseClauseTreeImpl>nonterminal(Kind.PARSE_CLAUSE). is(f.parseClause(
+				b.token(EsqlNonReservedKeyword.PARSE), b.token(LPARENTHESIS),ARGUMENT_LIST(),
+				b.zeroOrMore(f.newTuple75(b.firstOf(b.token(EsqlNonReservedKeyword.ENCODING), b.token(EsqlNonReservedKeyword.CCSID), 
+						b.token(EsqlNonReservedKeyword.SET), b.token(EsqlNonReservedKeyword.TYPE), 
+						b.token(EsqlNonReservedKeyword.FORMAT), b.token(EsqlNonReservedKeyword.OPTIONS)), 
+						EXPRESSION()
+				)),
+				b.token(RPARENTHESIS)
+				
+		));
+	}
 }

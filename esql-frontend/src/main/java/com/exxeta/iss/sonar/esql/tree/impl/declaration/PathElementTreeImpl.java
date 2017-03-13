@@ -18,7 +18,7 @@ import com.google.common.base.Functions;
 public class PathElementTreeImpl extends EsqlTree implements PathElementTree {
 
 	private InternalSyntaxToken typeOpenParen;
-	private SeparatedList<ExpressionTree> typeExpressionList;
+	private SeparatedList<InternalSyntaxToken> typeExpressionList;
 	private InternalSyntaxToken typeCloseParen;
 	private NamespaceTree namespace;
 	private InternalSyntaxToken namespaceCurlyOpen;
@@ -32,7 +32,7 @@ public class PathElementTreeImpl extends EsqlTree implements PathElementTree {
 	private InternalSyntaxToken name;
 	private IndexTreeImpl index;
 
-	public void setType(InternalSyntaxToken openParen, SeparatedList<ExpressionTree> expressionList,
+	public void setType(InternalSyntaxToken openParen, SeparatedList<InternalSyntaxToken> expressionList,
 			InternalSyntaxToken closeParen) {
 		this.typeOpenParen = openParen;
 		this.typeExpressionList = expressionList;
@@ -86,7 +86,7 @@ public class PathElementTreeImpl extends EsqlTree implements PathElementTree {
 		return typeOpenParen;
 	}
 
-	public SeparatedList<ExpressionTree> typeExpressionList() {
+	public SeparatedList<InternalSyntaxToken> typeExpressionList() {
 		return typeExpressionList;
 	}
 
@@ -153,7 +153,7 @@ public class PathElementTreeImpl extends EsqlTree implements PathElementTree {
 	public Iterator<Tree> childrenIterator() {
 		return Iterators.concat(Iterators.singletonIterator(typeOpenParen),
 				typeExpressionList==null?Iterators.emptyIterator():
-				typeExpressionList.elementsAndSeparators(Functions.<ExpressionTree>identity()),
+				typeExpressionList.elementsAndSeparators(Functions.<InternalSyntaxToken>identity()),
 				Iterators.forArray(typeCloseParen, namespace, namespaceCurlyOpen, namespaceExpression,
 						namespaceCurlyClose, namespaceStar, colon, nameCurlyOpen, nameExpression, nameCurlyClose, name,
 						index));

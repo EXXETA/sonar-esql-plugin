@@ -7,6 +7,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
 public interface FieldReferenceTree extends Tree{
 	ExpressionTree primaryExpression();
 	SyntaxToken variable();
+	PathElementTree pathElement();
 	SeparatedList<PathElementTree> pathElements();
 
 }

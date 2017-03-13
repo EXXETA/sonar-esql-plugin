@@ -15,7 +15,12 @@ public class FieldReferenceTest {
 		.matches("a")
 		.matches("Field [> ]")
 		.notMatches("")
-		.notMatches("a.");
+		.notMatches("a.")
+		.matches("(XML)Element1")
+		.matches("(XML.Element)Element1[2]")
+		.matches("(XML.Element)NSpace1:Element1")
+		.matches("(XML.Element)NSpace1:Element1[2]")
+		;
 
 	}
 	@Test
@@ -26,7 +31,8 @@ public class FieldReferenceTest {
 			.notMatches("a.")
 			.matches("a.b[]")
 			.matches("a.b[].c")
-			.notMatches("");
+			.notMatches("")
+			.matches("(XML.Element)NSpace1:Element1[2]");
 		
 
 		

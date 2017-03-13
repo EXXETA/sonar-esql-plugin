@@ -19,18 +19,28 @@ public class FieldReferenceTreeImpl extends EsqlTree implements FieldReferenceTr
 
 	private final ExpressionTree primaryExpression;
 	private final InternalSyntaxToken variable;
+	private final PathElementTree pathElement;
 	private final SeparatedList<PathElementTree> pathElements;
 
 	public FieldReferenceTreeImpl(ExpressionTree primaryExpression, SeparatedList<PathElementTree> pathElements) {
 		this.primaryExpression = primaryExpression;
 		this.variable=null;
 		this.pathElements = pathElements;
+		this.pathElement=null;
 	}
 
 	public FieldReferenceTreeImpl(InternalSyntaxToken variable, SeparatedList<PathElementTree> pathElements) {
 		this.primaryExpression=null;
 		this.variable = variable;
 		this.pathElements = pathElements;
+		this.pathElement=null;
+	}
+
+	public FieldReferenceTreeImpl(PathElementTree pathElement, SeparatedList<PathElementTree> pathElements) {
+		this.primaryExpression=null;
+		this.variable = null;
+		this.pathElements = pathElements;
+		this.pathElement=pathElement;
 	}
 
 	public ExpressionTree primaryExpression() {
@@ -39,6 +49,10 @@ public class FieldReferenceTreeImpl extends EsqlTree implements FieldReferenceTr
 	
 	public InternalSyntaxToken variable() {
 		return variable;
+	}
+	
+	public PathElementTree pathElement() {
+		return pathElement;
 	}
 
 	public SeparatedList<PathElementTree> pathElements() {
@@ -59,7 +73,7 @@ public class FieldReferenceTreeImpl extends EsqlTree implements FieldReferenceTr
 
 	@Override
 	public Iterator<Tree> childrenIterator() {
-		return Iterators.concat(Iterators.forArray(primaryExpression, variable),
+		return Iterators.concat(Iterators.forArray(primaryExpression, variable, pathElement),
 				pathElements.elementsAndSeparators(Functions.<PathElementTree>identity()));
 	}
 

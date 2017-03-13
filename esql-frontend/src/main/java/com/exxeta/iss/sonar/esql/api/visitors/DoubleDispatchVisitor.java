@@ -39,10 +39,12 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.ControlsTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateFunctionStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateModuleStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.CreateStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.DeclareStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ElseClauseTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ElseifClauseTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ExternalRoutineBodyTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.FromClauseTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.IfStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.IterateStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.LabelTree;
@@ -52,7 +54,9 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.LoopStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.MessageSourceTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ParameterListTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ParameterTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.ParseClauseTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.PropagateStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.RepeatClauseTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.RepeatStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ResultSetTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ReturnStatementTree;
@@ -60,6 +64,7 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.ReturnTypeTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.RoutineBodyTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.SetStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ThrowStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.ValuesClauseTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.WhenClauseTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.WhileStatementTree;
 import com.exxeta.iss.sonar.esql.tree.expression.LiteralTree;
@@ -255,27 +260,27 @@ public abstract class DoubleDispatchVisitor implements TreeVisitor {
 
 	public void visitIndex(IndexTree tree) {
 		scanChildren(tree);
-		
+
 	}
 
 	public void visitPathElement(PathElementTree tree) {
 		scanChildren(tree);
-		
+
 	}
 
 	public void visitNamespace(NamespaceTree tree) {
 		scanChildren(tree);
-		
+
 	}
 
 	public void visitFieldReference(FieldReferenceTree tree) {
 		scanChildren(tree);
-		
+
 	}
 
 	public void visitCallExpression(CallExpressionTree tree) {
 		scanChildren(tree);
-		
+
 	}
 
 	public void visitDecimalDataType(DecimalDataTypeTree tree) {
@@ -304,7 +309,7 @@ public abstract class DoubleDispatchVisitor implements TreeVisitor {
 
 	public void visitIterateStatement(IterateStatementTree tree) {
 		scanChildren(tree);
-		
+
 	}
 
 	public void visitCallStatement(CallStatementTree tree) {
@@ -344,14 +349,32 @@ public abstract class DoubleDispatchVisitor implements TreeVisitor {
 	}
 
 	public void visitWhileStatement(WhileStatementTree tree) {
-	scanChildren(tree);
-		
+		scanChildren(tree);
+
 	}
 
 	public void visitAttachStatement(AttachStatementTree tree) {
 		scanChildren(tree);
-		
 	}
 
+	public void visitCreateFunctionStatement(CreateStatementTree tree) {
+		scanChildren(tree);
+	}
+
+	public void visitRepeatClause(RepeatClauseTree tree) {
+		scanChildren(tree);
+	}
+
+	public void visitValuesClause(ValuesClauseTree tree) {
+		scanChildren(tree);
+	}
+
+	public void visitFromClause(FromClauseTree tree) {
+		scanChildren(tree);
+	}
+
+	public void visitParseClause(ParseClauseTree tree) {
+		scanChildren(tree);
+	}
 
 }

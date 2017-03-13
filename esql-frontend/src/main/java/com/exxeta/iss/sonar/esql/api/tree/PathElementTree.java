@@ -3,10 +3,11 @@ package com.exxeta.iss.sonar.esql.api.tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
+import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 
 public interface PathElementTree extends Tree {
 	SyntaxToken typeOpenParen();
-	SeparatedList<ExpressionTree> typeExpressionList();
+	SeparatedList<InternalSyntaxToken> typeExpressionList();
 	SyntaxToken typeCloseParen();
 	NamespaceTree namespace();
 	SyntaxToken namespaceCurlyOpen();
