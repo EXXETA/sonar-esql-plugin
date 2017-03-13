@@ -67,6 +67,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateModuleStatementTreeIm
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.DeclareStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.DeleteStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.DetachStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ElseClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ElseifClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ExternalRoutineBodyTreeImpl;
@@ -262,7 +263,7 @@ public class EsqlGrammar {
 	}
 
 	private StatementTree MESSAGE_TREE_MANIPULATION_STATEMENT() {
-		return b.firstOf(ATTACH_STATEMENT(), CREATE_STATEMENT(), DELETE_STATEMENT());
+		return b.firstOf(ATTACH_STATEMENT(), CREATE_STATEMENT(), DELETE_STATEMENT(), DETACH_STATEMENT());
 	}
 
 
@@ -833,5 +834,12 @@ public class EsqlGrammar {
 					f.newTuple76(b.firstOf(b.token(EsqlNonReservedKeyword.FIRSTCHILD), b.token(EsqlNonReservedKeyword.LASTCHILD), b.token(EsqlNonReservedKeyword.PREVIOUSSIBLING), b.token(EsqlNonReservedKeyword.NEXTSIBLING)), b.token(EsqlNonReservedKeyword.OF))
 				), FIELD_REFERENCE(), b.token(EsqlLegacyGrammar.EOS)
 		));
+	}
+	
+	public DetachStatementTreeImpl DETACH_STATEMENT() {
+		return b.<DetachStatementTreeImpl>nonterminal(Kind.DETACH_STATEMENT).is(
+				f.detachStatement(
+				b.token(EsqlNonReservedKeyword.DETACH), FIELD_REFERENCE(), b.token(EsqlLegacyGrammar.EOS)
+				));
 	}
 }

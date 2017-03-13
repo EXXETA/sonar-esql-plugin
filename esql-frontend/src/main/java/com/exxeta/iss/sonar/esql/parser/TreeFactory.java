@@ -80,6 +80,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateProcedureStatementTre
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.DeclareStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.DeleteStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.DetachStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ElseClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ElseifClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ExternalRoutineBodyTreeImpl;
@@ -1480,6 +1481,12 @@ public class TreeFactory {
 			return new DeleteStatementTreeImpl(deleteKeyword, (InternalSyntaxToken)qualifier, null, fieldReference, semi);
 		}
 		
+	}
+
+	public DetachStatementTreeImpl detachStatement(InternalSyntaxToken detachKeyword, FieldReferenceTreeImpl fieldReference,
+			InternalSyntaxToken semi) {
+		
+		return new DetachStatementTreeImpl(detachKeyword, fieldReference, semi);
 	}
 
 }
