@@ -79,6 +79,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateModuleStatementTreeIm
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateProcedureStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.DeclareStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.DeleteStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ElseClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ElseifClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ExternalRoutineBodyTreeImpl;
@@ -591,6 +592,10 @@ public class TreeFactory {
 	}
 
 	public <T, U> Tuple<T, U> newTuple75(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple76(T first, U second) {
 		return newTuple(first, second);
 	}
 
@@ -1463,6 +1468,18 @@ public class TreeFactory {
 				}
 			}
 		return new ParseClauseTreeImpl(parseKeyword, openingParenthesis, options, encodingKeyword, encoding, ccsidKeyword, ccsid, setKeyword, set, typeKeyword, type, formatKeyword, format, closingParenthesis);
+	}
+
+	public DeleteStatementTreeImpl deleteStatement(InternalSyntaxToken deleteKeyword, Object qualifier,
+			FieldReferenceTreeImpl fieldReference, InternalSyntaxToken semi) {
+		
+		if (qualifier instanceof Tuple){
+			Tuple<InternalSyntaxToken, InternalSyntaxToken> tuple = (Tuple)qualifier;
+			return new DeleteStatementTreeImpl(deleteKeyword, tuple.first(), tuple.second(), fieldReference, semi);
+		} else {
+			return new DeleteStatementTreeImpl(deleteKeyword, (InternalSyntaxToken)qualifier, null, fieldReference, semi);
+		}
+		
 	}
 
 }
