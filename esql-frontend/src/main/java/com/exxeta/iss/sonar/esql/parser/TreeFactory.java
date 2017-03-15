@@ -84,6 +84,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.DetachStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ElseClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ElseifClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ExternalRoutineBodyTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.ForStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.FromClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.IfStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.IterateStatementTreeImpl;
@@ -1492,6 +1493,13 @@ public class TreeFactory {
 
 	public ResignalStatementTreeImpl resignalStatement(InternalSyntaxToken resignalKeyword, InternalSyntaxToken semi) {
 		return new ResignalStatementTreeImpl(resignalKeyword, semi);
+	}
+
+	public ForStatementTreeImpl forStatement(InternalSyntaxToken forKeyword, InternalSyntaxToken correlationName,
+			InternalSyntaxToken asKeyword, FieldReferenceTreeImpl fieldReference, InternalSyntaxToken doKeyword,
+			Optional<List<StatementTree>> statements, InternalSyntaxToken endKeyword, InternalSyntaxToken forKeyword2,
+			InternalSyntaxToken semi) {
+		return new ForStatementTreeImpl(forKeyword, correlationName, asKeyword, fieldReference, doKeyword, optionalList(statements), forKeyword2, endKeyword, semi);
 	}
 
 }
