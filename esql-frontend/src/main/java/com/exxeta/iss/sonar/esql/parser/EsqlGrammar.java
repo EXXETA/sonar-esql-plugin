@@ -82,6 +82,8 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.LanguageTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.LeaveStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.LoopStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.MessageSourceTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.MoveStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.NameClausesTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ParameterTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ParseClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.PropagateStatementTreeImpl;
@@ -265,7 +267,7 @@ public class EsqlGrammar {
 	}
 
 	private StatementTree MESSAGE_TREE_MANIPULATION_STATEMENT() {
-		return b.firstOf(ATTACH_STATEMENT(), CREATE_STATEMENT(), DELETE_STATEMENT(), DETACH_STATEMENT(), FOR_STATEMENT()/*TODO: MOVE*/);
+		return b.firstOf(ATTACH_STATEMENT(), CREATE_STATEMENT(), DELETE_STATEMENT(), DETACH_STATEMENT(), FOR_STATEMENT(),MOVE_STATEMENT());
 	}
 
 
@@ -850,6 +852,28 @@ public class EsqlGrammar {
 				b.token(EsqlNonReservedKeyword.FOR), b.token(EsqlLegacyGrammar.IDENTIFIER), b.token(EsqlNonReservedKeyword.AS),
 				FIELD_REFERENCE(), b.token(EsqlNonReservedKeyword.DO), b.zeroOrMore(STATEMENT()),b.token(EsqlNonReservedKeyword.END), b.token(EsqlNonReservedKeyword.FOR),
 				b.token(EsqlLegacyGrammar.EOS)
+		));
+	}
+	public MoveStatementTreeImpl MOVE_STATEMENT() {
+		return b.<MoveStatementTreeImpl>nonterminal(Kind.MOVE_STATEMENT).is(f.moveStatement(
+				b.token(EsqlNonReservedKeyword.MOVE), b.token(EsqlLegacyGrammar.IDENTIFIER),
+				b.firstOf(f.newTuple77(b.token(EsqlNonReservedKeyword.TO), FIELD_REFERENCE()), b.token(EsqlNonReservedKeyword.PARENT),
+						f.newTuple78(b.firstOf(b.token(EsqlNonReservedKeyword.FIRSTCHILD),b.token(EsqlNonReservedKeyword.LASTCHILD),
+								b.token(EsqlNonReservedKeyword.PREVIOUSSIBLING),b.token(EsqlNonReservedKeyword.NEXTSIBLING)), NAME_CLAUSES())
+						),
+				b.token(EsqlLegacyGrammar.EOS)
+		));
+	}
+	
+	public NameClausesTreeImpl NAME_CLAUSES(){
+		return b.<NameClausesTreeImpl>nonterminal(Kind.NAME_CLAUSES).is(f.nameClauses(
+				b.firstOf(f.newTriple5(b.token(EsqlNonReservedKeyword.REPEAT), b.optional(b.token(EsqlNonReservedKeyword.TYPE)), b.optional(b.token(EsqlNonReservedKeyword.NAME))),
+						f.newTriple6(
+								b.optional(f.newTuple80(b.token(EsqlNonReservedKeyword.TYPE), EXPRESSION())),
+								b.optional(f.newTuple81(b.token(EsqlNonReservedKeyword.NAMESPACE), b.firstOf(b.token(EsqlPunctuator.STAR), EXPRESSION()))),
+								b.optional(f.newTuple82(b.token(EsqlNonReservedKeyword.NAME), EXPRESSION()))),
+						f.newTuple79(b.token(EsqlNonReservedKeyword.IDENTITY), PATH_ELEMENT())
+				)
 		));
 	}
 	public ResignalStatementTreeImpl RESIGNAL(){

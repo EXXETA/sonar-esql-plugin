@@ -39,9 +39,11 @@ import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.FunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.TheFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ElseifClauseTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.NameClausesTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ParameterTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
 import com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator;
+import com.exxeta.iss.sonar.esql.parser.TreeFactory.Triple;
 import com.exxeta.iss.sonar.esql.parser.TreeFactory.Tuple;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
 import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
@@ -93,6 +95,8 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.LanguageTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.LeaveStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.LoopStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.MessageSourceTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.MoveStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.NameClausesTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ParameterTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ParseClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.PropagateStatementTreeImpl;
@@ -602,6 +606,30 @@ public class TreeFactory {
 		return newTuple(first, second);
 	}
 
+	public <T, U> Tuple<T, U> newTuple77(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple78(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple79(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple80(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple81(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple82(T first, U second) {
+		return newTuple(first, second);
+	}
+
 	public <T, U, V> Triple<T, U, V> newTriple1(T first, U second, V third) {
 		return newTriple(first, second, third);
 	}
@@ -615,6 +643,14 @@ public class TreeFactory {
 	}
 
 	public <T, U, V> Triple<T, U, V> newTriple4(T first, U second, V third) {
+		return newTriple(first, second, third);
+	}
+
+	public <T, U, V> Triple<T, U, V> newTriple5(T first, U second, V third) {
+		return newTriple(first, second, third);
+	}
+
+	public <T, U, V> Triple<T, U, V> newTriple6(T first, U second, V third) {
 		return newTriple(first, second, third);
 	}
 
@@ -690,7 +726,6 @@ public class TreeFactory {
 
 		return new SeparatedList<>(elements.build(), commas.build());
 	}
-
 
 	private static SeparatedList<PathElementTree> pathElementList(
 			Optional<List<Tuple<InternalSyntaxToken, PathElementTreeImpl>>> pathElements) {
@@ -1081,7 +1116,7 @@ public class TreeFactory {
 			Optional<List<Tuple<InternalSyntaxToken, PathElementTreeImpl>>> zeroOrMore) {
 		if (first instanceof ExpressionTree) {
 			return new FieldReferenceTreeImpl((ExpressionTree) first, pathElementList(zeroOrMore));
-		} else if (first instanceof PathElementTree){
+		} else if (first instanceof PathElementTree) {
 			return new FieldReferenceTreeImpl((PathElementTree) first, pathElementList(zeroOrMore));
 		} else {
 			return new FieldReferenceTreeImpl((InternalSyntaxToken) first, pathElementList(zeroOrMore));
@@ -1375,8 +1410,8 @@ public class TreeFactory {
 				location, semi);
 	}
 
-	public CreateStatementTreeImpl createStatement(InternalSyntaxToken createKeyword, Object qualifier, FieldReferenceTreeImpl target,
-			Optional<Tuple<InternalSyntaxToken, FieldReferenceTreeImpl>> asClause,
+	public CreateStatementTreeImpl createStatement(InternalSyntaxToken createKeyword, Object qualifier,
+			FieldReferenceTreeImpl target, Optional<Tuple<InternalSyntaxToken, FieldReferenceTreeImpl>> asClause,
 			Optional<Tuple<InternalSyntaxToken, ExpressionTree>> domainClause, Optional<EsqlTree> restClauses,
 			InternalSyntaxToken semi) {
 
@@ -1453,41 +1488,43 @@ public class TreeFactory {
 
 		if (parameters.isPresent())
 			for (Tuple<InternalSyntaxToken, ExpressionTree> param : parameters.get()) {
-				if ("ENCODING".equalsIgnoreCase(param.first().text())){
-					encodingKeyword=param.first();
-					encoding=param.second();
-				}else if ("CCSID".equalsIgnoreCase(param.first().text())){
-					ccsidKeyword=param.first();
-					ccsid=param.second();
-				}else if ("SET".equalsIgnoreCase(param.first().text())){
-					setKeyword=param.first();
-					set=param.second();
-				}else if ("TYPE".equalsIgnoreCase(param.first().text())){
-					typeKeyword=param.first();
-					type=param.second();
-				}else if ("FORMAT".equalsIgnoreCase(param.first().text())){
-					formatKeyword=param.first();
-					format=param.second();
+				if ("ENCODING".equalsIgnoreCase(param.first().text())) {
+					encodingKeyword = param.first();
+					encoding = param.second();
+				} else if ("CCSID".equalsIgnoreCase(param.first().text())) {
+					ccsidKeyword = param.first();
+					ccsid = param.second();
+				} else if ("SET".equalsIgnoreCase(param.first().text())) {
+					setKeyword = param.first();
+					set = param.second();
+				} else if ("TYPE".equalsIgnoreCase(param.first().text())) {
+					typeKeyword = param.first();
+					type = param.second();
+				} else if ("FORMAT".equalsIgnoreCase(param.first().text())) {
+					formatKeyword = param.first();
+					format = param.second();
 				}
 			}
-		return new ParseClauseTreeImpl(parseKeyword, openingParenthesis, options, encodingKeyword, encoding, ccsidKeyword, ccsid, setKeyword, set, typeKeyword, type, formatKeyword, format, closingParenthesis);
+		return new ParseClauseTreeImpl(parseKeyword, openingParenthesis, options, encodingKeyword, encoding,
+				ccsidKeyword, ccsid, setKeyword, set, typeKeyword, type, formatKeyword, format, closingParenthesis);
 	}
 
 	public DeleteStatementTreeImpl deleteStatement(InternalSyntaxToken deleteKeyword, Object qualifier,
 			FieldReferenceTreeImpl fieldReference, InternalSyntaxToken semi) {
-		
-		if (qualifier instanceof Tuple){
-			Tuple<InternalSyntaxToken, InternalSyntaxToken> tuple = (Tuple)qualifier;
+
+		if (qualifier instanceof Tuple) {
+			Tuple<InternalSyntaxToken, InternalSyntaxToken> tuple = (Tuple) qualifier;
 			return new DeleteStatementTreeImpl(deleteKeyword, tuple.first(), tuple.second(), fieldReference, semi);
 		} else {
-			return new DeleteStatementTreeImpl(deleteKeyword, (InternalSyntaxToken)qualifier, null, fieldReference, semi);
+			return new DeleteStatementTreeImpl(deleteKeyword, (InternalSyntaxToken) qualifier, null, fieldReference,
+					semi);
 		}
-		
+
 	}
 
-	public DetachStatementTreeImpl detachStatement(InternalSyntaxToken detachKeyword, FieldReferenceTreeImpl fieldReference,
-			InternalSyntaxToken semi) {
-		
+	public DetachStatementTreeImpl detachStatement(InternalSyntaxToken detachKeyword,
+			FieldReferenceTreeImpl fieldReference, InternalSyntaxToken semi) {
+
 		return new DetachStatementTreeImpl(detachKeyword, fieldReference, semi);
 	}
 
@@ -1499,7 +1536,57 @@ public class TreeFactory {
 			InternalSyntaxToken asKeyword, FieldReferenceTreeImpl fieldReference, InternalSyntaxToken doKeyword,
 			Optional<List<StatementTree>> statements, InternalSyntaxToken endKeyword, InternalSyntaxToken forKeyword2,
 			InternalSyntaxToken semi) {
-		return new ForStatementTreeImpl(forKeyword, correlationName, asKeyword, fieldReference, doKeyword, optionalList(statements), forKeyword2, endKeyword, semi);
+		return new ForStatementTreeImpl(forKeyword, correlationName, asKeyword, fieldReference, doKeyword,
+				optionalList(statements), forKeyword2, endKeyword, semi);
+	}
+
+	public MoveStatementTreeImpl moveStatement(InternalSyntaxToken moveKeyword, InternalSyntaxToken target,
+			Object qualifier, InternalSyntaxToken semi) {
+		if (qualifier instanceof Tuple) {
+			if (((Tuple<Tree, Tree>) qualifier).second() instanceof NameClausesTree) {
+				Tuple<InternalSyntaxToken, NameClausesTreeImpl> tuple = (Tuple) qualifier;
+				return new MoveStatementTreeImpl(moveKeyword, target, tuple.first(), tuple.second(), semi);
+			} else {
+				Tuple<InternalSyntaxToken, FieldReferenceTreeImpl> tuple = (Tuple) qualifier;
+				return new MoveStatementTreeImpl(moveKeyword, target, tuple.first(), tuple.second(), semi);
+			}
+		} else {
+			return new MoveStatementTreeImpl(moveKeyword, target, (InternalSyntaxToken) qualifier, semi);
+		}
+	}
+
+	public NameClausesTreeImpl nameClauses(Object params) {
+		
+		if (params instanceof Triple){
+			Triple<Tree,Tree,Tree> t = (Triple)params;
+			if (t.first() instanceof InternalSyntaxToken){
+				Triple<InternalSyntaxToken, Optional<InternalSyntaxToken>, Optional<InternalSyntaxToken>> repeat = (Triple)params;
+				return new NameClausesTreeImpl(null, null, null, null, null, null, null, null, null, repeat.first(), repeat.second().isPresent()?repeat.second().get():null, repeat.third().isPresent()?repeat.third().get():null);
+			}else{
+				Triple<
+					Optional<Tuple<InternalSyntaxToken, ExpressionTree>>, 
+					Optional<Tuple<InternalSyntaxToken,Object>>, 
+					Optional<Tuple<InternalSyntaxToken,ExpressionTree>>
+				> t2 = (Triple)params;
+
+				if (t2.second().isPresent() && t2.second().get().second() instanceof InternalSyntaxToken){
+					return new NameClausesTreeImpl(t2.first().isPresent()?t2.first().get().first():null, t2.first().isPresent()?t2.first().get().second():null, 
+							t2.second().get().first(), null, (InternalSyntaxToken)t2.second().get().second(), 
+							t2.third().isPresent()?t2.third().get().first():null, t2.third().isPresent()?t2.third().get().second():null, 
+							null, null, null, null, null);
+				} else {
+					//Expression
+					return new NameClausesTreeImpl(t2.first().isPresent()?t2.first().get().first():null, t2.first().isPresent()?t2.first().get().second():null, 
+							t2.second().isPresent()?t2.second().get().first():null, (ExpressionTree)(t2.second().isPresent()?t2.second().get().second():null), null, 
+							t2.third().isPresent()?t2.third().get().first():null, t2.third().isPresent()?t2.third().get().second():null, 
+							null, null, null, null, null);
+					
+				}
+			}
+		}else {
+			Tuple<InternalSyntaxToken, PathElementTreeImpl> identity = (Tuple)params;
+			return new NameClausesTreeImpl(null, null, null, null, null, null, null, identity.first(), identity.second(), null, null, null);
+		}
 	}
 
 }

@@ -151,6 +151,7 @@ public enum EsqlNonReservedKeyword implements TokenType, GrammarRuleKey {
 	OR("OR"),
 	ORDER("ORDER"),
 	OUT("OUT"),
+	PARENT("PARENT"),
 	PARSE("PARSE"),
 	PASSTHRU("PASSTHRU"),
 	PATH("PATH"),
