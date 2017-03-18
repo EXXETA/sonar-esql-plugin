@@ -88,6 +88,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.MoveStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.NameClausesTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ParameterTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ParseClauseTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.PassthruStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.PropagateStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.RepeatClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.RepeatStatementTreeImpl;
@@ -259,7 +260,7 @@ public class EsqlGrammar {
 	}
 
 	private StatementTree DATABASE_UPDATE_STATEMENT() {
-		return b.firstOf(DELETE_FROM_STATEMENT(), INSERT_STATEMENT());
+		return b.firstOf(DELETE_FROM_STATEMENT(), INSERT_STATEMENT(), PASSTHRU_STATEMENT());
 	}
 
 	private StatementTree NODE_INTERACTION_STATEMENT() {
@@ -891,6 +892,17 @@ public class EsqlGrammar {
 				b.optional(ARGUMENT_CLAUSE()),b.token(EsqlNonReservedKeyword.VALUES), b.token(EsqlPunctuator.LPARENTHESIS),
 				EXPRESSION(),b.zeroOrMore(f.newTuple85(b.token(EsqlPunctuator.COMMA), EXPRESSION())),
 				b.token(EsqlPunctuator.RPARENTHESIS), b.token(EsqlLegacyGrammar.EOS)
+		));
+	}
+	
+	public PassthruStatementTreeImpl PASSTHRU_STATEMENT(){
+		return b.<PassthruStatementTreeImpl>nonterminal(Kind.PASSTHRU_STATEMENT). is(f.completePassthruStatement(
+				b.token(EsqlNonReservedKeyword.PASSTHRU), b.firstOf(f.passthruExpressionList(
+						ARGUMENT_CLAUSE()
+				), f.passthruSingleExpression(
+						EXPRESSION(), b.optional(f.newTuple86(b.token(EsqlNonReservedKeyword.TO), FIELD_REFERENCE())),
+						b.optional(f.newTuple87(b.token(EsqlNonReservedKeyword.VALUES), ARGUMENT_CLAUSE()))
+				)), b.token(EsqlLegacyGrammar.EOS)
 		));
 	}
 	public ResignalStatementTreeImpl RESIGNAL(){

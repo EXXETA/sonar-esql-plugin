@@ -42,6 +42,7 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.NameClausesTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ParameterTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
 import com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator;
+import com.exxeta.iss.sonar.esql.parser.TreeFactory.Tuple;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
 import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.BrokerSchemaStatementTreeImpl;
@@ -98,6 +99,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.MoveStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.NameClausesTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ParameterTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ParseClauseTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.PassthruStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.PropagateStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.RepeatClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.RepeatStatementTreeImpl;
@@ -638,6 +640,14 @@ public class TreeFactory {
 	}
 
 	public <T, U> Tuple<T, U> newTuple85(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple86(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple87(T first, U second) {
 		return newTuple(first, second);
 	}
 
@@ -1615,6 +1625,23 @@ public class TreeFactory {
 		return new InsertStatementTreeImpl(insertKeyword, intoKeyword, tableReference,
 				columns.isPresent() ? columns.get() : null, valuesKeyword, openingParenthesis,
 				expressionList(expression, restExpression), closingParenthesis, semi);
+	}
+
+	public PassthruStatementTreeImpl passthruExpressionList(ParameterListTreeImpl expressionList) {
+		return new PassthruStatementTreeImpl(expressionList);
+	}
+
+	public PassthruStatementTreeImpl passthruSingleExpression(ExpressionTree expression,
+			Optional<Tuple<InternalSyntaxToken, FieldReferenceTreeImpl>> to,
+			Optional<Tuple<InternalSyntaxToken, ParameterListTreeImpl>> values) {
+		return new PassthruStatementTreeImpl(expression, to.isPresent()?to.get().first():null, to.isPresent()?to.get().second():null,
+				values.isPresent()?values.get().first():null, values.isPresent()?values.get().second():null
+				);
+	}
+
+	public PassthruStatementTreeImpl completePassthruStatement(InternalSyntaxToken passthruKeyword,
+			PassthruStatementTreeImpl impl, InternalSyntaxToken semi) {
+		return impl.complete(passthruKeyword, semi);
 	}
 	
 }
