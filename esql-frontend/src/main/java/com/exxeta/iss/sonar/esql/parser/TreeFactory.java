@@ -28,7 +28,6 @@ import java.util.Map;
 import com.exxeta.iss.sonar.esql.api.EsqlNonReservedKeyword;
 import com.exxeta.iss.sonar.esql.api.tree.BrokerSchemaStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.EsqlContentsTree;
-import com.exxeta.iss.sonar.esql.api.tree.FieldReferenceTree;
 import com.exxeta.iss.sonar.esql.api.tree.NamespaceTree;
 import com.exxeta.iss.sonar.esql.api.tree.PathClauseTree;
 import com.exxeta.iss.sonar.esql.api.tree.PathElementTree;
@@ -43,8 +42,6 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.NameClausesTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ParameterTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
 import com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator;
-import com.exxeta.iss.sonar.esql.parser.TreeFactory.Triple;
-import com.exxeta.iss.sonar.esql.parser.TreeFactory.Tuple;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
 import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.BrokerSchemaStatementTreeImpl;
@@ -90,6 +87,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.ExternalRoutineBodyTreeImpl
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ForStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.FromClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.IfStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.InsertStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.IterateStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.LabelTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.LanguageTreeImpl;
@@ -636,6 +634,10 @@ public class TreeFactory {
 	}
 
 	public <T, U> Tuple<T, U> newTuple84(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple85(T first, U second) {
 		return newTuple(first, second);
 	}
 
@@ -1604,4 +1606,15 @@ public class TreeFactory {
 		return new DeleteFromStatementTreeImpl(deleteKeyword, fromKeyword, tableReference, asClause.isPresent()?asClause.get().first():null, asClause.isPresent()?asClause.get().second():null, whereClause.isPresent()?whereClause.get().first():null, whereClause.isPresent()?whereClause.get().second():null, semi);
 	}
 
+	public InsertStatementTreeImpl insertStatement(InternalSyntaxToken insertKeyword, InternalSyntaxToken intoKeyword,
+			FieldReferenceTreeImpl tableReference, Optional<ParameterListTreeImpl> columns,
+			InternalSyntaxToken valuesKeyword, InternalSyntaxToken openingParenthesis, ExpressionTree expression,
+			Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> restExpression, InternalSyntaxToken closingParenthesis,
+			InternalSyntaxToken semi) {
+		
+		return new InsertStatementTreeImpl(insertKeyword, intoKeyword, tableReference,
+				columns.isPresent() ? columns.get() : null, valuesKeyword, openingParenthesis,
+				expressionList(expression, restExpression), closingParenthesis, semi);
+	}
+	
 }
