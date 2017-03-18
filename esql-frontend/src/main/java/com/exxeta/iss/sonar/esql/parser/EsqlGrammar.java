@@ -68,6 +68,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateFunctionStatementTree
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateModuleStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.DeclareStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.DeleteFromStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.DeleteStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.DetachStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ElseClauseTreeImpl;
@@ -234,8 +235,8 @@ public class EsqlGrammar {
 	public StatementTree STATEMENT() {
 		return b.<StatementTree>nonterminal(EsqlLegacyGrammar.statement).is(b.firstOf(
 				BASIC_STATEMENT() , MESSAGE_TREE_MANIPULATION_STATEMENT(),
-				NODE_INTERACTION_STATEMENT()/* , DATABASE_UPDATE_STATEMENT(),*/
-				,OTHER_STATEMENT()));
+				NODE_INTERACTION_STATEMENT() , DATABASE_UPDATE_STATEMENT(),
+				OTHER_STATEMENT()));
 	}
 
 	public FunctionTree FUNCTION() {
@@ -258,8 +259,7 @@ public class EsqlGrammar {
 	}
 
 	private StatementTree DATABASE_UPDATE_STATEMENT() {
-		// TODO Auto-generated method stub
-		return null;
+		return DELETE_FROM_STATEMENT();
 	}
 
 	private StatementTree NODE_INTERACTION_STATEMENT() {
@@ -874,6 +874,15 @@ public class EsqlGrammar {
 								b.optional(f.newTuple82(b.token(EsqlNonReservedKeyword.NAME), EXPRESSION()))),
 						f.newTuple79(b.token(EsqlNonReservedKeyword.IDENTITY), PATH_ELEMENT())
 				)
+		));
+	}
+	
+	public DeleteFromStatementTreeImpl DELETE_FROM_STATEMENT(){
+		return b.<DeleteFromStatementTreeImpl>nonterminal(Kind.DELETE_FROM_STATEMENT).is (f.deleteFromStatement(
+				b.token(EsqlNonReservedKeyword.DELETE),b.token(EsqlReservedKeyword.FROM),FIELD_REFERENCE(),
+				b.optional(f.newTuple83(b.token(EsqlNonReservedKeyword.AS), b.token(EsqlLegacyGrammar.IDENTIFIER))),
+				b.optional(f.newTuple84(b.token(EsqlNonReservedKeyword.WHERE), EXPRESSION())),
+				b.token(EsqlLegacyGrammar.EOS)
 		));
 	}
 	public ResignalStatementTreeImpl RESIGNAL(){

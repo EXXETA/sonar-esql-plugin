@@ -81,6 +81,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateModuleStatementTreeIm
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateProcedureStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.DeclareStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.DeleteFromStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.DeleteStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.DetachStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ElseClauseTreeImpl;
@@ -627,6 +628,14 @@ public class TreeFactory {
 	}
 
 	public <T, U> Tuple<T, U> newTuple82(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple83(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple84(T first, U second) {
 		return newTuple(first, second);
 	}
 
@@ -1587,6 +1596,12 @@ public class TreeFactory {
 			Tuple<InternalSyntaxToken, PathElementTreeImpl> identity = (Tuple)params;
 			return new NameClausesTreeImpl(null, null, null, null, null, null, null, identity.first(), identity.second(), null, null, null);
 		}
+	}
+
+	public DeleteFromStatementTreeImpl deleteFromStatement(InternalSyntaxToken deleteKeyword, InternalSyntaxToken fromKeyword,
+			FieldReferenceTreeImpl tableReference, Optional<Tuple<InternalSyntaxToken, InternalSyntaxToken>> asClause,
+			Optional<Tuple<InternalSyntaxToken, ExpressionTree>> whereClause, InternalSyntaxToken semi) {
+		return new DeleteFromStatementTreeImpl(deleteKeyword, fromKeyword, tableReference, asClause.isPresent()?asClause.get().first():null, asClause.isPresent()?asClause.get().second():null, whereClause.isPresent()?whereClause.get().first():null, whereClause.isPresent()?whereClause.get().second():null, semi);
 	}
 
 }
