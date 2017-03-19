@@ -71,8 +71,10 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.ResultSetTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ReturnStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ReturnTypeTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.RoutineBodyTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.SetColumnTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.SetStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ThrowStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.UpdateStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ValuesClauseTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.WhenClauseTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.WhileStatementTree;
@@ -420,6 +422,15 @@ public abstract class DoubleDispatchVisitor implements TreeVisitor {
 
 	public void visitPassthruStatement(PassthruStatementTree tree) {
 		scanChildren(tree);
+	}
+
+	public void visitSetColumn(SetColumnTree tree) {
+		scanChildren(tree);
+	}
+
+	public void visitUpdateStatement(UpdateStatementTree tree) {
+		scanChildren(tree);
+		
 	}
 
 }

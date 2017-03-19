@@ -24,6 +24,8 @@ import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.LPARENTHESIS;
 import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.RPARENTHESIS;
 import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.SEMI;
 
+import java.util.List;
+
 import org.hamcrest.text.pattern.internal.ast.ZeroOrMore;
 
 import com.exxeta.iss.sonar.esql.api.EsqlNonReservedKeyword;
@@ -41,6 +43,7 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree
 import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
 import com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator;
 import com.exxeta.iss.sonar.esql.lexer.EsqlReservedKeyword;
+import com.exxeta.iss.sonar.esql.parser.TreeFactory.Tuple;
 import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.BrokerSchemaStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.DataTypeTreeImpl;
@@ -97,12 +100,15 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.ResultSetTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ReturnStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ReturnTypeTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.RoutineBodyTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.SetColumnTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.SetStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ThrowStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.UpdateStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ValuesClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.WhenClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.WhileStatementTreeImpl;
 import com.sonar.sslr.api.typed.GrammarBuilder;
+import com.sonar.sslr.api.typed.Optional;
 
 public class EsqlGrammar {
 	private final GrammarBuilder<InternalSyntaxToken> b;
@@ -260,7 +266,7 @@ public class EsqlGrammar {
 	}
 
 	private StatementTree DATABASE_UPDATE_STATEMENT() {
-		return b.firstOf(DELETE_FROM_STATEMENT(), INSERT_STATEMENT(), PASSTHRU_STATEMENT());
+		return b.firstOf(DELETE_FROM_STATEMENT(), INSERT_STATEMENT(), PASSTHRU_STATEMENT(), UPDATE_STATEMENT());
 	}
 
 	private StatementTree NODE_INTERACTION_STATEMENT() {
@@ -905,6 +911,27 @@ public class EsqlGrammar {
 				)), b.token(EsqlLegacyGrammar.EOS)
 		));
 	}
+	
+	public UpdateStatementTreeImpl UPDATE_STATEMENT(){
+		return b.<UpdateStatementTreeImpl>nonterminal(Kind.UPDATE_STATEMENT).is(f.updateStatement(
+				b.token(EsqlNonReservedKeyword.UPDATE), 
+				FIELD_REFERENCE(), 
+				b.optional(f.newTuple88(b.token(EsqlNonReservedKeyword.AS), b.token(EsqlLegacyGrammar.IDENTIFIER))),
+				b.token(EsqlNonReservedKeyword.SET), 
+				SET_COLUMN(), b.zeroOrMore(f.newTuple89(b.token(EsqlPunctuator.COMMA), SET_COLUMN())),
+				b.optional(f.newTuple90(b.token(EsqlNonReservedKeyword.WHERE), EXPRESSION())),
+				b.token(EsqlLegacyGrammar.EOS)
+		));
+		
+		
+	}
+	
+	public SetColumnTreeImpl SET_COLUMN(){
+		return b.<SetColumnTreeImpl>nonterminal(Kind.SET_COLUMN).is(f.setColumn(
+				b.token(EsqlLegacyGrammar.IDENTIFIER), b.token(EsqlPunctuator.EQUAL), EXPRESSION()
+				));
+	}
+	
 	public ResignalStatementTreeImpl RESIGNAL(){
 		return b.<ResignalStatementTreeImpl>nonterminal(Kind.RESIGNAL_STATEMENT).is(f.resignalStatement(
 				b.token(EsqlNonReservedKeyword.RESIGNAL), b.token(EsqlLegacyGrammar.EOS)

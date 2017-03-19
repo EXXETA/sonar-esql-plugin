@@ -40,6 +40,7 @@ import com.exxeta.iss.sonar.esql.api.tree.function.TheFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ElseifClauseTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.NameClausesTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ParameterTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.SetColumnTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
 import com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator;
 import com.exxeta.iss.sonar.esql.parser.TreeFactory.Tuple;
@@ -108,8 +109,10 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.ResultSetTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ReturnStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ReturnTypeTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.RoutineBodyTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.SetColumnTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.SetStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ThrowStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.UpdateStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ValuesClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.WhenClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.WhileStatementTreeImpl;
@@ -651,6 +654,18 @@ public class TreeFactory {
 		return newTuple(first, second);
 	}
 
+	public <T, U> Tuple<T, U> newTuple88(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple89(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple90(T first, U second) {
+		return newTuple(first, second);
+	}
+
 	public <T, U, V> Triple<T, U, V> newTriple1(T first, U second, V third) {
 		return newTriple(first, second, third);
 	}
@@ -822,6 +837,26 @@ public class TreeFactory {
 
 		if (rest.isPresent()) {
 			for (Tuple<InternalSyntaxToken, InternalSyntaxToken> pair : rest.get()) {
+				InternalSyntaxToken commaToken = pair.first();
+
+				commas.add(commaToken);
+				elements.add(pair.second());
+			}
+		}
+
+		return new SeparatedList<>(elements.build(), commas.build());
+	}
+
+	private static SeparatedList<SetColumnTree> setColumnList(SetColumnTreeImpl element,
+			Optional<List<Tuple<InternalSyntaxToken, SetColumnTreeImpl>>> rest) {
+
+		ImmutableList.Builder<SetColumnTree> elements = ImmutableList.builder();
+		ImmutableList.Builder<InternalSyntaxToken> commas = ImmutableList.builder();
+
+		elements.add(element);
+
+		if (rest.isPresent()) {
+			for (Tuple<InternalSyntaxToken, SetColumnTreeImpl> pair : rest.get()) {
 				InternalSyntaxToken commaToken = pair.first();
 
 				commas.add(commaToken);
@@ -1642,6 +1677,24 @@ public class TreeFactory {
 	public PassthruStatementTreeImpl completePassthruStatement(InternalSyntaxToken passthruKeyword,
 			PassthruStatementTreeImpl impl, InternalSyntaxToken semi) {
 		return impl.complete(passthruKeyword, semi);
+	}
+
+	public SetColumnTreeImpl setColumn(InternalSyntaxToken columnName, InternalSyntaxToken equal,
+			ExpressionTree expression) {
+		return new SetColumnTreeImpl(columnName, equal, expression);
+	}
+
+	public UpdateStatementTreeImpl updateStatement(InternalSyntaxToken updateKeyword, FieldReferenceTreeImpl tableReference,
+			Optional<Tuple<InternalSyntaxToken, InternalSyntaxToken>> as, InternalSyntaxToken setKeyword,
+			SetColumnTreeImpl setColumn, Optional<List<Tuple<InternalSyntaxToken, SetColumnTreeImpl>>> restSetColumn,
+			Optional<Tuple<InternalSyntaxToken, ExpressionTree>> whereClause, InternalSyntaxToken semi) {
+
+		SeparatedList<SetColumnTree> setColumns = setColumnList(setColumn, restSetColumn);
+		
+		return new UpdateStatementTreeImpl(updateKeyword, tableReference, as.isPresent() ? as.get().first() : null,
+				as.isPresent() ? as.get().second() : null, setKeyword, setColumns,
+				whereClause.isPresent() ? whereClause.get().first() : null,
+				whereClause.isPresent() ? whereClause.get().second() : null, semi);
 	}
 	
 }
