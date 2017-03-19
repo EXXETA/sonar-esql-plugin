@@ -37,6 +37,7 @@ import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.RCURLYBRACE;
 import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.RPARENTHESIS;
 import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.SEMI;
 import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.STAR;
+import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.CONCAT;
 
 import org.sonar.sslr.grammar.GrammarRuleKey;
 import org.sonar.sslr.grammar.LexerlessGrammarBuilder;
@@ -188,6 +189,7 @@ public enum EsqlLegacyGrammar implements GrammarRuleKey {
 		punctuator(b, RBRACKET, "]");
 		punctuator(b, LCURLYBRACE, "{");
 		punctuator(b, RCURLYBRACE, "}");
+		punctuator(b, CONCAT, "||");
 	}
 
 	private static void punctuator(LexerlessGrammarBuilder b, GrammarRuleKey ruleKey, String value) {

@@ -47,6 +47,7 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.DeleteStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.DetachStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ElseClauseTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ElseifClauseTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.EvalStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ExternalRoutineBodyTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ForStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.FromClauseTree;
@@ -439,6 +440,10 @@ public abstract class DoubleDispatchVisitor implements TreeVisitor {
 	}
 
 	public void visitDeclareHandlerStatement(DeclareHandlerStatementTree tree) {
+		scanChildren(tree);
+	}
+
+	public void visitEvalStatement(EvalStatementTree tree) {
 		scanChildren(tree);
 	}
 

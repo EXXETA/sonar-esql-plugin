@@ -72,6 +72,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.DeleteStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.DetachStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ElseClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ElseifClauseTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.EvalStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ExternalRoutineBodyTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ForStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.FromClauseTreeImpl;
@@ -258,7 +259,7 @@ public class EsqlGrammar {
 	}
 
 	private StatementTree OTHER_STATEMENT() {
-		return b.firstOf(DECLARE_HANDLER_STATEMENT(),/*TODO  EVAL, LOG*/RESIGNAL_STATEMENT()); 
+		return b.firstOf(DECLARE_HANDLER_STATEMENT(),EVAL_STATEMENT(), /*TODO  LOG*/RESIGNAL_STATEMENT()); 
 	}
 
 	private StatementTree DATABASE_UPDATE_STATEMENT() {
@@ -504,7 +505,7 @@ public class EsqlGrammar {
 		return b.<ExpressionTree>nonterminal(EsqlLegacyGrammar.additiveExpression)
 				.is(f.newAdditive(MULTIPLICATIVE_EXPRESSION(),
 						b.zeroOrMore(
-								f.newTuple25(b.firstOf(b.token(EsqlPunctuator.PLUS), b.token(EsqlPunctuator.MINUS)),
+								f.newTuple25(b.firstOf(b.token(EsqlPunctuator.PLUS), b.token(EsqlPunctuator.MINUS), b.token(EsqlPunctuator.CONCAT)),
 										MULTIPLICATIVE_EXPRESSION()))));
 	}
 
@@ -941,6 +942,13 @@ public class EsqlGrammar {
 			b.token(EsqlNonReservedKeyword.SQLSTATE), b.firstOf(
 				f.sqlStateLike(b.token(EsqlNonReservedKeyword.LIKE), STRING_LITERAL(), b.optional(f.newTuple92(b.token(EsqlNonReservedKeyword.ESCAPE), STRING_LITERAL()))),
 				f.sqlStateValue(b.optional(b.token(EsqlNonReservedKeyword.VALUE)), STRING_LITERAL()))
+		));
+	}
+	
+	public EvalStatementTreeImpl EVAL_STATEMENT(){
+		return b.<EvalStatementTreeImpl>nonterminal(Kind.EVAL_STATEMENT).is(f.evalStatement(
+				b.token(EsqlNonReservedKeyword.EVAL), b.token(LPARENTHESIS), EXPRESSION(), b.token(RPARENTHESIS),
+				b.token(EsqlLegacyGrammar.EOS)
 		));
 	}
 	
