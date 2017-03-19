@@ -40,6 +40,7 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.CreateFunctionStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateModuleStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.DeclareHandlerStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.DeclareStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.DeleteFromStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.DeleteStatementTree;
@@ -73,6 +74,7 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.ReturnTypeTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.RoutineBodyTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.SetColumnTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.SetStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.SqlStateTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ThrowStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.UpdateStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ValuesClauseTree;
@@ -430,7 +432,14 @@ public abstract class DoubleDispatchVisitor implements TreeVisitor {
 
 	public void visitUpdateStatement(UpdateStatementTree tree) {
 		scanChildren(tree);
-		
+	}
+
+	public void visitSqlState(SqlStateTree tree) {
+		scanChildren(tree);
+	}
+
+	public void visitDeclareHandlerStatement(DeclareHandlerStatementTree tree) {
+		scanChildren(tree);
 	}
 
 }

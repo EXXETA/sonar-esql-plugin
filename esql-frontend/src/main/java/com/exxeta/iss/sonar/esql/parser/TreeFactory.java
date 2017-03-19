@@ -41,6 +41,7 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.ElseifClauseTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.NameClausesTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ParameterTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.SetColumnTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.SqlStateTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
 import com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator;
 import com.exxeta.iss.sonar.esql.parser.TreeFactory.Tuple;
@@ -79,6 +80,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateFunctionStatementTree
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateModuleStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateProcedureStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.DeclareHandlerStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.DeclareStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.DeleteFromStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.DeleteStatementTreeImpl;
@@ -111,6 +113,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.ReturnTypeTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.RoutineBodyTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.SetColumnTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.SetStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.SqlStateTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ThrowStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.UpdateStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ValuesClauseTreeImpl;
@@ -666,6 +669,14 @@ public class TreeFactory {
 		return newTuple(first, second);
 	}
 
+	public <T, U> Tuple<T, U> newTuple91(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple92(T first, U second) {
+		return newTuple(first, second);
+	}
+
 	public <T, U, V> Triple<T, U, V> newTriple1(T first, U second, V third) {
 		return newTriple(first, second, third);
 	}
@@ -780,6 +791,26 @@ public class TreeFactory {
 		}
 
 		return new SeparatedList<>(elements.build(), dots.build(), false);
+	}
+
+	private static SeparatedList<SqlStateTree> sqlStateList(SqlStateTreeImpl sqlStateTree,
+			Optional<List<Tuple<InternalSyntaxToken, SqlStateTreeImpl>>> optional) {
+
+		ImmutableList.Builder<SqlStateTree> elements = ImmutableList.builder();
+		ImmutableList.Builder<InternalSyntaxToken> commas = ImmutableList.builder();
+
+		elements.add(sqlStateTree);
+
+		if (optional.isPresent()) {
+			for (Tuple<InternalSyntaxToken, SqlStateTreeImpl> pair : optional.get()) {
+				InternalSyntaxToken commaToken = pair.first();
+
+				commas.add(commaToken);
+				elements.add(pair.second());
+			}
+		}
+
+		return new SeparatedList<>(elements.build(), commas.build());
 	}
 
 	public SchemaNameTreeImpl schemaName(InternalSyntaxToken first,
@@ -1695,6 +1726,29 @@ public class TreeFactory {
 				as.isPresent() ? as.get().second() : null, setKeyword, setColumns,
 				whereClause.isPresent() ? whereClause.get().first() : null,
 				whereClause.isPresent() ? whereClause.get().second() : null, semi);
+	}
+
+	public SqlStateTreeImpl sqlStateLike(InternalSyntaxToken likeKeyword, LiteralTreeImpl likeText,
+			Optional<Tuple<InternalSyntaxToken, LiteralTreeImpl>> escape) {
+		return new SqlStateTreeImpl(likeKeyword, likeText, escape.isPresent()?escape.get().first():null, escape.isPresent()?escape.get().second():null);
+	}
+
+	public SqlStateTreeImpl sqlStateValue(Optional<InternalSyntaxToken> valueKeyword, LiteralTreeImpl valueText) {
+		return new SqlStateTreeImpl(valueKeyword.isPresent()?valueKeyword.get():null, valueText);
+	}
+
+	public SqlStateTreeImpl finishSqlState(InternalSyntaxToken sqlstateKeyword, SqlStateTreeImpl sqlState) {
+		return sqlState.finish(sqlstateKeyword);
+	}
+
+	public DeclareHandlerStatementTreeImpl declareHandlerStatement(InternalSyntaxToken declareKeyword,
+			InternalSyntaxToken handlerType, InternalSyntaxToken handlerKeyword, InternalSyntaxToken forKeyword,
+			SqlStateTreeImpl sqlState, Optional<List<Tuple<InternalSyntaxToken, SqlStateTreeImpl>>> restSqlState,
+			StatementTree statement) {
+		
+		SeparatedList<SqlStateTree> sqlStates = sqlStateList(sqlState, restSqlState);
+	
+		return new DeclareHandlerStatementTreeImpl(declareKeyword, handlerType, handlerKeyword, forKeyword, sqlStates, statement);
 	}
 	
 }
