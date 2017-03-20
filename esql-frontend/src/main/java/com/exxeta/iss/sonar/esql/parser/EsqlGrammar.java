@@ -82,6 +82,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.IterateStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.LabelTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.LanguageTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.LeaveStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.LogStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.LoopStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.MessageSourceTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.MoveStatementTreeImpl;
@@ -259,7 +260,7 @@ public class EsqlGrammar {
 	}
 
 	private StatementTree OTHER_STATEMENT() {
-		return b.firstOf(DECLARE_HANDLER_STATEMENT(),EVAL_STATEMENT(), /*TODO  LOG*/RESIGNAL_STATEMENT()); 
+		return b.firstOf(DECLARE_HANDLER_STATEMENT(),EVAL_STATEMENT(), LOG_STATEMENT(), RESIGNAL_STATEMENT()); 
 	}
 
 	private StatementTree DATABASE_UPDATE_STATEMENT() {
@@ -948,6 +949,18 @@ public class EsqlGrammar {
 	public EvalStatementTreeImpl EVAL_STATEMENT(){
 		return b.<EvalStatementTreeImpl>nonterminal(Kind.EVAL_STATEMENT).is(f.evalStatement(
 				b.token(EsqlNonReservedKeyword.EVAL), b.token(LPARENTHESIS), EXPRESSION(), b.token(RPARENTHESIS),
+				b.token(EsqlLegacyGrammar.EOS)
+		));
+	}
+	
+	public LogStatementTreeImpl LOG_STATEMENT(){
+		return b.<LogStatementTreeImpl>nonterminal(Kind.LOG_STATEMENT).is(f.logStatement(
+				b.token(EsqlNonReservedKeyword.LOG), b.firstOf(b.token(EsqlNonReservedKeyword.EVENT), f.newTuple93(b.token(EsqlNonReservedKeyword.USER), b.token(EsqlNonReservedKeyword.TRACE))),
+				b.optional(f.newTuple94(b.optional(b.token(EsqlNonReservedKeyword.FULL)), b.token(EsqlNonReservedKeyword.EXCEPTION))),
+				b.optional(f.newTuple95(b.token(EsqlNonReservedKeyword.SEVERITY), EXPRESSION())),
+				b.optional(f.newTuple96(b.token(EsqlNonReservedKeyword.CATALOG), EXPRESSION())),
+				b.optional(f.newTuple97(b.token(EsqlNonReservedKeyword.MESSAGE), EXPRESSION())),
+				b.optional(f.newTuple98(b.token(EsqlNonReservedKeyword.VALUES), ARGUMENT_CLAUSE())),
 				b.token(EsqlLegacyGrammar.EOS)
 		));
 	}

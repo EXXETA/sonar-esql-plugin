@@ -97,6 +97,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.IterateStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.LabelTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.LanguageTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.LeaveStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.LogStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.LoopStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.MessageSourceTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.MoveStatementTreeImpl;
@@ -675,6 +676,30 @@ public class TreeFactory {
 	}
 
 	public <T, U> Tuple<T, U> newTuple92(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple93(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple94(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple95(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple96(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple97(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple98(T first, U second) {
 		return newTuple(first, second);
 	}
 
@@ -1755,6 +1780,33 @@ public class TreeFactory {
 	public EvalStatementTreeImpl evalStatement(InternalSyntaxToken evalKeyword, InternalSyntaxToken openingParenthesis,
 			ExpressionTree expression, InternalSyntaxToken closingParenthesis, InternalSyntaxToken semi) {
 		return new EvalStatementTreeImpl(evalKeyword, openingParenthesis, expression, closingParenthesis, semi);
+	}
+
+	public LogStatementTreeImpl logStatement(InternalSyntaxToken logKeyword, Object logType,
+			Optional<Tuple<Optional<InternalSyntaxToken>, InternalSyntaxToken>> exception,
+			Optional<Tuple<InternalSyntaxToken, ExpressionTree>> severity,
+			Optional<Tuple<InternalSyntaxToken, ExpressionTree>> catalog,
+			Optional<Tuple<InternalSyntaxToken, ExpressionTree>> message,
+			Optional<Tuple<InternalSyntaxToken, ParameterListTreeImpl>> values, InternalSyntaxToken semi) {
+		InternalSyntaxToken eventKeyword, userKeyword, traceKeyword;
+		if (logType instanceof Tuple) {
+			Tuple<InternalSyntaxToken, InternalSyntaxToken> t = (Tuple) logType;
+			userKeyword = t.first();
+			traceKeyword = t.second();
+			eventKeyword = null;
+		} else {
+			eventKeyword = (InternalSyntaxToken) logType;
+			userKeyword = traceKeyword = null;
+		}
+		return new LogStatementTreeImpl(logKeyword, eventKeyword, userKeyword, traceKeyword,
+				exception.isPresent() && exception.get().first().isPresent() ? exception.get().first().get() : null,
+				exception.isPresent() ? exception.get().second() : null,
+				severity.isPresent() ? severity.get().first() : null,
+				severity.isPresent() ? severity.get().second() : null,
+				catalog.isPresent() ? catalog.get().first() : null, catalog.isPresent() ? catalog.get().second() : null,
+				message.isPresent() ? message.get().first() : null, message.isPresent() ? message.get().second() : null,
+				values.isPresent() ? values.get().first() : null, values.isPresent() ? values.get().second() : null,
+				semi);
 	}
 	
 }
