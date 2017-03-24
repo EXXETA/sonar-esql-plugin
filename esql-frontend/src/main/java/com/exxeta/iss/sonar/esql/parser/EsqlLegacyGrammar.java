@@ -160,7 +160,7 @@ public enum EsqlLegacyGrammar implements GrammarRuleKey {
 		b.rule(HEX_LITERAL).is(SPACING, b.token(EsqlTokenType.HEX, b.regexp(EsqlLexer.HEX_LITERAL)), SPACING);
 		b.rule(listLiteral).is(SPACING, "(", LITERAL, b.zeroOrMore(b.sequence(",", LITERAL)), ")");
 		b.rule(intervalLiteral).is(SPACING, "INTERVAL", LITERAL, intervalQualifier);
-		b.rule(dateLiteral).is(SPACING, b.regexp(EsqlLexer.DATE_LIERAL));
+		b.rule(dateLiteral).is(SPACING, b.regexp(EsqlLexer.DATE_LITERAL));
 		b.rule(timeLiteral).is(SPACING, b.regexp(EsqlLexer.TIME_LITERAL));
 		punctuators(b);
 		// datatypes(b);

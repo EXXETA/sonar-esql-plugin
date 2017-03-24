@@ -9,7 +9,7 @@ import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 public class ExtractFunctionTest {
 	@Test
 	public void extractFunction(){
-		
+		//aaa
 		assertThat(Kind.EXTRACT_FUNCTION)
 		.matches("EXTRACT(YEAR FROM CURRENT_DATE)")
 		.matches("EXTRACT (DAYS FROM DATE '2000-02-29')")

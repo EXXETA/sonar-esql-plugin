@@ -270,7 +270,7 @@ public class EsqlGrammar {
 						b.token(EsqlNonReservedKeyword.QUARTER), b.token(EsqlNonReservedKeyword.QUARTERS),
 						b.token(EsqlNonReservedKeyword.WEEKS), b.token(EsqlNonReservedKeyword.WEEKOFYEAR),
 						b.token(EsqlNonReservedKeyword.WEEKOFMONTH), b.token(EsqlNonReservedKeyword.ISLEAPYEAR)),
-				b.token(EsqlReservedKeyword.FROM), EXPRESSION(), b.token(EsqlPunctuator.RPARENTHESIS)));
+				b.token(EsqlReservedKeyword.FROM), b.firstOf(DATE_LITERAL(), EXPRESSION()), b.token(EsqlPunctuator.RPARENTHESIS)));
 	}
 
 	public TheFunctionTreeImpl THE_FUNCTION() {
