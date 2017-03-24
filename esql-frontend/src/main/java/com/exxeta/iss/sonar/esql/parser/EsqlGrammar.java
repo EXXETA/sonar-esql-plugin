@@ -35,7 +35,6 @@ import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.DateTimeFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.FunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.ListFunctionTree;
-import com.exxeta.iss.sonar.esql.api.tree.function.TheFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
 import com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator;
@@ -248,7 +247,7 @@ public class EsqlGrammar {
 				OTHER_STATEMENT()));
 	}
 
-	public FunctionTree FUNCTION() {
+	private FunctionTree FUNCTION() {
 		return b.firstOf(DATETIME_FUNCTION(),LIST_FUNCTION());
 	}
 	
