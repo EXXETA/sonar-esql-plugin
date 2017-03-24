@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.sonar.api.config.MapSettings;
 import org.sonar.api.config.Settings;
 
 public class EsqlLanguageTest {
@@ -12,7 +13,7 @@ public class EsqlLanguageTest {
 
 	  @Before
 	  public void setUp() {
-	    settings = new Settings();
+	    settings = new MapSettings();
 	    esqlLanguage = new EsqlLanguage(settings);
 	  }
 

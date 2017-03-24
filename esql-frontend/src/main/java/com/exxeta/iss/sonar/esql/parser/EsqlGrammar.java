@@ -32,6 +32,7 @@ import com.exxeta.iss.sonar.esql.api.tree.SchemaNameTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.DateTimeFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.FunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.ListFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.TheFunctionTree;
@@ -56,6 +57,8 @@ import com.exxeta.iss.sonar.esql.tree.impl.expression.ArrayLiteralTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.IntervalExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.LiteralTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.ParenthesisedExpressionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.ExtractFunctionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.TheFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.AttachStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.BeginEndStatementTreeImpl;
@@ -246,15 +249,33 @@ public class EsqlGrammar {
 	}
 
 	public FunctionTree FUNCTION() {
-		return LIST_FUNCTION();
+		return b.firstOf(DATETIME_FUNCTION(),LIST_FUNCTION());
 	}
-
+	
+	private DateTimeFunctionTree DATETIME_FUNCTION() {
+		return EXTRACT_FUNCTION();
+	}
+	
 	private ListFunctionTree LIST_FUNCTION() {
 		return THE_FUNCTION();
 	}
 
-	private TheFunctionTree THE_FUNCTION() {
-		return b.<TheFunctionTree>nonterminal(EsqlLegacyGrammar.function)
+	public ExtractFunctionTreeImpl EXTRACT_FUNCTION() {
+		return b.<ExtractFunctionTreeImpl>nonterminal(Kind.EXTRACT_FUNCTION).is(f.extractFunction(
+				b.token(EsqlNonReservedKeyword.EXTRACT), b.token(EsqlPunctuator.LPARENTHESIS),
+				b.firstOf(b.token(EsqlNonReservedKeyword.DAYS), b.token(EsqlNonReservedKeyword.DAYOFYEAR),
+						b.token(EsqlNonReservedKeyword.DAYOFWEEK), b.token(EsqlNonReservedKeyword.YEAR),
+						b.token(EsqlNonReservedKeyword.MONTH), b.token(EsqlNonReservedKeyword.DAY),
+						b.token(EsqlNonReservedKeyword.HOUR), b.token(EsqlNonReservedKeyword.MINUTE),
+						b.token(EsqlNonReservedKeyword.SECOND), b.token(EsqlNonReservedKeyword.MONTHS),
+						b.token(EsqlNonReservedKeyword.QUARTER), b.token(EsqlNonReservedKeyword.QUARTERS),
+						b.token(EsqlNonReservedKeyword.WEEKS), b.token(EsqlNonReservedKeyword.WEEKOFYEAR),
+						b.token(EsqlNonReservedKeyword.WEEKOFMONTH), b.token(EsqlNonReservedKeyword.ISLEAPYEAR)),
+				b.token(EsqlReservedKeyword.FROM), EXPRESSION(), b.token(EsqlPunctuator.RPARENTHESIS)));
+	}
+
+	public TheFunctionTreeImpl THE_FUNCTION() {
+		return b.<TheFunctionTreeImpl>nonterminal(Kind.THE_FUNCTION)
 				.is(f.theFunction(b.token(EsqlNonReservedKeyword.THE), b.token(EsqlPunctuator.LPARENTHESIS),
 						b.token(EsqlLegacyGrammar.expression), b.token(EsqlPunctuator.RPARENTHESIS)));
 	}

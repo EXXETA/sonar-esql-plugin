@@ -211,7 +211,9 @@ public enum EsqlNonReservedKeyword implements TokenType, GrammarRuleKey {
 	WEEKS("WEEKS"),
 	WHERE("WHERE"),
 	WHILE("WHILE"),
-	YEAR("YEAR");
+	YEAR("YEAR"), 
+	QUARTER("QUARTER"), 
+	EXTRACT("EXTRACT");
 	
 private final String value;
 

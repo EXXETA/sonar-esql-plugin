@@ -1,16 +1,8 @@
 package com.exxeta.iss.sonar.esql.checks.verifier;
 
-import com.exxeta.iss.sonar.esql.api.EsqlCheck;
-import com.exxeta.iss.sonar.esql.api.visitors.EsqlVisitorContext;
-import com.exxeta.iss.sonar.esql.api.visitors.Issue;
-import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
-import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
-import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
-import com.exxeta.iss.sonar.esql.checks.verifier.TestIssue.Location;
-import com.exxeta.iss.sonar.esql.se.SeCheck;
-import com.google.common.base.Function;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Ordering;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -19,8 +11,15 @@ import java.util.List;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.squidbridge.checks.CheckMessagesVerifier;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
+import com.exxeta.iss.sonar.esql.api.EsqlCheck;
+import com.exxeta.iss.sonar.esql.api.visitors.EsqlVisitorContext;
+import com.exxeta.iss.sonar.esql.api.visitors.Issue;
+import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
+import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
+import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
+import com.exxeta.iss.sonar.esql.checks.verifier.TestIssue.Location;
+import com.google.common.base.Function;
+import com.google.common.collect.Ordering;
 
 public class EsqlCheckVerifier {
 
@@ -31,7 +30,7 @@ public class EsqlCheckVerifier {
 	 * Example:
 	 * 
 	 * <pre>
-	 * JavaScriptCheckVerifier.issues(new MyCheck(), myFile))
+	 * EsqlCheckVerifier.issues(new MyCheck(), myFile))
 	 *    .next().atLine(2).withMessage("This is message for line 2.")
 	 *    .next().atLine(3).withMessage("This is message for line 3.").withCost(2.)
 	 *    .next().atLine(8)
@@ -99,7 +98,7 @@ public class EsqlCheckVerifier {
 	 * Example of call:
 	 * 
 	 * <pre>
-	 * JavaScriptCheckVerifier.verify(new MyCheck(), myFile));
+	 * EsqlCheckVerifier.verify(new MyCheck(), myFile));
 	 * </pre>
 	 */
 	public static void verify(EsqlCheck check, File file) {
@@ -128,9 +127,7 @@ public class EsqlCheckVerifier {
 
 	private static Iterator<Issue> getActualIssues(EsqlCheck check, EsqlVisitorContext context) {
 		EsqlCheck checkToRun = check;
-		if (check instanceof SeCheck) {
-			checkToRun = new SeChecksDispatcher(ImmutableList.of((SeCheck) check));
-		}
+
 
 		List<Issue> issues = checkToRun.scanFile(context);
 		List<Issue> sortedIssues = Ordering.natural().onResultOf(new IssueToLine()).sortedCopy(issues);

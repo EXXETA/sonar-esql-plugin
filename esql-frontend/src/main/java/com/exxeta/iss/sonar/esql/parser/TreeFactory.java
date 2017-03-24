@@ -1,22 +1,3 @@
-/*
- * SonarQube JavaScript Plugin
- * Copyright (C) 2011-2016 SonarSource SA
- * mailto:contact AT sonarsource DOT com
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- */
 package com.exxeta.iss.sonar.esql.parser;
 
 import java.util.ArrayList;
@@ -69,6 +50,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.expression.IntervalExpressionTreeImpl
 import com.exxeta.iss.sonar.esql.tree.impl.expression.LiteralTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.ParenthesisedExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.PrefixExpressionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.ExtractFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.TheFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.AttachStatementTreeImpl;
@@ -929,7 +911,7 @@ public class TreeFactory {
 		return new BrokerSchemaStatementTreeImpl(brokerToken, schemaToken, schemaNameTree);
 	}
 
-	public TheFunctionTree theFunction(InternalSyntaxToken theKeyword, InternalSyntaxToken openingParenthesis,
+	public TheFunctionTreeImpl theFunction(InternalSyntaxToken theKeyword, InternalSyntaxToken openingParenthesis,
 			InternalSyntaxToken expression, InternalSyntaxToken closingParenthesis) {
 		return new TheFunctionTreeImpl(theKeyword, openingParenthesis, expression, closingParenthesis);
 	}
@@ -1807,6 +1789,12 @@ public class TreeFactory {
 				message.isPresent() ? message.get().first() : null, message.isPresent() ? message.get().second() : null,
 				values.isPresent() ? values.get().first() : null, values.isPresent() ? values.get().second() : null,
 				semi);
+	}
+
+	public ExtractFunctionTreeImpl extractFunction(InternalSyntaxToken extractKeyword, InternalSyntaxToken openingParenthesis,
+			InternalSyntaxToken type, InternalSyntaxToken fromKeyword, ExpressionTree sourceDate,
+			InternalSyntaxToken closingParenthesis) {
+		return new ExtractFunctionTreeImpl(extractKeyword, openingParenthesis, type, fromKeyword, sourceDate, closingParenthesis);
 	}
 	
 }

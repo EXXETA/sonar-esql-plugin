@@ -17,7 +17,7 @@ public interface Type {
 	    UNKNOWN,
 
 	    // PRIMITIVE
-	    STRING,
+	    CHARACTER,
 	    NUMBER,
 	    BOOLEAN,
 

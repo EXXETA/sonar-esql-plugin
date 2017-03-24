@@ -17,7 +17,7 @@ public abstract class DoubleDispatchVisitorCheck extends DoubleDispatchVisitor i
   }
 
   /**
-   * @deprecated see {@link JavaScriptCheck#addLineIssue(Tree, String)}
+   * @deprecated see {@link EsqlCheck#addLineIssue(Tree, String)}
    */
   @Override
   @Deprecated

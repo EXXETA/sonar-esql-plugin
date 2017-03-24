@@ -7,7 +7,6 @@ import com.exxeta.iss.sonar.esql.api.symbols.SymbolModelBuilder;
 import com.exxeta.iss.sonar.esql.api.symbols.Usage;
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
-import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.BlockTree;
 import com.exxeta.iss.sonar.esql.api.tree.symbols.Scope;
@@ -47,14 +46,6 @@ public class SymbolVisitor extends DoubleDispatchVisitor {
       enterScope(tree);
       super.visitBlock(tree);
       leaveScope();
-    }
-  }
-
-
-  @Override
-  public void visitIdentifier(IdentifierTree tree) {
-    if (tree.is(Tree.Kind.FIELD_REFERENCE, Kind.THIS)) {
-      addUsageFor(tree, Usage.Kind.READ);
     }
   }
 

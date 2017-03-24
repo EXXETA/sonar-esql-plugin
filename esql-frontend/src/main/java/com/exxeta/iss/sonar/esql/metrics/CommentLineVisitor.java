@@ -1,22 +1,3 @@
-/*
- * SonarQube JavaScript Plugin
- * Copyright (C) 2011-2017 SonarSource SA
- * mailto:info AT sonarsource DOT com
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 3 of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- */
 package com.exxeta.iss.sonar.esql.metrics;
 
 
@@ -39,7 +20,6 @@ public class CommentLineVisitor extends SubscriptionVisitor {
   // seenFirstToken is required to track header comments (header comments are saved as trivias of first non-trivia token)
   private boolean seenFirstToken;
 
-  private boolean ignoreHeaderComments;
   private EsqlCommentAnalyser commentAnalyser = new EsqlCommentAnalyser();
 
   @Override
@@ -47,9 +27,7 @@ public class CommentLineVisitor extends SubscriptionVisitor {
     return ImmutableList.of(Tree.Kind.TOKEN);
   }
 
-  public CommentLineVisitor(Tree tree, boolean ignoreHeaderComments) {
-    this.ignoreHeaderComments = ignoreHeaderComments;
-
+  public CommentLineVisitor(Tree tree) {
     this.comments.clear();
     this.noSonarLines.clear();
     this.seenFirstToken = false;
@@ -59,7 +37,7 @@ public class CommentLineVisitor extends SubscriptionVisitor {
   @Override
   public void visitNode(Tree tree) {
     for (SyntaxTrivia trivia : ((SyntaxToken) tree).trivias()) {
-      if ((ignoreHeaderComments && seenFirstToken) || !ignoreHeaderComments) {
+      if (seenFirstToken) {
         String[] commentLines = commentAnalyser.getContents(trivia.text())
           .split("(\r)?\n|\r", -1);
         int lineNumber = trivia.line();

@@ -2,11 +2,11 @@ package com.exxeta.iss.sonar.esql.metrics;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.ce.measure.RangeDistributionBuilder;
@@ -21,7 +21,6 @@ import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitor;
 import com.exxeta.iss.sonar.esql.api.visitors.TreeVisitorContext;
 import com.exxeta.iss.sonar.esql.compat.CompatibleInputFile;
-import com.exxeta.iss.sonar.esql.tree.KindSet;
 
 public class MetricsVisitor extends SubscriptionVisitor {
 
@@ -37,7 +36,6 @@ public class MetricsVisitor extends SubscriptionVisitor {
   private final boolean saveExecutableLines;
   private InputFile inputFile;
   private NoSonarFilter noSonarFilter;
-  private final Boolean ignoreHeaderComments;
   private FileLinesContextFactory fileLinesContextFactory;
   private Map<InputFile, Set<Integer>> projectLinesOfCode;
 
@@ -47,12 +45,11 @@ public class MetricsVisitor extends SubscriptionVisitor {
   private RangeDistributionBuilder fileComplexityDistribution;
 
   public MetricsVisitor(
-    SensorContext context, NoSonarFilter noSonarFilter, Boolean ignoreHeaderComments,
+    SensorContext context, NoSonarFilter noSonarFilter,
     FileLinesContextFactory fileLinesContextFactory, boolean saveExecutableLines
   ) {
     this.sensorContext = context;
     this.noSonarFilter = noSonarFilter;
-    this.ignoreHeaderComments = ignoreHeaderComments;
     this.fileLinesContextFactory = fileLinesContextFactory;
     this.projectLinesOfCode = new HashMap<>();
     this.saveExecutableLines = saveExecutableLines;
@@ -136,7 +133,7 @@ public class MetricsVisitor extends SubscriptionVisitor {
 
     saveMetricOnFile(CoreMetrics.NCLOC, lineVisitor.getLinesOfCodeNumber());
 
-    CommentLineVisitor commentVisitor = new CommentLineVisitor(context.getTopTree(), ignoreHeaderComments);
+    CommentLineVisitor commentVisitor = new CommentLineVisitor(context.getTopTree());
     Set<Integer> commentLines = commentVisitor.getCommentLines();
 
     saveMetricOnFile(CoreMetrics.COMMENT_LINES, commentVisitor.getCommentLineNumber());

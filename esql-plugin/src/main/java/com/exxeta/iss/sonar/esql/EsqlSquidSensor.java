@@ -19,15 +19,22 @@ package com.exxeta.iss.sonar.esql;
 
 import com.exxeta.iss.sonar.esql.api.CustomEsqlRulesDefinition;
 import com.exxeta.iss.sonar.esql.api.EsqlCheck;
+import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
+import com.exxeta.iss.sonar.esql.api.visitors.EsqlVisitorContext;
 import com.exxeta.iss.sonar.esql.api.visitors.FileIssue;
 import com.exxeta.iss.sonar.esql.api.visitors.Issue;
+import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
 import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
+import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
 import com.exxeta.iss.sonar.esql.api.visitors.TreeVisitor;
 import com.exxeta.iss.sonar.esql.api.visitors.TreeVisitorContext;
 import com.exxeta.iss.sonar.esql.check.CheckList;
 import com.exxeta.iss.sonar.esql.check.ParsingErrorCheck;
 import com.exxeta.iss.sonar.esql.compat.CompatibleInputFile;
+import com.exxeta.iss.sonar.esql.highlighter.HighlightSymbolTableBuilder;
+import com.exxeta.iss.sonar.esql.highlighter.HighlighterVisitor;
+import com.exxeta.iss.sonar.esql.metrics.MetricsVisitor;
 import com.exxeta.iss.sonar.esql.parser.EsqlParserBuilder;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
@@ -286,7 +293,6 @@ public class EsqlSquidSensor implements Sensor {
 
     List<TreeVisitor> treeVisitors = Lists.newArrayList();
     treeVisitors.addAll(executor.getProductDependentTreeVisitors());
-    treeVisitors.add(new SeChecksDispatcher(checks.seChecks()));
     treeVisitors.addAll(checks.visitorChecks());
 
     for (TreeVisitor check : treeVisitors) {
@@ -301,12 +307,11 @@ public class EsqlSquidSensor implements Sensor {
       .map(CompatibleInputFile::file)
       .collect(Collectors.toList());
 
-    ProgressReport progressReport = new ProgressReport("Report about progress of Javascript analyzer", TimeUnit.SECONDS.toMillis(10));
+    ProgressReport progressReport = new ProgressReport("Report about progress of ESQL analyzer", TimeUnit.SECONDS.toMillis(10));
     progressReport.start(files);
 
     analyseFiles(context, treeVisitors, inputFiles, executor, progressReport);
 
-    executor.executeCoverageSensors();
   }
 
   private ProductDependentExecutor createProductDependentExecutor(SensorContext context) {
@@ -322,7 +327,6 @@ public class EsqlSquidSensor implements Sensor {
 
     void highlightSymbols(InputFile inputFile, TreeVisitorContext treeVisitorContext);
 
-    void executeCoverageSensors();
   }
 
   private static class SonarQubeProductExecutor implements ProductDependentExecutor {
@@ -344,10 +348,9 @@ public class EsqlSquidSensor implements Sensor {
       metricsVisitor = new MetricsVisitor(
         context,
         noSonarFilter,
-        context.settings().getBoolean(EsqlPlugin.IGNORE_HEADER_COMMENTS),
         fileLinesContextFactory,
         isAtLeastSq62);
-      return Arrays.asList(metricsVisitor, new HighlighterVisitor(context), new CpdVisitor(context));
+      return Arrays.asList(metricsVisitor, new HighlighterVisitor(context));
     }
 
     @Override
@@ -356,54 +359,17 @@ public class EsqlSquidSensor implements Sensor {
       HighlightSymbolTableBuilder.build(newSymbolTable, treeVisitorContext);
     }
 
-    @Override
-    public void executeCoverageSensors() {
-      if (metricsVisitor == null) {
-        throw new IllegalStateException("Before starting coverage computation, metrics should have been calculated.");
-      }
-      executeCoverageSensors(context, metricsVisitor.linesOfCode(), isAtLeastSq62);
-    }
 
-    private static void executeCoverageSensors(SensorContext context, Map<InputFile, Set<Integer>> linesOfCode, boolean isAtLeastSq62) {
-      Settings settings = context.settings();
-      if (isAtLeastSq62 && settings.getBoolean(EsqlPlugin.FORCE_ZERO_COVERAGE_KEY)) {
-        LOG.warn("Since SonarQube 6.2 property 'sonar.javascript.forceZeroCoverage' is removed and its value is not used during analysis");
-      }
-
-      if (isAtLeastSq62) {
-        logDeprecationForReportProperty(settings, EsqlPlugin.LCOV_UT_REPORT_PATH);
-        logDeprecationForReportProperty(settings, EsqlPlugin.LCOV_IT_REPORT_PATH);
-
-        String lcovReports = settings.getString(EsqlPlugin.LCOV_REPORT_PATHS);
-
-        if (lcovReports == null || lcovReports.isEmpty()) {
-          executeDeprecatedCoverageSensors(context, linesOfCode, true);
-
-        } else {
-          LOG.info("Test Coverage Sensor is started");
-          (new LCOVCoverageSensor()).execute(context, linesOfCode, true);
-        }
-
-      } else {
-        executeDeprecatedCoverageSensors(context, linesOfCode, false);
-      }
-    }
+   
 
     private static void logDeprecationForReportProperty(Settings settings, String propertyKey) {
       String value = settings.getString(propertyKey);
       if (value != null && !value.isEmpty()) {
-        LOG.warn("Since SonarQube 6.2 property '" + propertyKey + "' is deprecated. Use 'sonar.javascript.lcov.reportPaths' instead.");
+        LOG.warn("Since SonarQube 6.2 property '" + propertyKey + "' is deprecated. Use 'sonar.esql.lcov.reportPaths' instead.");
       }
     }
 
-    private static void executeDeprecatedCoverageSensors(SensorContext context, Map<InputFile, Set<Integer>> linesOfCode, boolean isAtLeastSq62) {
-      LOG.info("Unit Test Coverage Sensor is started");
-      (new UTCoverageSensor()).execute(context, linesOfCode, isAtLeastSq62);
-      LOG.info("Integration Test Coverage Sensor is started");
-      (new ITCoverageSensor()).execute(context, linesOfCode, isAtLeastSq62);
-      LOG.info("Overall Coverage Sensor is started");
-      (new OverallCoverageSensor()).execute(context, linesOfCode, isAtLeastSq62);
-    }
+    
   }
 
   @VisibleForTesting
@@ -418,10 +384,6 @@ public class EsqlSquidSensor implements Sensor {
       // unnecessary in SonarLint context
     }
 
-    @Override
-    public void executeCoverageSensors() {
-      // unnecessary in SonarLint context
-    }
   }
 
   private static boolean isSonarLint(SensorContext context) {

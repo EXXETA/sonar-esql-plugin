@@ -55,7 +55,7 @@ public class EsqlRulesDefinition implements RulesDefinition {
 
   @Nullable
   private static String readRuleDefinitionResource(String fileName) {
-    URL resource = EsqlRulesDefinition.class.getResource("/org/sonar/l10n/javascript/rules/javascript/" + fileName);
+    URL resource = EsqlRulesDefinition.class.getResource("/org/sonar/l10n/esql/rules/esql/" + fileName);
     if (resource == null) {
       return null;
     }

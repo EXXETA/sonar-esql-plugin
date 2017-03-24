@@ -8,6 +8,7 @@ import com.exxeta.iss.sonar.esql.api.tree.expression.InExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.IntervalExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ParenthesisedExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.UnaryExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.ExtractFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.TheFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxTrivia;
@@ -168,7 +169,8 @@ public interface Tree {
 		SQL_STATE(SqlStateTree.class), 
 		DECLARE_HANDLER_STATEMENT(DeclareHandlerStatementTree.class), 
 		EVAL_STATEMENT(EvalStatementTree.class), 
-		LOG_STATEMENT(LogStatementTree.class);
+		LOG_STATEMENT(LogStatementTree.class), 
+		EXTRACT_FUNCTION(ExtractFunctionTree.class);
 
 		final Class<? extends Tree> associatedInterface;
 
