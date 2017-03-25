@@ -813,7 +813,7 @@ public class EsqlGrammar {
 				FIELD_REFERENCE(),
 				b.optional(f.newTuple67(b.token(EsqlNonReservedKeyword.AS), FIELD_REFERENCE())),
 				b.optional(f.newTuple68(b.token(EsqlNonReservedKeyword.DOMAIN), EXPRESSION())),
-				b.optional(b.firstOf(REPEAT_CLAUSE(), VALUES_CLAUSE(), FROM_CLAUSE(), PARSE_CLAUSE())),
+				b.optional(b.firstOf(REPEAT_CLAUSE(), FROM_CLAUSE(), PARSE_CLAUSE(), VALUES_CLAUSE())),
 				b.token(EsqlLegacyGrammar.EOS)
 				));
 	}

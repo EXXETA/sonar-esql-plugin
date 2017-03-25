@@ -20,6 +20,7 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.LabelTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.LeaveStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.LoopStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.RepeatStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.WhileStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
 import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
 import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
@@ -68,26 +69,40 @@ public class TooManyIterateOrLeaveInLoopCheck extends DoubleDispatchVisitorCheck
 		increaseNumberOfJumpInScopes(tree.leaveKeyword(), tree.label());
 		super.visitLeaveStatement(tree);
 	}
-	
+
 	@Override
 	public void visitCreateFunctionStatement(CreateFunctionStatementTree tree) {
-		enterScope();
+		enterScope(null);
 		super.visitCreateFunctionStatement(tree);
 		leaveScope();
 	}
 
 	@Override
 	public void visitCreateProcedureStatement(CreateProcedureStatementTree tree) {
-		enterScope();
+		enterScope(null);
 		super.visitCreateProcedureStatement(tree);
 		leaveScope();
 	}
 
-	// TODO: WhileStatement
+	@Override
+	public void visitWhileStatement(WhileStatementTree tree) {
+		if (tree.label() != null) {
+			enterScope(tree.label().name().text());
+		} else {
+			enterScope(null);
+		}
+		super.visitWhileStatement(tree);
+		leaveScopeAndCheckNumberOfJump(tree.whileKeyword());
+
+	}
 
 	@Override
 	public void visitRepeatStatement(RepeatStatementTree tree) {
-		enterScope();
+		if (tree.label() != null) {
+			enterScope(tree.label().name().text());
+		} else {
+			enterScope(null);
+		}
 		super.visitRepeatStatement(tree);
 		leaveScopeAndCheckNumberOfJump(tree.repeatKeyword());
 
@@ -95,7 +110,11 @@ public class TooManyIterateOrLeaveInLoopCheck extends DoubleDispatchVisitorCheck
 
 	@Override
 	public void visitLoopStatement(LoopStatementTree tree) {
-		enterScope();
+		if (tree.label() != null) {
+			enterScope(tree.label().name().text());
+		} else {
+			enterScope(null);
+		}
 		super.visitLoopStatement(tree);
 		leaveScopeAndCheckNumberOfJump(tree.loopKeyword());
 
@@ -103,14 +122,18 @@ public class TooManyIterateOrLeaveInLoopCheck extends DoubleDispatchVisitorCheck
 
 	@Override
 	public void visitBeginEndStatement(BeginEndStatementTree tree) {
-		enterScope();
+		if (tree.labelName1() != null) {
+			enterScope(tree.labelName1().name().text());
+		} else {
+			enterScope(null);
+		}
 		super.visitBeginEndStatement(tree);
 		leaveScopeAndCheckNumberOfJump(tree.beginKeyword());
 
 	}
 
-	private void enterScope() {
-		jumpTargets.push(new JumpTarget());
+	private void enterScope(String label) {
+		jumpTargets.push(new JumpTarget(label));
 	}
 
 	private void leaveScope() {
