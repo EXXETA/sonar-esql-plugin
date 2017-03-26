@@ -28,10 +28,14 @@ public class NonReservedKeywordCheckTest {
 	public void test() throws Exception {
 		NonReservedKeywordCheck check = new NonReservedKeywordCheck();
 		 EsqlCheckVerifier.issues(check, new File("src/test/resources/lowerCaseKeyword.esql"))
-				.next()
-				.atLine(2)
-				.withMessage(
-						"ESQL keyword \"count\" should not be used as an identifier.")
+			.next()
+			.atLine(4)
+			.withMessage(
+					"ESQL keyword \"BLOB\" should not be used as an identifier.")
+			.next()
+			.atLine(4)
+			.withMessage(
+					"ESQL keyword \"COUNT\" should not be used as an identifier.")
 				.noMore();
 	}
 }

@@ -1,6 +1,7 @@
 create COMPUTE MODULE TestFlow_Compute
-	CREATE PROCEDURE count() 
+	CREATE PROCEDURE abc() 
 	BEGIN
---		CREATE LASTCHILD OF Environment DOMAIN('XMLNSC') PARSE(inBitStream, InputProperties.Encoding, InputProperties.CodedCharSetId);	
+		DECLARE COUNT, BLOB CHAR;
+		--CREATE LASTCHILD OF Environment DOMAIN('XMLNSC') PARSE(inBitStream, InputProperties.Encoding, InputProperties.CodedCharSetId);	
 	END;
 END module;
