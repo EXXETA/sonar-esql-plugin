@@ -1,0 +1,14 @@
+{
+  "title": "\"IF ... ELSEIF\" constructs should be terminated with an \"ELSE\" clause",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "misra",
+    "cert"
+  ],
+  "defaultSeverity": "Critical"
+}

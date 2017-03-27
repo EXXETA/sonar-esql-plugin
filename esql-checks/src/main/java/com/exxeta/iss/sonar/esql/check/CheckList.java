@@ -48,7 +48,6 @@ public final class CheckList {
         ProcedureNameCheck.class,
         TooManyIterateOrLeaveInLoopCheck.class,
         TooManyLinesInFileCheck.class,
-        UpperCaseKeywordCheck.class,
         UseBrokerSchemaCheck.class,
         VariableNameCheck.class,
         PropagateToLabelCheck.class,
