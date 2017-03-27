@@ -13,7 +13,9 @@ public class SetStatementTest {
 		assertThat(Kind.SET_STATEMENT)
 		.matches("SET a=b;")
 		.matches("SET a = b.c;")
-		.matches("SET i = 0;");
+		.matches("SET i = 0;")
+		.matches("SET OutputRoot=InputRoot;");
+		
 	}
 	
 }

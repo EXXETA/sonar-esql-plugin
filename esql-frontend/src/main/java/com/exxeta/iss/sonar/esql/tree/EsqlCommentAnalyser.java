@@ -16,15 +16,10 @@ public class EsqlCommentAnalyser extends CommentAnalyser {
 
   @Override
   public String getContents(String comment) {
-    if (comment.startsWith("//")) {
+    if (comment.startsWith("--")) {
       return comment.substring(2);
     } else if (comment.startsWith("/*")) {
       return comment.substring(2, comment.length() - 2);
-    } else if (comment.startsWith("<!--")) {
-      if (comment.endsWith("-->")) {
-        return comment.substring(4, comment.length() - 3);
-      }
-      return comment.substring(4);
     } else {
       throw new IllegalArgumentException();
     }
