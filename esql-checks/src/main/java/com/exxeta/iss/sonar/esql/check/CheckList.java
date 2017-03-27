@@ -52,7 +52,8 @@ public final class CheckList {
         UseBrokerSchemaCheck.class,
         VariableNameCheck.class,
         PropagateToLabelCheck.class,
-        ConstantNameCheck.class
+        ConstantNameCheck.class,
+        MissingNewlineAtEndOfFileCheck.class
         );
   }
 
