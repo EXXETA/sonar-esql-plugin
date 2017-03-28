@@ -1,9 +1,0 @@
-CREATE COMPUTE MODULE Badly_Named_Module
-
-END MODULE;
-CREATE COMPUTE MODULE too_long_module_name_because_it_has_more_than_30_characters
-
-END MODULE;
-CREATE COMPUTE MODULE ModuleOk
-
-END MODULE;
