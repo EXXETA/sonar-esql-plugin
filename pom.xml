@@ -36,7 +36,6 @@
     <module>esql-checks</module>
     <module>esql-plugin</module>
     <module>esql-checks-test</module>
-    <module>esql-to-be-migrated</module>
   </modules>
 
 	<scm>
