@@ -7,5 +7,6 @@ CREATE COMPUTE MODULE TestFlow_Compute
 	END;
 	CREATE PROCEDURE procedureOk() 
 	BEGIN
+		CALL Badly_Named_Procedure();
 	END;
 END MODULE;

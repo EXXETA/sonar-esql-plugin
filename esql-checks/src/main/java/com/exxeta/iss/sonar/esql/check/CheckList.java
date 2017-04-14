@@ -52,7 +52,8 @@ public final class CheckList {
         VariableNameCheck.class,
         PropagateToLabelCheck.class,
         ConstantNameCheck.class,
-        MissingNewlineAtEndOfFileCheck.class
+        MissingNewlineAtEndOfFileCheck.class,
+        UnusedRoutineCheck.class
         );
   }
 

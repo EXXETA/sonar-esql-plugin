@@ -373,7 +373,7 @@ public abstract class DoubleDispatchVisitor implements TreeVisitor {
 		scanChildren(tree);
 	}
 
-	public void visitCreateFunctionStatement(CreateStatementTree tree) {
+	public void visitCreateStatement(CreateStatementTree tree) {
 		scanChildren(tree);
 	}
 

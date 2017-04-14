@@ -106,7 +106,7 @@ public class CreateStatementTreeImpl extends EsqlTree implements CreateStatement
 
 	@Override
 	public void accept(DoubleDispatchVisitor visitor) {
-		visitor.visitCreateFunctionStatement(this);
+		visitor.visitCreateStatement(this);
 
 	}
 
