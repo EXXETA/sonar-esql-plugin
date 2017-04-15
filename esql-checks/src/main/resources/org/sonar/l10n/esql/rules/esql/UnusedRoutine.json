@@ -1,0 +1,15 @@
+{
+  "title": "Unused routines should be removed",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "misra",
+    "cert",
+    "unused"
+  ],
+  "defaultSeverity": "Major"
+}
