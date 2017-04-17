@@ -36,6 +36,9 @@ public class FunctionNameCheck extends DoubleDispatchVisitorCheck {
 
 	@RuleProperty(key = "format", description = "regular expression", defaultValue = "" + DEFAULT_FORMAT)
 	public String format = DEFAULT_FORMAT;
+	
+	@RuleProperty(key="ignoreMain", description = "igonre Main function", defaultValue="TRUE", type="BOOLEAN")
+	public boolean ignoreMain = true;
 
 	private Pattern pattern;
 
@@ -51,6 +54,7 @@ public class FunctionNameCheck extends DoubleDispatchVisitorCheck {
 	public void visitCreateFunctionStatement(CreateFunctionStatementTree tree) {
 		super.visitCreateFunctionStatement(tree);
 		if (!pattern.matcher(tree.identifier().text()).matches()) {
+			if (!ignoreMain || !tree.identifier().text().equalsIgnoreCase("Main"))
 			addIssue(
 					new PreciseIssue(this, new IssueLocation(tree.identifier(), tree.identifier(), "Rename function \""
 							+ tree.identifier().text() + "\" to match the regular expression " + format + ".")));

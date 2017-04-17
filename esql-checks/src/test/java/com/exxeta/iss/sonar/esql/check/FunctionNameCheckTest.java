@@ -25,7 +25,7 @@ import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
 
 public class FunctionNameCheckTest {
 	@Test
-	public void test() throws Exception {
+	public void testIgnoreMain() throws Exception {
 		FunctionNameCheck check = new FunctionNameCheck();
 
 		EsqlCheckVerifier.issues(check, new File("src/test/resources/functionName.esql")).next().atLine(2)
@@ -33,6 +33,23 @@ public class FunctionNameCheckTest {
 						"Rename function \"Badly_Named_Function\" to match the regular expression ^[a-z][a-zA-Z0-9]{1,30}$.")
 				.next().atLine(5)
 				.withMessage("Rename function \"too_long_function_name_because_it_has_more_than_30_characters\" "
+						+ "to match the regular expression ^[a-z][a-zA-Z0-9]{1,30}$.")
+				.noMore();
+	}
+
+	@Test
+	public void test() throws Exception {
+		FunctionNameCheck check = new FunctionNameCheck();
+		check.ignoreMain=false;
+
+		EsqlCheckVerifier.issues(check, new File("src/test/resources/functionName.esql")).next().atLine(2)
+				.withMessage(
+						"Rename function \"Badly_Named_Function\" to match the regular expression ^[a-z][a-zA-Z0-9]{1,30}$.")
+				.next().atLine(5)
+				.withMessage("Rename function \"too_long_function_name_because_it_has_more_than_30_characters\" "
+						+ "to match the regular expression ^[a-z][a-zA-Z0-9]{1,30}$.")
+				.next().atLine(12)
+				.withMessage("Rename function \"Main\" "
 						+ "to match the regular expression ^[a-z][a-zA-Z0-9]{1,30}$.")
 				.noMore();
 	}
