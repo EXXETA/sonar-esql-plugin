@@ -35,6 +35,8 @@ import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.DateTimeFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.FunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.ListFunctionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.NumericFunctionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.RoundFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
 import com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator;
@@ -57,6 +59,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.expression.IntervalExpressionTreeImpl
 import com.exxeta.iss.sonar.esql.tree.impl.expression.LiteralTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.ParenthesisedExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.ExtractFunctionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.RoundFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.TheFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.AttachStatementTreeImpl;
@@ -248,7 +251,7 @@ public class EsqlGrammar {
 	}
 
 	private FunctionTree FUNCTION() {
-		return b.firstOf(DATETIME_FUNCTION(),LIST_FUNCTION());
+		return b.firstOf(DATETIME_FUNCTION(),LIST_FUNCTION(), NUMERIC_FUNCTION());
 	}
 	
 	private DateTimeFunctionTree DATETIME_FUNCTION() {
@@ -257,6 +260,10 @@ public class EsqlGrammar {
 	
 	private ListFunctionTree LIST_FUNCTION() {
 		return THE_FUNCTION();
+	}
+	
+	private NumericFunctionTree NUMERIC_FUNCTION(){
+		return ROUND_FUNCTION();
 	}
 
 	public ExtractFunctionTreeImpl EXTRACT_FUNCTION() {
@@ -276,7 +283,19 @@ public class EsqlGrammar {
 	public TheFunctionTreeImpl THE_FUNCTION() {
 		return b.<TheFunctionTreeImpl>nonterminal(Kind.THE_FUNCTION)
 				.is(f.theFunction(b.token(EsqlNonReservedKeyword.THE), b.token(EsqlPunctuator.LPARENTHESIS),
-						b.token(EsqlLegacyGrammar.expression), b.token(EsqlPunctuator.RPARENTHESIS)));
+						EXPRESSION(), b.token(EsqlPunctuator.RPARENTHESIS)));
+	}
+	
+	public RoundFunctionTreeImpl ROUND_FUNCTION() {
+		return b.<RoundFunctionTreeImpl>nonterminal(Kind.ROUND_FUNCTION).is(f.roundFunction(
+				b.token(EsqlNonReservedKeyword.ROUND), b.token(EsqlPunctuator.LPARENTHESIS), EXPRESSION(),
+				b.token(EsqlPunctuator.COMMA), EXPRESSION(),
+				b.optional(f.newTuple99(b.token(EsqlNonReservedKeyword.MODE), b.firstOf(
+						b.token(EsqlNonReservedKeyword.ROUND_UP), b.token(EsqlNonReservedKeyword.ROUND_DOWN),
+						b.token(EsqlNonReservedKeyword.ROUND_CEILING), b.token(EsqlNonReservedKeyword.ROUND_FLOOR),
+						b.token(EsqlNonReservedKeyword.ROUND_HALF_UP), b.token(EsqlNonReservedKeyword.ROUND_HALF_EVEN),
+						b.token(EsqlNonReservedKeyword.ROUND_HALF_DOWN)))),
+				b.token(EsqlPunctuator.RPARENTHESIS)));
 	}
 
 	private StatementTree OTHER_STATEMENT() {

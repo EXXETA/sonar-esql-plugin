@@ -18,12 +18,12 @@ public class TheFunctionTreeImpl extends EsqlTree implements TheFunctionTree {
 
 	private final InternalSyntaxToken openingParenthesis;
 
-	private final InternalSyntaxToken expression;
+	private final ExpressionTree expression;
 
 	private final InternalSyntaxToken closingParenthesis;
 
 	public TheFunctionTreeImpl(InternalSyntaxToken theKeyword, InternalSyntaxToken openingParenthesis,
-			InternalSyntaxToken expression, InternalSyntaxToken closingParenthesis) {
+			ExpressionTree expression, InternalSyntaxToken closingParenthesis) {
 		super();
 		this.theKeyword = theKeyword;
 		this.openingParenthesis = openingParenthesis;
@@ -42,7 +42,7 @@ public class TheFunctionTreeImpl extends EsqlTree implements TheFunctionTree {
 	}
 
 	@Override
-	public InternalSyntaxToken expression() {
+	public ExpressionTree expression() {
 		return expression;
 	}
 

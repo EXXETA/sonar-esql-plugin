@@ -17,6 +17,7 @@ import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.FunctionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.RoundFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.TheFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ElseifClauseTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.NameClausesTree;
@@ -51,6 +52,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.expression.LiteralTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.ParenthesisedExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.PrefixExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.ExtractFunctionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.RoundFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.TheFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.AttachStatementTreeImpl;
@@ -685,6 +687,10 @@ public class TreeFactory {
 		return newTuple(first, second);
 	}
 
+	public <T, U> Tuple<T, U> newTuple99(T first, U second) {
+		return newTuple(first, second);
+	}
+
 	public <T, U, V> Triple<T, U, V> newTriple1(T first, U second, V third) {
 		return newTriple(first, second, third);
 	}
@@ -912,7 +918,7 @@ public class TreeFactory {
 	}
 
 	public TheFunctionTreeImpl theFunction(InternalSyntaxToken theKeyword, InternalSyntaxToken openingParenthesis,
-			InternalSyntaxToken expression, InternalSyntaxToken closingParenthesis) {
+			ExpressionTree expression, InternalSyntaxToken closingParenthesis) {
 		return new TheFunctionTreeImpl(theKeyword, openingParenthesis, expression, closingParenthesis);
 	}
 
@@ -1795,6 +1801,18 @@ public class TreeFactory {
 			InternalSyntaxToken type, InternalSyntaxToken fromKeyword, ExpressionTree sourceDate,
 			InternalSyntaxToken closingParenthesis) {
 		return new ExtractFunctionTreeImpl(extractKeyword, openingParenthesis, type, fromKeyword, sourceDate, closingParenthesis);
+	}
+
+	public RoundFunctionTreeImpl roundFunction(InternalSyntaxToken roundKeyword, InternalSyntaxToken openingParenthesis,
+			ExpressionTree sourceNumber, InternalSyntaxToken comma, ExpressionTree precision,
+			Optional<Tuple<InternalSyntaxToken, InternalSyntaxToken>> mode, InternalSyntaxToken closingParenthesis) {
+		
+		if (mode.isPresent()){
+			return new RoundFunctionTreeImpl(roundKeyword, openingParenthesis, sourceNumber, comma, precision, mode.get().first(), mode.get().second(), closingParenthesis);
+		}else{
+			return new RoundFunctionTreeImpl(roundKeyword, openingParenthesis, sourceNumber, comma, precision, closingParenthesis);
+		}
+		
 	}
 	
 }

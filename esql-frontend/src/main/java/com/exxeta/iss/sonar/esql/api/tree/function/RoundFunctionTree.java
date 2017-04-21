@@ -3,13 +3,14 @@ package com.exxeta.iss.sonar.esql.api.tree.function;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 
-public interface TheFunctionTree extends ListFunctionTree {
+public interface RoundFunctionTree extends NumericFunctionTree{
 
-	SyntaxToken theKeyword();
-	
+	SyntaxToken roundKeyword();
 	SyntaxToken openingParenthesis();
-	
-	ExpressionTree expression();
-	
+	ExpressionTree sourceNumber();
+//	SyntaxToken comma();
+//	ExpressionTree precision();
+	/*SyntaxToken modeKeyword();
+	SyntaxToken roundingMode();*/
 	SyntaxToken closingParenthesis();
 }

@@ -213,7 +213,16 @@ public enum EsqlNonReservedKeyword implements TokenType, GrammarRuleKey {
 	WHILE("WHILE"),
 	YEAR("YEAR"), 
 	QUARTER("QUARTER"), 
-	EXTRACT("EXTRACT");
+	EXTRACT("EXTRACT"), 
+	ROUND("ROUND"), 
+	MODE("MODE"), 
+	ROUND_UP("ROUND_UP"),
+	ROUND_DOWN("ROUND_DOWN"),
+	ROUND_CEILING("ROUND_CEILING"),
+	ROUND_FLOOR("ROUND_FLOOR"),
+	ROUND_HALF_UP("ROUND_HALF_UP"),
+	ROUND_HALF_EVEN("ROUND_HALF_EVEN"),
+	ROUND_HALF_DOWN("ROUND_HALF_DOWN");
 	
 private final String value;
 
