@@ -37,6 +37,7 @@ import com.exxeta.iss.sonar.esql.api.tree.function.FunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.ListFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.NumericFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.RoundFunctionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.StringManipulationFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
 import com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator;
@@ -59,6 +60,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.expression.IntervalExpressionTreeImpl
 import com.exxeta.iss.sonar.esql.tree.impl.expression.LiteralTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.ParenthesisedExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.ExtractFunctionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.OverlayFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.RoundFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.TheFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
@@ -251,7 +253,7 @@ public class EsqlGrammar {
 	}
 
 	private FunctionTree FUNCTION() {
-		return b.firstOf(DATETIME_FUNCTION(),LIST_FUNCTION(), NUMERIC_FUNCTION());
+		return b.firstOf(/*DATABASE_FUNCTION(),*/DATETIME_FUNCTION(),LIST_FUNCTION(), NUMERIC_FUNCTION());
 	}
 	
 	private DateTimeFunctionTree DATETIME_FUNCTION() {
@@ -264,6 +266,10 @@ public class EsqlGrammar {
 	
 	private NumericFunctionTree NUMERIC_FUNCTION(){
 		return ROUND_FUNCTION();
+	}
+	
+	private StringManipulationFunctionTree STRING_MANIPULATION_FUNCTION(){
+		return OVERLAY_FUNCTION();
 	}
 
 	public ExtractFunctionTreeImpl EXTRACT_FUNCTION() {
@@ -296,6 +302,14 @@ public class EsqlGrammar {
 						b.token(EsqlNonReservedKeyword.ROUND_HALF_UP), b.token(EsqlNonReservedKeyword.ROUND_HALF_EVEN),
 						b.token(EsqlNonReservedKeyword.ROUND_HALF_DOWN)))),
 				b.token(EsqlPunctuator.RPARENTHESIS)));
+	}
+	
+	public OverlayFunctionTreeImpl OVERLAY_FUNCTION(){
+		return b.<OverlayFunctionTreeImpl>nonterminal(Kind.OVERLAY_FUNCTION).is(
+			f.overlayFunction(b.token(EsqlNonReservedKeyword.OVERLAY), b.token(EsqlPunctuator.LPARENTHESIS),
+					EXPRESSION(), b.token(EsqlNonReservedKeyword.PLACING), EXPRESSION(),  b.token(EsqlReservedKeyword.FROM), EXPRESSION(),
+					b.optional(f.newTuple100(b.token(EsqlNonReservedKeyword.FOR) , EXPRESSION())), b.token(EsqlPunctuator.RPARENTHESIS)
+					));
 	}
 
 	private StatementTree OTHER_STATEMENT() {

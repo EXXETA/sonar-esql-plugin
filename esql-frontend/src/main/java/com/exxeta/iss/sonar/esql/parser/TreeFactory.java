@@ -52,6 +52,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.expression.LiteralTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.ParenthesisedExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.PrefixExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.ExtractFunctionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.OverlayFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.RoundFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.TheFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
@@ -688,6 +689,10 @@ public class TreeFactory {
 	}
 
 	public <T, U> Tuple<T, U> newTuple99(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple100(T first, U second) {
 		return newTuple(first, second);
 	}
 
@@ -1813,6 +1818,23 @@ public class TreeFactory {
 			return new RoundFunctionTreeImpl(roundKeyword, openingParenthesis, sourceNumber, comma, precision, closingParenthesis);
 		}
 		
+	}
+
+	public OverlayFunctionTreeImpl overlayFunction(InternalSyntaxToken overlayKeyword, InternalSyntaxToken openingParenthesis,
+			ExpressionTree sourceString, InternalSyntaxToken placingKeyword, ExpressionTree sourceString2,
+			InternalSyntaxToken fromKeyword, ExpressionTree startPosition,
+			Optional<Tuple<InternalSyntaxToken, ExpressionTree>> forClause, InternalSyntaxToken closingParenthesis) {
+		
+		if (forClause.isPresent()){
+			return new OverlayFunctionTreeImpl( overlayKeyword,  openingParenthesis,
+					 sourceString,  placingKeyword,  sourceString2,
+					 fromKeyword,  startPosition,
+					 forClause.get().first(),forClause.get().second(), closingParenthesis);
+		} else {
+			return new OverlayFunctionTreeImpl(overlayKeyword,  openingParenthesis,
+					 sourceString,  placingKeyword,  sourceString2,
+					 fromKeyword,  startPosition, closingParenthesis);
+		}
 	}
 	
 }
