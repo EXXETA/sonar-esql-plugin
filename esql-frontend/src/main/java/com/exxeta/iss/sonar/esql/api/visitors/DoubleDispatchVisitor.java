@@ -29,6 +29,7 @@ import com.exxeta.iss.sonar.esql.api.tree.expression.ParenthesisedExpressionTree
 import com.exxeta.iss.sonar.esql.api.tree.expression.UnaryExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.ExtractFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.OverlayFunctionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.PositionFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.RoundFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.TheFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
@@ -464,6 +465,10 @@ public abstract class DoubleDispatchVisitor implements TreeVisitor {
 	}
 
 	public void visitOverlayFunction(OverlayFunctionTree tree) {
+		scanChildren(tree);
+	}
+
+	public void visitPositionFunction(PositionFunctionTree tree) {
 		scanChildren(tree);
 	}
 

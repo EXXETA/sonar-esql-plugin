@@ -223,7 +223,8 @@ public enum EsqlNonReservedKeyword implements TokenType, GrammarRuleKey {
 	ROUND_HALF_UP("ROUND_HALF_UP"),
 	ROUND_HALF_EVEN("ROUND_HALF_EVEN"),
 	ROUND_HALF_DOWN("ROUND_HALF_DOWN"), 
-	OVERLAY("OVERLAY");
+	OVERLAY("OVERLAY"), 
+	POSITION("POSITION");
 	
 private final String value;
 

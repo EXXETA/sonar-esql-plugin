@@ -10,6 +10,7 @@ import com.exxeta.iss.sonar.esql.api.tree.expression.ParenthesisedExpressionTree
 import com.exxeta.iss.sonar.esql.api.tree.expression.UnaryExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.ExtractFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.OverlayFunctionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.PositionFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.RoundFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.TheFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
@@ -174,7 +175,8 @@ public interface Tree {
 		LOG_STATEMENT(LogStatementTree.class), 
 		EXTRACT_FUNCTION(ExtractFunctionTree.class), 
 		ROUND_FUNCTION(RoundFunctionTree.class), 
-		OVERLAY_FUNCTION(OverlayFunctionTree.class);
+		OVERLAY_FUNCTION(OverlayFunctionTree.class), 
+		POSITION_FUNCTION(PositionFunctionTree.class);
 
 		final Class<? extends Tree> associatedInterface;
 

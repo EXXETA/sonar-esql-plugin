@@ -61,6 +61,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.expression.LiteralTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.ParenthesisedExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.ExtractFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.OverlayFunctionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.PositionFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.RoundFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.TheFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
@@ -269,7 +270,7 @@ public class EsqlGrammar {
 	}
 	
 	private StringManipulationFunctionTree STRING_MANIPULATION_FUNCTION(){
-		return OVERLAY_FUNCTION();
+		return b.firstOf(OVERLAY_FUNCTION(), POSITION_FUNCTION());
 	}
 
 	public ExtractFunctionTreeImpl EXTRACT_FUNCTION() {
@@ -309,6 +310,14 @@ public class EsqlGrammar {
 			f.overlayFunction(b.token(EsqlNonReservedKeyword.OVERLAY), b.token(EsqlPunctuator.LPARENTHESIS),
 					EXPRESSION(), b.token(EsqlNonReservedKeyword.PLACING), EXPRESSION(),  b.token(EsqlReservedKeyword.FROM), EXPRESSION(),
 					b.optional(f.newTuple100(b.token(EsqlNonReservedKeyword.FOR) , EXPRESSION())), b.token(EsqlPunctuator.RPARENTHESIS)
+					));
+	}
+
+	public PositionFunctionTreeImpl POSITION_FUNCTION(){
+		return b.<PositionFunctionTreeImpl>nonterminal(Kind.POSITION_FUNCTION).is(
+			f.positionFunction(b.token(EsqlNonReservedKeyword.POSITION), b.token(EsqlPunctuator.LPARENTHESIS),
+					CALL_EXPRESSION(), b.token(EsqlNonReservedKeyword.IN), CALL_EXPRESSION(),  b.optional(f.newTuple101(b.token(EsqlReservedKeyword.FROM), EXPRESSION())),
+					b.optional(f.newTuple102(b.token(EsqlNonReservedKeyword.REPEAT) , EXPRESSION())), b.token(EsqlPunctuator.RPARENTHESIS)
 					));
 	}
 
