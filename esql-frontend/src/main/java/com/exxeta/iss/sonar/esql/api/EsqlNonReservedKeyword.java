@@ -228,7 +228,11 @@ public enum EsqlNonReservedKeyword implements TokenType, GrammarRuleKey {
 	SUBSTRING("SUBSTRING"),
 	FROM("FROM"),
 	BEFORE("BEFORE"),
-	AFTER("AFTER");
+	AFTER("AFTER"), 
+	TRIM("TRIM"),
+	BOTH("BOTH"),
+	LEADING("LEADING"),
+	TRAILING("TRAILING");
 	
 private final String value;
 

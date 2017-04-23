@@ -65,6 +65,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.function.PositionFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.RoundFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.SubstringFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.TheFunctionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.TrimFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.AttachStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.BeginEndStatementTreeImpl;
@@ -271,7 +272,7 @@ public class EsqlGrammar {
 	}
 	
 	private StringManipulationFunctionTree STRING_MANIPULATION_FUNCTION(){
-		return b.firstOf(OVERLAY_FUNCTION(), POSITION_FUNCTION(), SUBSTRING_FUNCTION());
+		return b.firstOf(OVERLAY_FUNCTION(), POSITION_FUNCTION(), SUBSTRING_FUNCTION(), TRIM_FUNCTION());
 	}
 
 	public ExtractFunctionTreeImpl EXTRACT_FUNCTION() {
@@ -329,6 +330,16 @@ public class EsqlGrammar {
 					CALL_EXPRESSION(), b.optional(f.newTuple103( b.token(EsqlNonReservedKeyword.FOR), CALL_EXPRESSION())),
 			b.token(EsqlPunctuator.RPARENTHESIS)
 		));
+	}
+
+	public TrimFunctionTreeImpl TRIM_FUNCTION() {
+		return b.<TrimFunctionTreeImpl>nonterminal(Kind.TRIM_FUNCTION)
+				.is(f.trimFunction(b.token(EsqlNonReservedKeyword.TRIM), b.token(EsqlPunctuator.LPARENTHESIS),
+						b.optional(f.newTuple105(b.optional(b.firstOf(b.token(EsqlNonReservedKeyword.BOTH),
+								b.token(EsqlNonReservedKeyword.LEADING), b.token(EsqlNonReservedKeyword.TRAILING))),
+								b.firstOf(b.token(EsqlNonReservedKeyword.FROM),f.newTuple104(CALL_EXPRESSION(), b.token(EsqlNonReservedKeyword.FROM)))
+								)),
+						CALL_EXPRESSION(), b.token(EsqlPunctuator.RPARENTHESIS)));
 	}
 
 	private StatementTree OTHER_STATEMENT() {

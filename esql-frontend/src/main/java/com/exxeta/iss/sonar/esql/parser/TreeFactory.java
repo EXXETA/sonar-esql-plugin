@@ -57,6 +57,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.function.PositionFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.RoundFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.SubstringFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.TheFunctionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.TrimFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.AttachStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.BeginEndStatementTreeImpl;
@@ -707,6 +708,14 @@ public class TreeFactory {
 	}
 
 	public <T, U> Tuple<T, U> newTuple103(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple104(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple105(T first, U second) {
 		return newTuple(first, second);
 	}
 
@@ -1871,6 +1880,35 @@ public class TreeFactory {
 			return new SubstringFunctionTreeImpl(substringKeyword, openingParenthesis, sourceExpression, qualifier, location, forClause.get().first(), forClause.get().second(), closingParenthesis);
 		}else {
 			return new SubstringFunctionTreeImpl(substringKeyword, openingParenthesis, sourceExpression, qualifier, location, closingParenthesis);
+		}
+	}
+
+	public TrimFunctionTreeImpl trimFunction(InternalSyntaxToken trimKeyword, InternalSyntaxToken openingParenthesis,
+			Optional<Tuple<Optional<InternalSyntaxToken>,Object>> qualifier,
+			ExpressionTree sourceString, InternalSyntaxToken closingParenthesis) {
+		
+		if (qualifier.isPresent()){
+			InternalSyntaxToken prefix = null;
+			ExpressionTree trimSingleton = null;
+			InternalSyntaxToken fromKeyword = null;
+			
+			if (qualifier.get().first().isPresent()){
+				prefix = qualifier.get().first().get();
+			}
+			if (qualifier.get().second() instanceof Tuple){
+				Tuple<ExpressionTree, InternalSyntaxToken> innerTuple = (Tuple)qualifier.get().second();
+				trimSingleton = innerTuple.first();
+				fromKeyword = innerTuple.second();
+			}else {
+				fromKeyword = (InternalSyntaxToken)qualifier.get().second();
+			}
+			
+			
+			return new TrimFunctionTreeImpl(trimKeyword, openingParenthesis, 
+					prefix, trimSingleton, fromKeyword,
+					sourceString, closingParenthesis);
+		}else {
+			return new TrimFunctionTreeImpl(trimKeyword, openingParenthesis, sourceString, closingParenthesis);
 		}
 	}
 	

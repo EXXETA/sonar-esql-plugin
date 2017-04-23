@@ -14,6 +14,7 @@ import com.exxeta.iss.sonar.esql.api.tree.function.PositionFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.RoundFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.SubstringFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.TheFunctionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.TrimFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxTrivia;
 import com.exxeta.iss.sonar.esql.api.tree.statement.AttachStatementTree;
@@ -178,7 +179,8 @@ public interface Tree {
 		ROUND_FUNCTION(RoundFunctionTree.class), 
 		OVERLAY_FUNCTION(OverlayFunctionTree.class), 
 		POSITION_FUNCTION(PositionFunctionTree.class), 
-		SUBSTRING_FUNCTION(SubstringFunctionTree.class);
+		SUBSTRING_FUNCTION(SubstringFunctionTree.class), 
+		TRIM_FUNCTION(TrimFunctionTree.class);
 
 		final Class<? extends Tree> associatedInterface;
 
