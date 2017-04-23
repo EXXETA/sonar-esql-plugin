@@ -55,6 +55,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.function.ExtractFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.OverlayFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.PositionFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.RoundFunctionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.SubstringFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.TheFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.AttachStatementTreeImpl;
@@ -702,6 +703,10 @@ public class TreeFactory {
 	}
 
 	public <T, U> Tuple<T, U> newTuple102(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple103(T first, U second) {
 		return newTuple(first, second);
 	}
 
@@ -1857,6 +1862,16 @@ public class TreeFactory {
 					searchExpression,  inKeyword, sourceExpression,
 					fromClause.isPresent()?fromClause.get().first():null,  fromClause.isPresent()?fromClause.get().second():null,
 							repeatClause.isPresent()?repeatClause.get().first():null,  repeatClause.isPresent()?repeatClause.get().second():null, closingParenthesis);
+	}
+
+	public SubstringFunctionTreeImpl substringFunction(InternalSyntaxToken substringKeyword, InternalSyntaxToken openingParenthesis,
+			ExpressionTree sourceExpression, InternalSyntaxToken qualifier, ExpressionTree location,
+			Optional<Tuple<InternalSyntaxToken, ExpressionTree>> forClause, InternalSyntaxToken closingParenthesis) {
+		if (forClause.isPresent()){
+			return new SubstringFunctionTreeImpl(substringKeyword, openingParenthesis, sourceExpression, qualifier, location, forClause.get().first(), forClause.get().second(), closingParenthesis);
+		}else {
+			return new SubstringFunctionTreeImpl(substringKeyword, openingParenthesis, sourceExpression, qualifier, location, closingParenthesis);
+		}
 	}
 	
 }
