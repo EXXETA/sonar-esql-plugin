@@ -180,7 +180,8 @@ public interface Tree {
 		OVERLAY_FUNCTION(OverlayFunctionTree.class), 
 		POSITION_FUNCTION(PositionFunctionTree.class), 
 		SUBSTRING_FUNCTION(SubstringFunctionTree.class), 
-		TRIM_FUNCTION(TrimFunctionTree.class);
+		TRIM_FUNCTION(TrimFunctionTree.class),
+		ASBITSTREAM_FUNCTION(AsbitstreamFunctionTree.class);
 
 		final Class<? extends Tree> associatedInterface;
 

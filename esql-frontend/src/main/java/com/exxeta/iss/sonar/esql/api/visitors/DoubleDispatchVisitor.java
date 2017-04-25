@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import com.exxeta.iss.sonar.esql.api.tree.AsbitstreamFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.BrokerSchemaStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.DataTypeTree;
 import com.exxeta.iss.sonar.esql.api.tree.DecimalDataTypeTree;
@@ -479,6 +480,10 @@ public abstract class DoubleDispatchVisitor implements TreeVisitor {
 	}
 
 	public void visitTrimFunction(TrimFunctionTree tree) {
+		scanChildren(tree);
+	}
+
+	public void visitAsbitstreamFunction(AsbitstreamFunctionTree tree) {
 		scanChildren(tree);
 	}
 

@@ -17,8 +17,6 @@ import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.FunctionTree;
-import com.exxeta.iss.sonar.esql.api.tree.function.RoundFunctionTree;
-import com.exxeta.iss.sonar.esql.api.tree.function.TheFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ElseifClauseTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.NameClausesTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ParameterTree;
@@ -26,7 +24,6 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.SetColumnTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.SqlStateTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
 import com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator;
-import com.exxeta.iss.sonar.esql.parser.TreeFactory.Tuple;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
 import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.BrokerSchemaStatementTreeImpl;
@@ -51,6 +48,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.expression.IntervalExpressionTreeImpl
 import com.exxeta.iss.sonar.esql.tree.impl.expression.LiteralTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.ParenthesisedExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.PrefixExpressionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.AsbitstreamFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.ExtractFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.OverlayFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.PositionFunctionTreeImpl;
@@ -719,6 +717,14 @@ public class TreeFactory {
 		return newTuple(first, second);
 	}
 
+	public <T, U> Tuple<T, U> newTuple106(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple107(T first, U second) {
+		return newTuple(first, second);
+	}
+
 	public <T, U, V> Triple<T, U, V> newTriple1(T first, U second, V third) {
 		return newTriple(first, second, third);
 	}
@@ -934,6 +940,25 @@ public class TreeFactory {
 
 				commas.add(commaToken);
 				elements.add(pair.second());
+			}
+		}
+
+		return new SeparatedList<>(elements.build(), commas.build());
+	}
+
+	private static SeparatedList<ExpressionTree> asbitstreamParameter(
+			Optional<List<Tuple<InternalSyntaxToken, Optional<ExpressionTree>>>> rest) {
+
+		ImmutableList.Builder<ExpressionTree> elements = ImmutableList.builder();
+		ImmutableList.Builder<InternalSyntaxToken> commas = ImmutableList.builder();
+
+
+		if (rest.isPresent()) {
+			for (Tuple<InternalSyntaxToken, Optional<ExpressionTree>> pair : rest.get()) {
+				InternalSyntaxToken commaToken = pair.first();
+
+				commas.add(commaToken);
+				elements.add(pair.second().isPresent()?pair.second().get():null);
 			}
 		}
 
@@ -1911,5 +1936,13 @@ public class TreeFactory {
 			return new TrimFunctionTreeImpl(trimKeyword, openingParenthesis, sourceString, closingParenthesis);
 		}
 	}
+
+	public AsbitstreamFunctionTreeImpl asbitstreamFunction(InternalSyntaxToken asbitstreamKeyword, InternalSyntaxToken openingParenthesis,
+			FieldReferenceTreeImpl fieldReference,
+			Optional<List<Tuple<InternalSyntaxToken, Optional<ExpressionTree>>>> parameters, InternalSyntaxToken closingParenthesis) {
+		return new AsbitstreamFunctionTreeImpl(asbitstreamKeyword, openingParenthesis, fieldReference, parameters.isPresent()?parameters.get():null, closingParenthesis);
+	}
+
+
 	
 }

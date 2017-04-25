@@ -33,6 +33,7 @@ import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.DateTimeFunctionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.FieldFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.FunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.ListFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.NumericFunctionTree;
@@ -59,6 +60,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.expression.ArrayLiteralTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.IntervalExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.LiteralTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.ParenthesisedExpressionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.AsbitstreamFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.ExtractFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.OverlayFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.PositionFunctionTreeImpl;
@@ -256,11 +258,15 @@ public class EsqlGrammar {
 	}
 
 	private FunctionTree FUNCTION() {
-		return b.firstOf(/*DATABASE_FUNCTION(),*/DATETIME_FUNCTION(),LIST_FUNCTION(), NUMERIC_FUNCTION());
+		return b.firstOf(/*DATABASE_FUNCTION(),*/DATETIME_FUNCTION(),NUMERIC_FUNCTION(), STRING_MANIPULATION_FUNCTION(), FIELD_FUNCTION(), LIST_FUNCTION()/*, COMPLEX_FUNCTION(), MISC_FUNCTION()*/);
 	}
 	
 	private DateTimeFunctionTree DATETIME_FUNCTION() {
 		return EXTRACT_FUNCTION();
+	}
+	
+	private FieldFunctionTree FIELD_FUNCTION() {
+		return ASBITSTREAM_FUNCTION();
 	}
 	
 	private ListFunctionTree LIST_FUNCTION() {
@@ -287,6 +293,25 @@ public class EsqlGrammar {
 						b.token(EsqlNonReservedKeyword.WEEKS), b.token(EsqlNonReservedKeyword.WEEKOFYEAR),
 						b.token(EsqlNonReservedKeyword.WEEKOFMONTH), b.token(EsqlNonReservedKeyword.ISLEAPYEAR)),
 				b.token(EsqlReservedKeyword.FROM), b.firstOf(DATE_LITERAL(), EXPRESSION()), b.token(EsqlPunctuator.RPARENTHESIS)));
+	}
+	
+	public AsbitstreamFunctionTreeImpl ASBITSTREAM_FUNCTION() {
+		return b.<AsbitstreamFunctionTreeImpl>nonterminal(Kind.ASBITSTREAM_FUNCTION).is(f.asbitstreamFunction(
+				b.token(EsqlNonReservedKeyword.ASBITSTREAM), b.token(EsqlPunctuator.LPARENTHESIS),
+				FIELD_REFERENCE(),b.optional(b.firstOf( 
+					b.oneOrMore(f.newTuple106(b.token(EsqlPunctuator.COMMA), b.optional(CALL_EXPRESSION()))),
+					b.oneOrMore(f.newTuple107(b.firstOf(
+						b.token(EsqlNonReservedKeyword.OPTIONS), 
+						b.token(EsqlNonReservedKeyword.ENCODING), 
+						b.token(EsqlNonReservedKeyword.CCSID), 
+						b.token(EsqlNonReservedKeyword.SET), 
+						b.token(EsqlNonReservedKeyword.TYPE), 
+						b.token(EsqlNonReservedKeyword.FORMAT)
+					), b.optional(CALL_EXPRESSION())))
+					  )),
+				b.token(EsqlPunctuator.RPARENTHESIS)
+				
+		));
 	}
 
 	public TheFunctionTreeImpl THE_FUNCTION() {
