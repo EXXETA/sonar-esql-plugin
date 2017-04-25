@@ -51,7 +51,7 @@ import com.exxeta.iss.sonar.esql.lexer.EsqlReservedKeyword;
 import com.sonar.sslr.api.GenericTokenType;
 
 public enum EsqlLegacyGrammar implements GrammarRuleKey {
-	EOF, PROGRAM, SOURCEELEMENTS, EOS, LITERAL, BOOLEAN_LITERAL, NULL_LITERAL, NUMERIC_LITERAL, HEX_LITERAL, STRING_LITERAL, SPACING, IDENTIFIER
+	EOF, PROGRAM, SOURCEELEMENTS, EOS, LITERAL, BOOLEAN_LITERAL, NULL_LITERAL, NUMERIC_LITERAL, HEX_LITERAL, STRING_LITERAL, SPACING, IDENTIFIER, IDENTIFIER_WO_QUOTES, IDENTIFIER_WITH_QUOTES
 
 	, listLiteral, dateLiteral, timeLiteral
 
@@ -145,7 +145,9 @@ public enum EsqlLegacyGrammar implements GrammarRuleKey {
 
 		b.rule(EOF).is(b.token(GenericTokenType.EOF, b.endOfInput())).skip();
 
-		b.rule(IDENTIFIER).is(b.nextNot(reservedKeyword), SPACING, b.regexp(EsqlLexer.IDENTIFIER));
+		b.rule(IDENTIFIER).is(b.firstOf(IDENTIFIER_WO_QUOTES, IDENTIFIER_WITH_QUOTES));
+		b.rule(IDENTIFIER_WO_QUOTES).is(b.nextNot(reservedKeyword), SPACING, b.regexp(EsqlLexer.IDENTIFIER));
+		b.rule(IDENTIFIER_WITH_QUOTES).is(SPACING, b.regexp("\""+EsqlLexer.IDENTIFIER+"\""));
 		b.rule(FIELD_NAME).is(IDENTIFIER);
 		// b.rule(keyword).is(
 		// b.firstOf(

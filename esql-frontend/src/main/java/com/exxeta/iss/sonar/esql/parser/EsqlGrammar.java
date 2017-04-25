@@ -62,6 +62,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.expression.LiteralTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.ParenthesisedExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.AsbitstreamFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.ExtractFunctionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.ForFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.OverlayFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.PositionFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.RoundFunctionTreeImpl;
@@ -266,7 +267,7 @@ public class EsqlGrammar {
 	}
 	
 	private FieldFunctionTree FIELD_FUNCTION() {
-		return ASBITSTREAM_FUNCTION();
+		return b.firstOf(ASBITSTREAM_FUNCTION(), FOR_FUNCTION());
 	}
 	
 	private ListFunctionTree LIST_FUNCTION() {
@@ -312,6 +313,14 @@ public class EsqlGrammar {
 				b.token(EsqlPunctuator.RPARENTHESIS)
 				
 		));
+	}
+	
+	public ForFunctionTreeImpl FOR_FUNCTION() {
+		return b.<ForFunctionTreeImpl>nonterminal(Kind.FOR_FUNCTION).is(f.forFunction(
+				b.token(EsqlNonReservedKeyword.FOR), b.optional(b.firstOf(b.token(EsqlNonReservedKeyword.ALL),b.token(EsqlNonReservedKeyword.SOME),b.token(EsqlNonReservedKeyword.ANY))),
+				FIELD_REFERENCE(), b.optional(f.newTuple108(b.token(EsqlNonReservedKeyword.AS), b.token(EsqlLegacyGrammar.IDENTIFIER))),
+				b.token(EsqlPunctuator.LPARENTHESIS), EXPRESSION(), b.token(EsqlPunctuator.RPARENTHESIS) 
+				));
 	}
 
 	public TheFunctionTreeImpl THE_FUNCTION() {

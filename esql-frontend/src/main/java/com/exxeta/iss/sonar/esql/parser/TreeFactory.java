@@ -24,6 +24,7 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.SetColumnTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.SqlStateTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
 import com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator;
+import com.exxeta.iss.sonar.esql.parser.TreeFactory.Tuple;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
 import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.BrokerSchemaStatementTreeImpl;
@@ -50,6 +51,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.expression.ParenthesisedExpressionTre
 import com.exxeta.iss.sonar.esql.tree.impl.expression.PrefixExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.AsbitstreamFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.ExtractFunctionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.ForFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.OverlayFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.PositionFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.RoundFunctionTreeImpl;
@@ -722,6 +724,10 @@ public class TreeFactory {
 	}
 
 	public <T, U> Tuple<T, U> newTuple107(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple108(T first, U second) {
 		return newTuple(first, second);
 	}
 
@@ -1941,6 +1947,16 @@ public class TreeFactory {
 			FieldReferenceTreeImpl fieldReference,
 			Optional<List<Tuple<InternalSyntaxToken, Optional<ExpressionTree>>>> parameters, InternalSyntaxToken closingParenthesis) {
 		return new AsbitstreamFunctionTreeImpl(asbitstreamKeyword, openingParenthesis, fieldReference, parameters.isPresent()?parameters.get():null, closingParenthesis);
+	}
+
+	public ForFunctionTreeImpl forFunction(InternalSyntaxToken forKeyword, Optional<InternalSyntaxToken> qualifier,
+			FieldReferenceTreeImpl fieldReference, Optional<Tuple<InternalSyntaxToken, InternalSyntaxToken>> asClause,
+			InternalSyntaxToken openingParenthesis, ExpressionTree expression, InternalSyntaxToken closingParenthesis) {
+		if (asClause.isPresent()){
+			return new ForFunctionTreeImpl(forKeyword, qualifier.isPresent()?qualifier.get():null, fieldReference, asClause.get().first(), asClause.get().second(), openingParenthesis, expression, closingParenthesis);
+		} else {
+			return new ForFunctionTreeImpl(forKeyword, qualifier.isPresent()?qualifier.get():null, fieldReference, openingParenthesis, expression, closingParenthesis);
+		}
 	}
 
 
