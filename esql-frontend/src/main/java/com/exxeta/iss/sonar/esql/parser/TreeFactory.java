@@ -50,6 +50,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.expression.LiteralTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.ParenthesisedExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.PrefixExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.AsbitstreamFunctionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.CastFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.ExtractFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.ForFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.OverlayFunctionTreeImpl;
@@ -728,6 +729,10 @@ public class TreeFactory {
 	}
 
 	public <T, U> Tuple<T, U> newTuple108(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple109(T first, U second) {
 		return newTuple(first, second);
 	}
 
@@ -1957,6 +1962,39 @@ public class TreeFactory {
 		} else {
 			return new ForFunctionTreeImpl(forKeyword, qualifier.isPresent()?qualifier.get():null, fieldReference, openingParenthesis, expression, closingParenthesis);
 		}
+	}
+
+	public CastFunctionTreeImpl castFunction(InternalSyntaxToken castKeyword, InternalSyntaxToken openingParenthesis,
+			SeparatedList<Tree> sourceExpressions, InternalSyntaxToken asKeyword, DataTypeTreeImpl dataType,
+			Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> parameters, InternalSyntaxToken closingParenthesis) {
+		InternalSyntaxToken ccsidKeyword = null;
+		ExpressionTree ccsidExpression = null;
+		InternalSyntaxToken encodingKeyword = null;
+		ExpressionTree encodingExpression = null;
+		InternalSyntaxToken formatKeyword = null;
+		ExpressionTree formatExpression = null;
+		InternalSyntaxToken defaultKeyword = null;
+		ExpressionTree defaultExpression = null;
+		if (parameters.isPresent()) {
+			for (Tuple<InternalSyntaxToken, ExpressionTree> parameter : parameters.get()) {
+				if (parameter.first().is(EsqlNonReservedKeyword.CCSID)) {
+					ccsidKeyword = parameter.first();
+					ccsidExpression = parameter.second();
+				} else if (parameter.first().is(EsqlNonReservedKeyword.ENCODING)) {
+					encodingKeyword = parameter.first();
+					encodingExpression = parameter.second();
+				} else if (parameter.first().is(EsqlNonReservedKeyword.FORMAT)) {
+					formatKeyword = parameter.first();
+					formatExpression = parameter.second();
+				} else if (parameter.first().is(EsqlNonReservedKeyword.DEFAULT)) {
+					defaultKeyword = parameter.first();
+					defaultExpression = parameter.second();
+				}
+			}
+		}
+		return new CastFunctionTreeImpl(castKeyword, openingParenthesis, sourceExpressions, asKeyword, dataType,
+				ccsidKeyword, ccsidExpression, encodingKeyword, encodingExpression, formatKeyword, formatExpression,
+				defaultKeyword, defaultExpression, closingParenthesis);
 	}
 
 

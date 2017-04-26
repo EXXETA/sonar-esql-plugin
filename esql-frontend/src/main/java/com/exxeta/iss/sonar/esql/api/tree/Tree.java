@@ -8,6 +8,7 @@ import com.exxeta.iss.sonar.esql.api.tree.expression.InExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.IntervalExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ParenthesisedExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.UnaryExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.CastFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.ExtractFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.ForFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.OverlayFunctionTree;
@@ -183,7 +184,8 @@ public interface Tree {
 		SUBSTRING_FUNCTION(SubstringFunctionTree.class), 
 		TRIM_FUNCTION(TrimFunctionTree.class),
 		ASBITSTREAM_FUNCTION(AsbitstreamFunctionTree.class), 
-		FOR_FUNCTION(ForFunctionTree.class);
+		FOR_FUNCTION(ForFunctionTree.class), 
+		CAST_FUNCTION(CastFunctionTree.class);
 
 		final Class<? extends Tree> associatedInterface;
 

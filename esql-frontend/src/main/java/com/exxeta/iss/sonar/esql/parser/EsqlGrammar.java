@@ -32,10 +32,12 @@ import com.exxeta.iss.sonar.esql.api.tree.SchemaNameTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.ComplexFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.DateTimeFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.FieldFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.FunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.ListFunctionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.MiscellaneousFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.NumericFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.RoundFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.StringManipulationFunctionTree;
@@ -61,6 +63,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.expression.IntervalExpressionTreeImpl
 import com.exxeta.iss.sonar.esql.tree.impl.expression.LiteralTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.ParenthesisedExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.AsbitstreamFunctionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.CastFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.ExtractFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.ForFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.OverlayFunctionTreeImpl;
@@ -259,7 +262,7 @@ public class EsqlGrammar {
 	}
 
 	private FunctionTree FUNCTION() {
-		return b.firstOf(/*DATABASE_FUNCTION(),*/DATETIME_FUNCTION(),NUMERIC_FUNCTION(), STRING_MANIPULATION_FUNCTION(), FIELD_FUNCTION(), LIST_FUNCTION()/*, COMPLEX_FUNCTION(), MISC_FUNCTION()*/);
+		return b.firstOf(/*DATABASE_STATE_FUNCTION(),*/DATETIME_FUNCTION(),NUMERIC_FUNCTION(), STRING_MANIPULATION_FUNCTION(), FIELD_FUNCTION(), LIST_FUNCTION(), COMPLEX_FUNCTION()/*, MISC_FUNCTION()*/);
 	}
 	
 	private DateTimeFunctionTree DATETIME_FUNCTION() {
@@ -272,6 +275,16 @@ public class EsqlGrammar {
 	
 	private ListFunctionTree LIST_FUNCTION() {
 		return THE_FUNCTION();
+	}
+	
+	private ComplexFunctionTree COMPLEX_FUNCTION(){
+		//return b.firstOf(castFunction, caseFunction, selectFunction, rowConstructorFunction);
+		return b.firstOf(CAST_FUNCTION());
+	}	
+
+	private MiscellaneousFunctionTree MISCELLANEOUS_FUNCTION(){
+		//return b.firstOf(passthru);
+		return null;
 	}
 	
 	private NumericFunctionTree NUMERIC_FUNCTION(){
@@ -666,7 +679,7 @@ public class EsqlGrammar {
 	}
 
 	public ExpressionTree ARGUMENT() {
-		return b.<ExpressionTree>nonterminal().is(b.firstOf(EXPRESSION()));
+		return b.<ExpressionTree>nonterminal().is(b.firstOf(CALL_EXPRESSION()));
 	}
 
 	public ExpressionTree RELATIONAL_EXPRESSION() {
@@ -1086,5 +1099,16 @@ public class EsqlGrammar {
 		return b.<ResignalStatementTreeImpl>nonterminal(Kind.RESIGNAL_STATEMENT).is(f.resignalStatement(
 				b.token(EsqlNonReservedKeyword.RESIGNAL), b.token(EsqlLegacyGrammar.EOS)
 				));
+	}
+	
+	public CastFunctionTreeImpl CAST_FUNCTION(){
+		return b.<CastFunctionTreeImpl>nonterminal(Kind.CAST_FUNCTION).is(f.castFunction(
+				b.token(EsqlNonReservedKeyword.CAST),b.token(EsqlPunctuator.LPARENTHESIS),
+				ARGUMENT_LIST(), b.token(EsqlNonReservedKeyword.AS), DATA_TYPE(),
+				b.zeroOrMore(f.newTuple109(b.firstOf(b.token(EsqlNonReservedKeyword.CCSID), 
+						b.token(EsqlNonReservedKeyword.ENCODING), b.token(EsqlNonReservedKeyword.FORMAT),
+						b.token(EsqlNonReservedKeyword.DEFAULT)), CALL_EXPRESSION())), b.token(EsqlPunctuator.RPARENTHESIS)
+				
+		));
 	}
 }
