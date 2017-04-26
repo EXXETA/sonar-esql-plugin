@@ -28,6 +28,7 @@ import com.exxeta.iss.sonar.esql.api.tree.expression.InExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.IntervalExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ParenthesisedExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.UnaryExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.CaseFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.CastFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.ExtractFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.ForFunctionTree;
@@ -37,6 +38,7 @@ import com.exxeta.iss.sonar.esql.api.tree.function.RoundFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.SubstringFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.TheFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.TrimFunctionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.WhenClauseExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxTrivia;
 import com.exxeta.iss.sonar.esql.api.tree.statement.AttachStatementTree;
@@ -495,6 +497,14 @@ public abstract class DoubleDispatchVisitor implements TreeVisitor {
 	}
 
 	public void visitCastFunction(CastFunctionTree tree) {
+		scanChildren(tree);
+	}
+
+	public void visitWhenClauseExpression(WhenClauseExpressionTree tree) {
+		scanChildren(tree);
+	}
+
+	public void visitCaseFunction(CaseFunctionTree tree) {
 		scanChildren(tree);
 	}
 

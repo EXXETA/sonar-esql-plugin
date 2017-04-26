@@ -50,6 +50,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.expression.LiteralTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.ParenthesisedExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.PrefixExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.AsbitstreamFunctionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.CaseFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.CastFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.ExtractFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.ForFunctionTreeImpl;
@@ -59,6 +60,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.function.RoundFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.SubstringFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.TheFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.TrimFunctionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.WhenClauseExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.AttachStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.BeginEndStatementTreeImpl;
@@ -733,6 +735,14 @@ public class TreeFactory {
 	}
 
 	public <T, U> Tuple<T, U> newTuple109(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple110(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple111(T first, U second) {
 		return newTuple(first, second);
 	}
 
@@ -1995,6 +2005,29 @@ public class TreeFactory {
 		return new CastFunctionTreeImpl(castKeyword, openingParenthesis, sourceExpressions, asKeyword, dataType,
 				ccsidKeyword, ccsidExpression, encodingKeyword, encodingExpression, formatKeyword, formatExpression,
 				defaultKeyword, defaultExpression, closingParenthesis);
+	}
+
+	public WhenClauseExpressionTreeImpl whenClauseExpression(InternalSyntaxToken whenKeyword, ExpressionTree expression,
+			InternalSyntaxToken thenKeyword, ExpressionTree resultValue) {
+		return new WhenClauseExpressionTreeImpl(whenKeyword, expression, thenKeyword, resultValue);
+	}
+
+	public CaseFunctionTreeImpl caseFunction(InternalSyntaxToken caseKeyword, Object whenClauses,
+			Optional<Tuple<InternalSyntaxToken, ExpressionTree>> elseClause, InternalSyntaxToken endKeyword) {
+		
+		//Optional<ExpressionTree> sourceValue, List<WhenClauseExpressionTreeImpl> whenClauses
+		if (whenClauses instanceof Tuple){
+			Tuple<ExpressionTree, List<WhenClauseExpressionTreeImpl>> whenTuple = (Tuple)whenClauses;
+			return new CaseFunctionTreeImpl(caseKeyword, whenTuple.first(), 
+					whenTuple.second(), elseClause.isPresent() ? elseClause.get().first() : null,
+					elseClause.isPresent() ? elseClause.get().second() : null, endKeyword);
+		} else {
+			return new CaseFunctionTreeImpl(caseKeyword, null, 
+					(List<WhenClauseExpressionTreeImpl>)whenClauses, elseClause.isPresent() ? elseClause.get().first() : null,
+					elseClause.isPresent() ? elseClause.get().second() : null, endKeyword);
+		}
+		
+		
 	}
 
 

@@ -63,6 +63,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.expression.IntervalExpressionTreeImpl
 import com.exxeta.iss.sonar.esql.tree.impl.expression.LiteralTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.ParenthesisedExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.AsbitstreamFunctionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.CaseFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.CastFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.ExtractFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.ForFunctionTreeImpl;
@@ -72,6 +73,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.function.RoundFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.SubstringFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.TheFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.TrimFunctionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.WhenClauseExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.AttachStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.BeginEndStatementTreeImpl;
@@ -279,7 +281,7 @@ public class EsqlGrammar {
 	
 	private ComplexFunctionTree COMPLEX_FUNCTION(){
 		//return b.firstOf(castFunction, caseFunction, selectFunction, rowConstructorFunction);
-		return b.firstOf(CAST_FUNCTION());
+		return b.firstOf(CAST_FUNCTION(), CASE_FUNCTION());
 	}	
 
 	private MiscellaneousFunctionTree MISCELLANEOUS_FUNCTION(){
@@ -1109,6 +1111,20 @@ public class EsqlGrammar {
 						b.token(EsqlNonReservedKeyword.ENCODING), b.token(EsqlNonReservedKeyword.FORMAT),
 						b.token(EsqlNonReservedKeyword.DEFAULT)), CALL_EXPRESSION())), b.token(EsqlPunctuator.RPARENTHESIS)
 				
+		));
+	}
+	
+	public CaseFunctionTreeImpl CASE_FUNCTION(){
+		return b.<CaseFunctionTreeImpl>nonterminal(Kind.CASE_FUNCTION).is(f.caseFunction(
+				b.token(EsqlReservedKeyword.CASE), b.firstOf(b.oneOrMore(WHEN_CLAUSE_EXPRESSION()), f.newTuple111(CALL_EXPRESSION(), b.oneOrMore(WHEN_CLAUSE_EXPRESSION()))), 
+				b.optional(f.newTuple110(b.token(EsqlNonReservedKeyword.ELSE), EXPRESSION())),
+				b.token(EsqlNonReservedKeyword.END)
+		));
+	}
+	
+	public WhenClauseExpressionTreeImpl WHEN_CLAUSE_EXPRESSION(){
+		return b.<WhenClauseExpressionTreeImpl>nonterminal(Kind.WHEN_CLAUSE_EXPRESSION).is(f.whenClauseExpression(
+				b.token(EsqlReservedKeyword.WHEN), EXPRESSION(), b.token(EsqlNonReservedKeyword.THEN), EXPRESSION()
 		));
 	}
 }

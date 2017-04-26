@@ -8,6 +8,7 @@ import com.exxeta.iss.sonar.esql.api.tree.expression.InExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.IntervalExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ParenthesisedExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.UnaryExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.CaseFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.CastFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.ExtractFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.ForFunctionTree;
@@ -17,6 +18,7 @@ import com.exxeta.iss.sonar.esql.api.tree.function.RoundFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.SubstringFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.TheFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.TrimFunctionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.WhenClauseExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxTrivia;
 import com.exxeta.iss.sonar.esql.api.tree.statement.AttachStatementTree;
@@ -185,7 +187,9 @@ public interface Tree {
 		TRIM_FUNCTION(TrimFunctionTree.class),
 		ASBITSTREAM_FUNCTION(AsbitstreamFunctionTree.class), 
 		FOR_FUNCTION(ForFunctionTree.class), 
-		CAST_FUNCTION(CastFunctionTree.class);
+		CAST_FUNCTION(CastFunctionTree.class), 
+		CASE_FUNCTION(CaseFunctionTree.class), 
+		WHEN_CLAUSE_EXPRESSION(WhenClauseExpressionTree.class);
 
 		final Class<? extends Tree> associatedInterface;
 
