@@ -59,18 +59,22 @@ public class FieldReferenceTreeImpl extends EsqlTree implements FieldReferenceTr
 		this.pathElement=pathElement;
 	}
 
+	@Override
 	public ExpressionTree primaryExpression() {
 		return primaryExpression;
 	}
 	
+	@Override
 	public InternalSyntaxToken variable() {
 		return variable;
 	}
 	
+	@Override
 	public PathElementTree pathElement() {
 		return pathElement;
 	}
 
+	@Override
 	public SeparatedList<PathElementTree> pathElements() {
 		return pathElements;
 	}

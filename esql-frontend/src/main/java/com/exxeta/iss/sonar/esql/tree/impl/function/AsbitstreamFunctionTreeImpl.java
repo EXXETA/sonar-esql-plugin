@@ -149,61 +149,73 @@ public class AsbitstreamFunctionTreeImpl extends EsqlTree implements Asbitstream
 
 	
 	
+	@Override
 	public InternalSyntaxToken optionsSeparator() {
 		return optionsSeparator;
 	}
 
 
+	@Override
 	public ExpressionTree optionsExpression() {
 		return optionsExpression;
 	}
 
 
+	@Override
 	public InternalSyntaxToken encodingSeparator() {
 		return encodingSeparator;
 	}
 
 
+	@Override
 	public ExpressionTree encodingExpression() {
 		return encodingExpression;
 	}
 
 
+	@Override
 	public InternalSyntaxToken ccsidSeparator() {
 		return ccsidSeparator;
 	}
 
 
+	@Override
 	public ExpressionTree ccsidExpression() {
 		return ccsidExpression;
 	}
 
 
+	@Override
 	public InternalSyntaxToken setSeparator() {
 		return setSeparator;
 	}
 
 
+	@Override
 	public ExpressionTree setExpression() {
 		return setExpression;
 	}
 
 
+	@Override
 	public InternalSyntaxToken typeSeparator() {
 		return typeSeparator;
 	}
 
 
+	@Override
 	public ExpressionTree typeExpression() {
 		return typeExpression;
 	}
 
 
+	@Override
 	public InternalSyntaxToken formatSeparator() {
 		return formatSeparator;
 	}
 
 
+	@Override
 	public ExpressionTree formatExpression() {
 		return formatExpression;
 	}

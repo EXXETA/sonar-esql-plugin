@@ -98,58 +98,72 @@ public class PathElementTreeImpl extends EsqlTree implements PathElementTree {
 
 	}
 
+	@Override
 	public InternalSyntaxToken typeOpenParen() {
 		return typeOpenParen;
 	}
 
+	@Override
 	public SeparatedList<InternalSyntaxToken> typeExpressionList() {
 		return typeExpressionList;
 	}
 
+	@Override
 	public InternalSyntaxToken typeCloseParen() {
 		return typeCloseParen;
 	}
 
+	@Override
 	public NamespaceTree namespace() {
 		return namespace;
 	}
 
+	@Override
 	public InternalSyntaxToken namespaceCurlyOpen() {
 		return namespaceCurlyOpen;
 	}
 
+	@Override
 	public ExpressionTree namespaceExpression() {
 		return namespaceExpression;
 	}
 
+	@Override
 	public InternalSyntaxToken namespaceCurlyClose() {
 		return namespaceCurlyClose;
 	}
 
+	@Override
 	public InternalSyntaxToken namespaceStar() {
 		return namespaceStar;
 	}
 
+	@Override
 	public InternalSyntaxToken colon() {
 		return colon;
 	}
 
+	@Override
 	public InternalSyntaxToken nameCurlyOpen() {
 		return nameCurlyOpen;
 	}
 
+	@Override
 	public ExpressionTree nameExpression() {
 		return nameExpression;
 	}
 
+	@Override
 	public InternalSyntaxToken nameCurlyClose() {
 		return nameCurlyClose;
 	}
 
+	@Override
 	public InternalSyntaxToken name() {
 		return name;
 	}
 
+	@Override
 	public IndexTreeImpl index() {
 		return index;
 	}

@@ -39,12 +39,15 @@ public class ReturnStatementTreeImpl extends EsqlTree implements ReturnStatement
 		this.expression = expression;
 		this.semi = semi;
 	}
+	@Override
 	public InternalSyntaxToken returnKeyword() {
 		return returnKeyword;
 	}
+	@Override
 	public ExpressionTree expression() {
 		return expression;
 	}
+	@Override
 	public InternalSyntaxToken semi() {
 		return semi;
 	}

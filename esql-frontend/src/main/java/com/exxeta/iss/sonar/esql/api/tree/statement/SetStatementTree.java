@@ -25,7 +25,7 @@ public interface SetStatementTree extends StatementTree {
 	SyntaxToken setKeyword();
 	FieldReferenceTreeImpl fieldReference();
 	SyntaxToken type();
-	SyntaxToken equal();
+	SyntaxToken equalSign();
 	ExpressionTree expression();
 	SyntaxToken semiToken();
 

@@ -1675,7 +1675,7 @@ public class TreeFactory {
 			Optional<Tuple<InternalSyntaxToken, ExpressionTree>> domainClause, Optional<EsqlTree> restClauses,
 			InternalSyntaxToken semi) {
 
-		InternalSyntaxToken qualifierName = null;
+		InternalSyntaxToken qualifierName;
 		InternalSyntaxToken qualifierOfKeyword = null;
 		if (qualifier instanceof Tuple) {
 			Tuple<InternalSyntaxToken, InternalSyntaxToken> qualiTuple = (Tuple) qualifier;

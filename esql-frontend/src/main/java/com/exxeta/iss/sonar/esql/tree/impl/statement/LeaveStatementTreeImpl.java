@@ -38,12 +38,15 @@ public class LeaveStatementTreeImpl extends EsqlTree implements LeaveStatementTr
 		this.label = label;
 		this.semi = semi;
 	}
+	@Override
 	public InternalSyntaxToken leaveKeyword() {
 		return leaveKeyword;
 	}
+	@Override
 	public LabelTreeImpl label() {
 		return label;
 	}
+	@Override
 	public InternalSyntaxToken semi() {
 		return semi;
 	}

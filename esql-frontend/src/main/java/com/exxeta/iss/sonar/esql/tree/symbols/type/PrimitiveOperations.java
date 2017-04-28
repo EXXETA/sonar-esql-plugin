@@ -20,14 +20,13 @@ package com.exxeta.iss.sonar.esql.tree.symbols.type;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.annotation.Nullable;
 
 import com.exxeta.iss.sonar.esql.api.symbols.Type;
 import com.exxeta.iss.sonar.esql.api.symbols.Type.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
-import com.exxeta.iss.sonar.esql.api.tree.expression.UnaryExpressionTree;
-import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
 
 public class PrimitiveOperations {
 
@@ -77,14 +76,6 @@ public class PrimitiveOperations {
     } else {
       return getType(leftOperand.types().getUniqueKnownType(), rightOperand.types().getUniqueKnownType(), operationKind);
     }
-  }
-
-  @Nullable
-  static Type getType(UnaryExpressionTree expressionTree) {
-    Tree.Kind kind = ((EsqlTree) expressionTree).getKind();
-
-
-    return null;
   }
 
   @Nullable

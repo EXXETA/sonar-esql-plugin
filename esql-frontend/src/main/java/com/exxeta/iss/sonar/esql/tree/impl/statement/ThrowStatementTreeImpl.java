@@ -74,50 +74,62 @@ public class ThrowStatementTreeImpl extends EsqlTree implements ThrowStatementTr
 		this.semi=semi;
 	}
 
+	@Override
 	public SyntaxToken throwKeyword() {
 		return throwKeyword;
 	}
 
+	@Override
 	public SyntaxToken userKeyword() {
 		return userKeyword;
 	}
 
+	@Override
 	public SyntaxToken exceptionKeyword() {
 		return exceptionKeyword;
 	}
 
+	@Override
 	public SyntaxToken severityKeyword() {
 		return severityKeyword;
 	}
 
+	@Override
 	public ExpressionTree severity() {
 		return severity;
 	}
 
+	@Override
 	public SyntaxToken catalogKeyword() {
 		return catalogKeyword;
 	}
 
+	@Override
 	public ExpressionTree catalog() {
 		return catalog;
 	}
 
+	@Override
 	public SyntaxToken messageKeyword() {
 		return messageKeyword;
 	}
 
+	@Override
 	public ExpressionTree message() {
 		return message;
 	}
 
+	@Override
 	public SyntaxToken valuesKeyword() {
 		return valuesKeyword;
 	}
 
+	@Override
 	public ParameterListTree values() {
 		return values;
 	}
 	
+	@Override
 	public SyntaxToken semi() {
 		return semi;
 	}

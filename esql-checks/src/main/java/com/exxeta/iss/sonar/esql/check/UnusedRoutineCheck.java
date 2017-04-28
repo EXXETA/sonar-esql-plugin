@@ -17,8 +17,9 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Hashtable;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.sonar.check.Rule;
@@ -38,9 +39,9 @@ public class UnusedRoutineCheck extends DoubleDispatchVisitorCheck {
 	private static final String MESSAGE = "Remove the unused %s \"%s\".";
 
 	private Set<String> calledProcedures = new HashSet<>();
-	private Hashtable<String, CreateProcedureStatementTree> declaredProcedures = new Hashtable<>();
+	private HashMap<String, CreateProcedureStatementTree> declaredProcedures = new HashMap<>();
 	private Set<String> calledFunctions = new HashSet<>();
-	private Hashtable<String, CreateFunctionStatementTree> declaredFunctions = new Hashtable<>();
+	private HashMap<String, CreateFunctionStatementTree> declaredFunctions = new HashMap<>();
 
 	@Override
 	public void visitCreateModuleStatement(CreateModuleStatementTree tree) {
@@ -55,15 +56,16 @@ public class UnusedRoutineCheck extends DoubleDispatchVisitorCheck {
 		for (String procedure : calledProcedures) {
 			declaredProcedures.remove(procedure);
 		}
-		for (String function : declaredFunctions.keySet()) {
-			if (!function.equalsIgnoreCase("Main")) {
-				addIssue(new PreciseIssue(this, new IssueLocation(declaredFunctions.get(function),
-						declaredFunctions.get(function), String.format(MESSAGE, "function", function))));
+		
+		for (Entry<String, CreateFunctionStatementTree> function : declaredFunctions.entrySet()){
+			if (!"Main".equalsIgnoreCase(function.getKey())) {
+				addIssue(new PreciseIssue(this, new IssueLocation(function.getValue(),
+						function.getValue(), String.format(MESSAGE, "function", function.getKey()))));
 			}
 		}
-		for (String procedure : declaredProcedures.keySet()) {
-			addIssue(new PreciseIssue(this, new IssueLocation(declaredProcedures.get(procedure),
-					declaredProcedures.get(procedure), String.format(MESSAGE, "procedure", procedure))));
+		for (Entry<String, CreateProcedureStatementTree> procedure : declaredProcedures.entrySet()) {
+			addIssue(new PreciseIssue(this, new IssueLocation(procedure.getValue(),
+					procedure.getValue(), String.format(MESSAGE, "procedure", procedure.getKey()))));
 		}
 	}
 

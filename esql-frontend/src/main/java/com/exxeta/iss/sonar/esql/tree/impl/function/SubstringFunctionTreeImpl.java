@@ -63,27 +63,35 @@ public class SubstringFunctionTreeImpl extends EsqlTree implements SubstringFunc
 		this.stringLength = null;
 		this.closingParenthesis = closingParenthesis;
 	}
+	@Override
 	public InternalSyntaxToken substringKeyword() {
 		return substringKeyword;
 	}
+	@Override
 	public InternalSyntaxToken openingParenthesis() {
 		return openingParenthesis;
 	}
+	@Override
 	public ExpressionTree sourceExpression() {
 		return sourceExpression;
 	}
+	@Override
 	public InternalSyntaxToken qualifier() {
 		return qualifier;
 	}
+	@Override
 	public ExpressionTree location() {
 		return location;
 	}
+	@Override
 	public InternalSyntaxToken forKeyword() {
 		return forKeyword;
 	}
+	@Override
 	public ExpressionTree stringLength() {
 		return stringLength;
 	}
+	@Override
 	public InternalSyntaxToken closingParenthesis() {
 		return closingParenthesis;
 	}

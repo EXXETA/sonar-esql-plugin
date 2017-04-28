@@ -62,30 +62,37 @@ public class PropagateStatementTreeImpl extends EsqlTree implements PropagateSta
 		this.semi=semi;
 	}
 
+	@Override
 	public InternalSyntaxToken propagateKeyword() {
 		return propagateKeyword;
 	}
 
+	@Override
 	public InternalSyntaxToken toKeyword() {
 		return toKeyword;
 	}
 
+	@Override
 	public InternalSyntaxToken targetType() {
 		return targetType;
 	}
 
+	@Override
 	public ExpressionTree target() {
 		return target;
 	}
 
+	@Override
 	public MessageSourceTreeImpl messageSource() {
 		return messageSource;
 	}
 
+	@Override
 	public ControlsTreeImpl controls() {
 		return controls;
 	}
 	
+	@Override
 	public InternalSyntaxToken semi() {
 		return semi;
 	}

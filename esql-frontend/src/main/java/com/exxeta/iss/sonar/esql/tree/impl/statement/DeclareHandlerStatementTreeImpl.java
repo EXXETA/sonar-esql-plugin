@@ -49,21 +49,27 @@ public class DeclareHandlerStatementTreeImpl extends EsqlTree implements Declare
 		this.sqlStates = sqlStates;
 		this.statement = statement;
 	}
+	@Override
 	public InternalSyntaxToken declareKeyword() {
 		return declareKeyword;
 	}
+	@Override
 	public InternalSyntaxToken handlerType() {
 		return handlerType;
 	}
+	@Override
 	public InternalSyntaxToken handlerKeyword() {
 		return handlerKeyword;
 	}
+	@Override
 	public InternalSyntaxToken forKeyword() {
 		return forKeyword;
 	}
+	@Override
 	public SeparatedList<SqlStateTree> sqlStates() {
 		return sqlStates;
 	}
+	@Override
 	public StatementTree statement() {
 		return statement;
 	}

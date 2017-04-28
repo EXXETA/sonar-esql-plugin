@@ -66,14 +66,17 @@ public class RoundFunctionTreeImpl extends EsqlTree implements RoundFunctionTree
 		this.closingParenthesis = closingParenthesis;
 	}
 
+	@Override
 	public InternalSyntaxToken roundKeyword() {
 		return roundKeyword;
 	}
 
+	@Override
 	public InternalSyntaxToken openingParenthesis() {
 		return openingParenthesis;
 	}
 
+	@Override
 	public ExpressionTree sourceNumber() {
 		return sourceNumber;
 	}
@@ -94,6 +97,7 @@ public class RoundFunctionTreeImpl extends EsqlTree implements RoundFunctionTree
 		return roundingMode;
 	}
 
+	@Override
 	public InternalSyntaxToken closingParenthesis() {
 		return closingParenthesis;
 	}

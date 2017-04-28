@@ -66,38 +66,47 @@ public class UpdateStatementTreeImpl extends EsqlTree implements UpdateStatement
 		this.semi = semi;
 	}
 
+	@Override
 	public InternalSyntaxToken updateKeyword() {
 		return updateKeyword;
 	}
 
+	@Override
 	public FieldReferenceTreeImpl tableReference() {
 		return tableReference;
 	}
 
+	@Override
 	public InternalSyntaxToken asKeyword() {
 		return asKeyword;
 	}
 
+	@Override
 	public InternalSyntaxToken alias() {
 		return alias;
 	}
 
+	@Override
 	public InternalSyntaxToken setKeyword() {
 		return setKeyword;
 	}
 
+	@Override
 	public SeparatedList<SetColumnTree> setColumns() {
 		return setColumns;
 	}
 
+	@Override
 	public InternalSyntaxToken whereKeyword() {
 		return whereKeyword;
 	}
 
+	@Override
 	public ExpressionTree whereExpression() {
 		return whereExpression;
 	}
 
+	@Override
 	public InternalSyntaxToken semi() {
 		return semi;
 	}

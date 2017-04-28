@@ -34,35 +34,41 @@ public class SetStatementTreeImpl extends EsqlTree implements SetStatementTree{
 	private InternalSyntaxToken setKeyword;
 	private FieldReferenceTreeImpl fieldReference;
 	private InternalSyntaxToken type;
-	private InternalSyntaxToken equal;
+	private InternalSyntaxToken equalSign;
 	private ExpressionTree expression;
 	private final InternalSyntaxToken semiToken;
 
 	public SetStatementTreeImpl(InternalSyntaxToken setKeyword, FieldReferenceTreeImpl fieldReference,
-			InternalSyntaxToken type, InternalSyntaxToken equal, ExpressionTree expression, InternalSyntaxToken semiToken) {
+			InternalSyntaxToken type, InternalSyntaxToken equalSign, ExpressionTree expression, InternalSyntaxToken semiToken) {
 		super();
 		this.setKeyword = setKeyword;
 		this.fieldReference = fieldReference;
 		this.type = type;
-		this.equal = equal;
+		this.equalSign = equalSign;
 		this.expression = expression;
 		this.semiToken=semiToken;
 	}
+	@Override
 	public InternalSyntaxToken setKeyword() {
 		return setKeyword;
 	}
+	@Override
 	public FieldReferenceTreeImpl fieldReference() {
 		return fieldReference;
 	}
+	@Override
 	public InternalSyntaxToken type() {
 		return type;
 	}
-	public InternalSyntaxToken equal() {
-		return equal;
+	@Override
+	public InternalSyntaxToken equalSign() {
+		return equalSign;
 	}
+	@Override
 	public ExpressionTree expression() {
 		return expression;
 	}
+	@Override
 	public InternalSyntaxToken semiToken(){
 		return semiToken;
 	}
@@ -77,7 +83,7 @@ public class SetStatementTreeImpl extends EsqlTree implements SetStatementTree{
 	}
 	@Override
 	public Iterator<Tree> childrenIterator() {
-		return Iterators.forArray(setKeyword, fieldReference, type, equal, expression, semiToken);
+		return Iterators.forArray(setKeyword, fieldReference, type, equalSign, expression, semiToken);
 	}
 	
 

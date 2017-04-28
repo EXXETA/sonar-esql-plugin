@@ -31,25 +31,28 @@ import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
 public class SetColumnTreeImpl extends EsqlTree implements SetColumnTree {
 	private SyntaxToken columnName;
 
-	private SyntaxToken equal;
+	private SyntaxToken equalSign;
 
 	private ExpressionTree expression;
 
-	public SetColumnTreeImpl(SyntaxToken columnName, SyntaxToken equal, ExpressionTree expression) {
+	public SetColumnTreeImpl(SyntaxToken columnName, SyntaxToken equalSign, ExpressionTree expression) {
 		super();
 		this.columnName = columnName;
-		this.equal = equal;
+		this.equalSign = equalSign;
 		this.expression = expression;
 	}
 
+	@Override
 	public SyntaxToken columnName() {
 		return columnName;
 	}
 
-	public SyntaxToken equal() {
-		return equal;
+	@Override
+	public SyntaxToken equalSign() {
+		return equalSign;
 	}
 
+	@Override
 	public ExpressionTree expression() {
 		return expression;
 	}
@@ -66,7 +69,7 @@ public class SetColumnTreeImpl extends EsqlTree implements SetColumnTree {
 
 	@Override
 	public Iterator<Tree> childrenIterator() {
-		return Iterators.forArray(columnName, equal, expression);
+		return Iterators.forArray(columnName, equalSign, expression);
 	}
 	
 	

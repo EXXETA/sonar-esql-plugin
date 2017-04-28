@@ -66,38 +66,47 @@ public class InsertStatementTreeImpl extends EsqlTree implements InsertStatement
 		this.semi = semi;
 	}
 
+	@Override
 	public InternalSyntaxToken insertKeyword() {
 		return insertKeyword;
 	}
 
+	@Override
 	public InternalSyntaxToken intoKeyword() {
 		return intoKeyword;
 	}
 
+	@Override
 	public FieldReferenceTreeImpl tableReference() {
 		return tableReference;
 	}
 
+	@Override
 	public ParameterListTreeImpl columns() {
 		return columns;
 	}
 
+	@Override
 	public InternalSyntaxToken valuesKeyword() {
 		return valuesKeyword;
 	}
 
+	@Override
 	public SyntaxToken openParenthesis() {
 		return openParenthesis;
 	}
 
+	@Override
 	public SeparatedList<ExpressionTree> expressions() {
 		return expressions;
 	}
 
+	@Override
 	public InternalSyntaxToken closeParenthesis() {
 		return closeParenthesis;
 	}
 
+	@Override
 	public InternalSyntaxToken semi() {
 		return semi;
 	}

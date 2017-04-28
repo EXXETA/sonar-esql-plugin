@@ -40,14 +40,17 @@ public class RepeatClauseTreeImpl extends EsqlTree implements RepeatClauseTree {
 		this.expression = expression;
 	}
 
+	@Override
 	public InternalSyntaxToken repeatKeyword() {
 		return repeatKeyword;
 	}
 
+	@Override
 	public InternalSyntaxToken valueKeyword() {
 		return valueKeyword;
 	}
 
+	@Override
 	public ExpressionTree expression() {
 		return expression;
 	}

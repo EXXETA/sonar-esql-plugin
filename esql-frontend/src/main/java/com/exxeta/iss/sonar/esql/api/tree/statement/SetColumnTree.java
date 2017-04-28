@@ -24,7 +24,7 @@ import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 public interface SetColumnTree extends Tree{
 	SyntaxToken columnName();
 
-	SyntaxToken equal();
+	SyntaxToken equalSign();
 
 	ExpressionTree expression();
 }

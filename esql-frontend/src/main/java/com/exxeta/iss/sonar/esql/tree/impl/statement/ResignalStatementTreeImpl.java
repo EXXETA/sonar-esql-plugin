@@ -37,10 +37,12 @@ public class ResignalStatementTreeImpl extends EsqlTree implements ResignalState
 		this.semi = semi;
 	}
 
+	@Override
 	public InternalSyntaxToken resignalKeyword() {
 		return resignalKeyword;
 	}
 
+	@Override
 	public InternalSyntaxToken semi() {
 		return semi;
 	}

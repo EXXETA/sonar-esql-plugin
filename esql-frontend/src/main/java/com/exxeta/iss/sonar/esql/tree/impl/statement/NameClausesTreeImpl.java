@@ -30,12 +30,12 @@ import com.google.common.collect.Iterators;
 
 public class NameClausesTreeImpl extends EsqlTree implements NameClausesTree {
 	private InternalSyntaxToken typeKeyword;
-	private ExpressionTree typeExpression;;
+	private ExpressionTree typeExpression;
 	private InternalSyntaxToken namespaceKeyword;
-	private ExpressionTree namespaceExpression;;
+	private ExpressionTree namespaceExpression;
 	private InternalSyntaxToken namespaceStar;
 	private InternalSyntaxToken nameKeyword;
-	private ExpressionTree nameExpression;;
+	private ExpressionTree nameExpression;
 	private InternalSyntaxToken identityKeyword;
 	private PathElementTreeImpl pathElement;
 	private InternalSyntaxToken repeatKeyword;

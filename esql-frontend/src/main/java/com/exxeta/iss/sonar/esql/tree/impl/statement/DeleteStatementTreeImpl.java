@@ -43,18 +43,23 @@ public class DeleteStatementTreeImpl extends EsqlTree implements DeleteStatement
 		this.fieldReference = fieldReference;
 		this.semi=semi;
 	}
+	@Override
 	public InternalSyntaxToken deleteKeyword() {
 		return deleteKeyword;
 	}
+	@Override
 	public InternalSyntaxToken qualifier() {
 		return qualifier;
 	}
+	@Override
 	public InternalSyntaxToken ofKeyword() {
 		return ofKeyword;
 	}
+	@Override
 	public FieldReferenceTree fieldReference() {
 		return fieldReference;
 	}
+	@Override
 	public InternalSyntaxToken semi(){
 		return semi;
 	}
