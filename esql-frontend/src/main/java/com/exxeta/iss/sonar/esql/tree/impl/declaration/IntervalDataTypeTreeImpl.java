@@ -42,9 +42,11 @@ public class IntervalDataTypeTreeImpl extends EsqlTree implements IntervalDataTy
 		this.intervalKeyword = intervalKeyword;
 		this.qualifier=null;
 	}
+	@Override
 	public InternalSyntaxToken intervalKeyword() {
 		return intervalKeyword;
 	}
+	@Override
 	public IntervalQualifierTreeImpl qualifier() {
 		return qualifier;
 	}

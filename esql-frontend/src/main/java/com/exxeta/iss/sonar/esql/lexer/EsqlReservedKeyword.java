@@ -29,7 +29,7 @@ public enum EsqlReservedKeyword implements TokenType, GrammarRuleKey {
 	ALL("ALL"), ASYMMETRIC("ASYMMETRIC"), BOTH("BOTH"), CASE("CASE"), DISTINCT("DISTINCT"), FROM("FROM"), ITEM(
 			"ITEM"), LEADING("LEADING"), NOT("NOT"), SYMMETRIC("SYMMETRIC"), TRAILING("TRAILING"), WHEN("WHEN"),
 
-;
+	;
 
 	private final String value;
 
@@ -37,14 +37,17 @@ public enum EsqlReservedKeyword implements TokenType, GrammarRuleKey {
 		this.value = value;
 	}
 
+	@Override
 	public String getName() {
 		return name();
 	}
 
+	@Override
 	public String getValue() {
 		return value;
 	}
 
+	@Override
 	public boolean hasToBeSkippedFromAst(AstNode node) {
 		return false;
 	}

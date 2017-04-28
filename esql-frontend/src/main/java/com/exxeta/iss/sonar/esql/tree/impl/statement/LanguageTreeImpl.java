@@ -37,10 +37,12 @@ public class LanguageTreeImpl extends EsqlTree implements LanguageTree{
 		this.languageName=languageName;
 	}
 	
+	@Override
 	public InternalSyntaxToken languageKeyword() {
 		return languageKeyword;
 	}
 	
+	@Override
 	public InternalSyntaxToken languageName() {
 		return languageName;
 	}

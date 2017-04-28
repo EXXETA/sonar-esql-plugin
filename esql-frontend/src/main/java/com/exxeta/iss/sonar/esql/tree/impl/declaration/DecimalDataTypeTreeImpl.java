@@ -58,31 +58,37 @@ public class DecimalDataTypeTreeImpl extends EsqlTree implements DecimalDataType
 	}
 
 
+	@Override
 	public InternalSyntaxToken decimalKeyword() {
 		return decimalKeyword;
 	}
 
 
+	@Override
 	public InternalSyntaxToken openParen() {
 		return openParen;
 	}
 
 
+	@Override
 	public InternalSyntaxToken precision() {
 		return precision;
 	}
 
 
+	@Override
 	public InternalSyntaxToken comma() {
 		return comma;
 	}
 
 
+	@Override
 	public InternalSyntaxToken scale() {
 		return scale;
 	}
 
 
+	@Override
 	public InternalSyntaxToken closeParen() {
 		return closeParen;
 	}

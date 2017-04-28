@@ -66,38 +66,47 @@ public class BeginEndStatementTreeImpl extends EsqlTree implements BeginEndState
 		this.semiToken=semiToken;
 	}
 
+	@Override
 	public LabelTreeImpl labelName1() {
 		return labelName1;
 	}
 
+	@Override
 	public InternalSyntaxToken colon() {
 		return colon;
 	}
 
+	@Override
 	public InternalSyntaxToken beginKeyword() {
 		return beginKeyword;
 	}
 
+	@Override
 	public InternalSyntaxToken notKeyword() {
 		return notKeyword;
 	}
 
+	@Override
 	public InternalSyntaxToken atomicKeyword() {
 		return atomicKeyword;
 	}
 
+	@Override
 	public List<StatementTree> statements() {
 		return statements;
 	}
 
+	@Override
 	public InternalSyntaxToken endKeyword() {
 		return endKeyword;
 	}
 
+	@Override
 	public LabelTreeImpl labelName2() {
 		return labelName2;
 	}
 
+	@Override
 	public InternalSyntaxToken semiToken() {
 		return semiToken;
 	}

@@ -43,14 +43,17 @@ public class IntervalQualifierTreeImpl extends EsqlTree implements IntervalQuali
 		this.to = to;
 	}
 
+	@Override
 	public InternalSyntaxToken from() {
 		return from;
 	}
 
+	@Override
 	public InternalSyntaxToken toKeyword() {
 		return toKeyword;
 	}
 
+	@Override
 	public InternalSyntaxToken to() {
 		return to;
 	}

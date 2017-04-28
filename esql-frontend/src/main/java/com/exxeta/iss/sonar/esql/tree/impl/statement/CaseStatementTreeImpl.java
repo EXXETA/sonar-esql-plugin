@@ -55,34 +55,42 @@ public class CaseStatementTreeImpl extends EsqlTree implements CaseStatementTree
 		this.semi = semi;
 	}
 
+	@Override
 	public InternalSyntaxToken caseKeyword() {
 		return caseKeyword;
 	}
 
+	@Override
 	public ExpressionTree mainExpression() {
 		return mainExpression;
 	}
 
+	@Override
 	public List<WhenClauseTreeImpl> whenClauses() {
 		return whenClauses;
 	}
 
+	@Override
 	public InternalSyntaxToken elseKeyword() {
 		return elseKeyword;
 	}
 
+	@Override
 	public List<StatementTree> elseSatements() {
 		return elseSatements;
 	}
 
+	@Override
 	public InternalSyntaxToken endKeyword() {
 		return endKeyword;
 	}
 
+	@Override
 	public InternalSyntaxToken caseKeyword2() {
 		return caseKeyword2;
 	}
 
+	@Override
 	public InternalSyntaxToken semi() {
 		return semi;
 	}

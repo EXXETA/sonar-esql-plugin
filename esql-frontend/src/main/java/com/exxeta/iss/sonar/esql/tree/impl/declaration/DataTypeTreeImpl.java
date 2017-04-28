@@ -35,11 +35,11 @@ public class DataTypeTreeImpl extends EsqlTree implements DataTypeTree{
 	private InternalSyntaxToken toKeyword;
 
 	public DataTypeTreeImpl(IntervalDataTypeTreeImpl firstOf) {
-		this.intervalDataType = (IntervalDataTypeTreeImpl)firstOf;
+		this.intervalDataType = firstOf;
 	}
 
 	public DataTypeTreeImpl(DecimalDataTypeTreeImpl firstOf) {
-		this.decimalDataType = (DecimalDataTypeTreeImpl)firstOf;
+		this.decimalDataType = firstOf;
 	}
 
 	public DataTypeTreeImpl(InternalSyntaxToken referenceKeyword, InternalSyntaxToken toKeyword) {
@@ -51,18 +51,22 @@ public class DataTypeTreeImpl extends EsqlTree implements DataTypeTree{
 		this.dataType = dataType;
 	}
 
+	@Override
 	public IntervalDataTypeTreeImpl intervalDataType() {
 		return intervalDataType;
 	}
 
+	@Override
 	public DecimalDataTypeTreeImpl decimalDataType() {
 		return decimalDataType;
 	}
 
+	@Override
 	public InternalSyntaxToken dataType() {
 		return dataType;
 	}
 
+	@Override
 	public InternalSyntaxToken toKeyword() {
 		return toKeyword;
 	}

@@ -30,22 +30,27 @@ public enum EsqlMetric implements MetricDef{
 	  COMPLEXITY,
 	  ROUTINES;
 
+	@Override
 	public boolean aggregateIfThereIsAlreadyAValue() {
 		return true;
 	}
 
+	@Override
 	public CalculatedMetricFormula getCalculatedMetricFormula() {
 		return null;
 	}
 
+	@Override
 	public String getName() {
 		return name();
 	}
 
+	@Override
 	public boolean isCalculatedMetric() {
 		return false;
 	}
 
+	@Override
 	public boolean isThereAggregationFormula() {
 		return true;
 	}

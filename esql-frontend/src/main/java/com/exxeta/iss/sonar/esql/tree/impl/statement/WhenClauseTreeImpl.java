@@ -44,15 +44,19 @@ public class WhenClauseTreeImpl extends EsqlTree implements WhenClauseTree{
 		this.thenKeyword = thenKeyword;
 		this.statements = statements;
 	}
+	@Override
 	public InternalSyntaxToken whenKeyword() {
 		return whenKeyword;
 	}
+	@Override
 	public ExpressionTree expression() {
 		return expression;
 	}
+	@Override
 	public InternalSyntaxToken thenKeyword() {
 		return thenKeyword;
 	}
+	@Override
 	public List<StatementTree> statements() {
 		return statements;
 	}
