@@ -70,6 +70,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.function.ExtractFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.ForFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.FromClauseExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.OverlayFunctionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.PassthruFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.PositionFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.RoundFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.RowConstructorFunctionTreeImpl;
@@ -290,8 +291,7 @@ public class EsqlGrammar {
 	}	
 
 	private MiscellaneousFunctionTree MISCELLANEOUS_FUNCTION(){
-		//return b.firstOf(passthru);
-		return null;
+		return b.firstOf(PASSTHRU_FUNCTION());
 	}
 	
 	private NumericFunctionTree NUMERIC_FUNCTION(){
@@ -1180,6 +1180,18 @@ public class EsqlGrammar {
 				b.firstOf(f.aliasedExpression(EXPRESSION(), b.token(EsqlNonReservedKeyword.AS), b.token(EsqlLegacyGrammar.IDENTIFIER)) , 
 						f.aliasedExpression(EXPRESSION())
 		)));
+	}
+	
+	public PassthruFunctionTreeImpl PASSTHRU_FUNCTION(){
+		return b.<PassthruFunctionTreeImpl>nonterminal(Kind.PASSTHRU_FUNCTION).is(f.finishPassthruFunction(
+				b.token(EsqlNonReservedKeyword.PASSTHRU), b.token(EsqlPunctuator.LPARENTHESIS),
+				b.firstOf(
+						f.passthruNewSyntax(CALL_EXPRESSION(), b.optional(f.newTuple115(b.token(EsqlNonReservedKeyword.TO), FIELD_REFERENCE())),
+								b.optional(f.newTuple116(b.token(EsqlNonReservedKeyword.VALUES), ARGUMENT_CLAUSE()))), 
+						f.passthruOldSyntax(ARGUMENT_LIST())
+				), 
+				b.token(EsqlPunctuator.RPARENTHESIS)
+		));
 	}
 
 }

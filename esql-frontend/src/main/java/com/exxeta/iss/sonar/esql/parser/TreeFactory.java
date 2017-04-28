@@ -60,6 +60,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.function.ExtractFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.ForFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.FromClauseExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.OverlayFunctionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.PassthruFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.PositionFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.RoundFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.RowConstructorFunctionTreeImpl;
@@ -764,6 +765,14 @@ public class TreeFactory {
 	}
 
 	public <T, U> Tuple<T, U> newTuple114(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple115(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple116(T first, U second) {
 		return newTuple(first, second);
 	}
 
@@ -2156,6 +2165,24 @@ public class TreeFactory {
 			InternalSyntaxToken closingParenthesis) {
 
 		return new RowConstructorFunctionTreeImpl(rowKeyword, openingParenthesis, aliasedExpressionList(aliasedExpression, rest), closingParenthesis);
+	}
+
+	public PassthruFunctionTreeImpl passthruOldSyntax(SeparatedList<Tree> argumentList) {
+		return new PassthruFunctionTreeImpl(argumentList);
+	}
+
+	public PassthruFunctionTreeImpl passthruNewSyntax(ExpressionTree expression,
+			Optional<Tuple<InternalSyntaxToken, FieldReferenceTreeImpl>> toClause,
+			Optional<Tuple<InternalSyntaxToken, ParameterListTreeImpl>> valuesClause) {
+		
+		return new PassthruFunctionTreeImpl(expression, toClause.isPresent()?toClause.get().first():null,toClause.isPresent()?toClause.get().second():null,valuesClause.isPresent()?valuesClause.get().first():null,valuesClause.isPresent()?valuesClause.get().second():null);
+	}
+
+	public PassthruFunctionTreeImpl finishPassthruFunction(InternalSyntaxToken passthruKeyword, InternalSyntaxToken openingParenthesis,
+			PassthruFunctionTreeImpl tree, InternalSyntaxToken closingParenthesis) {
+		
+		tree.finish(passthruKeyword, openingParenthesis, closingParenthesis);
+		return tree;
 	}
 
 

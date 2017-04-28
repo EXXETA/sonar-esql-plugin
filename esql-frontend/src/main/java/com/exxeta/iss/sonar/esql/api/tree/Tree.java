@@ -15,6 +15,7 @@ import com.exxeta.iss.sonar.esql.api.tree.function.CastFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.ExtractFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.ForFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.OverlayFunctionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.PassthruFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.PositionFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.RoundFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.RowConstructorFunctionTree;
@@ -201,7 +202,8 @@ public interface Tree {
 		ALIASED_FIELD_REFERENCE(AliasedFieldReferenceTree.class), 
 		FROM_CLAUSE_EXPRESSION(FromClauseTree.class), 
 		ROW_CONSTRUCTOR_FUNCTION(RowConstructorFunctionTree.class), 
-		ALIASED_EXPRESSION(AliasedExpressionTree.class);
+		ALIASED_EXPRESSION(AliasedExpressionTree.class), 
+		PASSTHRU_FUNCTION(PassthruFunctionTree.class);
 
 		final Class<? extends Tree> associatedInterface;
 
