@@ -32,6 +32,7 @@ import com.exxeta.iss.sonar.esql.api.tree.SchemaNameTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.AliasedFieldReferenceTreeImpl;
 import com.exxeta.iss.sonar.esql.api.tree.function.ComplexFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.DateTimeFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.FieldFunctionTree;
@@ -39,7 +40,6 @@ import com.exxeta.iss.sonar.esql.api.tree.function.FunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.ListFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.MiscellaneousFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.NumericFunctionTree;
-import com.exxeta.iss.sonar.esql.api.tree.function.RoundFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.StringManipulationFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
@@ -67,13 +67,17 @@ import com.exxeta.iss.sonar.esql.tree.impl.function.CaseFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.CastFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.ExtractFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.ForFunctionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.FromClauseExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.OverlayFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.PositionFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.RoundFunctionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.SelectClauseTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.SelectFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.SubstringFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.TheFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.TrimFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.WhenClauseExpressionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.WhereClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.AttachStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.BeginEndStatementTreeImpl;
@@ -281,7 +285,7 @@ public class EsqlGrammar {
 	
 	private ComplexFunctionTree COMPLEX_FUNCTION(){
 		//return b.firstOf(castFunction, caseFunction, selectFunction, rowConstructorFunction);
-		return b.firstOf(CAST_FUNCTION(), CASE_FUNCTION());
+		return b.firstOf(CAST_FUNCTION(), CASE_FUNCTION(), SELECT_FUNCTION());
 	}	
 
 	private MiscellaneousFunctionTree MISCELLANEOUS_FUNCTION(){
@@ -333,7 +337,7 @@ public class EsqlGrammar {
 	public ForFunctionTreeImpl FOR_FUNCTION() {
 		return b.<ForFunctionTreeImpl>nonterminal(Kind.FOR_FUNCTION).is(f.forFunction(
 				b.token(EsqlNonReservedKeyword.FOR), b.optional(b.firstOf(b.token(EsqlNonReservedKeyword.ALL),b.token(EsqlNonReservedKeyword.SOME),b.token(EsqlNonReservedKeyword.ANY))),
-				FIELD_REFERENCE(), b.optional(f.newTuple108(b.token(EsqlNonReservedKeyword.AS), b.token(EsqlLegacyGrammar.IDENTIFIER))),
+				FIELD_REFERENCE(), b.optional(f.newTuple108(b.token(EsqlNonReservedKeyword.AS), b.token(EsqlLegacyGrammar.IDENTIFIER))), //TODO use AliasedFieldReference
 				b.token(EsqlPunctuator.LPARENTHESIS), EXPRESSION(), b.token(EsqlPunctuator.RPARENTHESIS) 
 				));
 	}
@@ -1017,7 +1021,7 @@ public class EsqlGrammar {
 	public DeleteFromStatementTreeImpl DELETE_FROM_STATEMENT(){
 		return b.<DeleteFromStatementTreeImpl>nonterminal(Kind.DELETE_FROM_STATEMENT).is (f.deleteFromStatement(
 				b.token(EsqlNonReservedKeyword.DELETE),b.token(EsqlReservedKeyword.FROM),FIELD_REFERENCE(),
-				b.optional(f.newTuple83(b.token(EsqlNonReservedKeyword.AS), b.token(EsqlLegacyGrammar.IDENTIFIER))),
+				b.optional(f.newTuple83(b.token(EsqlNonReservedKeyword.AS), b.token(EsqlLegacyGrammar.IDENTIFIER))), //TODO use AliasedFieldReference
 				b.optional(f.newTuple84(b.token(EsqlNonReservedKeyword.WHERE), EXPRESSION())),
 				b.token(EsqlLegacyGrammar.EOS)
 		));
@@ -1046,7 +1050,7 @@ public class EsqlGrammar {
 		return b.<UpdateStatementTreeImpl>nonterminal(Kind.UPDATE_STATEMENT).is(f.updateStatement(
 				b.token(EsqlNonReservedKeyword.UPDATE), 
 				FIELD_REFERENCE(), 
-				b.optional(f.newTuple88(b.token(EsqlNonReservedKeyword.AS), b.token(EsqlLegacyGrammar.IDENTIFIER))),
+				b.optional(f.newTuple88(b.token(EsqlNonReservedKeyword.AS), b.token(EsqlLegacyGrammar.IDENTIFIER))), //TODO use AliasedFieldReference
 				b.token(EsqlNonReservedKeyword.SET), 
 				SET_COLUMN(), b.zeroOrMore(f.newTuple89(b.token(EsqlPunctuator.COMMA), SET_COLUMN())),
 				b.optional(f.newTuple90(b.token(EsqlNonReservedKeyword.WHERE), EXPRESSION())),
@@ -1127,4 +1131,39 @@ public class EsqlGrammar {
 				b.token(EsqlReservedKeyword.WHEN), EXPRESSION(), b.token(EsqlNonReservedKeyword.THEN), EXPRESSION()
 		));
 	}
+	
+	public SelectFunctionTreeImpl SELECT_FUNCTION(){
+		return b.<SelectFunctionTreeImpl>nonterminal(Kind.SELECT_FUNCTION).is(f.selectFunction(
+				b.token(EsqlNonReservedKeyword.SELECT), SELECT_CLAUSE(), FROM_CLAUSE_EXPRESSION(), b.optional(WHERE_CLAUSE())
+		));
+	}
+
+	public WhereClauseTreeImpl WHERE_CLAUSE() {
+		return b.<WhereClauseTreeImpl>nonterminal(Kind.WHERE_CLAUSE).is(f.whereClause(
+			b.token(EsqlNonReservedKeyword.WHERE), EXPRESSION()
+		));
+	}
+
+	public SelectClauseTreeImpl SELECT_CLAUSE() {
+		return b.<SelectClauseTreeImpl>nonterminal(Kind.SELECT_CLAUSE).is(f.finishSelectClause(
+			b.firstOf(
+				f.selectClauseFields(ALIASED_FIELD_REFERENCE(), b.zeroOrMore(f.newTuple113(b.token(EsqlPunctuator.COMMA), ALIASED_FIELD_REFERENCE()))),
+				f.selectClauseItem(b.token(EsqlReservedKeyword.ITEM), CALL_EXPRESSION()),
+				f.selectClauseAggregation(b.firstOf(b.token(EsqlNonReservedKeyword.COUNT),b.token(EsqlNonReservedKeyword.MAX),b.token(EsqlNonReservedKeyword.MIN),b.token(EsqlNonReservedKeyword.SUM)), b.token(EsqlPunctuator.LPARENTHESIS), CALL_EXPRESSION(), b.token(EsqlPunctuator.RPARENTHESIS))
+			)
+		));
+	}
+
+	public FromClauseExpressionTreeImpl FROM_CLAUSE_EXPRESSION() {
+		return b.<FromClauseExpressionTreeImpl>nonterminal(Kind.FROM_CLAUSE_EXPRESSION). is(f.fromClauseExpression(
+				b.token(EsqlReservedKeyword.FROM), ALIASED_FIELD_REFERENCE(), b.zeroOrMore(f.newTuple112(b.token(EsqlPunctuator.COMMA), ALIASED_FIELD_REFERENCE()))		));
+	}
+	
+	public AliasedFieldReferenceTreeImpl ALIASED_FIELD_REFERENCE(){
+		return b.<AliasedFieldReferenceTreeImpl>nonterminal(Kind.ALIASED_FIELD_REFERENCE).is(f.finishAliasFieldReference(
+				b.firstOf(f.aliasFieldReference(FIELD_REFERENCE(), b.token(EsqlNonReservedKeyword.AS), b.token(EsqlLegacyGrammar.IDENTIFIER)) , 
+						f.aliasFieldReference(FIELD_REFERENCE())
+		)));
+	}
+
 }

@@ -16,6 +16,7 @@ import com.exxeta.iss.sonar.esql.api.tree.SchemaNameTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.AliasedFieldReferenceTreeImpl;
 import com.exxeta.iss.sonar.esql.api.tree.function.FunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ElseifClauseTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.NameClausesTree;
@@ -49,18 +50,23 @@ import com.exxeta.iss.sonar.esql.tree.impl.expression.IntervalExpressionTreeImpl
 import com.exxeta.iss.sonar.esql.tree.impl.expression.LiteralTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.ParenthesisedExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.PrefixExpressionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.AliasedFieldReferenceTree;
 import com.exxeta.iss.sonar.esql.tree.impl.function.AsbitstreamFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.CaseFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.CastFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.ExtractFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.ForFunctionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.FromClauseExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.OverlayFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.PositionFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.RoundFunctionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.SelectClauseTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.SelectFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.SubstringFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.TheFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.TrimFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.WhenClauseExpressionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.WhereClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.AttachStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.BeginEndStatementTreeImpl;
@@ -746,6 +752,14 @@ public class TreeFactory {
 		return newTuple(first, second);
 	}
 
+	public <T, U> Tuple<T, U> newTuple112(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple113(T first, U second) {
+		return newTuple(first, second);
+	}
+
 	public <T, U, V> Triple<T, U, V> newTriple1(T first, U second, V third) {
 		return newTriple(first, second, third);
 	}
@@ -813,6 +827,25 @@ public class TreeFactory {
 
 		if (optional.isPresent()) {
 			for (Tuple<InternalSyntaxToken, ParameterTree> pair : optional.get()) {
+				InternalSyntaxToken commaToken = pair.first();
+
+				commas.add(commaToken);
+				elements.add(pair.second());
+			}
+		}
+
+		return new SeparatedList<>(elements.build(), commas.build());
+	}	
+	private static SeparatedList<AliasedFieldReferenceTree> aliasedFieldReferenceList(AliasedFieldReferenceTreeImpl parameterTree,
+			Optional<List<Tuple<InternalSyntaxToken, AliasedFieldReferenceTreeImpl>>> optional) {
+
+		ImmutableList.Builder<AliasedFieldReferenceTree> elements = ImmutableList.builder();
+		ImmutableList.Builder<InternalSyntaxToken> commas = ImmutableList.builder();
+
+		elements.add(parameterTree);
+
+		if (optional.isPresent()) {
+			for (Tuple<InternalSyntaxToken, AliasedFieldReferenceTreeImpl> pair : optional.get()) {
 				InternalSyntaxToken commaToken = pair.first();
 
 				commas.add(commaToken);
@@ -2028,6 +2061,54 @@ public class TreeFactory {
 		}
 		
 		
+	}
+
+	public WhereClauseTreeImpl whereClause(InternalSyntaxToken whereKeyword, ExpressionTree expression) {
+		return new WhereClauseTreeImpl(whereKeyword, expression);
+	}
+
+	public AliasedFieldReferenceTreeImpl aliasFieldReference(FieldReferenceTreeImpl fieldRefernce,
+			InternalSyntaxToken asKeyword, InternalSyntaxToken alias) {
+		return new AliasedFieldReferenceTreeImpl(fieldRefernce, asKeyword, alias);
+	}
+	
+	public AliasedFieldReferenceTreeImpl aliasFieldReference(FieldReferenceTreeImpl fieldRefernce) {
+		return new AliasedFieldReferenceTreeImpl(fieldRefernce, null, null);
+	}
+	
+	public AliasedFieldReferenceTreeImpl finishAliasFieldReference(AliasedFieldReferenceTreeImpl input){
+		return input;
+	}
+
+	public SelectFunctionTreeImpl selectFunction(InternalSyntaxToken selectKeyword, SelectClauseTreeImpl selectClause,
+			FromClauseExpressionTreeImpl fromClause, Optional<WhereClauseTreeImpl> whereClause) {
+		return new SelectFunctionTreeImpl(selectKeyword, selectClause,  fromClause, whereClause.isPresent()?whereClause.get():null);
+	}
+
+	public FromClauseExpressionTreeImpl fromClauseExpression(InternalSyntaxToken fromKeyword,
+			AliasedFieldReferenceTreeImpl aliasedFieldReference,
+			Optional<List<Tuple<InternalSyntaxToken, AliasedFieldReferenceTreeImpl>>> rest) {
+		
+		return new FromClauseExpressionTreeImpl(fromKeyword, aliasedFieldReferenceList(aliasedFieldReference, rest));
+	}
+
+	public SelectClauseTreeImpl finishSelectClause(SelectClauseTreeImpl selectClause) {
+		return selectClause;
+	}
+
+	public SelectClauseTreeImpl selectClauseFields(AliasedFieldReferenceTreeImpl aliasedFieldReference,
+			Optional<List<Tuple<InternalSyntaxToken, AliasedFieldReferenceTreeImpl>>> rest) {
+		
+		return new SelectClauseTreeImpl(aliasedFieldReferenceList(aliasedFieldReference, rest));
+	}
+
+	public SelectClauseTreeImpl selectClauseItem(InternalSyntaxToken itemKeyword, ExpressionTree itemExpression) {
+		return new SelectClauseTreeImpl(itemKeyword, itemExpression);
+	}
+
+	public SelectClauseTreeImpl selectClauseAggregation(InternalSyntaxToken aggregationType, InternalSyntaxToken openingParenthesis,
+			ExpressionTree aggregationExpression, InternalSyntaxToken closingParenthesis) {
+		return new SelectClauseTreeImpl(aggregationType, openingParenthesis, aggregationExpression, closingParenthesis);
 	}
 
 

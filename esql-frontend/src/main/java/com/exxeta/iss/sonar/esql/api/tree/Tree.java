@@ -15,6 +15,8 @@ import com.exxeta.iss.sonar.esql.api.tree.function.ForFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.OverlayFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.PositionFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.RoundFunctionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.SelectClauseTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.SelectFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.SubstringFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.TheFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.TrimFunctionTree;
@@ -75,6 +77,7 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.WhileStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.Kinds;
 import com.exxeta.iss.sonar.esql.tree.expression.LiteralTree;
+import com.exxeta.iss.sonar.esql.tree.impl.function.AliasedFieldReferenceTree;
 
 public interface Tree {
 	boolean is(Kind... kind);
@@ -189,7 +192,12 @@ public interface Tree {
 		FOR_FUNCTION(ForFunctionTree.class), 
 		CAST_FUNCTION(CastFunctionTree.class), 
 		CASE_FUNCTION(CaseFunctionTree.class), 
-		WHEN_CLAUSE_EXPRESSION(WhenClauseExpressionTree.class);
+		WHEN_CLAUSE_EXPRESSION(WhenClauseExpressionTree.class), 
+		SELECT_FUNCTION(SelectFunctionTree.class), 
+		WHERE_CLAUSE(WhenClauseTree.class), 
+		SELECT_CLAUSE(SelectClauseTree.class), 
+		ALIASED_FIELD_REFERENCE(AliasedFieldReferenceTree.class), 
+		FROM_CLAUSE_EXPRESSION(FromClauseTree.class);
 
 		final Class<? extends Tree> associatedInterface;
 

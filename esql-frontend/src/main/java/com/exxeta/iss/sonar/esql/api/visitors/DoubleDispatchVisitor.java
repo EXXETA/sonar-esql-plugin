@@ -32,13 +32,17 @@ import com.exxeta.iss.sonar.esql.api.tree.function.CaseFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.CastFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.ExtractFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.ForFunctionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.FromClauseExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.OverlayFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.PositionFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.RoundFunctionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.SelectClauseTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.SelectFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.SubstringFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.TheFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.TrimFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.WhenClauseExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.WhereClauseTree;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxTrivia;
 import com.exxeta.iss.sonar.esql.api.tree.statement.AttachStatementTree;
@@ -95,6 +99,7 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.WhenClauseTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.WhileStatementTree;
 import com.exxeta.iss.sonar.esql.tree.expression.LiteralTree;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
+import com.exxeta.iss.sonar.esql.tree.impl.function.AliasedFieldReferenceTree;
 import com.google.common.base.Preconditions;
 
 public abstract class DoubleDispatchVisitor implements TreeVisitor {
@@ -505,6 +510,27 @@ public abstract class DoubleDispatchVisitor implements TreeVisitor {
 	}
 
 	public void visitCaseFunction(CaseFunctionTree tree) {
+		scanChildren(tree);
+	}
+
+	public void visitWhereClause(WhereClauseTree tree) {
+		scanChildren(tree);
+	}
+
+	public void visitAliasedFieldReference(AliasedFieldReferenceTree tree) {
+		scanChildren(tree);
+	}
+
+	public void visitSelectFunction(SelectFunctionTree tree) {
+		scanChildren(tree);
+	}
+
+	public void visitFromClauseExpression(FromClauseExpressionTree tree) {
+		scanChildren(tree);
+		
+	}
+
+	public void visitSelectClause(SelectClauseTree tree) {
 		scanChildren(tree);
 	}
 
