@@ -1,7 +1,7 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013 Thomas Pohl and EXXETA AG
- * http://www.exxeta.de
+ * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +19,10 @@ package com.exxeta.iss.sonar.esql.check;
 
 import java.util.List;
 
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.squidbridge.annotations.ActivatedByDefault;
 import org.sonar.squidbridge.annotations.NoSqale;
-import org.sonar.squidbridge.checks.SquidCheck;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
@@ -32,9 +30,6 @@ import com.exxeta.iss.sonar.esql.api.visitors.FileIssue;
 import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitorCheck;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.google.common.collect.ImmutableList;
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.GenericTokenType;
-import com.sonar.sslr.api.Grammar;
 
 @Rule(key = "TooManyLinesInFile")
 @NoSqale

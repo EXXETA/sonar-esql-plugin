@@ -1,7 +1,7 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013 Thomas Pohl and EXXETA AG
- * http://www.exxeta.de
+ * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,25 +17,15 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
-import java.util.List;
 import java.util.regex.Pattern;
 
-import org.sonar.api.server.rule.RulesDefinition;
-import org.sonar.check.BelongsToProfile;
-import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonar.squidbridge.annotations.ActivatedByDefault;
-import org.sonar.squidbridge.annotations.SqaleConstantRemediation;
-import org.sonar.squidbridge.annotations.SqaleSubCharacteristic;
 
 import com.exxeta.iss.sonar.esql.api.tree.statement.DeclareStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
 import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
 import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.AstNodeType;
-import com.sonar.sslr.api.GenericTokenType;
 
 @Rule(key = ConstantNameCheck.CHECK_KEY)
 public class ConstantNameCheck extends DoubleDispatchVisitorCheck {

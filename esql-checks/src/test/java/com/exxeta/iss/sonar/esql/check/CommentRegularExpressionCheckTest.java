@@ -1,7 +1,7 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013 Thomas Pohl and EXXETA AG
- * http://www.exxeta.de
+ * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,10 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.File;
 
 import org.junit.Test;
-import org.sonar.squidbridge.api.SourceFile;
-import org.sonar.squidbridge.checks.CheckMessagesVerifier;
 
-import com.exxeta.iss.sonar.esql.check.CommentRegularExpressionCheck;
 import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
 
 public class CommentRegularExpressionCheckTest {
