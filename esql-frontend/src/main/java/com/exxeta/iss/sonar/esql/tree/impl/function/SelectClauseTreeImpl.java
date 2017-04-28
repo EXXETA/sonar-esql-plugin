@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.AliasedFieldReferenceTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.SelectClauseTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;

@@ -28,6 +28,8 @@ import com.exxeta.iss.sonar.esql.api.tree.expression.InExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.IntervalExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ParenthesisedExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.UnaryExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.AliasedExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.AliasedFieldReferenceTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.CaseFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.CastFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.ExtractFunctionTree;
@@ -36,6 +38,7 @@ import com.exxeta.iss.sonar.esql.api.tree.function.FromClauseExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.OverlayFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.PositionFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.RoundFunctionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.RowConstructorFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.SelectClauseTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.SelectFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.SubstringFunctionTree;
@@ -99,7 +102,6 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.WhenClauseTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.WhileStatementTree;
 import com.exxeta.iss.sonar.esql.tree.expression.LiteralTree;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
-import com.exxeta.iss.sonar.esql.tree.impl.function.AliasedFieldReferenceTree;
 import com.google.common.base.Preconditions;
 
 public abstract class DoubleDispatchVisitor implements TreeVisitor {
@@ -531,6 +533,14 @@ public abstract class DoubleDispatchVisitor implements TreeVisitor {
 	}
 
 	public void visitSelectClause(SelectClauseTree tree) {
+		scanChildren(tree);
+	}
+
+	public void visitAliasedExpression(AliasedExpressionTree tree) {
+		scanChildren(tree);
+	}
+
+	public void visitRowConstructorFunction(RowConstructorFunctionTree tree) {
 		scanChildren(tree);
 	}
 

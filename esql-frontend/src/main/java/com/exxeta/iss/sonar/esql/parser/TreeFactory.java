@@ -16,7 +16,8 @@ import com.exxeta.iss.sonar.esql.api.tree.SchemaNameTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
-import com.exxeta.iss.sonar.esql.api.tree.function.AliasedFieldReferenceTreeImpl;
+import com.exxeta.iss.sonar.esql.api.tree.function.AliasedExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.AliasedFieldReferenceTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.FunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ElseifClauseTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.NameClausesTree;
@@ -50,7 +51,8 @@ import com.exxeta.iss.sonar.esql.tree.impl.expression.IntervalExpressionTreeImpl
 import com.exxeta.iss.sonar.esql.tree.impl.expression.LiteralTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.ParenthesisedExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.PrefixExpressionTreeImpl;
-import com.exxeta.iss.sonar.esql.tree.impl.function.AliasedFieldReferenceTree;
+import com.exxeta.iss.sonar.esql.tree.impl.function.AliasedExpressionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.AliasedFieldReferenceTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.AsbitstreamFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.CaseFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.CastFunctionTreeImpl;
@@ -60,6 +62,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.function.FromClauseExpressionTreeImpl
 import com.exxeta.iss.sonar.esql.tree.impl.function.OverlayFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.PositionFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.RoundFunctionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.RowConstructorFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.SelectClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.SelectFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.SubstringFunctionTreeImpl;
@@ -760,6 +763,10 @@ public class TreeFactory {
 		return newTuple(first, second);
 	}
 
+	public <T, U> Tuple<T, U> newTuple114(T first, U second) {
+		return newTuple(first, second);
+	}
+
 	public <T, U, V> Triple<T, U, V> newTriple1(T first, U second, V third) {
 		return newTriple(first, second, third);
 	}
@@ -846,6 +853,26 @@ public class TreeFactory {
 
 		if (optional.isPresent()) {
 			for (Tuple<InternalSyntaxToken, AliasedFieldReferenceTreeImpl> pair : optional.get()) {
+				InternalSyntaxToken commaToken = pair.first();
+
+				commas.add(commaToken);
+				elements.add(pair.second());
+			}
+		}
+
+		return new SeparatedList<>(elements.build(), commas.build());
+	}
+
+	private static SeparatedList<AliasedExpressionTree> aliasedExpressionList(AliasedExpressionTreeImpl parameterTree,
+			Optional<List<Tuple<InternalSyntaxToken, AliasedExpressionTreeImpl>>> optional) {
+
+		ImmutableList.Builder<AliasedExpressionTree> elements = ImmutableList.builder();
+		ImmutableList.Builder<InternalSyntaxToken> commas = ImmutableList.builder();
+
+		elements.add(parameterTree);
+
+		if (optional.isPresent()) {
+			for (Tuple<InternalSyntaxToken, AliasedExpressionTreeImpl> pair : optional.get()) {
 				InternalSyntaxToken commaToken = pair.first();
 
 				commas.add(commaToken);
@@ -2109,6 +2136,26 @@ public class TreeFactory {
 	public SelectClauseTreeImpl selectClauseAggregation(InternalSyntaxToken aggregationType, InternalSyntaxToken openingParenthesis,
 			ExpressionTree aggregationExpression, InternalSyntaxToken closingParenthesis) {
 		return new SelectClauseTreeImpl(aggregationType, openingParenthesis, aggregationExpression, closingParenthesis);
+	}
+
+	public AliasedExpressionTreeImpl aliasedExpression(ExpressionTree expression, InternalSyntaxToken asKeyword, InternalSyntaxToken alias) {
+		return new AliasedExpressionTreeImpl(expression, asKeyword, alias);
+	}
+
+	public AliasedExpressionTreeImpl aliasedExpression(ExpressionTree expression) {
+		return new AliasedExpressionTreeImpl(expression, null, null);
+	}
+
+	public AliasedExpressionTreeImpl finishAliasedExpression(AliasedExpressionTreeImpl input) {
+		return input;
+	}
+
+	public RowConstructorFunctionTreeImpl rowConstructorFunction(InternalSyntaxToken rowKeyword, InternalSyntaxToken openingParenthesis,
+			AliasedExpressionTreeImpl aliasedExpression,
+			Optional<List<Tuple<InternalSyntaxToken, AliasedExpressionTreeImpl>>> rest,
+			InternalSyntaxToken closingParenthesis) {
+
+		return new RowConstructorFunctionTreeImpl(rowKeyword, openingParenthesis, aliasedExpressionList(aliasedExpression, rest), closingParenthesis);
 	}
 
 

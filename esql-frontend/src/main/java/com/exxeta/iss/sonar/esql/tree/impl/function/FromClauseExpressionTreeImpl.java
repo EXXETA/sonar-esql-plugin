@@ -3,6 +3,7 @@ package com.exxeta.iss.sonar.esql.tree.impl.function;
 import java.util.Iterator;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
+import com.exxeta.iss.sonar.esql.api.tree.function.AliasedFieldReferenceTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.FromClauseExpressionTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;

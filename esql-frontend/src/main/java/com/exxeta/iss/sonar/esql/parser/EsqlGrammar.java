@@ -32,7 +32,6 @@ import com.exxeta.iss.sonar.esql.api.tree.SchemaNameTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
-import com.exxeta.iss.sonar.esql.api.tree.function.AliasedFieldReferenceTreeImpl;
 import com.exxeta.iss.sonar.esql.api.tree.function.ComplexFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.DateTimeFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.FieldFunctionTree;
@@ -62,6 +61,8 @@ import com.exxeta.iss.sonar.esql.tree.impl.expression.ArrayLiteralTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.IntervalExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.LiteralTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.ParenthesisedExpressionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.AliasedExpressionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.AliasedFieldReferenceTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.AsbitstreamFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.CaseFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.CastFunctionTreeImpl;
@@ -71,6 +72,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.function.FromClauseExpressionTreeImpl
 import com.exxeta.iss.sonar.esql.tree.impl.function.OverlayFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.PositionFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.RoundFunctionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.RowConstructorFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.SelectClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.SelectFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.SubstringFunctionTreeImpl;
@@ -284,8 +286,7 @@ public class EsqlGrammar {
 	}
 	
 	private ComplexFunctionTree COMPLEX_FUNCTION(){
-		//return b.firstOf(castFunction, caseFunction, selectFunction, rowConstructorFunction);
-		return b.firstOf(CAST_FUNCTION(), CASE_FUNCTION(), SELECT_FUNCTION());
+		return b.firstOf(CAST_FUNCTION(), CASE_FUNCTION(), SELECT_FUNCTION(), ROW_CONSTRUCTOR_FUNCTION());
 	}	
 
 	private MiscellaneousFunctionTree MISCELLANEOUS_FUNCTION(){
@@ -1163,6 +1164,21 @@ public class EsqlGrammar {
 		return b.<AliasedFieldReferenceTreeImpl>nonterminal(Kind.ALIASED_FIELD_REFERENCE).is(f.finishAliasFieldReference(
 				b.firstOf(f.aliasFieldReference(FIELD_REFERENCE(), b.token(EsqlNonReservedKeyword.AS), b.token(EsqlLegacyGrammar.IDENTIFIER)) , 
 						f.aliasFieldReference(FIELD_REFERENCE())
+		)));
+	}
+	
+	public  RowConstructorFunctionTreeImpl ROW_CONSTRUCTOR_FUNCTION(){
+		return b.<RowConstructorFunctionTreeImpl>nonterminal(Kind.ROW_CONSTRUCTOR_FUNCTION).is(f.rowConstructorFunction(
+				b.token(EsqlNonReservedKeyword.ROW), b.token(EsqlPunctuator.LPARENTHESIS), ALIASED_EXPRESSION(), 
+				b.zeroOrMore(f.newTuple114(b.token(EsqlPunctuator.COMMA), ALIASED_EXPRESSION())),
+				b.token(EsqlPunctuator.RPARENTHESIS)
+		));
+	}
+	
+	public AliasedExpressionTreeImpl ALIASED_EXPRESSION(){
+		return b.<AliasedExpressionTreeImpl>nonterminal(Kind.ALIASED_EXPRESSION).is(f.finishAliasedExpression(
+				b.firstOf(f.aliasedExpression(EXPRESSION(), b.token(EsqlNonReservedKeyword.AS), b.token(EsqlLegacyGrammar.IDENTIFIER)) , 
+						f.aliasedExpression(EXPRESSION())
 		)));
 	}
 

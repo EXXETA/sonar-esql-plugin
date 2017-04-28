@@ -1,32 +1,30 @@
-package com.exxeta.iss.sonar.esql.api.tree.function;
+package com.exxeta.iss.sonar.esql.tree.impl.function;
 
 import java.util.Iterator;
 
 import org.sonar.api.internal.google.common.collect.Iterators;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.AliasedExpressionTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
-import com.exxeta.iss.sonar.esql.parser.TreeFactory.Tuple;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
-import com.exxeta.iss.sonar.esql.tree.impl.declaration.FieldReferenceTreeImpl;
-import com.exxeta.iss.sonar.esql.tree.impl.function.AliasedFieldReferenceTree;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
-import com.sonar.sslr.api.typed.Optional;
 
-public class AliasedFieldReferenceTreeImpl extends EsqlTree implements AliasedFieldReferenceTree{
-	private FieldReferenceTreeImpl fieldRefernce;
+public class AliasedExpressionTreeImpl extends EsqlTree implements AliasedExpressionTree{
+	private ExpressionTree expression;
 	private InternalSyntaxToken asKeyword;
 	private InternalSyntaxToken alias;
-	public AliasedFieldReferenceTreeImpl(FieldReferenceTreeImpl fieldRefernce, InternalSyntaxToken asKeyword,
+	public AliasedExpressionTreeImpl(ExpressionTree expression, InternalSyntaxToken asKeyword,
 			InternalSyntaxToken alias) {
 		super();
-		this.fieldRefernce = fieldRefernce;
+		this.expression = expression;
 		this.asKeyword = asKeyword;
 		this.alias = alias;
 	}
 	@Override
-	public FieldReferenceTreeImpl fieldRefernce() {
-		return fieldRefernce;
+	public ExpressionTree expression() {
+		return expression;
 	}
 	@Override
 	public InternalSyntaxToken asKeyword() {
@@ -38,15 +36,15 @@ public class AliasedFieldReferenceTreeImpl extends EsqlTree implements AliasedFi
 	}
 	@Override
 	public void accept(DoubleDispatchVisitor visitor) {
-		visitor.visitAliasedFieldReference(this);
+		visitor.visitAliasedExpression(this);
 	}
 	@Override
 	public Kind getKind() {
-		return Kind.ALIASED_FIELD_REFERENCE;
+		return Kind.ALIASED_EXPRESSION;
 	}
 	@Override
 	public Iterator<Tree> childrenIterator() {
-		return Iterators.forArray(fieldRefernce, asKeyword, alias);
+		return Iterators.forArray(expression, asKeyword, alias);
 	}
 	
 	

@@ -8,6 +8,8 @@ import com.exxeta.iss.sonar.esql.api.tree.expression.InExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.IntervalExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ParenthesisedExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.UnaryExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.AliasedExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.AliasedFieldReferenceTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.CaseFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.CastFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.ExtractFunctionTree;
@@ -15,6 +17,7 @@ import com.exxeta.iss.sonar.esql.api.tree.function.ForFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.OverlayFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.PositionFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.RoundFunctionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.RowConstructorFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.SelectClauseTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.SelectFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.SubstringFunctionTree;
@@ -77,7 +80,6 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.WhileStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.Kinds;
 import com.exxeta.iss.sonar.esql.tree.expression.LiteralTree;
-import com.exxeta.iss.sonar.esql.tree.impl.function.AliasedFieldReferenceTree;
 
 public interface Tree {
 	boolean is(Kind... kind);
@@ -197,7 +199,9 @@ public interface Tree {
 		WHERE_CLAUSE(WhenClauseTree.class), 
 		SELECT_CLAUSE(SelectClauseTree.class), 
 		ALIASED_FIELD_REFERENCE(AliasedFieldReferenceTree.class), 
-		FROM_CLAUSE_EXPRESSION(FromClauseTree.class);
+		FROM_CLAUSE_EXPRESSION(FromClauseTree.class), 
+		ROW_CONSTRUCTOR_FUNCTION(RowConstructorFunctionTree.class), 
+		ALIASED_EXPRESSION(AliasedExpressionTree.class);
 
 		final Class<? extends Tree> associatedInterface;
 
