@@ -17,28 +17,41 @@
  */
 package com.exxeta.iss.sonar.esql;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.sonar.api.Plugin;
+import org.sonar.api.config.PropertyDefinition;
+import org.sonar.api.resources.Qualifiers;
 
 public class EsqlPlugin implements Plugin {
 
+	  private static final String GENERAL = "General";
 
-  // Global ESQL constants
-  public static final String FALSE = "false";
+	// Global ESQL constants
+	public static final String FALSE = "false";
 
-  public static final String FILE_SUFFIXES_KEY = "sonar.esql.file.suffixes";
-  public static final String FILE_SUFFIXES_DEFVALUE = ".esql";
+	public static final String FILE_SUFFIXES_KEY = "sonar.esql.file.suffixes";
+	public static final String FILE_SUFFIXES_DEFVALUE = ".esql";
 
-  public static final String PROPERTY_PREFIX = "sonar.esql";
-  public static final String TEST_FRAMEWORK_KEY = PROPERTY_PREFIX + ".testframework";
-  public static final String TEST_FRAMEWORK_DEFAULT = "";
-@Override
-public void define(Context context) {
-    context.addExtensions(
-    	      EsqlLanguage.class,
-    	      EsqlSquidSensor.class,
-    	      new EsqlRulesDefinition(context.getSonarQubeVersion()),
-    	      EsqlProfile.class);
-	
-}
+	public static final String PROPERTY_PREFIX = "sonar.esql";
+	public static final String TEST_FRAMEWORK_KEY = PROPERTY_PREFIX + ".testframework";
+	public static final String TEST_FRAMEWORK_DEFAULT = "";
+
+	@Override
+	public void define(Context context) {
+		context.addExtensions(EsqlLanguage.class, EsqlSquidSensor.class,
+				new EsqlRulesDefinition(context.getSonarQubeVersion()), EsqlProfile.class);
+		
+		  context.addExtension(PropertyDefinition.builder(FILE_SUFFIXES_KEY)
+			        .defaultValue(FILE_SUFFIXES_DEFVALUE)
+			        .name("File Suffixes")
+			        .description("Comma-separated list of suffixes for files to analyze.")
+			        .subCategory(GENERAL)
+			        .onQualifiers(Qualifiers.PROJECT)
+			        .build());
+			      
+
+	}
 
 }

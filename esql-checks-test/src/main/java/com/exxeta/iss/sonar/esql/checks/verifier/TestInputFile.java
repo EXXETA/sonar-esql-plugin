@@ -30,7 +30,7 @@ public class TestInputFile extends DefaultInputFile {
   public TestInputFile(String baseDir, String relativePath) {
     super("module1", relativePath);
     this.setModuleBaseDir(Paths.get(baseDir))
-      .setLanguage("js")
+      .setLanguage("esql")
       .setCharset(StandardCharsets.UTF_8)
       .setType(Type.MAIN);
   }

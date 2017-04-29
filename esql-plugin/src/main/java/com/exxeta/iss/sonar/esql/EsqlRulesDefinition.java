@@ -17,21 +17,24 @@
  */
 package com.exxeta.iss.sonar.esql;
 
-import com.exxeta.iss.sonar.esql.check.CheckList;
-import com.google.common.base.Charsets;
-import com.google.common.io.Resources;
-import com.google.gson.Gson;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
 import java.util.Set;
+
 import javax.annotation.Nullable;
+
 import org.sonar.api.rule.RuleStatus;
 import org.sonar.api.rules.RuleType;
 import org.sonar.api.server.debt.DebtRemediationFunction;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.utils.Version;
 import org.sonar.squidbridge.annotations.AnnotationBasedRulesDefinition;
+
+import com.exxeta.iss.sonar.esql.check.CheckList;
+import com.google.common.base.Charsets;
+import com.google.common.io.Resources;
+import com.google.gson.Gson;
 
 public class EsqlRulesDefinition implements RulesDefinition {
 
@@ -61,7 +64,7 @@ public class EsqlRulesDefinition implements RulesDefinition {
 
     boolean shouldSetupSonarLintProfile = sonarRuntimeVersion.isGreaterThanOrEqual(Version.parse("6.0"));
     if (shouldSetupSonarLintProfile) {
-      Set<String> activatedRuleKeys = EsqlProfile.activatedRuleKeys();
+      Set<String> activatedRuleKeys = JsonProfileReader.ruleKeys(EsqlProfile.PATH_TO_JSON);
       for (NewRule rule : repository.rules()) {
         rule.setActivatedByDefault(activatedRuleKeys.contains(rule.key()));
       }

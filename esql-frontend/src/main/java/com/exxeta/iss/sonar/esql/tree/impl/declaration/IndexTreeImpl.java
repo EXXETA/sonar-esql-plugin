@@ -44,18 +44,22 @@ public class IndexTreeImpl extends EsqlTree implements IndexTree {
 		this.closeBracket = closeBracket;
 	}
 
+	@Override
 	public InternalSyntaxToken openBracket() {
 		return openBracket;
 	}
 
+	@Override
 	public InternalSyntaxToken direction() {
 		return direction;
 	}
 
+	@Override
 	public ExpressionTree index() {
 		return index;
 	}
 
+	@Override
 	public InternalSyntaxToken closeBracket() {
 		return closeBracket;
 	}
