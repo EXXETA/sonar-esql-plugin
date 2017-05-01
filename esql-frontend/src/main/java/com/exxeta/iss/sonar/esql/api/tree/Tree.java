@@ -105,6 +105,8 @@ public interface Tree {
 
 	void accept(DoubleDispatchVisitor visitor);
 
+    Tree getParent();
+
 	public enum Kind implements GrammarRuleKey, Kinds {
 	    TOKEN(SyntaxToken.class),
 		TRIVIA(SyntaxTrivia.class), 
@@ -238,6 +240,9 @@ public interface Tree {
 	    public boolean contains(Kinds other) {
 	      return this.equals(other);
 	    }
+	    
+
+	    
 
 	}
 }

@@ -27,7 +27,7 @@ public final class CheckList {
 
   public static final String REPOSITORY_NAME = "SonarAnalyzer";
 
-  public static final String SONAR_WAY_PROFILE = "Sonar way";
+  public static final String SONAR_WAY_PROFILE = "Sonar way Recommended";
 
   private CheckList() {
   }
@@ -53,7 +53,8 @@ public final class CheckList {
         PropagateToLabelCheck.class,
         ConstantNameCheck.class,
         MissingNewlineAtEndOfFileCheck.class,
-        UnusedRoutineCheck.class
+        UnusedRoutineCheck.class,
+        EmptyBlockCheck.class
         );
   }
 

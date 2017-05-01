@@ -1,7 +1,21 @@
 {
   "name": "Sonar way",
   "ruleKeys": [
-  	"VariableName"
+  	"CommentRegularExpression",
+  	"ElseIfWithoutElse",
+  	"EmptyBlock",
+  	"IterateStatement",
+  	"LineLength",
+  	"MissingNewLineAtEndOfFile",
+  	"NestedIfDepth",
+  	"NonReservedKeyword",
+  	"OneStatementPerLine",
+  	"ParsingError",
+  	"PropagateToLabel",
+  	"TooManyIterateOrLeaveInLoop",
+  	"TooManyLinesInFile",
+  	"UnusedRoutine",
+  	"UpperCaseKeyword"
   ]
 }
   
