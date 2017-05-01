@@ -90,6 +90,7 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.RoutineBodyTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.SetColumnTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.SetStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.SqlStateTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.StatementsTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ThrowStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.UpdateStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ValuesClauseTree;
@@ -220,7 +221,8 @@ public interface Tree {
 		FROM_CLAUSE_EXPRESSION(FromClauseTree.class), 
 		ROW_CONSTRUCTOR_FUNCTION(RowConstructorFunctionTree.class), 
 		ALIASED_EXPRESSION(AliasedExpressionTree.class), 
-		PASSTHRU_FUNCTION(PassthruFunctionTree.class);
+		PASSTHRU_FUNCTION(PassthruFunctionTree.class),
+		STATEMENTS(StatementsTree.class);
 
 		final Class<? extends Tree> associatedInterface;
 

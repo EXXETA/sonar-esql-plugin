@@ -126,6 +126,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.RoutineBodyTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.SetColumnTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.SetStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.SqlStateTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.StatementsTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ThrowStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.UpdateStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ValuesClauseTreeImpl;
@@ -270,6 +271,12 @@ public class EsqlGrammar {
 				OTHER_STATEMENT()));
 	}
 
+	public StatementsTreeImpl STATEMENTS() {
+		return b.<StatementsTreeImpl>nonterminal(Kind.STATEMENTS).is(
+				f.statements(b.zeroOrMore(STATEMENT()))
+		);
+	}
+	
 	private FunctionTree FUNCTION() {
 		return b.firstOf(/*DATABASE_STATE_FUNCTION(),*/DATETIME_FUNCTION(),NUMERIC_FUNCTION(), STRING_MANIPULATION_FUNCTION(), FIELD_FUNCTION(), LIST_FUNCTION(), COMPLEX_FUNCTION()/*, MISC_FUNCTION()*/);
 	}
@@ -426,7 +433,7 @@ public class EsqlGrammar {
 						b.token(EsqlNonReservedKeyword.BEGIN),
 						b.optional(f.newTuple19(b.optional(b.token(EsqlNonReservedKeyword.NOT)),
 								b.token(EsqlNonReservedKeyword.ATOMIC))),
-						b.zeroOrMore(STATEMENT()), b.token(EsqlNonReservedKeyword.END),
+						STATEMENTS(), b.token(EsqlNonReservedKeyword.END),
 						b.optional(LABEL()), b.token(EsqlLegacyGrammar.EOS)));
 	}
 	public LabelTreeImpl LABEL(){
@@ -453,13 +460,13 @@ public class EsqlGrammar {
 
 	public CaseStatementTreeImpl CASE_STATEMENT() {
 		return b.<CaseStatementTreeImpl>nonterminal(Kind.CASE_STATEMENT)
-				.is(f.caseStatement(b.token(EsqlReservedKeyword.CASE), b.firstOf(b.oneOrMore(WHEN_CLAUSE()), f.newTuple61(EXPRESSION(), b.oneOrMore(WHEN_CLAUSE()))), b.optional(f.newTuple60(b.token(EsqlNonReservedKeyword.ELSE), b.zeroOrMore(STATEMENT()))),
+				.is(f.caseStatement(b.token(EsqlReservedKeyword.CASE), b.firstOf(b.oneOrMore(WHEN_CLAUSE()), f.newTuple61(EXPRESSION(), b.oneOrMore(WHEN_CLAUSE()))), b.optional(f.newTuple60(b.token(EsqlNonReservedKeyword.ELSE), STATEMENTS())),
 						b.token(EsqlNonReservedKeyword.END), b.token(EsqlReservedKeyword.CASE), b.token(EsqlLegacyGrammar.EOS)));
 	}
 	
 	public WhenClauseTreeImpl WHEN_CLAUSE(){
 		return b.<WhenClauseTreeImpl>nonterminal(Kind.WHEN_CLAUSE)
-				.is(f.whenClause(b.token(EsqlReservedKeyword.WHEN), EXPRESSION(), b.token(EsqlNonReservedKeyword.THEN), b.zeroOrMore(STATEMENT())));
+				.is(f.whenClause(b.token(EsqlReservedKeyword.WHEN), EXPRESSION(), b.token(EsqlNonReservedKeyword.THEN), STATEMENTS()));
 	}
 
 	public DeclareStatementTreeImpl DECLARE_STATEMENT() {
@@ -485,20 +492,20 @@ public class EsqlGrammar {
 		return b.<IfStatementTreeImpl>nonterminal(Kind.IF_STATEMENT).is(
 
 				f.ifStatement(b.token(EsqlNonReservedKeyword.IF), EXPRESSION(), b.token(EsqlNonReservedKeyword.THEN),
-						b.zeroOrMore(STATEMENT()), b.zeroOrMore(ELSEIF_CLAUSE()), b.optional(ELSE_CLAUSE()),
+						STATEMENTS(), b.zeroOrMore(ELSEIF_CLAUSE()), b.optional(ELSE_CLAUSE()),
 						b.token(EsqlNonReservedKeyword.END), b.token(EsqlNonReservedKeyword.IF),
 						b.token(EsqlLegacyGrammar.EOS)));
 	}
 
 	public ElseClauseTreeImpl ELSE_CLAUSE() {
 		return b.<ElseClauseTreeImpl>nonterminal(Kind.ELSE_CLAUSE)
-				.is(f.elseClause(b.token(EsqlNonReservedKeyword.ELSE), b.zeroOrMore(STATEMENT())));
+				.is(f.elseClause(b.token(EsqlNonReservedKeyword.ELSE), STATEMENTS()));
 	}
 
 	public ElseifClauseTreeImpl ELSEIF_CLAUSE() {
 		return b.<ElseifClauseTreeImpl>nonterminal(Kind.ELSEIF_CLAUSE)
 				.is(f.elseifClause(b.token(EsqlNonReservedKeyword.ELSEIF), EXPRESSION(),
-						b.token(EsqlNonReservedKeyword.THEN), b.zeroOrMore(STATEMENT())));
+						b.token(EsqlNonReservedKeyword.THEN), STATEMENTS()));
 	}
 	
 	public IterateStatementTreeImpl ITERATE_STATEMENT(){
@@ -520,7 +527,7 @@ public class EsqlGrammar {
 
 	public LoopStatementTreeImpl LOOP_STATEMENT_WO_LABEL() {
 		return b.<LoopStatementTreeImpl>nonterminal()
-				.is(f.loopStatementWoLabel(b.token(EsqlNonReservedKeyword.LOOP), b.zeroOrMore(STATEMENT()),
+				.is(f.loopStatementWoLabel(b.token(EsqlNonReservedKeyword.LOOP), STATEMENTS(),
 						b.token(EsqlNonReservedKeyword.END), b.token(EsqlNonReservedKeyword.LOOP),
 						b.token(EsqlLegacyGrammar.EOS)));
 	}
@@ -528,7 +535,7 @@ public class EsqlGrammar {
 	public LoopStatementTreeImpl LOOP_STATEMENT_WITH_LABEL() {
 		return b.<LoopStatementTreeImpl>nonterminal()
 				.is(f.loopStatementWithLabel(LABEL(), b.token(COLON), b.token(EsqlNonReservedKeyword.LOOP),
-						b.zeroOrMore(STATEMENT()), b.token(EsqlNonReservedKeyword.END),
+						STATEMENTS(), b.token(EsqlNonReservedKeyword.END),
 						b.token(EsqlNonReservedKeyword.LOOP), LABEL(), b.token(EsqlLegacyGrammar.EOS)
 
 		));
@@ -542,7 +549,7 @@ public class EsqlGrammar {
 	public RepeatStatementTreeImpl REPEAT_STATEMENT_WITH_LABEL() {
 		return b.<RepeatStatementTreeImpl>nonterminal()
 				.is(f.repeatStatementWithLabel(
-						LABEL(), b.token(COLON), b.token(EsqlNonReservedKeyword.REPEAT), b.zeroOrMore(STATEMENT()), 
+						LABEL(), b.token(COLON), b.token(EsqlNonReservedKeyword.REPEAT), STATEMENTS(), 
 						b.token(EsqlNonReservedKeyword.UNTIL), EXPRESSION(), b.token(EsqlNonReservedKeyword.END), 
 						b.token(EsqlNonReservedKeyword.REPEAT), LABEL(), b.token(EsqlLegacyGrammar.EOS)
 						));
@@ -551,7 +558,7 @@ public class EsqlGrammar {
 	public RepeatStatementTreeImpl REPEAT_STATEMENT_WO_LABEL() {
 		return b.<RepeatStatementTreeImpl>nonterminal()
 				.is(f.repeatStatementWoLabel(
-						b.token(EsqlNonReservedKeyword.REPEAT), b.zeroOrMore(STATEMENT()), 
+						b.token(EsqlNonReservedKeyword.REPEAT), STATEMENTS(), 
 						b.token(EsqlNonReservedKeyword.UNTIL), EXPRESSION(), b.token(EsqlNonReservedKeyword.END), 
 						b.token(EsqlNonReservedKeyword.REPEAT), b.token(EsqlLegacyGrammar.EOS)
 						));
@@ -592,7 +599,7 @@ public class EsqlGrammar {
 		return b.<WhileStatementTreeImpl>nonterminal()
 				.is(f.whileStatementWithLabel(
 						LABEL(), b.token(COLON), b.token(EsqlNonReservedKeyword.WHILE), EXPRESSION(), 
-						b.token(EsqlNonReservedKeyword.DO), b.zeroOrMore(STATEMENT()), b.token(EsqlNonReservedKeyword.END), 
+						b.token(EsqlNonReservedKeyword.DO), STATEMENTS(), b.token(EsqlNonReservedKeyword.END), 
 						b.token(EsqlNonReservedKeyword.WHILE), LABEL(), b.token(EsqlLegacyGrammar.EOS)
 						));
 	}
@@ -601,7 +608,7 @@ public class EsqlGrammar {
 		return b.<WhileStatementTreeImpl>nonterminal()
 				.is(f.whileStatementWoLabel(
 						b.token(EsqlNonReservedKeyword.WHILE), EXPRESSION(), 
-						b.token(EsqlNonReservedKeyword.DO), b.zeroOrMore(STATEMENT()), b.token(EsqlNonReservedKeyword.END), 
+						b.token(EsqlNonReservedKeyword.DO), STATEMENTS(), b.token(EsqlNonReservedKeyword.END), 
 						b.token(EsqlNonReservedKeyword.WHILE), b.token(EsqlLegacyGrammar.EOS)
 						));
 	}
@@ -992,7 +999,7 @@ public class EsqlGrammar {
 	public ForStatementTreeImpl FOR_STATEMENT() {
 		return b.<ForStatementTreeImpl>nonterminal(Kind.FOR_STATEMENT).is(f.forStatement(
 				b.token(EsqlNonReservedKeyword.FOR), b.token(EsqlLegacyGrammar.IDENTIFIER), b.token(EsqlNonReservedKeyword.AS),
-				FIELD_REFERENCE(), b.token(EsqlNonReservedKeyword.DO), b.zeroOrMore(STATEMENT()),b.token(EsqlNonReservedKeyword.END), b.token(EsqlNonReservedKeyword.FOR),
+				FIELD_REFERENCE(), b.token(EsqlNonReservedKeyword.DO), STATEMENTS(),b.token(EsqlNonReservedKeyword.END), b.token(EsqlNonReservedKeyword.FOR),
 				b.token(EsqlLegacyGrammar.EOS)
 		));
 	}

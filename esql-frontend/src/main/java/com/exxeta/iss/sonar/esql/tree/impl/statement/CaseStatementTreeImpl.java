@@ -36,13 +36,13 @@ public class CaseStatementTreeImpl extends EsqlTree implements CaseStatementTree
 	private final ExpressionTree mainExpression;
 	private final List<WhenClauseTreeImpl> whenClauses;
 	private final InternalSyntaxToken elseKeyword;
-	private final List<StatementTree> elseSatements;
+	private final StatementsTreeImpl elseSatements;
 	private final InternalSyntaxToken endKeyword;
 	private final InternalSyntaxToken caseKeyword2;
 	private final InternalSyntaxToken semi;
 
 	public CaseStatementTreeImpl(InternalSyntaxToken caseKeyword, ExpressionTree mainExpression,
-			List<WhenClauseTreeImpl> whenClauses, InternalSyntaxToken elseKeyword, List<StatementTree> elseStatements,
+			List<WhenClauseTreeImpl> whenClauses, InternalSyntaxToken elseKeyword, StatementsTreeImpl elseStatements,
 			InternalSyntaxToken endKeyword, InternalSyntaxToken caseKeyword2, InternalSyntaxToken semi) {
 		super();
 		this.caseKeyword = caseKeyword;
@@ -76,7 +76,7 @@ public class CaseStatementTreeImpl extends EsqlTree implements CaseStatementTree
 	}
 
 	@Override
-	public List<StatementTree> elseSatements() {
+	public StatementsTreeImpl elseSatements() {
 		return elseSatements;
 	}
 
@@ -109,8 +109,7 @@ public class CaseStatementTreeImpl extends EsqlTree implements CaseStatementTree
 	@Override
 	public Iterator<Tree> childrenIterator() {
 		return Iterators.concat(Iterators.forArray(caseKeyword, mainExpression), whenClauses.iterator(),
-				Iterators.singletonIterator(elseKeyword), elseSatements.iterator(),
-				Iterators.forArray(endKeyword, caseKeyword2, semi));
+				Iterators.forArray(elseKeyword, elseSatements,endKeyword, caseKeyword2, semi));
 	}
 
 }

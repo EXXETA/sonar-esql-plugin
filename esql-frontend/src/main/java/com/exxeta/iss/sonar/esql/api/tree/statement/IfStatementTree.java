@@ -29,7 +29,7 @@ public interface IfStatementTree extends StatementTree {
 
 	ExpressionTree condition();
 
-	List<StatementTree> statements();
+	StatementsTree statements();
 
 	SyntaxToken thenToken();
 

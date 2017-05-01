@@ -18,13 +18,11 @@
 package com.exxeta.iss.sonar.esql.tree.impl.statement;
 
 import java.util.Iterator;
-import java.util.List;
 
 import org.sonar.api.internal.google.common.collect.Iterators;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.LoopStatementTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
@@ -34,14 +32,14 @@ public class LoopStatementTreeImpl extends EsqlTree implements LoopStatementTree
 	private LabelTreeImpl label;
 	private InternalSyntaxToken colon;
 	private InternalSyntaxToken loopKeyword;
-	private List<StatementTree> statements;
+	private StatementsTreeImpl statements;
 	private InternalSyntaxToken endKeyword;
 	private InternalSyntaxToken loopKeyword2;
 	private LabelTreeImpl label2;
 	private InternalSyntaxToken semi;
 
 	public LoopStatementTreeImpl(LabelTreeImpl label, InternalSyntaxToken colon, InternalSyntaxToken loopKeyword,
-			List<StatementTree> statements, InternalSyntaxToken endKeyword, InternalSyntaxToken loopKeyword2,
+			StatementsTreeImpl statements, InternalSyntaxToken endKeyword, InternalSyntaxToken loopKeyword2,
 			LabelTreeImpl label2, InternalSyntaxToken semi) {
 		super();
 		this.label = label;
@@ -54,7 +52,7 @@ public class LoopStatementTreeImpl extends EsqlTree implements LoopStatementTree
 		this.semi = semi;
 	}
 
-	public LoopStatementTreeImpl(InternalSyntaxToken loopKeyword, List<StatementTree> statements,
+	public LoopStatementTreeImpl(InternalSyntaxToken loopKeyword, StatementsTreeImpl statements,
 			InternalSyntaxToken endKeyword, InternalSyntaxToken loopKeyword2, InternalSyntaxToken semi) {
 		super();
 		this.loopKeyword = loopKeyword;
@@ -80,7 +78,7 @@ public class LoopStatementTreeImpl extends EsqlTree implements LoopStatementTree
 	}
 
 	@Override
-	public List<StatementTree> statements() {
+	public StatementsTreeImpl statements() {
 		return statements;
 	}
 
@@ -116,8 +114,8 @@ public class LoopStatementTreeImpl extends EsqlTree implements LoopStatementTree
 
 	@Override
 	public Iterator<Tree> childrenIterator() {
-		return Iterators.concat(Iterators.forArray(label, colon, loopKeyword), statements.iterator(),
-				Iterators.forArray(endKeyword, loopKeyword2, semi));
+		return Iterators.forArray(label, colon, loopKeyword, statements,
+				endKeyword, loopKeyword2, semi);
 	}
 
 }

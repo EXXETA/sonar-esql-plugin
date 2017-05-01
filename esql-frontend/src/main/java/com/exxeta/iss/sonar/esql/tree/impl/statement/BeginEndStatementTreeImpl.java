@@ -18,11 +18,9 @@
 package com.exxeta.iss.sonar.esql.tree.impl.statement;
 
 import java.util.Iterator;
-import java.util.List;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.BeginEndStatementTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
@@ -35,14 +33,14 @@ public class BeginEndStatementTreeImpl extends EsqlTree implements BeginEndState
 	private InternalSyntaxToken beginKeyword;
 	private InternalSyntaxToken notKeyword;
 	private InternalSyntaxToken atomicKeyword;
-	private List<StatementTree> statements;
+	private StatementsTreeImpl statements;
 	private InternalSyntaxToken endKeyword;
 	private LabelTreeImpl labelName2;
 	private InternalSyntaxToken semiToken;
 
 	public BeginEndStatementTreeImpl(LabelTreeImpl labelName1, InternalSyntaxToken colon,
 			InternalSyntaxToken beginKeyword, InternalSyntaxToken notKeyword, InternalSyntaxToken atomicKeyword,
-			List<StatementTree> statements, InternalSyntaxToken endKeyword, LabelTreeImpl labelName2, InternalSyntaxToken semiToken) {
+			StatementsTreeImpl statements, InternalSyntaxToken endKeyword, LabelTreeImpl labelName2, InternalSyntaxToken semiToken) {
 		super();
 		this.labelName1 = labelName1;
 		this.colon = colon;
@@ -56,7 +54,7 @@ public class BeginEndStatementTreeImpl extends EsqlTree implements BeginEndState
 	}
 
 	public BeginEndStatementTreeImpl(InternalSyntaxToken beginKeyword, InternalSyntaxToken notKeyword,
-			InternalSyntaxToken atomicKeyword, List<StatementTree> statements, InternalSyntaxToken endKeyword, InternalSyntaxToken semiToken) {
+			InternalSyntaxToken atomicKeyword, StatementsTreeImpl statements, InternalSyntaxToken endKeyword, InternalSyntaxToken semiToken) {
 		super();
 		this.beginKeyword = beginKeyword;
 		this.notKeyword = notKeyword;
@@ -92,7 +90,7 @@ public class BeginEndStatementTreeImpl extends EsqlTree implements BeginEndState
 	}
 
 	@Override
-	public List<StatementTree> statements() {
+	public StatementsTreeImpl statements() {
 		return statements;
 	}
 
@@ -118,8 +116,8 @@ public class BeginEndStatementTreeImpl extends EsqlTree implements BeginEndState
 
 	@Override
 	public Iterator<Tree> childrenIterator() {
-		return Iterators.<Tree>concat(Iterators.forArray(labelName1, colon, beginKeyword, notKeyword, atomicKeyword),
-				statements.iterator(), Iterators.forArray(endKeyword, labelName2, semiToken));
+		return Iterators.forArray(labelName1, colon, beginKeyword, notKeyword, atomicKeyword,
+				statements, endKeyword, labelName2, semiToken);
 	}
 
 	@Override

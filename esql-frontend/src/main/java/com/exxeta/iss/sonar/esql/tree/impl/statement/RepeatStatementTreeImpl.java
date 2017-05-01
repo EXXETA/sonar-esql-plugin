@@ -18,14 +18,12 @@
 package com.exxeta.iss.sonar.esql.tree.impl.statement;
 
 import java.util.Iterator;
-import java.util.List;
 
 import org.sonar.api.internal.google.common.collect.Iterators;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.RepeatStatementTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
@@ -34,7 +32,7 @@ public class RepeatStatementTreeImpl extends EsqlTree implements RepeatStatement
 	LabelTreeImpl label;
 	InternalSyntaxToken colon;
 	InternalSyntaxToken repeatKeyword;
-	List<StatementTree> statements;
+	StatementsTreeImpl statements;
 	InternalSyntaxToken untilKeyword;
 	ExpressionTree condition;
 	InternalSyntaxToken endKeyword;
@@ -43,7 +41,7 @@ public class RepeatStatementTreeImpl extends EsqlTree implements RepeatStatement
 	InternalSyntaxToken semi;
 
 	public RepeatStatementTreeImpl(LabelTreeImpl label, InternalSyntaxToken colon, InternalSyntaxToken repeatKeyword,
-			List<StatementTree> statements, InternalSyntaxToken untilKeyword, ExpressionTree condition,
+			StatementsTreeImpl statements, InternalSyntaxToken untilKeyword, ExpressionTree condition,
 			InternalSyntaxToken endKeyword, InternalSyntaxToken repeatKeyword2, LabelTreeImpl label2,
 			InternalSyntaxToken semi) {
 		super();
@@ -59,7 +57,7 @@ public class RepeatStatementTreeImpl extends EsqlTree implements RepeatStatement
 		this.semi = semi;
 	}
 
-	public RepeatStatementTreeImpl(InternalSyntaxToken repeatKeyword, List<StatementTree> statements,
+	public RepeatStatementTreeImpl(InternalSyntaxToken repeatKeyword, StatementsTreeImpl statements,
 			InternalSyntaxToken untilKeyword, ExpressionTree condition, InternalSyntaxToken endKeyword,
 			InternalSyntaxToken repeatKeyword2, InternalSyntaxToken semi) {
 		super();
@@ -88,7 +86,7 @@ public class RepeatStatementTreeImpl extends EsqlTree implements RepeatStatement
 	}
 
 	@Override
-	public List<StatementTree> statements() {
+	public StatementsTreeImpl statements() {
 		return statements;
 	}
 
@@ -135,8 +133,8 @@ public class RepeatStatementTreeImpl extends EsqlTree implements RepeatStatement
 
 	@Override
 	public Iterator<Tree> childrenIterator() {
-		return Iterators.concat(Iterators.forArray(label, colon, repeatKeyword), statements.iterator(),
-				Iterators.forArray(untilKeyword, condition, endKeyword, repeatKeyword2, label2, semi));
+		return Iterators.forArray(label, colon, repeatKeyword, statements,
+				untilKeyword, condition, endKeyword, repeatKeyword2, label2, semi);
 	}
 
 }

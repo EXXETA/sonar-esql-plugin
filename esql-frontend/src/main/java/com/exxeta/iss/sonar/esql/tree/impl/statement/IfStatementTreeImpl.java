@@ -29,7 +29,6 @@ import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ElseClauseTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ElseifClauseTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.IfStatementTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
@@ -40,7 +39,7 @@ public class IfStatementTreeImpl extends EsqlTree implements IfStatementTree {
 	private final InternalSyntaxToken ifKeyword;
 	private final ExpressionTree condition;
 	private final InternalSyntaxToken thenKeyword;
-	private final List<StatementTree> statements;
+	private final StatementsTreeImpl statements;
 	private final List<ElseifClauseTree> elseifClauses;
 	private final ElseClauseTree elseClause;
 	private final InternalSyntaxToken endKeyword;
@@ -48,14 +47,14 @@ public class IfStatementTreeImpl extends EsqlTree implements IfStatementTree {
 	private final InternalSyntaxToken semiToken;
 
 	public IfStatementTreeImpl(InternalSyntaxToken ifKeyword, ExpressionTree expression,
-			InternalSyntaxToken thenKeyword, List<StatementTree> statements, List<ElseifClauseTree> elseifClauses,
+			InternalSyntaxToken thenKeyword, StatementsTreeImpl statements, List<ElseifClauseTree> elseifClauses,
 			ElseClauseTree elseClause, InternalSyntaxToken endKeyword, InternalSyntaxToken ifKeyword2,
 			InternalSyntaxToken semiToken) {
 		super();
 		this.ifKeyword = ifKeyword;
 		this.condition = expression;
 		this.thenKeyword = thenKeyword;
-		this.statements = statements == null ? Collections.emptyList() : statements;
+		this.statements = statements;
 		this.elseifClauses = elseifClauses == null ? Collections.emptyList() : elseifClauses;
 		this.elseClause = elseClause;
 		this.endKeyword = endKeyword;
@@ -79,7 +78,7 @@ public class IfStatementTreeImpl extends EsqlTree implements IfStatementTree {
 	}
 
 	@Override
-	public List<StatementTree> statements() {
+	public StatementsTreeImpl statements() {
 		return statements;
 	}
 
@@ -120,7 +119,7 @@ public class IfStatementTreeImpl extends EsqlTree implements IfStatementTree {
 
 	@Override
 	public Iterator<Tree> childrenIterator() {
-		return Iterators.<Tree>concat(Iterators.forArray(ifKeyword, condition, thenKeyword), statements.iterator(),
+		return Iterators.<Tree>concat(Iterators.forArray(ifKeyword, condition, thenKeyword, statements),
 				elseifClauses.iterator(), Iterators.forArray(elseClause, endKeyword, ifKeyword2, semiToken));
 	}
 

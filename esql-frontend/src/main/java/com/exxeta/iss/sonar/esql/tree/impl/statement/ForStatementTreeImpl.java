@@ -36,13 +36,13 @@ public class ForStatementTreeImpl extends EsqlTree implements ForStatementTree {
 	private final InternalSyntaxToken asKeyword;
 	private final FieldReferenceTreeImpl fieldReference;
 	private final InternalSyntaxToken doKeyword;
-	private final List<StatementTree> statements;
+	private final StatementsTreeImpl statements;
 	private final InternalSyntaxToken forKeyword2;
 	private final InternalSyntaxToken endKeyword;
 	private final InternalSyntaxToken semi;
 
 	public ForStatementTreeImpl(InternalSyntaxToken forKeyword, InternalSyntaxToken correlationName,
-			InternalSyntaxToken asKeyword, FieldReferenceTreeImpl fieldReference, InternalSyntaxToken doKeyword, List<StatementTree> statements,
+			InternalSyntaxToken asKeyword, FieldReferenceTreeImpl fieldReference, InternalSyntaxToken doKeyword, StatementsTreeImpl statements,
 			InternalSyntaxToken forKeyword2, InternalSyntaxToken endKeyword, InternalSyntaxToken semi) {
 		super();
 		this.forKeyword = forKeyword;
@@ -82,7 +82,7 @@ public class ForStatementTreeImpl extends EsqlTree implements ForStatementTree {
 	}
 
 	@Override
-	public List<StatementTree> statements() {
+	public StatementsTreeImpl statements() {
 		return statements;
 	}
 
@@ -113,8 +113,8 @@ public class ForStatementTreeImpl extends EsqlTree implements ForStatementTree {
 
 	@Override
 	public Iterator<Tree> childrenIterator() {
-		return Iterators.concat(Iterators.forArray(forKeyword, correlationName, asKeyword, fieldReference),
-				statements.iterator(), Iterators.forArray(forKeyword2, endKeyword, semi));
+		return Iterators.forArray(forKeyword, correlationName, asKeyword, fieldReference,
+				statements, forKeyword2, endKeyword, semi);
 	}
 
 }

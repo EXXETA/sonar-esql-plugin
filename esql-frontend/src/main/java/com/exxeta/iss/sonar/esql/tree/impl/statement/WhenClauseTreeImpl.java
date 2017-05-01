@@ -18,13 +18,12 @@
 package com.exxeta.iss.sonar.esql.tree.impl.statement;
 
 import java.util.Iterator;
-import java.util.List;
 
 import org.sonar.api.internal.google.common.collect.Iterators;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.StatementsTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.WhenClauseTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
@@ -35,9 +34,9 @@ public class WhenClauseTreeImpl extends EsqlTree implements WhenClauseTree{
 	private final InternalSyntaxToken whenKeyword; 
 	private final ExpressionTree expression;
 	private final InternalSyntaxToken thenKeyword; 
-	private final List<StatementTree> statements;
+	private final StatementsTreeImpl statements;
 	public WhenClauseTreeImpl(InternalSyntaxToken whenKeyword, ExpressionTree expression,
-			InternalSyntaxToken thenKeyword, List<StatementTree> statements) {
+			InternalSyntaxToken thenKeyword, StatementsTreeImpl statements) {
 		super();
 		this.whenKeyword = whenKeyword;
 		this.expression = expression;
@@ -57,7 +56,7 @@ public class WhenClauseTreeImpl extends EsqlTree implements WhenClauseTree{
 		return thenKeyword;
 	}
 	@Override
-	public List<StatementTree> statements() {
+	public StatementsTreeImpl statements() {
 		return statements;
 	}
 	@Override
@@ -70,7 +69,7 @@ public class WhenClauseTreeImpl extends EsqlTree implements WhenClauseTree{
 	}
 	@Override
 	public Iterator<Tree> childrenIterator() {
-		return Iterators.concat(Iterators.forArray(whenKeyword, expression, thenKeyword), statements.iterator());
+		return Iterators.forArray(whenKeyword, expression, thenKeyword, statements);
 	}
 
 	

@@ -17,10 +17,9 @@
  */
 package com.exxeta.iss.sonar.esql.api.tree.statement;
 
-import java.util.List;
-
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.LabelTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.StatementsTreeImpl;
 
 public interface BeginEndStatementTree extends StatementTree{
 	LabelTreeImpl labelName1();
@@ -28,7 +27,7 @@ public interface BeginEndStatementTree extends StatementTree{
 	InternalSyntaxToken beginKeyword();
 	InternalSyntaxToken notKeyword();
 	InternalSyntaxToken atomicKeyword();
-	List<StatementTree> statements();
+	StatementsTreeImpl statements();
 	InternalSyntaxToken endKeyword();
 	LabelTreeImpl labelName2();
 	InternalSyntaxToken semiToken();

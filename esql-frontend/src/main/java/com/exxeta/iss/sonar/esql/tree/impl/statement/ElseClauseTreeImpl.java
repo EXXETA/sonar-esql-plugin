@@ -18,12 +18,10 @@
 package com.exxeta.iss.sonar.esql.tree.impl.statement;
 
 import java.util.Iterator;
-import java.util.List;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ElseClauseTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
@@ -32,9 +30,9 @@ import com.google.common.collect.Iterators;
 public class ElseClauseTreeImpl extends EsqlTree implements ElseClauseTree {
 
 	  private SyntaxToken elseKeyword;
-	  private final List<StatementTree> statements;
+	  private final StatementsTreeImpl statements;
 
-	  public ElseClauseTreeImpl(InternalSyntaxToken elseKeyword, List<StatementTree> statements) {
+	  public ElseClauseTreeImpl(InternalSyntaxToken elseKeyword, StatementsTreeImpl statements) {
 	    this.elseKeyword = elseKeyword;
 	    this.statements = statements;
 
@@ -46,7 +44,7 @@ public class ElseClauseTreeImpl extends EsqlTree implements ElseClauseTree {
 	  }
 
 	  @Override
-	  public List<StatementTree> statements() {
+	  public StatementsTreeImpl statements() {
 	    return statements;
 	  }
 
@@ -57,7 +55,7 @@ public class ElseClauseTreeImpl extends EsqlTree implements ElseClauseTree {
 
 	  @Override
 	  public Iterator<Tree> childrenIterator() {
-	    return Iterators.<Tree>concat(Iterators.singletonIterator(elseKeyword), statements.iterator());
+	    return Iterators.<Tree>forArray(elseKeyword, statements);
 	  }
 
 	  @Override

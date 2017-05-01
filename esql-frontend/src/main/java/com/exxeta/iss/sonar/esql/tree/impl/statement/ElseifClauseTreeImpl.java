@@ -17,15 +17,12 @@
  */
 package com.exxeta.iss.sonar.esql.tree.impl.statement;
 
-import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ElseifClauseTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
@@ -36,9 +33,9 @@ public class ElseifClauseTreeImpl extends EsqlTree implements ElseifClauseTree {
 	  private InternalSyntaxToken elseifKeyword;
 	  private ExpressionTree expression;
 	  private InternalSyntaxToken thenKeyword;
-	  private final List<StatementTree> statements;
+	  private final StatementsTreeImpl statements;
 
-	  public ElseifClauseTreeImpl(InternalSyntaxToken elseifKeyword, ExpressionTree expression, InternalSyntaxToken thenToken, List<StatementTree> statements) {
+	  public ElseifClauseTreeImpl(InternalSyntaxToken elseifKeyword, ExpressionTree expression, InternalSyntaxToken thenToken, StatementsTreeImpl statements) {
 		    this.elseifKeyword = elseifKeyword;
 		    this.expression=expression;
 		    this.thenKeyword=thenToken;
@@ -48,7 +45,7 @@ public class ElseifClauseTreeImpl extends EsqlTree implements ElseifClauseTree {
 
 	  public ElseifClauseTreeImpl(InternalSyntaxToken elseifKeyword) {
 		    this.elseifKeyword = elseifKeyword;
-		    this.statements = Collections.emptyList();
+		    this.statements = null;
 
 		  }
 
@@ -68,7 +65,7 @@ public class ElseifClauseTreeImpl extends EsqlTree implements ElseifClauseTree {
 	}
 
 	  @Override
-	  public List<StatementTree> statements() {
+	  public StatementsTreeImpl statements() {
 	    return statements;
 	  }
 
@@ -80,9 +77,7 @@ public class ElseifClauseTreeImpl extends EsqlTree implements ElseifClauseTree {
 	  @Override
 	  public Iterator<Tree> childrenIterator() {
 		  
-		  return Iterators.<Tree>concat(
-			      Iterators.forArray(elseifKeyword, expression, thenKeyword),
-			      statements.iterator());
+		  return Iterators.forArray(elseifKeyword, expression, thenKeyword, statements);
 	  }
 
 	  @Override

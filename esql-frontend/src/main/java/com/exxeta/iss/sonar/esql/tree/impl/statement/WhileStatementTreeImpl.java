@@ -18,13 +18,11 @@
 package com.exxeta.iss.sonar.esql.tree.impl.statement;
 
 import java.util.Iterator;
-import java.util.List;
 
 import org.sonar.api.internal.google.common.collect.Iterators;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.WhileStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
@@ -36,13 +34,13 @@ public class WhileStatementTreeImpl extends EsqlTree implements WhileStatementTr
 	InternalSyntaxToken whileKeyword;
 	ExpressionTree condition;
 	InternalSyntaxToken doKeyword;
-	List<StatementTree> statements;
+	StatementsTreeImpl statements;
 	InternalSyntaxToken endKeyword;
 	InternalSyntaxToken whileKeyword2;
 	LabelTreeImpl label2;
 	InternalSyntaxToken semi;
 	public WhileStatementTreeImpl(LabelTreeImpl label, InternalSyntaxToken colon, InternalSyntaxToken whileKeyword,
-			ExpressionTree condition, InternalSyntaxToken doKeyword, List<StatementTree> statements,
+			ExpressionTree condition, InternalSyntaxToken doKeyword, StatementsTreeImpl statements,
 			InternalSyntaxToken endKeyword, InternalSyntaxToken whileKeyword2, LabelTreeImpl label2,
 			InternalSyntaxToken semi) {
 		super();
@@ -58,7 +56,7 @@ public class WhileStatementTreeImpl extends EsqlTree implements WhileStatementTr
 		this.semi = semi;
 	}
 	public WhileStatementTreeImpl(InternalSyntaxToken whileKeyword, ExpressionTree condition,
-			InternalSyntaxToken doKeyword, List<StatementTree> statements, InternalSyntaxToken endKeyword,
+			InternalSyntaxToken doKeyword, StatementsTreeImpl statements, InternalSyntaxToken endKeyword,
 			InternalSyntaxToken whileKeyword2, InternalSyntaxToken semi) {
 		super();
 		this.whileKeyword = whileKeyword;
@@ -96,7 +94,7 @@ public class WhileStatementTreeImpl extends EsqlTree implements WhileStatementTr
 	}
 
 	@Override
-	public List<StatementTree> statements() {
+	public StatementsTreeImpl statements() {
 		return statements;
 	}
 	
@@ -133,8 +131,8 @@ public class WhileStatementTreeImpl extends EsqlTree implements WhileStatementTr
 
 	@Override
 	public Iterator<Tree> childrenIterator() {
-		return Iterators.concat(Iterators.forArray(label, colon, whileKeyword, condition, doKeyword), statements.iterator(),
-				Iterators.forArray(endKeyword, whileKeyword2, label2, semi));
+		return Iterators.forArray(label, colon, whileKeyword, condition, doKeyword, statements,
+				endKeyword, whileKeyword2, label2, semi);
 	}
 
 
