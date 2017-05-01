@@ -17,6 +17,8 @@
  */
 package com.exxeta.iss.sonar.esql.api.tree;
 
+import java.util.Iterator;
+
 import org.sonar.sslr.grammar.GrammarRuleKey;
 
 import com.exxeta.iss.sonar.esql.api.tree.expression.BinaryExpressionTree;
@@ -106,6 +108,9 @@ public interface Tree {
 	void accept(DoubleDispatchVisitor visitor);
 
     Tree getParent();
+    
+	Iterator<Tree> childrenIterator();
+
 
 	public enum Kind implements GrammarRuleKey, Kinds {
 	    TOKEN(SyntaxToken.class),
