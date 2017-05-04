@@ -235,7 +235,10 @@ public enum EsqlNonReservedKeyword implements TokenType, GrammarRuleKey {
 	TRAILING("TRAILING"), 
 	ASBITSTREAM("ASBITSTREAM"), 
 	ALL("ALL"), 
-	CAST("CAST");
+	CAST("CAST"), 
+	SYMMERTIC("SYMMERTIC"),
+	ASYMMERTIC("ASYMMERTIC")
+	;
 	
 private final String value;
 

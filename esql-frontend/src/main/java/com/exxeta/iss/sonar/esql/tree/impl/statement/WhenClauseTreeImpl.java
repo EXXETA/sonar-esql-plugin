@@ -23,7 +23,6 @@ import org.sonar.api.internal.google.common.collect.Iterators;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.StatementsTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.WhenClauseTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;

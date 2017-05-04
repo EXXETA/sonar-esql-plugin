@@ -4,10 +4,8 @@ import java.util.List;
 
 import org.sonar.check.Rule;
 
-import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
-import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
 import com.exxeta.iss.sonar.esql.api.visitors.FileIssue;
 import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitorCheck;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;

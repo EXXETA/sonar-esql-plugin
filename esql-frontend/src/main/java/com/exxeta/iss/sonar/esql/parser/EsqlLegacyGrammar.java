@@ -113,7 +113,7 @@ public enum EsqlLegacyGrammar implements GrammarRuleKey {
 
 		b.rule(IDENTIFIER).is(b.firstOf(IDENTIFIER_WO_QUOTES, IDENTIFIER_WITH_QUOTES));
 		b.rule(IDENTIFIER_WO_QUOTES).is(b.nextNot(reservedKeyword), SPACING, b.regexp(EsqlLexer.IDENTIFIER));
-		b.rule(IDENTIFIER_WITH_QUOTES).is(SPACING, b.regexp("\"" + EsqlLexer.IDENTIFIER + "\""));
+		b.rule(IDENTIFIER_WITH_QUOTES).is(SPACING, b.regexp(EsqlLexer.IDENTIFIER_WITH_QUOTES));
 		b.rule(FIELD_NAME).is(IDENTIFIER);
 		b.rule(NUMERIC_LITERAL).is(SPACING, b.token(EsqlTokenType.NUMBER, b.regexp(EsqlLexer.NUMERIC_LITERAL)),
 				SPACING);

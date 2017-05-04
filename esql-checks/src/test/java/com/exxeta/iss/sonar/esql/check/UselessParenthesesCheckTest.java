@@ -15,18 +15,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.esql.api.tree.expression;
+package com.exxeta.iss.sonar.esql.check;
 
-import com.exxeta.iss.sonar.esql.api.tree.FieldReferenceTree;
-import com.exxeta.iss.sonar.esql.api.tree.Tree;
-import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
-import com.exxeta.iss.sonar.esql.api.tree.statement.ParameterListTree;
-import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
+import java.io.File;
 
-public interface InExpressionTree extends ExpressionTree{
+import org.junit.Test;
 
-	FieldReferenceTree fieldReference();
-	SyntaxToken notKeyword();
-	SyntaxToken inKeyword();
-	ParameterListTree argumentList();
+import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
+
+public class UselessParenthesesCheckTest {
+	@Test
+	public void test() throws Exception {
+		UselessParenthesesCheck check = new UselessParenthesesCheck();
+		EsqlCheckVerifier.issues(check, new File("src/test/resources/uselessParentheses.esql"))
+			.next().atLine(5).withMessage("Remove these useless parentheses.")
+			.next().atLine(6).withMessage("Remove these useless parentheses.")
+			.noMore();
+	}
 }

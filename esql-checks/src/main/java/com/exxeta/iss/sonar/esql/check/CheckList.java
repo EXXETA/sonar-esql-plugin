@@ -55,7 +55,8 @@ public final class CheckList {
         MissingNewlineAtEndOfFileCheck.class,
         UnusedRoutineCheck.class,
         EmptyBlockCheck.class,
-        EmptyFileCheck.class
+        EmptyFileCheck.class,
+        UselessParenthesesCheck.class
         );
   }
 

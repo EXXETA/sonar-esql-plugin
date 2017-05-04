@@ -60,6 +60,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.declaration.PathElementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.ProgramTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.SchemaNameTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.ArrayLiteralTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.expression.BetweenExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.BinaryExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.CallExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.InExpressionTreeImpl;
@@ -1282,9 +1283,15 @@ public class TreeFactory {
 		}
 	}
 
-	public InExpressionTreeImpl inExpression(FieldReferenceTreeImpl fieldReference, InternalSyntaxToken inKeyword,
-			SeparatedList<Tree> argumentList) {
-		return new InExpressionTreeImpl(fieldReference, inKeyword, argumentList);
+	public InExpressionTreeImpl inExpression(FieldReferenceTreeImpl fieldReference, Optional<InternalSyntaxToken> notKeyword,  InternalSyntaxToken inKeyword,
+			ParameterListTreeImpl argumentList) {
+		return new InExpressionTreeImpl(fieldReference, notKeyword.isPresent()?notKeyword.get():null, inKeyword, argumentList);
+	}
+
+	public BetweenExpressionTreeImpl betweenExpression(ExpressionTree expression, Optional<InternalSyntaxToken> notKeyword,  InternalSyntaxToken betweenKeyword,
+			Optional<InternalSyntaxToken> symmetricKeyword ,ExpressionTree endpoint1, InternalSyntaxToken andKeyword, ExpressionTree endpoint2) {
+		return new BetweenExpressionTreeImpl(expression, notKeyword.isPresent()?notKeyword.get():null, betweenKeyword, symmetricKeyword.isPresent()?symmetricKeyword.get():null,
+				endpoint1, andKeyword, endpoint2);
 	}
 
 	public LiteralTreeImpl listLiteral(InternalSyntaxToken listToken) {

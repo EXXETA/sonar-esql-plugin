@@ -69,7 +69,7 @@ CREATE COMPUTE MODULE ABC
    END IF;
    IF c BETWEEN a AND b THEN
    END IF;
-   IF c BETWEEN c.from AND currentDayIntervalRef.until THEN
+   IF c BETWEEN c."from" AND currentDayIntervalRef."until" THEN
    END IF;
 
 	        HOUSENR_LOOP: LOOP
@@ -86,11 +86,11 @@ CREATE COMPUTE MODULE ABC
 	               IF pos > strLength THEN
 	                       LEAVE HOUSENR_LOOP;
 	               END IF;
-	        END LOOP;
+	        END LOOP HOUSENR_LOOP;
 
 
 
-SET OutRef.From = eMailFrom;
+SET OutRef."From" = eMailFrom;
 
 
 DECLARE asOfDateTS TIMESTAMP CAST(asOfDate, TIME '00:00:00' AS TIMESTAMP);

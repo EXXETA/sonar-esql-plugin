@@ -663,16 +663,27 @@ public class EsqlGrammar {
 
 	public ExpressionTree UNARY_EXPRESSION() {
 		return b.<ExpressionTree>nonterminal(EsqlLegacyGrammar.unaryExpression)
-				.is(b.firstOf(f.prefixExpression(b.firstOf(b.token(EsqlNonReservedKeyword.NOT)), UNARY_EXPRESSION()),
+				.is(b.firstOf(f.prefixExpression(b.firstOf(
+						b.token(EsqlNonReservedKeyword.NOT),
+						b.token(EsqlPunctuator.PLUS),
+						b.token(EsqlPunctuator.MINUS)
+						), UNARY_EXPRESSION()),
 						LEFT_HAND_SIDE_EXPRESSION()));
 	}
 
 	public ExpressionTree LEFT_HAND_SIDE_EXPRESSION() {
-		return b.<ExpressionTree>nonterminal(EsqlLegacyGrammar.leftHandSideExpression).is(b.firstOf(IN_EXPRESSION(), CALL_EXPRESSION()));
+		return b.<ExpressionTree>nonterminal(EsqlLegacyGrammar.leftHandSideExpression).is(b.firstOf(IN_EXPRESSION(), BETWEEN_EXPRESSION(), CALL_EXPRESSION()));
 	}
 
 	public ExpressionTree IN_EXPRESSION(){
-		return b.<ExpressionTree>nonterminal(Kind.IN_EXPRESSION).is(f.inExpression(FIELD_REFERENCE(), b.token(EsqlNonReservedKeyword.IN), ARGUMENT_LIST())
+		return b.<ExpressionTree>nonterminal(Kind.IN_EXPRESSION).is(f.inExpression(FIELD_REFERENCE(), b.optional(b.token(EsqlNonReservedKeyword.NOT)), b.token(EsqlNonReservedKeyword.IN), ARGUMENT_CLAUSE())
+				);
+	}
+	
+	public ExpressionTree BETWEEN_EXPRESSION(){
+		return b.<ExpressionTree>nonterminal(Kind.BETWEEN_EXPRESSION).is(f.betweenExpression(CALL_EXPRESSION(), b.optional(b.token(EsqlNonReservedKeyword.NOT)), 
+				b.token(EsqlNonReservedKeyword.BETWEEN), b.optional(b.firstOf(b.token(EsqlNonReservedKeyword.SYMMERTIC),b.token(EsqlNonReservedKeyword.ASYMMERTIC))), 
+				CALL_EXPRESSION(), b.token(EsqlNonReservedKeyword.AND), CALL_EXPRESSION())
 				);
 	}
 	

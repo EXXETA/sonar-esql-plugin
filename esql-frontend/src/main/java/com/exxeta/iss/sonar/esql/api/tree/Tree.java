@@ -21,6 +21,7 @@ import java.util.Iterator;
 
 import org.sonar.sslr.grammar.GrammarRuleKey;
 
+import com.exxeta.iss.sonar.esql.api.tree.expression.BetweenExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.BinaryExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.CallExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.InExpressionTree;
@@ -229,7 +230,8 @@ public interface Tree {
 		ROW_CONSTRUCTOR_FUNCTION(RowConstructorFunctionTree.class), 
 		ALIASED_EXPRESSION(AliasedExpressionTree.class), 
 		PASSTHRU_FUNCTION(PassthruFunctionTree.class),
-		STATEMENTS(StatementsTree.class);
+		STATEMENTS(StatementsTree.class), 
+		BETWEEN_EXPRESSION(BetweenExpressionTree.class);
 
 		final Class<? extends Tree> associatedInterface;
 

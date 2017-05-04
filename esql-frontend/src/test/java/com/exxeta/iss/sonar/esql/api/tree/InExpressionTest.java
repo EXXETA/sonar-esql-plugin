@@ -15,18 +15,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.esql.api.tree.expression;
+package com.exxeta.iss.sonar.esql.api.tree;
 
-import com.exxeta.iss.sonar.esql.api.tree.FieldReferenceTree;
-import com.exxeta.iss.sonar.esql.api.tree.Tree;
-import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
-import com.exxeta.iss.sonar.esql.api.tree.statement.ParameterListTree;
-import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
+import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
 
-public interface InExpressionTree extends ExpressionTree{
+import org.junit.Test;
 
-	FieldReferenceTree fieldReference();
-	SyntaxToken notKeyword();
-	SyntaxToken inKeyword();
-	ParameterListTree argumentList();
+import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+
+public class InExpressionTest {
+
+	@Test
+	public void expression() {
+		assertThat(Kind.IN_EXPRESSION)
+		.matches("a in (a,b,c)")
+		.matches("a not in (a,b,c)")
+		;
+	}
+	
 }

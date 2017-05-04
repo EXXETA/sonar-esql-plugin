@@ -28,14 +28,14 @@ import com.exxeta.iss.sonar.esql.api.visitors.FileIssue;
 @NoSqale
 public class UseBrokerSchemaCheck extends DoubleDispatchVisitorCheck {
 	public static final String CHECK_KEY = "UseBrokerSchema";
-
+	public static final String MESSAGE = "The default Schema should not be used. Move the file to a broker schema.";
 
 	@Override
 	public void visitProgram(ProgramTree tree) {
 		
 		if (tree.brokerSchemaStatement()==null){
-			String message = "The default Schema should not be used. Move the file to a broker schema.";
-			addIssue(new FileIssue(this, message));
+			
+			addIssue(new FileIssue(this, MESSAGE));
 		}
 		
 		super.visitProgram(tree);

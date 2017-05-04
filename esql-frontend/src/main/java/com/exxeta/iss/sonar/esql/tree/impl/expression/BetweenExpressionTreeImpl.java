@@ -23,53 +23,71 @@ import com.exxeta.iss.sonar.esql.api.symbols.Type;
 import com.exxeta.iss.sonar.esql.api.symbols.TypeSet;
 import com.exxeta.iss.sonar.esql.api.tree.FieldReferenceTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
-import com.exxeta.iss.sonar.esql.api.tree.expression.InExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.BetweenExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.symbols.type.TypableTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
-import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
-import com.exxeta.iss.sonar.esql.tree.impl.declaration.FieldReferenceTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.ParameterListTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
-import com.google.common.base.Functions;
 import com.google.common.collect.Iterators;
 
-public class InExpressionTreeImpl extends EsqlTree implements InExpressionTree, TypableTree {
+public class BetweenExpressionTreeImpl extends EsqlTree implements BetweenExpressionTree, TypableTree {
 
-	private FieldReferenceTreeImpl fieldReference;
+	private ExpressionTree expression;
 	private InternalSyntaxToken notKeyword;
-	private InternalSyntaxToken inKeyword;
-	private ParameterListTreeImpl argumentList;
+	private InternalSyntaxToken betweenKeyword;
+	private InternalSyntaxToken symmetricKeyword;
+	private ExpressionTree endpoint1;
+	private InternalSyntaxToken andKeyword;
+	private ExpressionTree endpoint2;
 
 	private TypeSet types = TypeSet.emptyTypeSet();
 
-	public InExpressionTreeImpl(FieldReferenceTreeImpl fieldReference, InternalSyntaxToken notKeyword, 
-			InternalSyntaxToken inKeyword, ParameterListTreeImpl argumentList) {
+	public BetweenExpressionTreeImpl(ExpressionTree expression, InternalSyntaxToken notKeyword,
+			InternalSyntaxToken betweenKeyword, InternalSyntaxToken symmetricKeyword, ExpressionTree endpoint1,
+			InternalSyntaxToken andKeyword, ExpressionTree endpoint2) {
 		super();
-		this.fieldReference = fieldReference;
+		this.expression = expression;
 		this.notKeyword = notKeyword;
-		this.inKeyword = inKeyword;
-		this.argumentList = argumentList;
+		this.betweenKeyword = betweenKeyword;
+		this.symmetricKeyword = symmetricKeyword;
+		this.endpoint1 = endpoint1;
+		this.andKeyword = andKeyword;
+		this.endpoint2 = endpoint2;
 	}
 
-	@Override
-	public FieldReferenceTree fieldReference() {
-		return fieldReference;
+
+	public ExpressionTree expression() {
+		return expression;
 	}
 
-	@Override
 	public InternalSyntaxToken notKeyword() {
 		return notKeyword;
 	}
 
-	@Override
-	public InternalSyntaxToken inKeyword() {
-		return inKeyword;
+	public InternalSyntaxToken betweenKeyword() {
+		return betweenKeyword;
 	}
 
-	@Override
-	public ParameterListTreeImpl argumentList() {
-		return argumentList;
+	public InternalSyntaxToken symmetricKeyword() {
+		return symmetricKeyword;
+	}
+
+	public ExpressionTree endpoint1() {
+		return endpoint1;
+	}
+
+	public InternalSyntaxToken andKeyword() {
+		return andKeyword;
+	}
+
+	public ExpressionTree endpoint2() {
+		return endpoint2;
+	}
+
+	public TypeSet getTypes() {
+		return types;
 	}
 
 	@Override
@@ -79,18 +97,18 @@ public class InExpressionTreeImpl extends EsqlTree implements InExpressionTree, 
 
 	@Override
 	public void accept(DoubleDispatchVisitor visitor) {
-		visitor.visitInExpression(this);
+		visitor.visitBetweenExpression(this);
 
 	}
 
 	@Override
 	public Kind getKind() {
-		return Kind.IN_EXPRESSION;
+		return Kind.BETWEEN_EXPRESSION;
 	}
 
 	@Override
 	public Iterator<Tree> childrenIterator() {
-		return Iterators.forArray(fieldReference, notKeyword, inKeyword, argumentList);
+		return Iterators.forArray(expression, notKeyword, betweenKeyword, symmetricKeyword, endpoint1, andKeyword, endpoint2);
 	}
 
 	@Override
