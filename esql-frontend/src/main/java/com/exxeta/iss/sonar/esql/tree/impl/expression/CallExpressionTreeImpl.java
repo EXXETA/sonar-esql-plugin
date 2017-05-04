@@ -23,6 +23,7 @@ import com.exxeta.iss.sonar.esql.api.symbols.Type;
 import com.exxeta.iss.sonar.esql.api.symbols.TypeSet;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.CallExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.FunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.symbols.type.TypableTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
@@ -36,6 +37,7 @@ public class CallExpressionTreeImpl extends EsqlTree implements CallExpressionTr
 	private FunctionTree function;
 	private FieldReferenceTreeImpl functionName;
 	private ParameterListTreeImpl parameters;
+	private ExpressionTree expression;
 	  private TypeSet types = TypeSet.emptyTypeSet();
 
 
@@ -50,6 +52,10 @@ public class CallExpressionTreeImpl extends EsqlTree implements CallExpressionTr
 
 	public CallExpressionTreeImpl(FieldReferenceTreeImpl functionName) {
 		this.functionName=functionName;
+	}
+
+	public CallExpressionTreeImpl(ExpressionTree expression) {
+		this.expression = expression;
 	}
 
 	@Override
@@ -85,7 +91,7 @@ public class CallExpressionTreeImpl extends EsqlTree implements CallExpressionTr
 
 	@Override
 	public Iterator<Tree> childrenIterator() {
-		return Iterators.forArray(function, functionName, parameters);
+		return Iterators.forArray(expression, function, functionName, parameters);
 	}
 	
 	  @Override

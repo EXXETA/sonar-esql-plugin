@@ -20,35 +20,37 @@ package com.exxeta.iss.sonar.esql.tree.impl.statement;
 import java.util.Iterator;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ParameterTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
+import com.exxeta.iss.sonar.esql.tree.impl.declaration.DataTypeTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.google.common.collect.Iterators;
 
 public class ParameterTreeImpl extends EsqlTree implements ParameterTree {
 
 	private InternalSyntaxToken directionIndicator;
-	private InternalSyntaxToken expression;
+	private ExpressionTree expression;
 	private InternalSyntaxToken constantKeyword;
 	private InternalSyntaxToken nameOrNamesapceKeyword;
-	private InternalSyntaxToken dataType;
+	private DataTypeTreeImpl dataType;
 
-	public ParameterTreeImpl(InternalSyntaxToken directionIndicator, InternalSyntaxToken expression) {
+	public ParameterTreeImpl(InternalSyntaxToken directionIndicator, ExpressionTree expression) {
 		this.directionIndicator = directionIndicator;
 		this.expression = expression;
 
 	}
 
-	public ParameterTreeImpl(InternalSyntaxToken directionIndicator, InternalSyntaxToken expression, InternalSyntaxToken nameOrNamesapceKeyword) {
+	public ParameterTreeImpl(InternalSyntaxToken directionIndicator, ExpressionTree expression, InternalSyntaxToken nameOrNamesapceKeyword) {
 		this.directionIndicator = directionIndicator;
 		this.expression=expression;
 		this.nameOrNamesapceKeyword = nameOrNamesapceKeyword;
 				
 	}
 
-	public ParameterTreeImpl(InternalSyntaxToken directionIndicator, InternalSyntaxToken expression,
-			InternalSyntaxToken constantKeyword, InternalSyntaxToken dataType) {
+	public ParameterTreeImpl(InternalSyntaxToken directionIndicator, ExpressionTree expression,
+			InternalSyntaxToken constantKeyword, DataTypeTreeImpl dataType) {
 		this.directionIndicator = directionIndicator;
 		this.expression = expression;
 		this.nameOrNamesapceKeyword = null;
@@ -64,7 +66,7 @@ public class ParameterTreeImpl extends EsqlTree implements ParameterTree {
 	}
 
 	@Override
-	public InternalSyntaxToken expression() {
+	public ExpressionTree expression() {
 		return expression;
 	}
 
@@ -79,7 +81,7 @@ public class ParameterTreeImpl extends EsqlTree implements ParameterTree {
 	}
 
 	@Override
-	public InternalSyntaxToken dataType() {
+	public DataTypeTreeImpl dataType() {
 		return dataType;
 	}
 
@@ -96,7 +98,7 @@ public class ParameterTreeImpl extends EsqlTree implements ParameterTree {
 
 	@Override
 	public Iterator<Tree> childrenIterator() {
-		return Iterators.forArray(directionIndicator, constantKeyword, nameOrNamesapceKeyword, dataType);
+		return Iterators.forArray(directionIndicator, expression, constantKeyword, nameOrNamesapceKeyword, dataType);
 	}
 
 }

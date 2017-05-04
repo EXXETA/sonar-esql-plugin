@@ -21,40 +21,37 @@ import java.util.Iterator;
 
 import com.exxeta.iss.sonar.esql.api.symbols.Type;
 import com.exxeta.iss.sonar.esql.api.symbols.TypeSet;
-import com.exxeta.iss.sonar.esql.api.tree.FieldReferenceTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.InExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.symbols.type.TypableTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
-import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
-import com.exxeta.iss.sonar.esql.tree.impl.declaration.FieldReferenceTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.ParameterListTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
-import com.google.common.base.Functions;
 import com.google.common.collect.Iterators;
 
 public class InExpressionTreeImpl extends EsqlTree implements InExpressionTree, TypableTree {
 
-	private FieldReferenceTreeImpl fieldReference;
+	private ExpressionTree expression;
 	private InternalSyntaxToken notKeyword;
 	private InternalSyntaxToken inKeyword;
 	private ParameterListTreeImpl argumentList;
 
 	private TypeSet types = TypeSet.emptyTypeSet();
 
-	public InExpressionTreeImpl(FieldReferenceTreeImpl fieldReference, InternalSyntaxToken notKeyword, 
+	public InExpressionTreeImpl(ExpressionTree expression, InternalSyntaxToken notKeyword, 
 			InternalSyntaxToken inKeyword, ParameterListTreeImpl argumentList) {
 		super();
-		this.fieldReference = fieldReference;
+		this.expression = expression;
 		this.notKeyword = notKeyword;
 		this.inKeyword = inKeyword;
 		this.argumentList = argumentList;
 	}
 
 	@Override
-	public FieldReferenceTree fieldReference() {
-		return fieldReference;
+	public ExpressionTree expression() {
+		return expression;
 	}
 
 	@Override
@@ -90,7 +87,7 @@ public class InExpressionTreeImpl extends EsqlTree implements InExpressionTree, 
 
 	@Override
 	public Iterator<Tree> childrenIterator() {
-		return Iterators.forArray(fieldReference, notKeyword, inKeyword, argumentList);
+		return Iterators.forArray(expression, notKeyword, inKeyword, argumentList);
 	}
 
 	@Override

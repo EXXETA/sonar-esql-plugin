@@ -199,10 +199,10 @@ public class EsqlGrammar {
 		return b.<ParameterTreeImpl>nonterminal(Kind.PARAMETER).is(f.parameter(
 				b.optional(b.firstOf(b.token(EsqlNonReservedKeyword.IN), b.token(EsqlNonReservedKeyword.OUT),
 						b.token(EsqlNonReservedKeyword.INOUT))),
-				b.token(EsqlLegacyGrammar.expression),
+				CALL_EXPRESSION(),
 				b.optional(b.firstOf(b.token(EsqlNonReservedKeyword.NAME), b.token(EsqlNonReservedKeyword.NAMESPACE),
 						f.newTuple8(b.optional(b.token(EsqlNonReservedKeyword.CONSTANT)),
-								b.token(EsqlLegacyGrammar.dataType))))));
+								DATA_TYPE())))));
 	}
 
 	public RoutineBodyTreeImpl ROUTINE_BODY() {
@@ -278,7 +278,7 @@ public class EsqlGrammar {
 	}
 	
 	private FunctionTree FUNCTION() {
-		return b.firstOf(/*DATABASE_STATE_FUNCTION(),*/DATETIME_FUNCTION(),NUMERIC_FUNCTION(), STRING_MANIPULATION_FUNCTION(), FIELD_FUNCTION(), LIST_FUNCTION(), COMPLEX_FUNCTION()/*, MISC_FUNCTION()*/);
+		return b.firstOf(/*DATABASE_STATE_FUNCTION(),*/DATETIME_FUNCTION(),NUMERIC_FUNCTION(), STRING_MANIPULATION_FUNCTION(), FIELD_FUNCTION(), LIST_FUNCTION(), COMPLEX_FUNCTION(), MISCELLANEOUS_FUNCTION());
 	}
 	
 	private DateTimeFunctionTree DATETIME_FUNCTION() {
@@ -676,7 +676,7 @@ public class EsqlGrammar {
 	}
 
 	public ExpressionTree IN_EXPRESSION(){
-		return b.<ExpressionTree>nonterminal(Kind.IN_EXPRESSION).is(f.inExpression(FIELD_REFERENCE(), b.optional(b.token(EsqlNonReservedKeyword.NOT)), b.token(EsqlNonReservedKeyword.IN), ARGUMENT_CLAUSE())
+		return b.<ExpressionTree>nonterminal(Kind.IN_EXPRESSION).is(f.inExpression(CALL_EXPRESSION(), b.optional(b.token(EsqlNonReservedKeyword.NOT)), b.token(EsqlNonReservedKeyword.IN), ARGUMENT_CLAUSE())
 				);
 	}
 	
@@ -689,7 +689,7 @@ public class EsqlGrammar {
 	
 	public ExpressionTree CALL_EXPRESSION() {
 		return b.<ExpressionTree>nonterminal(Kind.CALL_EXPRESSION).is(f.callExpression(
-				b.firstOf(FUNCTION(), f.newTuple24(FIELD_REFERENCE(), ARGUMENT_CLAUSE()), FIELD_REFERENCE())));
+				b.firstOf(FUNCTION(), PRIMARY_EXPRESSION(), f.newTuple24(FIELD_REFERENCE(), ARGUMENT_CLAUSE()), FIELD_REFERENCE())));
 	}
 
 	public ParameterListTreeImpl ARGUMENT_CLAUSE() {
@@ -713,25 +713,10 @@ public class EsqlGrammar {
 				.is(f.newRelational(ADDITIVE_EXPRESSION(),
 						b.zeroOrMore(f.newTuple14(b.firstOf(b.token(EsqlPunctuator.LT), b.token(EsqlPunctuator.GT),
 								b.token(EsqlPunctuator.LE), b.token(EsqlPunctuator.GE)
-								// f.newTuple20(b.optional(b.token(EsqlNonReservedKeyword.NOT)),
-								// b.token(EsqlNonReservedKeyword.IN)),
-								// f.newTuple21(b.optional(b.token(EsqlNonReservedKeyword.NOT)),
-								// b.token(EsqlNonReservedKeyword.BETWEEN)),
+
 								), ADDITIVE_EXPRESSION()))));
 
-		// FIXME
-
 		/*
-		 * b.rule(relationalExpression) .is(b.firstOf(additiveExpression,
-		 * subtractiveExpression), b .firstOf(
-		 * b.sequence(b.firstOf(b.sequence("NOT", "IN"), "IN"), "(",
-		 * b.firstOf(additiveExpression, subtractiveExpression),
-		 * b.zeroOrMore(b.sequence( ",", b.firstOf(additiveExpression,
-		 * subtractiveExpression))), ")"),
-		 * b.sequence(b.firstOf(b.sequence("NOT", "BETWEEN"), "BETWEEN"),
-		 * b.optional(b.firstOf("ASYMMETRIC", "SYMMETRIC")),
-		 * b.firstOf(additiveExpression, subtractiveExpression), "AND", b
-		 * .firstOf(additiveExpression, subtractiveExpression)), b.zeroOrMore(
 		 * b.firstOf("<", ">", "<=", ">=", b.sequence("IS", b.optional("NOT")),
 		 * b.sequence(b.optional("NOT"), "LIKE")), b.firstOf(additiveExpression,
 		 * subtractiveExpression)))) .skipIfOneChild();
@@ -806,7 +791,7 @@ public class EsqlGrammar {
 
 	public FieldReferenceTreeImpl FIELD_REFERENCE() {
 		return b.<FieldReferenceTreeImpl>nonterminal(Kind.FIELD_REFERENCE)
-				.is(f.fieldReference(b.firstOf(PATH_ELEMENT(), PRIMARY_EXPRESSION(), b.token(EsqlLegacyGrammar.IDENTIFIER) ),
+				.is(f.fieldReference(b.firstOf(PATH_ELEMENT(), b.token(EsqlLegacyGrammar.IDENTIFIER) ),
 						b.zeroOrMore(f.newTuple21(b.token(EsqlPunctuator.DOT), PATH_ELEMENT()))));
 	}
 
@@ -819,9 +804,7 @@ public class EsqlGrammar {
 				Kind.PATH_ELEMENT).is(
 						f.pathElement(
 								b.optional(f.newTriple1(b.token(EsqlPunctuator.LPARENTHESIS),
-										f.newTuple30(b.token(EsqlLegacyGrammar.IDENTIFIER),
-												b.zeroOrMore(f.newTuple20(b.token(EsqlPunctuator.DOT),
-														b.token(EsqlLegacyGrammar.IDENTIFIER)))),
+										CALL_EXPRESSION(),
 										b.token(EsqlPunctuator.RPARENTHESIS))),
 								b.optional(f.newTuple31(b.optional(b.firstOf(NAMESPACE(),
 										f.newTriple2(b.token(EsqlPunctuator.LCURLYBRACE), EXPRESSION(),
@@ -830,7 +813,7 @@ public class EsqlGrammar {
 								b.firstOf(b.token(EsqlLegacyGrammar.IDENTIFIER),
 										f.newTriple3(b.token(EsqlPunctuator.LCURLYBRACE), EXPRESSION(),
 												b.token(EsqlPunctuator.RCURLYBRACE)),
-										b.token(EsqlPunctuator.STAR)),
+										b.token(EsqlPunctuator.STAR), INDEX()),
 								b.optional(INDEX())));
 	}
 
@@ -838,7 +821,7 @@ public class EsqlGrammar {
 		return b.<IndexTreeImpl>nonterminal(Kind.INDEX)
 				.is(f.index(b.token(EsqlPunctuator.LBRACKET),
 						f.newTuple32(b.optional(b.firstOf(b.token(EsqlPunctuator.LT), b.token(EsqlPunctuator.GT))),
-								b.optional(EXPRESSION())),
+								b.optional(b.firstOf(CALL_EXPRESSION(), NUMERIC_LITERAL()))),
 						b.token(EsqlPunctuator.RBRACKET)));
 	}
 

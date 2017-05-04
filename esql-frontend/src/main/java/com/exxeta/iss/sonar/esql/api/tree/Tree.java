@@ -231,7 +231,9 @@ public interface Tree {
 		ALIASED_EXPRESSION(AliasedExpressionTree.class), 
 		PASSTHRU_FUNCTION(PassthruFunctionTree.class),
 		STATEMENTS(StatementsTree.class), 
-		BETWEEN_EXPRESSION(BetweenExpressionTree.class);
+		BETWEEN_EXPRESSION(BetweenExpressionTree.class), 
+		UNARY_PLUS(UnaryExpressionTree.class),
+		UNARY_MINUS(UnaryExpressionTree.class);
 
 		final Class<? extends Tree> associatedInterface;
 

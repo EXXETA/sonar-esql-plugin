@@ -29,7 +29,8 @@ public class PassthruFunctionTest {
 	@Test
 	public void passthruStatement(){
 		assertThat(Kind.PASSTHRU_FUNCTION)
-		.matches("PASSTHRU('SELECT R.* FROM Schema1.Table1 AS R WHERE R.Name = ? OR R.Name =            ? ORDER BY Name'   TO Database.DSN1   VALUES ('Name1', 'Name4'))");
+		.matches("PASSTHRU('SELECT R.* FROM Schema1.Table1 AS R WHERE R.Name = ? OR R.Name =            ? ORDER BY Name'   TO Database.DSN1   VALUES ('Name1', 'Name4'))")
+		.matches("PASSTHRU('aaaaa' VALUES ('aaaa'))");
 
 	}
 	

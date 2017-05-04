@@ -18,13 +18,15 @@
 package com.exxeta.iss.sonar.esql.api.tree.statement;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
+import com.exxeta.iss.sonar.esql.tree.impl.declaration.DataTypeTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 
 public interface ParameterTree extends Tree {
 	InternalSyntaxToken directionIndicator();
-	InternalSyntaxToken expression();
+	ExpressionTree expression();
 	InternalSyntaxToken constantKeyword();
 	InternalSyntaxToken nameOrNamesapceKeyword();
-	InternalSyntaxToken dataType();
+	DataTypeTreeImpl dataType();
 
 }

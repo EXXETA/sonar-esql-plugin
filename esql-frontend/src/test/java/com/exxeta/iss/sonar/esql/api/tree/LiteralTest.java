@@ -48,4 +48,10 @@ public class LiteralTest {
 		.matches("0");
 	}
 	
+	@Test
+	public void timeLiteral(){
+		assertThat(Kind.TIME_LITERAL)
+		.matches("TIME '00:00:00'");
+	}
+	
 }

@@ -34,6 +34,8 @@ public class IdentifierTest {
 		.matches("\"position-b\"")
 		.matches("\"-b\"")
 		.matches("\"a\"\"a\"")
+		.matches("XML")
+		.matches("Element")
 		;
 
 	}

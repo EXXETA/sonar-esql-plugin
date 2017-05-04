@@ -38,7 +38,8 @@ public class FieldReferenceTest {
 		.matches("(XML.Element)NSpace1:Element1")
 		.matches("(XML.Element)NSpace1:Element1[2]")
 		.matches("\"aItem\"")
-		.matches("\"Item\"");
+		.matches("\"Item\"")
+		.matches("[]");
 
 	}
 	@Test
@@ -52,8 +53,6 @@ public class FieldReferenceTest {
 			.notMatches("")
 			.matches("(XML.Element)NSpace1:Element1[2]")
 			.matches("Body.Invoice.Purchases.\"Item\"[]");
-		
-
 		
 	}
 	

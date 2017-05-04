@@ -31,8 +31,7 @@ public class ExpressionTest {
 		.matches("b")
 		.matches("b.c")
 		.matches("0")
-		.notMatches("WHEN.a")
-		.notMatches("when.a");
+		;
 	}
 	
 }

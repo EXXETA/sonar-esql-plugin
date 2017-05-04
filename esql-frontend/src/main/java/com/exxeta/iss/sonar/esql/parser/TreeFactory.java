@@ -166,7 +166,10 @@ public class TreeFactory {
 	}
 
 	private static final Map<String, Kind> PREFIX_KIND_BY_VALUE = ImmutableMap.<String, Tree.Kind>builder()
-			.put(EsqlNonReservedKeyword.NOT.getValue(), Kind.LOGICAL_COMPLEMENT).build();
+			.put(EsqlNonReservedKeyword.NOT.getValue(), Kind.LOGICAL_COMPLEMENT)
+			.put(EsqlPunctuator.PLUS.getValue(), Kind.UNARY_PLUS)
+		    .put(EsqlPunctuator.MINUS.getValue(), Kind.UNARY_MINUS)
+		    .build();
 
 	private static ExpressionTree buildBinaryExpression(ExpressionTree expression,
 			Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> operatorAndOperands) {
@@ -406,10 +409,6 @@ public class TreeFactory {
 		return newTuple(first, second);
 	}
 
-	public <T, U> Tuple<T, U> newTuple20(T first, U second) {
-		return newTuple(first, second);
-	}
-
 	public <T, U> Tuple<T, U> newTuple21(T first, U second) {
 		return newTuple(first, second);
 	}
@@ -443,10 +442,6 @@ public class TreeFactory {
 	}
 
 	public <T, U> Tuple<T, U> newTuple29(T first, U second) {
-		return newTuple(first, second);
-	}
-
-	public <T, U> Tuple<T, U> newTuple30(T first, U second) {
 		return newTuple(first, second);
 	}
 
@@ -1144,11 +1139,11 @@ public class TreeFactory {
 		}
 	}
 
-	public ParameterTreeImpl parameter(Optional<InternalSyntaxToken> directionIndicator, InternalSyntaxToken expression,
+	public ParameterTreeImpl parameter(Optional<InternalSyntaxToken> directionIndicator, ExpressionTree expression,
 			Optional<Object> optional) {
 		if (optional.isPresent()) {
 			if (optional.get() instanceof Tuple) {
-				Tuple<Optional<InternalSyntaxToken>, InternalSyntaxToken> t = (Tuple) optional.get();
+				Tuple<Optional<InternalSyntaxToken>, DataTypeTreeImpl> t = (Tuple) optional.get();
 				return new ParameterTreeImpl(directionIndicator.isPresent() ? directionIndicator.get() : null,
 						expression, t.first().isPresent() ? t.first().get() : null, t.second());
 			} else {
@@ -1278,14 +1273,16 @@ public class TreeFactory {
 		} else if (firstOf instanceof Tuple) {
 			Tuple<FieldReferenceTreeImpl, ParameterListTreeImpl> t = (Tuple) firstOf;
 			return new CallExpressionTreeImpl(t.first(), t.second());
+		} else if (firstOf instanceof ExpressionTree) {
+			return new CallExpressionTreeImpl((ExpressionTree)firstOf);
 		} else {
 			return new CallExpressionTreeImpl((FieldReferenceTreeImpl) firstOf);
 		}
 	}
 
-	public InExpressionTreeImpl inExpression(FieldReferenceTreeImpl fieldReference, Optional<InternalSyntaxToken> notKeyword,  InternalSyntaxToken inKeyword,
+	public InExpressionTreeImpl inExpression(ExpressionTree expression, Optional<InternalSyntaxToken> notKeyword,  InternalSyntaxToken inKeyword,
 			ParameterListTreeImpl argumentList) {
-		return new InExpressionTreeImpl(fieldReference, notKeyword.isPresent()?notKeyword.get():null, inKeyword, argumentList);
+		return new InExpressionTreeImpl(expression, notKeyword.isPresent()?notKeyword.get():null, inKeyword, argumentList);
 	}
 
 	public BetweenExpressionTreeImpl betweenExpression(ExpressionTree expression, Optional<InternalSyntaxToken> notKeyword,  InternalSyntaxToken betweenKeyword,
@@ -1403,15 +1400,14 @@ public class TreeFactory {
 	}
 
 	public PathElementTreeImpl pathElement(
-			Optional<Triple<InternalSyntaxToken, Tuple<InternalSyntaxToken, Optional<List<Tuple<InternalSyntaxToken, InternalSyntaxToken>>>>, InternalSyntaxToken>> type,
+			Optional<Triple<InternalSyntaxToken, ExpressionTree, InternalSyntaxToken>> type,
 			Optional<Tuple<Optional<Object>, InternalSyntaxToken>> namespace, Object name,
 			Optional<IndexTreeImpl> index) {
 
 		PathElementTreeImpl pathElement = new PathElementTreeImpl();
 
 		if (type.isPresent()) {
-			pathElement.setType(type.get().first(),
-					tokenList(type.get().second().first(), type.get().second().second()), type.get().third());
+			pathElement.setType(type.get().first(),	type.get().second(), type.get().third());
 		}
 
 		if (namespace.isPresent()) {
@@ -1432,8 +1428,10 @@ public class TreeFactory {
 		if (name instanceof Triple) {
 			Triple<InternalSyntaxToken, ExpressionTree, InternalSyntaxToken> triple = (Triple) name;
 			pathElement.name(triple.first(), triple.second(), triple.third());
-		} else {
+		} else if (name instanceof InternalSyntaxToken){
 			pathElement.name((InternalSyntaxToken) name);
+		} else {
+			pathElement.index((IndexTreeImpl) name);
 		}
 		if (index.isPresent()) {
 			pathElement.index(index.get());
