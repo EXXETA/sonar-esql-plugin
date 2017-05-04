@@ -24,6 +24,8 @@ import org.sonar.api.Plugin;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
 
+import com.exxeta.iss.sonar.esql.metrics.EsqlMetrics;
+
 public class EsqlPlugin implements Plugin {
 
 	  private static final String GENERAL = "General";
@@ -41,7 +43,7 @@ public class EsqlPlugin implements Plugin {
 	@Override
 	public void define(Context context) {
 		context.addExtensions(EsqlLanguage.class, EsqlSquidSensor.class,
-				new EsqlRulesDefinition(context.getSonarQubeVersion()), EsqlProfile.class);
+				new EsqlRulesDefinition(context.getSonarQubeVersion()), EsqlProfile.class, EsqlMetrics.class);
 		
 		  context.addExtension(PropertyDefinition.builder(FILE_SUFFIXES_KEY)
 			        .defaultValue(FILE_SUFFIXES_DEFVALUE)

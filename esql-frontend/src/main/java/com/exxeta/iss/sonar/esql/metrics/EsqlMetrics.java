@@ -17,10 +17,15 @@
  */
 package com.exxeta.iss.sonar.esql.metrics;
 
+import java.util.List;
+
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.Metric;
+import org.sonar.api.measures.Metrics;
 
-public class EsqlMetrics {
+import com.google.common.collect.Lists;
+
+public class EsqlMetrics implements Metrics {
 	public static final String PROCEDURES_KEY = "procedures";
 	public static final Metric<Integer> PROCEDURES = new Metric.Builder(PROCEDURES_KEY, "Procedures",
 			Metric.ValueType.INT).setDescription("Procedures").setDirection(Metric.DIRECTION_WORST)
@@ -29,4 +34,10 @@ public class EsqlMetrics {
 	public static final Metric<Integer> MODULES = new Metric.Builder(MODULES_KEY, "Modules", Metric.ValueType.INT)
 			.setDescription("Modules").setDirection(Metric.DIRECTION_WORST).setQualitative(false)
 			.setDomain(CoreMetrics.DOMAIN_SIZE).create();
+	
+	private static final List<Metric> metrics = Lists.newArrayList(PROCEDURES, MODULES);
+	@Override
+	public List<Metric> getMetrics() {
+		return metrics;
+	}
 }

@@ -20,7 +20,7 @@ package com.exxeta.iss.sonar.esql.tree.impl.function;
 import java.util.Iterator;
 import java.util.List;
 
-import org.sonar.api.internal.google.common.collect.Iterators;
+import com.google.common.collect.Iterators;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;

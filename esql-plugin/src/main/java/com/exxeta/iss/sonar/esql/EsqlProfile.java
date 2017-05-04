@@ -56,6 +56,9 @@ public class EsqlProfile extends ProfileDefinition {
 	private void loadActiveKeysFromJsonProfile(RulesProfile rulesProfile) {
 		for (String ruleKey : JsonProfileReader.ruleKeys(PATH_TO_JSON)) {
 			Rule rule = ruleFinder.findByKey(CheckList.REPOSITORY_KEY, ruleKey);
+			if (rule==null){
+				System.err.println("Cannot load rule: "+ruleKey);
+			}
 			rulesProfile.activateRule(rule, null);
 		}
 	}
