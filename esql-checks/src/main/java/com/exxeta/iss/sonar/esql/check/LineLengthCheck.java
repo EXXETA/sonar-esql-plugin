@@ -17,7 +17,6 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
-import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.List;
 
@@ -26,19 +25,18 @@ import org.sonar.check.RuleProperty;
 
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
+import com.exxeta.iss.sonar.esql.api.visitors.EsqlFile;
 import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
 import com.exxeta.iss.sonar.esql.tree.visitors.CharsetAwareVisitor;
-import com.google.common.io.Files;
 
 
 
 
 @Rule(key = "LineLength")
-public class LineLengthCheck extends DoubleDispatchVisitorCheck implements CharsetAwareVisitor {
+public class LineLengthCheck extends DoubleDispatchVisitorCheck  {
 
   private static final String MESSAGE = "Split this %s characters long line (which is greater than %s authorized).";
   private static final int DEFAULT_MAXIMUM_LINE_LENGTH = 80;
-  private Charset charset;
 
   @RuleProperty(
     key = "maximumLineLength",
@@ -48,12 +46,8 @@ public class LineLengthCheck extends DoubleDispatchVisitorCheck implements Chars
 
   @Override
   public void visitProgram(ProgramTree tree) {
-    List<String> lines;
-    try {
-      lines = Files.readLines(getContext().getFile(), charset);
-    } catch (IOException e) {
-      throw new IllegalStateException(e);
-    }
+	  EsqlFile file = getContext().getEsqlFile();
+	   List<String> lines = CheckUtils.readLines(file);
 
     for (int i = 0; i < lines.size(); i++) {
       int length = lines.get(i).length();
@@ -67,8 +61,4 @@ public class LineLengthCheck extends DoubleDispatchVisitorCheck implements Chars
     }
   }
 
-  @Override
-  public void setCharset(Charset charset) {
-    this.charset = charset;
-  }
 }

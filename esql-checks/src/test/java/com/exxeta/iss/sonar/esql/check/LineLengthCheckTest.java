@@ -22,14 +22,12 @@ import java.io.File;
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
-import com.google.common.base.Charsets;
 
 public class LineLengthCheckTest {
 
   @Test
   public void test() {
     LineLengthCheck check = new LineLengthCheck();
-    check.setCharset(Charsets.UTF_8);
     check.maximumLineLength = 30;
 
     EsqlCheckVerifier.issues(check, new File("src/test/resources/test.esql"))
