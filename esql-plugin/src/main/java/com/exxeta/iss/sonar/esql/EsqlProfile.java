@@ -27,7 +27,7 @@ import com.exxeta.iss.sonar.esql.check.CheckList;
 
 public class EsqlProfile extends ProfileDefinition {
 
-	public static final String PROFILE_NAME = "Sonar way Recommended";
+	public static final String PROFILE_NAME = "Sonar way";
 	public static final String PATH_TO_JSON = "/org/sonar/l10n/esql/rules/esql/Sonar_way_profile.json";
 
 	private final RuleFinder ruleFinder;

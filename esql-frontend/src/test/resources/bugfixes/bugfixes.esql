@@ -116,6 +116,8 @@ ATTACH bpFSAAssocRef TO OutputRoot.XMLNSC.ens:Envelope.ens:Body.tns:TFeed.tns:Bu
 
 	SET duration = (stateRef.Endtime - stateRef.Starttime) HOUR TO SECOND;
 	CALL ABC() into OutputRoot.ABC;
+	SET a = b('a');
+	SET a = b('a' || 'b');
    END;
    
 

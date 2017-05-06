@@ -27,7 +27,7 @@ public final class CheckList {
 
   public static final String REPOSITORY_NAME = "SonarAnalyzer";
 
-  public static final String SONAR_WAY_PROFILE = "Sonar way Recommended";
+  public static final String SONAR_WAY_PROFILE = "Sonar way";
 
   private CheckList() {
   }

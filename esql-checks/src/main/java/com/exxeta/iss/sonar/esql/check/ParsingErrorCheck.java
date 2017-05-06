@@ -24,4 +24,5 @@ import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
 @Rule(key = "ParsingError")
 public class ParsingErrorCheck extends DoubleDispatchVisitorCheck {
 
+	public static final String MESSAGE = "Parse error";
 }

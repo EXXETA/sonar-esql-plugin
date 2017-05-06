@@ -36,7 +36,7 @@ import com.exxeta.iss.sonar.esql.tree.visitors.CharsetAwareVisitor;
 public class LineLengthCheck extends DoubleDispatchVisitorCheck  {
 
   private static final String MESSAGE = "Split this %s characters long line (which is greater than %s authorized).";
-  private static final int DEFAULT_MAXIMUM_LINE_LENGTH = 80;
+  private static final int DEFAULT_MAXIMUM_LINE_LENGTH = 180;
 
   @RuleProperty(
     key = "maximumLineLength",

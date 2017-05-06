@@ -704,7 +704,7 @@ public class EsqlGrammar {
 	}
 
 	public ExpressionTree ARGUMENT() {
-		return b.<ExpressionTree>nonterminal().is(b.firstOf(CALL_EXPRESSION()));
+		return b.<ExpressionTree>nonterminal().is(b.firstOf(EXPRESSION()));
 	}
 
 	public ExpressionTree RELATIONAL_EXPRESSION() {

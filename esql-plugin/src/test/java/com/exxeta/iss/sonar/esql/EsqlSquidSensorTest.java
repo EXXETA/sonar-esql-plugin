@@ -178,6 +178,7 @@ public class EsqlSquidSensorTest {
 		assertThat(issues).hasSize(1);
 		Issue issue = issues.iterator().next();
 		assertThat(issue.primaryLocation().textRange().start().line()).isEqualTo(3);
+		assertThat(issue.primaryLocation().message()).isEqualTo("Parse error");
 
 		assertThat(context.allAnalysisErrors()).hasSize(1);
 	}

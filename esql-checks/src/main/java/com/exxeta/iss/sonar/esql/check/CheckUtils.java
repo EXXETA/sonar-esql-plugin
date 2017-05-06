@@ -16,8 +16,13 @@
  * limitations under the License.
  */package com.exxeta.iss.sonar.esql.check;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.exxeta.iss.sonar.esql.api.visitors.EsqlFile;
 import com.sonar.sslr.api.AstNode;
 import com.sonar.sslr.api.Token;
 
@@ -25,14 +30,11 @@ public class CheckUtils {
 	private CheckUtils() {
 	}
 
-
-
 	public static boolean equalNodes(AstNode node1, AstNode node2) {
-		if (!node1.getType().equals(node2.getType())
-				|| node1.getNumberOfChildren() != node2.getNumberOfChildren()) {
+		if (!node1.getType().equals(node2.getType()) || node1.getNumberOfChildren() != node2.getNumberOfChildren()) {
 			return false;
 		}
-		
+
 		List<AstNode> children1 = node1.getChildren();
 		List<AstNode> children2 = node2.getChildren();
 		for (int i = 0; i < children1.size(); i++) {
@@ -43,7 +45,6 @@ public class CheckUtils {
 		return true;
 	}
 
-
 	public static boolean containsValue(List<Token> list, String value) {
 		for (Token currentToken : list) {
 			if (currentToken.getValue().equals(value)) {
@@ -51,5 +52,18 @@ public class CheckUtils {
 			}
 		}
 		return false;
+	}
+
+	public static List<String> readLines(EsqlFile file) {
+		try (BufferedReader reader = newBufferedReader(file)) {
+			return reader.lines().collect(Collectors.toList());
+
+		} catch (IOException e) {
+			throw new IllegalStateException("Unable to read file " + file.relativePath(), e);
+		}
+	}
+
+	private static BufferedReader newBufferedReader(EsqlFile file) {
+		return new BufferedReader(new StringReader(file.contents()));
 	}
 }
