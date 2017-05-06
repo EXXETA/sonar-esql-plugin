@@ -118,6 +118,9 @@ ATTACH bpFSAAssocRef TO OutputRoot.XMLNSC.ens:Envelope.ens:Body.tns:TFeed.tns:Bu
 	CALL ABC() into OutputRoot.ABC;
 	SET a = b('a');
 	SET a = b('a' || 'b');
+	IF (a IS NULL) THEN
+	END IF;
+	
    END;
    
 

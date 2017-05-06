@@ -20,6 +20,7 @@ package com.exxeta.iss.sonar.esql.tree.impl.statement;
 import java.util.Iterator;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ExternalRoutineBodyTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
@@ -30,9 +31,9 @@ public class ExternalRoutineBodyTreeImpl extends EsqlTree implements ExternalRou
 
 	private final SyntaxToken externalKeyword;
 	private final SyntaxToken nameKeyword;
-	private final SyntaxToken expression;
+	private final ExpressionTree expression;
 
-	public ExternalRoutineBodyTreeImpl(SyntaxToken externalKeyword, SyntaxToken nameKeyword, SyntaxToken expression) {
+	public ExternalRoutineBodyTreeImpl(SyntaxToken externalKeyword, SyntaxToken nameKeyword, ExpressionTree expression) {
 		this.externalKeyword = externalKeyword;
 		this.nameKeyword = nameKeyword;
 		this.expression = expression;
@@ -49,7 +50,7 @@ public class ExternalRoutineBodyTreeImpl extends EsqlTree implements ExternalRou
 	}
 
 	@Override
-	public SyntaxToken expression() {
+	public ExpressionTree expression() {
 		return expression;
 	}
 

@@ -20,6 +20,7 @@ package com.exxeta.iss.sonar.esql.tree.impl.statement;
 import java.util.Iterator;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.MessageSourceTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
@@ -29,15 +30,15 @@ import com.google.common.collect.Iterators;
 public class MessageSourceTreeImpl extends EsqlTree implements MessageSourceTree {
 
 	private InternalSyntaxToken environmentKeyword;
-	private InternalSyntaxToken environment;
+	private ExpressionTree environment;
 	private InternalSyntaxToken messageKeyword;
-	private InternalSyntaxToken message;
+	private ExpressionTree message;
 	private InternalSyntaxToken exceptionKeyword;
-	private InternalSyntaxToken exception;
+	private ExpressionTree exception;
 
-	public MessageSourceTreeImpl(InternalSyntaxToken environmentKeyword, InternalSyntaxToken environment,
-			InternalSyntaxToken messageKeyword, InternalSyntaxToken message, InternalSyntaxToken exceptionKeyword,
-			InternalSyntaxToken exception) {
+	public MessageSourceTreeImpl(InternalSyntaxToken environmentKeyword, ExpressionTree environment,
+			InternalSyntaxToken messageKeyword, ExpressionTree message, InternalSyntaxToken exceptionKeyword,
+			ExpressionTree exception) {
 		super();
 		this.environmentKeyword = environmentKeyword;
 		this.environment = environment;
@@ -53,7 +54,7 @@ public class MessageSourceTreeImpl extends EsqlTree implements MessageSourceTree
 	}
 
 	@Override
-	public InternalSyntaxToken environment() {
+	public ExpressionTree environment() {
 		return environment;
 	}
 
@@ -63,7 +64,7 @@ public class MessageSourceTreeImpl extends EsqlTree implements MessageSourceTree
 	}
 
 	@Override
-	public InternalSyntaxToken message() {
+	public ExpressionTree message() {
 		return message;
 	}
 
@@ -73,7 +74,7 @@ public class MessageSourceTreeImpl extends EsqlTree implements MessageSourceTree
 	}
 
 	@Override
-	public InternalSyntaxToken exception() {
+	public ExpressionTree exception() {
 		return exception;
 	}
 

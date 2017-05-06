@@ -17,6 +17,7 @@
  */
 package com.exxeta.iss.sonar.esql.tree.impl.function;
 
+import java.util.Collections;
 import java.util.Iterator;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
@@ -48,6 +49,7 @@ public class SelectClauseTreeImpl extends EsqlTree implements SelectClauseTree {
 		super();
 		this.itemKeyword = itemKeyword;
 		this.itemExpression = itemExpression;
+		this.aliasedFieldReferenceList = new SeparatedList<>(Collections.emptyList(), Collections.emptyList());
 	}
 
 	public SelectClauseTreeImpl(InternalSyntaxToken aggregationType, InternalSyntaxToken openingParenthesis,
@@ -57,6 +59,7 @@ public class SelectClauseTreeImpl extends EsqlTree implements SelectClauseTree {
 		this.openingParenthesis = openingParenthesis;
 		this.aggregationExpression = aggregationExpression;
 		this.closingParenthesis = closingParenthesis;
+		this.aliasedFieldReferenceList = new SeparatedList<>(Collections.emptyList(), Collections.emptyList());
 	}
 
 	@Override

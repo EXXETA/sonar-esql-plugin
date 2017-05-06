@@ -31,13 +31,15 @@ public class SelectFunctionTest {
 		.matches("SELECT P.PartNumber AS a,  P.Description,  P.Price FROM PartsTable.Part[]")
 		.matches("SELECT * FROM Database.Datasource.SchemaName.Table As A")
 		.matches("SELECT P.PartNumber AS a,  P.Description,  P.Price FROM PartsTable.Part[] AS P")
+		.matches("SELECT COUNT(*) FROM Database.{UDP_Schemaname}.DATA AS DAT WHERE CON.a=a  AND CON.b NOT IN('C', 'I')")
 		;
 	}
 	
 	@Test
 	public void selectClause(){
 		assertThat(Kind.SELECT_CLAUSE)
-		.matches("P.PartNumber,  P.Description,  P.Price");
+		.matches("P.PartNumber,  P.Description,  P.Price")
+		.matches("COUNT(*)");
 	}
 
 	@Test
@@ -45,13 +47,15 @@ public class SelectFunctionTest {
 		assertThat(Kind.FROM_CLAUSE_EXPRESSION)
 		.matches("FROM PartsTable.Part[] AS P")
 		.matches("FROM Database.Datasource.SchemaName.Table As A")
+		.matches("FROM Database.{UDP_Schemaname}.DATA AS DATN")
 		;
 	}
 
 	@Test
 	public void whereClause(){
 		assertThat(Kind.WHERE_CLAUSE)
-		.matches("WHERE A = B");
+		.matches("WHERE A = B")
+		.matches("WHERE CON.a=a  AND CON.b NOT IN('C', 'I')");
 	}
 
 }

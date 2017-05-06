@@ -213,7 +213,7 @@ public class EsqlGrammar {
 	public ExternalRoutineBodyTreeImpl EXTERNAL_ROUTINE_BODY() {
 		return b.<ExternalRoutineBodyTreeImpl>nonterminal(Kind.EXTERNAL_ROUTINE_BODY)
 				.is(f.externalRoutineBody(b.token(EsqlNonReservedKeyword.EXTERNAL),
-						b.token(EsqlNonReservedKeyword.NAME), b.token(EsqlLegacyGrammar.expression)));
+						b.token(EsqlNonReservedKeyword.NAME), EXPRESSION()));
 	}
 
 	public CreateProcedureStatementTree CREATE_PROCEDURE_STATEMENT() {
@@ -628,11 +628,11 @@ public class EsqlGrammar {
 	public MessageSourceTreeImpl MESSAGE_SOURCE() {
 		return b.<MessageSourceTreeImpl>nonterminal(Kind.MESSAGE_SOURCE).is(f.messageSource(
 				b.optional(f.newTuple16(b.token(EsqlNonReservedKeyword.ENVIRONMENT),
-						b.token(EsqlLegacyGrammar.expression))),
+						EXPRESSION())),
 				b.optional(
-						f.newTuple12(b.token(EsqlNonReservedKeyword.MESSAGE), b.token(EsqlLegacyGrammar.expression))),
+						f.newTuple12(b.token(EsqlNonReservedKeyword.MESSAGE), EXPRESSION())),
 				b.optional(f.newTuple13(b.token(EsqlNonReservedKeyword.EXCEPTION),
-						b.token(EsqlLegacyGrammar.expression)))));
+						EXPRESSION()))));
 
 	}
 
@@ -672,11 +672,29 @@ public class EsqlGrammar {
 	}
 
 	public ExpressionTree LEFT_HAND_SIDE_EXPRESSION() {
-		return b.<ExpressionTree>nonterminal(EsqlLegacyGrammar.leftHandSideExpression).is(b.firstOf(IN_EXPRESSION(), BETWEEN_EXPRESSION(), CALL_EXPRESSION()));
+		return b.<ExpressionTree>nonterminal(EsqlLegacyGrammar.leftHandSideExpression).is(b.firstOf(IN_EXPRESSION(), BETWEEN_EXPRESSION(), IS_EXPRESSION(), CALL_EXPRESSION()));
 	}
 
 	public ExpressionTree IN_EXPRESSION(){
 		return b.<ExpressionTree>nonterminal(Kind.IN_EXPRESSION).is(f.inExpression(CALL_EXPRESSION(), b.optional(b.token(EsqlNonReservedKeyword.NOT)), b.token(EsqlNonReservedKeyword.IN), ARGUMENT_CLAUSE())
+				);
+	}
+
+	public ExpressionTree IS_EXPRESSION(){
+		return b.<ExpressionTree>nonterminal(Kind.IS_EXPRESSION).is(f.isExpression(CALL_EXPRESSION(), b.token(EsqlNonReservedKeyword.IS), b.optional(b.token(EsqlNonReservedKeyword.NOT)), 
+				b.optional(b.firstOf(b.token(EsqlPunctuator.PLUS), b.token(EsqlPunctuator.MINUS))),
+				b.firstOf(
+				b.token(EsqlNonReservedKeyword.TRUE),
+				b.token(EsqlNonReservedKeyword.FALSE),
+				b.token(EsqlNonReservedKeyword.INF),
+				b.token(EsqlNonReservedKeyword.INFINITY),
+				b.token(EsqlNonReservedKeyword.NAN),
+				b.token(EsqlNonReservedKeyword.NULL),
+				b.token(EsqlNonReservedKeyword.NUM),
+				b.token(EsqlNonReservedKeyword.NUMBER),
+				b.token(EsqlNonReservedKeyword.UNKNOWN)
+				
+				))
 				);
 	}
 	
@@ -1149,9 +1167,9 @@ public class EsqlGrammar {
 	public SelectClauseTreeImpl SELECT_CLAUSE() {
 		return b.<SelectClauseTreeImpl>nonterminal(Kind.SELECT_CLAUSE).is(f.finishSelectClause(
 			b.firstOf(
-				f.selectClauseFields(ALIASED_FIELD_REFERENCE(), b.zeroOrMore(f.newTuple113(b.token(EsqlPunctuator.COMMA), ALIASED_FIELD_REFERENCE()))),
+				f.selectClauseAggregation(b.firstOf(b.token(EsqlNonReservedKeyword.COUNT),b.token(EsqlNonReservedKeyword.MAX),b.token(EsqlNonReservedKeyword.MIN),b.token(EsqlNonReservedKeyword.SUM)), b.token(EsqlPunctuator.LPARENTHESIS), CALL_EXPRESSION(), b.token(EsqlPunctuator.RPARENTHESIS)),
 				f.selectClauseItem(b.token(EsqlReservedKeyword.ITEM), CALL_EXPRESSION()),
-				f.selectClauseAggregation(b.firstOf(b.token(EsqlNonReservedKeyword.COUNT),b.token(EsqlNonReservedKeyword.MAX),b.token(EsqlNonReservedKeyword.MIN),b.token(EsqlNonReservedKeyword.SUM)), b.token(EsqlPunctuator.LPARENTHESIS), CALL_EXPRESSION(), b.token(EsqlPunctuator.RPARENTHESIS))
+				f.selectClauseFields(ALIASED_FIELD_REFERENCE(), b.zeroOrMore(f.newTuple113(b.token(EsqlPunctuator.COMMA), ALIASED_FIELD_REFERENCE())))
 			)
 		));
 	}

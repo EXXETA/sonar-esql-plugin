@@ -26,6 +26,7 @@ import com.exxeta.iss.sonar.esql.api.tree.expression.BinaryExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.CallExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.InExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.IntervalExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.IsExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ParenthesisedExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.UnaryExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.AliasedExpressionTree;
@@ -173,6 +174,7 @@ public interface Tree {
 		INDEX(IndexTree.class), 
 		CALL_EXPRESSION(CallExpressionTree.class), 
 		IN_EXPRESSION(InExpressionTree.class),
+		IS_EXPRESSION(IsExpressionTree.class),
 		INTERVAL_QUALIFIER(IntervalQualifierTree.class), 
 		INTERVAL_DATA_TYPE(IntervalDataTypeTree.class), 
 		DECIMAL_DATA_TYPE(DecimalDataTypeTree.class), 

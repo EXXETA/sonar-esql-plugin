@@ -15,16 +15,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.esql.api.tree.statement;
+package com.exxeta.iss.sonar.esql.api.tree;
 
-import com.exxeta.iss.sonar.esql.api.tree.Tree;
-import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
-import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
+import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
 
-public interface ExternalRoutineBodyTree extends Tree{
+import org.junit.Test;
 
-	SyntaxToken externalKeyword();
-	SyntaxToken nameKeyword();
-	ExpressionTree expression();
+import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 
+public class IsExpressionTest {
+
+	@Test
+	public void expression() {
+		assertThat(Kind.IS_EXPRESSION)
+		.matches("a is null")
+		.matches("a is not false")
+		.matches("a() is +inf")
+		.matches("a() is -inf")
+		.matches("(a+b) is number")
+		;
+	}
+	
 }

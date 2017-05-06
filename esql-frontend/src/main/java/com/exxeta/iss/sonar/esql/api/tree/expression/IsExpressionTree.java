@@ -15,16 +15,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.esql.api.tree.statement;
+package com.exxeta.iss.sonar.esql.api.tree.expression;
 
-import com.exxeta.iss.sonar.esql.api.tree.Tree;
-import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 
-public interface ExternalRoutineBodyTree extends Tree{
+public interface IsExpressionTree extends ExpressionTree{
 
-	SyntaxToken externalKeyword();
-	SyntaxToken nameKeyword();
 	ExpressionTree expression();
-
+	SyntaxToken isKeyword();
+	SyntaxToken notKeyword();
+	SyntaxToken plusMinus();
+	SyntaxToken with();
+	
+	
 }

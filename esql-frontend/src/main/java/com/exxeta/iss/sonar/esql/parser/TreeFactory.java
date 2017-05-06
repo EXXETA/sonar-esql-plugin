@@ -65,6 +65,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.expression.BinaryExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.CallExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.InExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.IntervalExpressionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.expression.IsExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.LiteralTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.ParenthesisedExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.PrefixExpressionTreeImpl;
@@ -1127,7 +1128,7 @@ public class TreeFactory {
 	}
 
 	public ExternalRoutineBodyTreeImpl externalRoutineBody(InternalSyntaxToken externalKeyword,
-			InternalSyntaxToken nameKeyword, InternalSyntaxToken expression) {
+			InternalSyntaxToken nameKeyword, ExpressionTree expression) {
 		return new ExternalRoutineBodyTreeImpl(externalKeyword, nameKeyword, expression);
 	}
 
@@ -1205,9 +1206,9 @@ public class TreeFactory {
 
 	}
 
-	public MessageSourceTreeImpl messageSource(Optional<Tuple<InternalSyntaxToken, InternalSyntaxToken>> environment,
-			Optional<Tuple<InternalSyntaxToken, InternalSyntaxToken>> message,
-			Optional<Tuple<InternalSyntaxToken, InternalSyntaxToken>> exception) {
+	public MessageSourceTreeImpl messageSource(Optional<Tuple<InternalSyntaxToken, ExpressionTree>> environment,
+			Optional<Tuple<InternalSyntaxToken, ExpressionTree>> message,
+			Optional<Tuple<InternalSyntaxToken, ExpressionTree>> exception) {
 		return new MessageSourceTreeImpl(environment.isPresent() ? environment.get().first() : null,
 				environment.isPresent() ? environment.get().second() : null,
 				message.isPresent() ? message.get().first() : null, message.isPresent() ? message.get().second() : null,
@@ -1283,6 +1284,11 @@ public class TreeFactory {
 	public InExpressionTreeImpl inExpression(ExpressionTree expression, Optional<InternalSyntaxToken> notKeyword,  InternalSyntaxToken inKeyword,
 			ParameterListTreeImpl argumentList) {
 		return new InExpressionTreeImpl(expression, notKeyword.isPresent()?notKeyword.get():null, inKeyword, argumentList);
+	}
+
+	public IsExpressionTreeImpl isExpression(ExpressionTree expression, InternalSyntaxToken isKeyword, Optional<InternalSyntaxToken> notKeyword,  
+			Optional<InternalSyntaxToken> plusMinus, InternalSyntaxToken with) {
+		return new IsExpressionTreeImpl(expression, isKeyword, notKeyword.isPresent()?notKeyword.get():null, plusMinus.isPresent()?plusMinus.get():null, with);
 	}
 
 	public BetweenExpressionTreeImpl betweenExpression(ExpressionTree expression, Optional<InternalSyntaxToken> notKeyword,  InternalSyntaxToken betweenKeyword,
