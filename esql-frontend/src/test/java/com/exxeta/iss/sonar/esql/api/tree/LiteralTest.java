@@ -53,5 +53,10 @@ public class LiteralTest {
 		assertThat(Kind.TIME_LITERAL)
 		.matches("TIME '00:00:00'");
 	}
+	@Test
+	public void timestampLiteral(){
+		assertThat(Kind.TIMESTAMP_LITERAL)
+		.matches("TIMESTAMP '2017-01-01 00:00:00'");
+	}
 	
 }

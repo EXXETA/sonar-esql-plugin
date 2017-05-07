@@ -32,6 +32,7 @@ public class SelectFunctionTest {
 		.matches("SELECT * FROM Database.Datasource.SchemaName.Table As A")
 		.matches("SELECT P.PartNumber AS a,  P.Description,  P.Price FROM PartsTable.Part[] AS P")
 		.matches("SELECT COUNT(*) FROM Database.{UDP_Schemaname}.DATA AS DAT WHERE CON.a=a  AND CON.b NOT IN('C', 'I')")
+		.matches("SELECT FIELDVALUE(v.a) FROM vehicle.fb:VEHICLE[] AS v WHERE v.fb:c = Environment.Variables.F")
 		;
 	}
 	
@@ -39,7 +40,9 @@ public class SelectFunctionTest {
 	public void selectClause(){
 		assertThat(Kind.SELECT_CLAUSE)
 		.matches("P.PartNumber,  P.Description,  P.Price")
-		.matches("COUNT(*)");
+		.matches("COUNT(*)")
+		.matches("FIELDVALUE(v.a)")
+		;
 	}
 
 	@Test

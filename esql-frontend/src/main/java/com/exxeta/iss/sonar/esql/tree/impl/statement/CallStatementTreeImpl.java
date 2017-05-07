@@ -19,8 +19,6 @@ package com.exxeta.iss.sonar.esql.tree.impl.statement;
 
 import java.util.Iterator;
 
-import com.google.common.collect.Iterators;
-
 import com.exxeta.iss.sonar.esql.api.tree.SchemaNameTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
@@ -31,13 +29,12 @@ import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.FieldReferenceTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.google.common.base.Functions;
+import com.google.common.collect.Iterators;
 
 public class CallStatementTreeImpl extends EsqlTree implements CallStatementTree{
 
 	private InternalSyntaxToken callKeyword;
-	private SchemaNameTree schemaName;
-	private InternalSyntaxToken dot;
-	private InternalSyntaxToken routineName;
+	private SchemaNameTree routineName;
 	private InternalSyntaxToken openParen;
 	private SeparatedList<ExpressionTree> parameterList;
 	private InternalSyntaxToken closeParen;
@@ -50,12 +47,10 @@ public class CallStatementTreeImpl extends EsqlTree implements CallStatementTree
 	private FieldReferenceTreeImpl intoTarget;
 	private InternalSyntaxToken semi;
 
-	public CallStatementTreeImpl(InternalSyntaxToken callKeyword, SchemaNameTree schemaName, InternalSyntaxToken dot,
-			InternalSyntaxToken routineName, InternalSyntaxToken openParen, SeparatedList<ExpressionTree> parameterList,
+	public CallStatementTreeImpl(InternalSyntaxToken callKeyword, SchemaNameTree routineName, 
+			InternalSyntaxToken openParen, SeparatedList<ExpressionTree> parameterList,
 			InternalSyntaxToken closeParen, InternalSyntaxToken semi) {
 		this.callKeyword=callKeyword;
-		this.schemaName=schemaName;
-		this.dot=dot;
 		this.routineName=routineName;
 		this.openParen=openParen;
 		this.parameterList=parameterList;
@@ -88,17 +83,7 @@ public class CallStatementTreeImpl extends EsqlTree implements CallStatementTree
 	}
 
 	@Override
-	public SchemaNameTree schemaName() {
-		return schemaName;
-	}
-
-	@Override
-	public InternalSyntaxToken dot() {
-		return dot;
-	}
-
-	@Override
-	public InternalSyntaxToken routineName() {
+	public SchemaNameTree routineName() {
 		return routineName;
 	}
 
@@ -171,7 +156,7 @@ public class CallStatementTreeImpl extends EsqlTree implements CallStatementTree
 	@Override
 	public Iterator<Tree> childrenIterator() {
 		return Iterators.concat(
-				Iterators.forArray(	callKeyword,schemaName,	dot, routineName, openParen),
+				Iterators.forArray(	callKeyword, routineName, openParen),
 				parameterList.elementsAndSeparators(Functions.<ExpressionTree> identity()),
 				Iterators.forArray( closeParen, inKeyword, schemaReference, externalKeyword, schemaKeyword, externalSchemaName, intoKeyword, intoTarget, semi)
 				

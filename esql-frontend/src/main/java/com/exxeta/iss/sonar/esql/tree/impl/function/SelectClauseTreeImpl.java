@@ -22,6 +22,7 @@ import java.util.Iterator;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.AliasedExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.AliasedFieldReferenceTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.SelectClauseTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
@@ -33,7 +34,7 @@ import com.google.common.collect.Iterators;
 
 public class SelectClauseTreeImpl extends EsqlTree implements SelectClauseTree {
 
-	private SeparatedList<AliasedFieldReferenceTree> aliasedFieldReferenceList;
+	private SeparatedList<AliasedExpressionTree> aliasedFieldReferenceList;
 	private InternalSyntaxToken itemKeyword;
 	private ExpressionTree itemExpression;
 	private InternalSyntaxToken aggregationType;
@@ -41,7 +42,7 @@ public class SelectClauseTreeImpl extends EsqlTree implements SelectClauseTree {
 	private ExpressionTree aggregationExpression;
 	private InternalSyntaxToken closingParenthesis;
 
-	public SelectClauseTreeImpl(SeparatedList<AliasedFieldReferenceTree> aliasedFieldReferenceList) {
+	public SelectClauseTreeImpl(SeparatedList<AliasedExpressionTree> aliasedFieldReferenceList) {
 		this.aliasedFieldReferenceList = aliasedFieldReferenceList;
 	}
 
@@ -63,7 +64,7 @@ public class SelectClauseTreeImpl extends EsqlTree implements SelectClauseTree {
 	}
 
 	@Override
-	public SeparatedList<AliasedFieldReferenceTree> aliasedFieldReferenceList() {
+	public SeparatedList<AliasedExpressionTree> aliasedFieldReferenceList() {
 		return aliasedFieldReferenceList;
 	}
 
@@ -110,7 +111,7 @@ public class SelectClauseTreeImpl extends EsqlTree implements SelectClauseTree {
 	@Override
 	public Iterator<Tree> childrenIterator() {
 		return Iterators.concat(
-				aliasedFieldReferenceList.elementsAndSeparators(Functions.<AliasedFieldReferenceTree>identity()),
+				aliasedFieldReferenceList.elementsAndSeparators(Functions.<AliasedExpressionTree>identity()),
 				Iterators.forArray(itemKeyword, itemExpression, aggregationType, openingParenthesis,
 						aggregationExpression, closingParenthesis));
 	}

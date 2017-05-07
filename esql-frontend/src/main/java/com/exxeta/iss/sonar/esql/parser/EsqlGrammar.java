@@ -444,8 +444,7 @@ public class EsqlGrammar {
 		return b.<CallStatementTreeImpl>nonterminal(Kind.CALL_STATEMENT)
 				.is(f.callStatement(
 						b.token(EsqlNonReservedKeyword.CALL), 
-						b.optional(f.newTuple44(SCHEMA_NAME(),b.token(DOT))),
-						b.token(EsqlLegacyGrammar.IDENTIFIER),
+						SCHEMA_NAME(),
 						b.token(LPARENTHESIS),b.optional(f.newTuple45(EXPRESSION(),b.zeroOrMore(f.newTuple46(b.token(COMMA),EXPRESSION())))),
 						b.token(RPARENTHESIS), 
 						b.optional(b.firstOf(
@@ -776,6 +775,11 @@ public class EsqlGrammar {
 				.is(f.timeLiteral(b.token(EsqlLegacyGrammar.TIME_LITERAL)));
 	}
 
+	public LiteralTreeImpl TIMESTAMP_LITERAL() {
+		return b.<LiteralTreeImpl>nonterminal(Kind.TIMESTAMP_LITERAL)
+				.is(f.timestampLiteral(b.token(EsqlLegacyGrammar.TIMESTAMP_LITERAL)));
+	}
+
 	public LiteralTreeImpl DATE_LITERAL() {
 		return b.<LiteralTreeImpl>nonterminal(Kind.DATE_LITERAL)
 				.is(f.dateLiteral(b.token(EsqlLegacyGrammar.DATE_LITERAL)));
@@ -804,7 +808,7 @@ public class EsqlGrammar {
 	public ExpressionTree PRIMARY_EXPRESSION() {
 		return b.<ExpressionTree>nonterminal(EsqlLegacyGrammar.primaryExpression)
 				.is(b.firstOf(INTERVAL_LITERAL(), LITERAL(), ARRAY_LITERAL(), INTERVAL_EXPRESSION(), LIST_LITERAL(),
-						TIME_LITERAL(), DATE_LITERAL(), PARENTHESISED_EXPRESSION()));
+						TIME_LITERAL(), DATE_LITERAL(), TIMESTAMP_LITERAL(), PARENTHESISED_EXPRESSION()));
 	}
 
 	public FieldReferenceTreeImpl FIELD_REFERENCE() {
@@ -906,10 +910,10 @@ public class EsqlGrammar {
 								b.optional(f.newTuple34(b.token(EsqlNonReservedKeyword.TO),
 										b.token(EsqlNonReservedKeyword.MONTH)))),
 						b.token(EsqlNonReservedKeyword.MONTH),
-						f.newTuple37(b.token(EsqlNonReservedKeyword.DAY), f.newTuple36(
+						f.newTuple37(b.token(EsqlNonReservedKeyword.DAY), b.optional(f.newTuple36(
 								b.token(EsqlNonReservedKeyword.TO), b.firstOf(b.token(EsqlNonReservedKeyword.HOUR),
 										b.token(EsqlNonReservedKeyword.MINUTE), b
-												.token(EsqlNonReservedKeyword.SECOND)))),
+												.token(EsqlNonReservedKeyword.SECOND))))),
 						f.newTuple38(b.token(EsqlNonReservedKeyword.HOUR),
 								b.optional(f.newTuple39(b.token(EsqlNonReservedKeyword.TO),
 										b.firstOf(b.token(EsqlNonReservedKeyword.MINUTE),
@@ -1169,7 +1173,7 @@ public class EsqlGrammar {
 			b.firstOf(
 				f.selectClauseAggregation(b.firstOf(b.token(EsqlNonReservedKeyword.COUNT),b.token(EsqlNonReservedKeyword.MAX),b.token(EsqlNonReservedKeyword.MIN),b.token(EsqlNonReservedKeyword.SUM)), b.token(EsqlPunctuator.LPARENTHESIS), CALL_EXPRESSION(), b.token(EsqlPunctuator.RPARENTHESIS)),
 				f.selectClauseItem(b.token(EsqlReservedKeyword.ITEM), CALL_EXPRESSION()),
-				f.selectClauseFields(ALIASED_FIELD_REFERENCE(), b.zeroOrMore(f.newTuple113(b.token(EsqlPunctuator.COMMA), ALIASED_FIELD_REFERENCE())))
+				f.selectClauseFields(ALIASED_EXPRESSION(), b.zeroOrMore(f.newTuple113(b.token(EsqlPunctuator.COMMA), ALIASED_EXPRESSION())))
 			)
 		));
 	}

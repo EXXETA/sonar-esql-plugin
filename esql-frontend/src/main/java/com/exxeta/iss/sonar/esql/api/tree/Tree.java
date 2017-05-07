@@ -160,6 +160,7 @@ public interface Tree {
 		PARAMETER_LIST(ParameterListTree.class), 
 		LIST_LITERAL(LiteralTree.class), 
 		TIME_LITERAL(LiteralTree.class), 
+		TIMESTAMP_LITERAL(LiteralTree.class), 
 		DATE_LITERAL(LiteralTree.class), 
 		ARRAY_LITERAL(LiteralTree.class), 
 		INTERVAL_LITERAL(LiteralTree.class), 

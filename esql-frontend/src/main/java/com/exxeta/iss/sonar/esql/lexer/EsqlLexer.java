@@ -97,8 +97,10 @@ public final class EsqlLexer {
    */
   public static final String WHITESPACE = "[\\n\\r\\t\\u000B\\f\\u0020\\u00A0\\uFEFF\\p{Zs}]";
 
+  //TODO needs to be case insensitive?
   public static final String TIME_LITERAL = "TIME"+WHITESPACE+"+'[0-9]{2}:[0-9]{2}:[0-9]{2}'";
   public static final String DATE_LITERAL = "DATE"+WHITESPACE+"+'[0-9]{4}-[0-9]{2}-[0-9]{2}'";
+  public static final String TIMESTAMP_LITERAL = "TIMESTAMP"+WHITESPACE+"+'[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}'";
 
   
 /*  public static Lexer create(EsqlConfiguration conf) {

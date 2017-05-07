@@ -1305,6 +1305,10 @@ public class TreeFactory {
 		return new LiteralTreeImpl(Kind.TIME_LITERAL, timeToken);
 	}
 
+	public LiteralTreeImpl timestampLiteral(InternalSyntaxToken timestampToken) {
+		return new LiteralTreeImpl(Kind.TIMESTAMP_LITERAL, timestampToken);
+	}
+
 	public LiteralTreeImpl dateLiteral(InternalSyntaxToken dateToken) {
 		return new LiteralTreeImpl(Kind.DATE_LITERAL, dateToken);
 	}
@@ -1527,15 +1531,14 @@ public class TreeFactory {
 	}
 
 	public CallStatementTreeImpl callStatement(InternalSyntaxToken callKeyword,
-			Optional<Tuple<SchemaNameTree, InternalSyntaxToken>> schemaName, InternalSyntaxToken routineName,
+			SchemaNameTree routineName,
 			InternalSyntaxToken openParen,
 			Optional<Tuple<ExpressionTree, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>>>> parameterList,
 			InternalSyntaxToken closeParen, Optional<Object> qualifiers,
 			Optional<Tuple<InternalSyntaxToken, FieldReferenceTreeImpl>> intoClause, InternalSyntaxToken semi) {
 
 		CallStatementTreeImpl result = new CallStatementTreeImpl(callKeyword,
-				schemaName.isPresent() ? schemaName.get().first() : null,
-				schemaName.isPresent() ? schemaName.get().second() : null, routineName, openParen,
+				routineName, openParen,
 				parameterList.isPresent() ? expressionList(parameterList.get().first(), parameterList.get().second())
 						: new SeparatedList<>(Collections.<ExpressionTree>emptyList(),
 								Collections.<InternalSyntaxToken>emptyList()),
@@ -2130,10 +2133,10 @@ public class TreeFactory {
 		return selectClause;
 	}
 
-	public SelectClauseTreeImpl selectClauseFields(AliasedFieldReferenceTreeImpl aliasedFieldReference,
-			Optional<List<Tuple<InternalSyntaxToken, AliasedFieldReferenceTreeImpl>>> rest) {
+	public SelectClauseTreeImpl selectClauseFields(AliasedExpressionTreeImpl aliasedFieldReference,
+			Optional<List<Tuple<InternalSyntaxToken, AliasedExpressionTreeImpl>>> rest) {
 		
-		return new SelectClauseTreeImpl(aliasedFieldReferenceList(aliasedFieldReference, rest));
+		return new SelectClauseTreeImpl(aliasedExpressionList(aliasedFieldReference, rest));
 	}
 
 	public SelectClauseTreeImpl selectClauseItem(InternalSyntaxToken itemKeyword, ExpressionTree itemExpression) {

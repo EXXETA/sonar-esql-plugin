@@ -23,7 +23,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 
 public interface SelectClauseTree extends Tree{
-	 SeparatedList<AliasedFieldReferenceTree> aliasedFieldReferenceList();
+	 SeparatedList<AliasedExpressionTree> aliasedFieldReferenceList();
 	 InternalSyntaxToken itemKeyword();
 	 ExpressionTree itemExpression();
 	 InternalSyntaxToken aggregationType();

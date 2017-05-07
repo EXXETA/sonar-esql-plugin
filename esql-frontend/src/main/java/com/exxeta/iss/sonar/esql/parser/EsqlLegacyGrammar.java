@@ -53,7 +53,7 @@ import com.sonar.sslr.api.GenericTokenType;
 public enum EsqlLegacyGrammar implements GrammarRuleKey {
 	EOF, PROGRAM, EOS, LITERAL, BOOLEAN_LITERAL, NULL_LITERAL, NUMERIC_LITERAL, HEX_LITERAL, 
 	STRING_LITERAL, SPACING, IDENTIFIER, IDENTIFIER_WO_QUOTES, IDENTIFIER_WITH_QUOTES
-	, LIST_LITERAL, DATE_LITERAL, TIME_LITERAL, 
+	, LIST_LITERAL, DATE_LITERAL, TIME_LITERAL, TIMESTAMP_LITERAL, 
 	 SPACING_NO_LINE_BREAK_NOT_FOLLOWED_BY_LINE_BREAK, SPACING_NO_LB, NEXT_NOT_LB, 
 	SPACING_NOT_SKIPPED, LINE_TERMINATOR_SEQUENCE, EOS_NO_LB, LETTER_OR_DIGIT, reservedKeyword, 
 	intervalLiteral, intervalQualifier, keyword, nonReservedKeyword, dataType, 
@@ -121,6 +121,7 @@ public enum EsqlLegacyGrammar implements GrammarRuleKey {
 		b.rule(intervalLiteral).is(SPACING, "INTERVAL", LITERAL, intervalQualifier);
 		b.rule(DATE_LITERAL).is(SPACING, b.regexp(EsqlLexer.DATE_LITERAL));
 		b.rule(TIME_LITERAL).is(SPACING, b.regexp(EsqlLexer.TIME_LITERAL));
+		b.rule(TIMESTAMP_LITERAL).is(SPACING, b.regexp(EsqlLexer.TIMESTAMP_LITERAL));
 		punctuators(b);
 		keywords(b);
 	}

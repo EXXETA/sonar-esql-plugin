@@ -30,6 +30,7 @@ public class CallStatementTest {
 	public void callStatement(){
 		assertThat(Kind.CALL_STATEMENT)
 		.matches("CALL myProc1();")
+		.matches("CALL a.b.c.myProc1();")
 		.matches("CALL myProc1() INTO cursor;")
 		.matches("CALL myProc1() INTO OutputRoot.XMLNS.TestValue1;");
 
