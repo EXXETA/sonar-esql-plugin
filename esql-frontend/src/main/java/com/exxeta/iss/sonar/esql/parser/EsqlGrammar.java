@@ -44,6 +44,7 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree
 import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
 import com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator;
 import com.exxeta.iss.sonar.esql.lexer.EsqlReservedKeyword;
+import com.exxeta.iss.sonar.esql.tree.expression.LikeExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.BrokerSchemaStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.DataTypeTreeImpl;
@@ -213,7 +214,9 @@ public class EsqlGrammar {
 	public ExternalRoutineBodyTreeImpl EXTERNAL_ROUTINE_BODY() {
 		return b.<ExternalRoutineBodyTreeImpl>nonterminal(Kind.EXTERNAL_ROUTINE_BODY)
 				.is(f.externalRoutineBody(b.token(EsqlNonReservedKeyword.EXTERNAL),
-						b.token(EsqlNonReservedKeyword.NAME), EXPRESSION()));
+						b.token(EsqlNonReservedKeyword.NAME), b.token(EsqlLegacyGrammar.IDENTIFIER_WITH_QUOTES),
+						b.token(EsqlLegacyGrammar.EOS)
+						));
 	}
 
 	public CreateProcedureStatementTree CREATE_PROCEDURE_STATEMENT() {
@@ -671,7 +674,7 @@ public class EsqlGrammar {
 	}
 
 	public ExpressionTree LEFT_HAND_SIDE_EXPRESSION() {
-		return b.<ExpressionTree>nonterminal(EsqlLegacyGrammar.leftHandSideExpression).is(b.firstOf(IN_EXPRESSION(), BETWEEN_EXPRESSION(), IS_EXPRESSION(), CALL_EXPRESSION()));
+		return b.<ExpressionTree>nonterminal(EsqlLegacyGrammar.leftHandSideExpression).is(b.firstOf(IN_EXPRESSION(), BETWEEN_EXPRESSION(), IS_EXPRESSION(), LIKE_EXPRESSION(), CALL_EXPRESSION()));
 	}
 
 	public ExpressionTree IN_EXPRESSION(){
@@ -702,6 +705,14 @@ public class EsqlGrammar {
 				b.token(EsqlNonReservedKeyword.BETWEEN), b.optional(b.firstOf(b.token(EsqlNonReservedKeyword.SYMMERTIC),b.token(EsqlNonReservedKeyword.ASYMMERTIC))), 
 				CALL_EXPRESSION(), b.token(EsqlNonReservedKeyword.AND), CALL_EXPRESSION())
 				);
+	}
+	
+	public LikeExpressionTreeImpl LIKE_EXPRESSION(){
+		return b.<LikeExpressionTreeImpl>nonterminal(Kind.LIKE_EXPRESSION).is (f.likeExpression(
+				CALL_EXPRESSION(), b.optional(b.token(EsqlNonReservedKeyword.NOT)), b.token(EsqlNonReservedKeyword.LIKE),
+				CALL_EXPRESSION(), b.optional(f.newTuple30(b.token(EsqlNonReservedKeyword.ESCAPE), CALL_EXPRESSION()))
+		));
+				
 	}
 	
 	public ExpressionTree CALL_EXPRESSION() {

@@ -20,23 +20,26 @@ package com.exxeta.iss.sonar.esql.tree.impl.statement;
 import java.util.Iterator;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
-import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ExternalRoutineBodyTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
+import com.exxeta.iss.sonar.esql.tree.impl.expression.LiteralTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.google.common.collect.Iterators;
 
 public class ExternalRoutineBodyTreeImpl extends EsqlTree implements ExternalRoutineBodyTree {
 
-	private final SyntaxToken externalKeyword;
-	private final SyntaxToken nameKeyword;
-	private final ExpressionTree expression;
+	private final InternalSyntaxToken externalKeyword;
+	private final InternalSyntaxToken nameKeyword;
+	private final InternalSyntaxToken externalRoutineName;
+	private final InternalSyntaxToken semi;
 
-	public ExternalRoutineBodyTreeImpl(SyntaxToken externalKeyword, SyntaxToken nameKeyword, ExpressionTree expression) {
+	public ExternalRoutineBodyTreeImpl(InternalSyntaxToken externalKeyword, InternalSyntaxToken nameKeyword, InternalSyntaxToken externalRoutineName, InternalSyntaxToken semi) {
 		this.externalKeyword = externalKeyword;
 		this.nameKeyword = nameKeyword;
-		this.expression = expression;
+		this.externalRoutineName = externalRoutineName;
+		this.semi=semi;
 	}
 
 	@Override
@@ -50,8 +53,13 @@ public class ExternalRoutineBodyTreeImpl extends EsqlTree implements ExternalRou
 	}
 
 	@Override
-	public ExpressionTree expression() {
-		return expression;
+	public InternalSyntaxToken externalRoutineName() {
+		return externalRoutineName;
+	}
+	
+	@Override
+	public InternalSyntaxToken semi() {
+		return semi;
 	}
 
 	@Override
@@ -61,7 +69,7 @@ public class ExternalRoutineBodyTreeImpl extends EsqlTree implements ExternalRou
 
 	@Override
 	public Iterator<Tree> childrenIterator() {
-		return Iterators.forArray(externalKeyword, nameKeyword, expression);
+		return Iterators.forArray(externalKeyword, nameKeyword, externalRoutineName, semi);
 	}
 
 	@Override

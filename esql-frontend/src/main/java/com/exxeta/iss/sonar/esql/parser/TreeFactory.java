@@ -43,6 +43,8 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.SetColumnTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.SqlStateTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
 import com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator;
+import com.exxeta.iss.sonar.esql.parser.TreeFactory.Tuple;
+import com.exxeta.iss.sonar.esql.tree.expression.LikeExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
 import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.BrokerSchemaStatementTreeImpl;
@@ -443,6 +445,10 @@ public class TreeFactory {
 	}
 
 	public <T, U> Tuple<T, U> newTuple29(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple30(T first, U second) {
 		return newTuple(first, second);
 	}
 
@@ -1128,8 +1134,8 @@ public class TreeFactory {
 	}
 
 	public ExternalRoutineBodyTreeImpl externalRoutineBody(InternalSyntaxToken externalKeyword,
-			InternalSyntaxToken nameKeyword, ExpressionTree expression) {
-		return new ExternalRoutineBodyTreeImpl(externalKeyword, nameKeyword, expression);
+			InternalSyntaxToken nameKeyword, InternalSyntaxToken externalRoutineName, InternalSyntaxToken semiToken) {
+		return new ExternalRoutineBodyTreeImpl(externalKeyword, nameKeyword, externalRoutineName, semiToken);
 	}
 
 	public RoutineBodyTreeImpl routineBody(Tree firstOf) {
@@ -1296,6 +1302,14 @@ public class TreeFactory {
 		return new BetweenExpressionTreeImpl(expression, notKeyword.isPresent()?notKeyword.get():null, betweenKeyword, symmetricKeyword.isPresent()?symmetricKeyword.get():null,
 				endpoint1, andKeyword, endpoint2);
 	}
+
+	public LikeExpressionTreeImpl likeExpression(ExpressionTree source, Optional<InternalSyntaxToken> notKeyword,
+			InternalSyntaxToken likeKeyword, ExpressionTree pattern,
+			Optional<Tuple<InternalSyntaxToken, ExpressionTree>> escapeClause) {
+		return new LikeExpressionTreeImpl(source, notKeyword.isPresent()?notKeyword.get():null, likeKeyword, pattern, 
+				escapeClause.isPresent()?escapeClause.get().first():null, escapeClause.isPresent()?escapeClause.get().second():null);
+	}
+	
 
 	public LiteralTreeImpl listLiteral(InternalSyntaxToken listToken) {
 		return new LiteralTreeImpl(Kind.LIST_LITERAL, listToken);
@@ -2189,5 +2203,5 @@ public class TreeFactory {
 	public StatementsTreeImpl statements(Optional<List<StatementTree>> listOfStatements){
 		return new StatementsTreeImpl(optionalList(listOfStatements));
 	}
-	
+
 }
