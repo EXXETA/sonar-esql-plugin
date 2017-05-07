@@ -23,4 +23,6 @@ import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 public interface SchemaNameTree extends Tree {
 
 	SeparatedList<InternalSyntaxToken> schemaElements();
+	
+	String text();
 }

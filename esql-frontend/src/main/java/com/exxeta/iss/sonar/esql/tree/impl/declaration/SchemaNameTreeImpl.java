@@ -54,5 +54,16 @@ public class SchemaNameTreeImpl  extends EsqlTree implements SchemaNameTree {
 		visitor.visitSchemaName(this);
 	}
 
+	public String text(){
+		StringBuilder sb = new StringBuilder();
+		for (InternalSyntaxToken element : schemaElements){
+			if (sb.length()>0){
+				sb.append('.');
+			}
+				
+			sb.append(element.text());
+		}
+		return sb.toString();
+	}
 
 }
