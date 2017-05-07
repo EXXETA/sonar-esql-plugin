@@ -24,6 +24,7 @@ import org.sonar.sslr.grammar.GrammarRuleKey;
 import com.exxeta.iss.sonar.esql.api.tree.expression.BetweenExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.BinaryExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.CallExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.InExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.IntervalExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.IsExpressionTree;
@@ -94,6 +95,7 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.RoutineBodyTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.SetColumnTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.SetStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.SqlStateTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.StatementsTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ThrowStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.UpdateStatementTree;
@@ -235,7 +237,9 @@ public interface Tree {
 		STATEMENTS(StatementsTree.class), 
 		BETWEEN_EXPRESSION(BetweenExpressionTree.class), 
 		UNARY_PLUS(UnaryExpressionTree.class),
-		UNARY_MINUS(UnaryExpressionTree.class);
+		UNARY_MINUS(UnaryExpressionTree.class),
+		EXPRESSION(ExpressionTree.class), 
+		STATEMENT(StatementTree.class);
 
 		final Class<? extends Tree> associatedInterface;
 

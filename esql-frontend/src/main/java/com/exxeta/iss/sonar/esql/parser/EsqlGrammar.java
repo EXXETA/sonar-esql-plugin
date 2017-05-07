@@ -247,14 +247,14 @@ public class EsqlGrammar {
 	}
 
 	public BrokerSchemaStatementTreeImpl BROKER_SCHEMA_STATEMENT() {
-		return b.<BrokerSchemaStatementTreeImpl>nonterminal(EsqlLegacyGrammar.BROKER_SCHEMA_STATEMENT)
+		return b.<BrokerSchemaStatementTreeImpl>nonterminal(Kind.BROKER_SCHEMA_STATEMENT)
 				.is(f.brokerSchema(b.token(EsqlNonReservedKeyword.BROKER), b.token(EsqlNonReservedKeyword.SCHEMA),
 						SCHEMA_NAME()));
 
 	}
 
 	public PathClauseTree PATH_CLAUSE() {
-		return b.<PathClauseTree>nonterminal(EsqlLegacyGrammar.PATH_CLAUSE)
+		return b.<PathClauseTree>nonterminal(Kind.PATH_CLAUSE)
 				.is(f.pathClause(b.token(EsqlNonReservedKeyword.PATH), SCHEMA_NAME(),
 						b.zeroOrMore(f.newTuple4(b.token(COMMA), SCHEMA_NAME()))));
 	}
@@ -265,7 +265,7 @@ public class EsqlGrammar {
 	}
 
 	public StatementTree STATEMENT() {
-		return b.<StatementTree>nonterminal(EsqlLegacyGrammar.statement).is(b.firstOf(
+		return b.<StatementTree>nonterminal(Kind.STATEMENT).is(b.firstOf(
 				BASIC_STATEMENT() , MESSAGE_TREE_MANIPULATION_STATEMENT(),
 				NODE_INTERACTION_STATEMENT() , DATABASE_UPDATE_STATEMENT(),
 				OTHER_STATEMENT()));
@@ -763,22 +763,22 @@ public class EsqlGrammar {
 	}
 
 	public ExpressionTree EXPRESSION() {
-		return b.<ExpressionTree>nonterminal(EsqlLegacyGrammar.expression).is(f.expression(LOGICAL_OR_EXPRESSION()));
+		return b.<ExpressionTree>nonterminal(Kind.EXPRESSION).is(f.expression(LOGICAL_OR_EXPRESSION()));
 	}
 
 	public LiteralTreeImpl LIST_LITERAL() {
 		return b.<LiteralTreeImpl>nonterminal(Kind.LIST_LITERAL)
-				.is(f.listLiteral(b.token(EsqlLegacyGrammar.listLiteral)));
+				.is(f.listLiteral(b.token(EsqlLegacyGrammar.LIST_LITERAL)));
 	}
 
 	public LiteralTreeImpl TIME_LITERAL() {
 		return b.<LiteralTreeImpl>nonterminal(Kind.TIME_LITERAL)
-				.is(f.timeLiteral(b.token(EsqlLegacyGrammar.timeLiteral)));
+				.is(f.timeLiteral(b.token(EsqlLegacyGrammar.TIME_LITERAL)));
 	}
 
 	public LiteralTreeImpl DATE_LITERAL() {
 		return b.<LiteralTreeImpl>nonterminal(Kind.DATE_LITERAL)
-				.is(f.dateLiteral(b.token(EsqlLegacyGrammar.dateLiteral)));
+				.is(f.dateLiteral(b.token(EsqlLegacyGrammar.DATE_LITERAL)));
 	}
 
 	public LiteralTreeImpl INTERVAL_LITERAL() {
@@ -860,7 +860,7 @@ public class EsqlGrammar {
 	}
 
 	public ArrayLiteralTreeImpl ARRAY_ELEMENT_LIST() {
-		return b.<ArrayLiteralTreeImpl>nonterminal(EsqlLegacyGrammar.ELEMENT_LIST)
+		return b.<ArrayLiteralTreeImpl>nonterminal()
 				.is(f.newArrayLiteralWithElements(b.zeroOrMore(b.token(EsqlPunctuator.COMMA)), EXPRESSION(),
 						b.zeroOrMore(f.newTuple3(b.oneOrMore(b.token(EsqlPunctuator.COMMA)), EXPRESSION()))));
 	}

@@ -21,13 +21,13 @@ import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
 
 import org.junit.Test;
 
-import com.exxeta.iss.sonar.esql.parser.EsqlLegacyGrammar;
+import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 
 public class PrimaryExpressionTest {
 
 	@Test
 	public void realLife() {
-		assertThat(EsqlLegacyGrammar.expression)
+		assertThat(Kind.EXPRESSION)
 			.matches("'sss'")
 			.matches("1")
 			.matches("TRUE")

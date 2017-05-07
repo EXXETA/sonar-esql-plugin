@@ -53,13 +53,12 @@ import com.sonar.sslr.api.GenericTokenType;
 public enum EsqlLegacyGrammar implements GrammarRuleKey {
 	EOF, PROGRAM, EOS, LITERAL, BOOLEAN_LITERAL, NULL_LITERAL, NUMERIC_LITERAL, HEX_LITERAL, 
 	STRING_LITERAL, SPACING, IDENTIFIER, IDENTIFIER_WO_QUOTES, IDENTIFIER_WITH_QUOTES
-	, listLiteral, dateLiteral, timeLiteral, 
-	FIELD_NAME, NAME, SPACING_NO_LINE_BREAK_NOT_FOLLOWED_BY_LINE_BREAK, SPACING_NO_LB, NEXT_NOT_LB, 
+	, LIST_LITERAL, DATE_LITERAL, TIME_LITERAL, 
+	 SPACING_NO_LINE_BREAK_NOT_FOLLOWED_BY_LINE_BREAK, SPACING_NO_LB, NEXT_NOT_LB, 
 	SPACING_NOT_SKIPPED, LINE_TERMINATOR_SEQUENCE, EOS_NO_LB, LETTER_OR_DIGIT, reservedKeyword, 
-	intervalLiteral, intervalQualifier, keyword, nonReservedKeyword, expression, dataType, 
+	intervalLiteral, intervalQualifier, keyword, nonReservedKeyword, dataType, 
 	leftHandSideExpression, unaryExpression, multiplicativeExpression, additiveExpression, 
-	relationalExpression, equalityExpression, primaryExpression, statement, PATH_CLAUSE, 
-	BROKER_SCHEMA_STATEMENT, ELEMENT_LIST;
+	relationalExpression, equalityExpression, primaryExpression;
 
 	private final String internalName;
 
@@ -114,15 +113,14 @@ public enum EsqlLegacyGrammar implements GrammarRuleKey {
 		b.rule(IDENTIFIER).is(b.firstOf(IDENTIFIER_WO_QUOTES, IDENTIFIER_WITH_QUOTES));
 		b.rule(IDENTIFIER_WO_QUOTES).is(b.nextNot(LITERAL), SPACING, b.regexp(EsqlLexer.IDENTIFIER));
 		b.rule(IDENTIFIER_WITH_QUOTES).is(SPACING, b.regexp(EsqlLexer.IDENTIFIER_WITH_QUOTES));
-		b.rule(FIELD_NAME).is(IDENTIFIER);
 		b.rule(NUMERIC_LITERAL).is(SPACING, b.token(EsqlTokenType.NUMBER, b.regexp(EsqlLexer.NUMERIC_LITERAL)),
 				SPACING);
 		b.rule(STRING_LITERAL).is(SPACING, b.token(EsqlTokenType.STRING, b.regexp(EsqlLexer.LITERAL)), SPACING);
 		b.rule(HEX_LITERAL).is(SPACING, b.token(EsqlTokenType.HEX, b.regexp(EsqlLexer.HEX_LITERAL)), SPACING);
-		b.rule(listLiteral).is(SPACING, "(", LITERAL, b.zeroOrMore(b.sequence(",", LITERAL)), ")");
+		b.rule(LIST_LITERAL).is(SPACING, "(", LITERAL, b.zeroOrMore(b.sequence(",", LITERAL)), ")");
 		b.rule(intervalLiteral).is(SPACING, "INTERVAL", LITERAL, intervalQualifier);
-		b.rule(dateLiteral).is(SPACING, b.regexp(EsqlLexer.DATE_LITERAL));
-		b.rule(timeLiteral).is(SPACING, b.regexp(EsqlLexer.TIME_LITERAL));
+		b.rule(DATE_LITERAL).is(SPACING, b.regexp(EsqlLexer.DATE_LITERAL));
+		b.rule(TIME_LITERAL).is(SPACING, b.regexp(EsqlLexer.TIME_LITERAL));
 		punctuators(b);
 		keywords(b);
 	}

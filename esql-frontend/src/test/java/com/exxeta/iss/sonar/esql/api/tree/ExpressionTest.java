@@ -21,13 +21,13 @@ import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
 
 import org.junit.Test;
 
-import com.exxeta.iss.sonar.esql.parser.EsqlLegacyGrammar;
+import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 
 public class ExpressionTest {
 
 	@Test
 	public void expression() {
-		assertThat(EsqlLegacyGrammar.expression)
+		assertThat(Kind.EXPRESSION)
 		.matches("b")
 		.matches("b.c")
 		.matches("0")
