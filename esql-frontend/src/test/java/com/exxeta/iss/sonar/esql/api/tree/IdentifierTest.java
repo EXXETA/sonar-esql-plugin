@@ -36,6 +36,7 @@ public class IdentifierTest {
 		.matches("\"a\"\"a\"")
 		.matches("XML")
 		.matches("Element")
+		.matches("timestamp")
 		;
 
 	}

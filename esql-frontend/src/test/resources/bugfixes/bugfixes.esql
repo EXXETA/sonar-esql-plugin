@@ -121,7 +121,48 @@ ATTACH bpFSAAssocRef TO OutputRoot.XMLNSC.ens:Envelope.ens:Body.tns:TFeed.tns:Bu
 	IF (a IS NULL) THEN
 	END IF;
 	
+	
+	CREATE FIELD OutputRoot.SOAP.Body.t:P VALUE TIMESTAMP '1970-01-01 23:59:59';
+
+SET inoid = THE(SELECT FIELDVALUE(v.a) FROM vehicle.fb:VEHICLE[] AS v WHERE v.fb:c = Environment.Variables.F);
+
+CALL com.daimler.mbb.wmb.logInfoActivityListBuilt(OutBodyRef);
+
+
+DECLARE MonthInterval INTERVAL CAST(COALESCE(SecurityConfigCache.XMLNSC.SecurityConfiguration.TimeLDMDataToLive, 15) AS INTERVAL DAY);
+
+CALL a();
+
+
+
+SET OutputRoot.MQMD.Expiry = CURRENT_GMTTIMESTAMP + INTERVAL '2' DAY;
+
+IF (FIELDNAME(rOut) NOT LIKE('MQ%')) THEN END IF;
+
+CALL com.daimler.mbb.wmb.log4j_1_1(MessageFlowLabel, ExecutionGroupLabel, 'INFO', TRIM(COALESCE(logId || ' ','')) || COALESCE(logText,'<null>')) INTO rc;
+
+--IF NOT isNullOrEmpty(Response.(XMLNSC.Attribute).timestamp) THEN --Is not valid ESQL according to ibm reference
+--END IF;
+
+DECLARE prevA REFERENCE TO OutputRoot.XMLNSC.ens:Envelope.ens:Header.a[i-1];
+
+
+SET S = SUBSTRING(S FROM P + LENGTH(Delim));
+
+SET msgBody = SUBSTRING(msgBody FROM 1 FOR UDP_Log_Size_kB * 1024);
+
+
+	
    END;
+
+CREATE PROCEDURE InsertV(
+INOUT p_id CHARACTER,
+INOUT p_state CHARACTER,
+INOUT p_ResultCode INTEGER,
+INOUT p_ResultText CHARACTER
+)
+LANGUAGE DATABASE
+EXTERNAL NAME "A.V.INSERT";
    
 
 END MODULE;

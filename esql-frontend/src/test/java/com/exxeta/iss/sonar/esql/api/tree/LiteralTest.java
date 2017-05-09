@@ -56,7 +56,8 @@ public class LiteralTest {
 	@Test
 	public void timestampLiteral(){
 		assertThat(Kind.TIMESTAMP_LITERAL)
-		.matches("TIMESTAMP '2017-01-01 00:00:00'");
+		.matches("TIMESTAMP '2017-01-01 00:00:00'")
+		.notMatches("timestamp");
 	}
 	
 }

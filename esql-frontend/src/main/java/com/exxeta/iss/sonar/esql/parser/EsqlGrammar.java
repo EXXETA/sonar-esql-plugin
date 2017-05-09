@@ -390,8 +390,8 @@ public class EsqlGrammar {
 	public SubstringFunctionTreeImpl SUBSTRING_FUNCTION(){
 		return b.<SubstringFunctionTreeImpl>nonterminal(Kind.SUBSTRING_FUNCTION).is(
 			f.substringFunction(b.token(EsqlNonReservedKeyword.SUBSTRING), b.token(EsqlPunctuator.LPARENTHESIS),
-					CALL_EXPRESSION(), b.firstOf(b.token(EsqlNonReservedKeyword.FROM), b.token(EsqlNonReservedKeyword.BEFORE), b.token(EsqlNonReservedKeyword.AFTER)),
-					CALL_EXPRESSION(), b.optional(f.newTuple103( b.token(EsqlNonReservedKeyword.FOR), CALL_EXPRESSION())),
+					EXPRESSION(), b.firstOf(b.token(EsqlNonReservedKeyword.FROM), b.token(EsqlNonReservedKeyword.BEFORE), b.token(EsqlNonReservedKeyword.AFTER)),
+					EXPRESSION(), b.optional(f.newTuple103( b.token(EsqlNonReservedKeyword.FOR), EXPRESSION())),
 			b.token(EsqlPunctuator.RPARENTHESIS)
 		));
 	}
@@ -401,7 +401,7 @@ public class EsqlGrammar {
 				.is(f.trimFunction(b.token(EsqlNonReservedKeyword.TRIM), b.token(EsqlPunctuator.LPARENTHESIS),
 						b.optional(f.newTuple105(b.optional(b.firstOf(b.token(EsqlNonReservedKeyword.BOTH),
 								b.token(EsqlNonReservedKeyword.LEADING), b.token(EsqlNonReservedKeyword.TRAILING))),
-								b.firstOf(b.token(EsqlNonReservedKeyword.FROM),f.newTuple104(CALL_EXPRESSION(), b.token(EsqlNonReservedKeyword.FROM)))
+								b.firstOf(b.token(EsqlNonReservedKeyword.FROM),f.newTuple104(EXPRESSION(), b.token(EsqlNonReservedKeyword.FROM)))
 								)),
 						CALL_EXPRESSION(), b.token(EsqlPunctuator.RPARENTHESIS)));
 	}
@@ -854,7 +854,7 @@ public class EsqlGrammar {
 		return b.<IndexTreeImpl>nonterminal(Kind.INDEX)
 				.is(f.index(b.token(EsqlPunctuator.LBRACKET),
 						f.newTuple32(b.optional(b.firstOf(b.token(EsqlPunctuator.LT), b.token(EsqlPunctuator.GT))),
-								b.optional(b.firstOf(CALL_EXPRESSION(), NUMERIC_LITERAL()))),
+								b.optional(b.firstOf(EXPRESSION(), NUMERIC_LITERAL()))),
 						b.token(EsqlPunctuator.RBRACKET)));
 	}
 

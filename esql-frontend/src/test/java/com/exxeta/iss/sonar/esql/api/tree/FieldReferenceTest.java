@@ -39,7 +39,11 @@ public class FieldReferenceTest {
 		.matches("(XML.Element)NSpace1:Element1[2]")
 		.matches("\"aItem\"")
 		.matches("\"Item\"")
-		.matches("[]");
+		.matches("[]")
+		.matches("a[i-1]")
+		.notMatches("(XML.Element)")// IIB accepts this Element although it is not allowed by the documentation.
+		;
+		
 
 	}
 	@Test
