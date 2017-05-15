@@ -56,7 +56,25 @@ public final class CheckList {
         UnusedRoutineCheck.class,
         EmptyBlockCheck.class,
         EmptyFileCheck.class,
-        UselessParenthesesCheck.class
+        UselessParenthesesCheck.class,
+        CaseAtLeastThreeWhenCheck.class,
+        FileHeaderCheck.class
+        /*
+        
+        HardCodedCredentialsCheck
+        HardcodedIpCheck
+        HardcodedURICheck
+        IdenticalCasesInSwitchCheck
+        IdenticalOperandOnBinaryExpressionCheck
+        IfConditionAlwaysTrueOrFalseCheck
+        SwitchWithTooManyCasesCheck
+        DuplicateConditionIfElseIfCheck 
+        BooleanInversionCheck
+        BooleanLiteralCheck
+        FloatEqualityCheck
+        
+        
+        */
         );
   }
 
