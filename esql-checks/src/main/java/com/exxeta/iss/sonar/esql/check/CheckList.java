@@ -58,7 +58,8 @@ public final class CheckList {
         EmptyFileCheck.class,
         UselessParenthesesCheck.class,
         CaseAtLeastThreeWhenCheck.class,
-        FileHeaderCheck.class
+        FileHeaderCheck.class,
+        IdenticalExpressionOnBinaryOperatorCheck.class
         /*
         
         HardCodedCredentialsCheck
