@@ -23,7 +23,7 @@ import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 
 public interface ElseifClauseTree extends Tree{
 	  SyntaxToken elseifKeyword();
-	  ExpressionTree expression();
+	  ExpressionTree condition();
 	  SyntaxToken thenKeyword();
 	  StatementsTree statements();
 }

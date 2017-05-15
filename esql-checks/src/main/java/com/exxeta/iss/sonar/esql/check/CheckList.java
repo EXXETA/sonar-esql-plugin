@@ -59,7 +59,8 @@ public final class CheckList {
         UselessParenthesesCheck.class,
         CaseAtLeastThreeWhenCheck.class,
         FileHeaderCheck.class,
-        IdenticalExpressionOnBinaryOperatorCheck.class
+        IdenticalExpressionOnBinaryOperatorCheck.class,
+        IfConditionalAlwaysTrueOrFalseCheck.class
         /*
         
         HardCodedCredentialsCheck
@@ -67,7 +68,6 @@ public final class CheckList {
         HardcodedURICheck
         IdenticalCasesInSwitchCheck
         IdenticalOperandOnBinaryExpressionCheck
-        IfConditionAlwaysTrueOrFalseCheck
         SwitchWithTooManyCasesCheck
         DuplicateConditionIfElseIfCheck 
         BooleanInversionCheck

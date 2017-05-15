@@ -8,8 +8,8 @@ CREATE COMPUTE MODULE ProcessCardAccount
 					IF FALSE THEN --Non compliant
 						SET OutputRoot=InputRoot;
 					END IF;
-				ELSEIF FALSE THEN --Compliant
-					IF FALSE THEN --Non compliant
+				ELSEIF A = B THEN --Compliant
+					IF TRUE THEN --Non compliant
 						SET OutputRoot=InputRoot;
 					END IF;
 				END IF;
