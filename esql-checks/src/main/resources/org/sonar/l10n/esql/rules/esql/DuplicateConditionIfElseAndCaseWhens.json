@@ -1,0 +1,16 @@
+{
+  "title": "Related \"IF\/ELSEIF\" statements and \"WHEN\" in a \"CASE\" should not have the same condition",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "10min"
+  },
+  "tags": [
+    "bug",
+    "cert",
+    "unused",
+    "pitfall"
+  ],
+  "defaultSeverity": "Major"
+}

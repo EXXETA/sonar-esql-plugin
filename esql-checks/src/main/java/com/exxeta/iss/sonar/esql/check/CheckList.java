@@ -60,16 +60,19 @@ public final class CheckList {
         CaseAtLeastThreeWhenCheck.class,
         FileHeaderCheck.class,
         IdenticalExpressionOnBinaryOperatorCheck.class,
-        IfConditionalAlwaysTrueOrFalseCheck.class
+        IfConditionalAlwaysTrueOrFalseCheck.class,
+        DuplicateConditionIfElseAndCaseWhensCheck.class
         /*
         
         HardCodedCredentialsCheck
         HardcodedIpCheck
         HardcodedURICheck
-        IdenticalCasesInSwitchCheck
         IdenticalOperandOnBinaryExpressionCheck
         SwitchWithTooManyCasesCheck
+
+        IdenticalCasesInSwitchCheck
         DuplicateConditionIfElseIfCheck 
+
         BooleanInversionCheck
         BooleanLiteralCheck
         FloatEqualityCheck

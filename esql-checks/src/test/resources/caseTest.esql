@@ -5,7 +5,7 @@ CREATE COMPUTE MODULE ProcessCardAccount
 		CASE size
 		  WHEN minimum + 0 THEN
 		    SET description = 'small';
-		  WHEN minimum + 1 THEN
+		  WHEN minimum + 0 THEN
 		    SET description = 'medium';        
 		  ELSE
 		    SET description = 'unknown';
@@ -17,7 +17,7 @@ CREATE COMPUTE MODULE ProcessCardAccount
 		    SET description = 'small';
 		  WHEN minimum + 1 THEN
 		    SET description = 'medium';        
-		  WHEN minimum + 2 THEN
+		  WHEN minimum + 1 THEN
 		    SET description = 'large';
 		    CALL handleLargeObject();
 		  ELSE

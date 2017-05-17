@@ -27,8 +27,10 @@ public class EmptyBlockCheckTest {
 	 @Test
 	  public void test() {
 		 EsqlCheckVerifier.issues(new EmptyBlockCheck(), new File("src/test/resources/ifTest.esql"))
-	        .next().atLine(17).withMessage("Either remove or fill this block of code.")
-	        .next().atLine(22).withMessage("Either remove or fill this block of code.")
+	        .next().atLine(15).withMessage("Either remove or fill this block of code.")
+	        .next().atLine(16).withMessage("Either remove or fill this block of code.")
+	        .next().atLine(19).withMessage("Either remove or fill this block of code.")
+	        .next().atLine(24).withMessage("Either remove or fill this block of code.")
 	        .noMore();
 	  }
 }

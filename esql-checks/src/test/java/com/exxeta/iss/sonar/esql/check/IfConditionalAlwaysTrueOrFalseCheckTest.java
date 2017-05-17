@@ -15,6 +15,7 @@ public class IfConditionalAlwaysTrueOrFalseCheckTest {
 	        .next().atLine(7).withMessage("Remove this \"IF\" statement.")
 	        .next().atLine(8).withMessage("Remove this \"IF\" statement.")
 	        .next().atLine(12).withMessage("Remove this \"IF\" statement.")
+	        .next().atLine(16).withMessage("Remove this \"IF\" statement.")
 	        .noMore();
 	  }
 }
