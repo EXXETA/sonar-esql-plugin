@@ -61,7 +61,8 @@ public final class CheckList {
         FileHeaderCheck.class,
         IdenticalExpressionOnBinaryOperatorCheck.class,
         IfConditionalAlwaysTrueOrFalseCheck.class,
-        DuplicateConditionIfElseAndCaseWhensCheck.class
+        DuplicateConditionIfElseAndCaseWhensCheck.class,
+        BooleanInversionCheck.class
         /*
         
         HardCodedCredentialsCheck
@@ -71,9 +72,7 @@ public final class CheckList {
         SwitchWithTooManyCasesCheck
 
         IdenticalCasesInSwitchCheck
-        DuplicateConditionIfElseIfCheck 
 
-        BooleanInversionCheck
         BooleanLiteralCheck
         FloatEqualityCheck
         

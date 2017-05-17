@@ -1,11 +1,17 @@
 package com.exxeta.iss.sonar.esql.tree;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
+import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.api.tree.expression.CallExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.ParenthesisedExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Objects;
+
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import javax.annotation.Nullable;
@@ -78,5 +84,29 @@ public final class SyntacticEquivalence {
       throw new IllegalArgumentException();
     }
   }
+  
+  
+  public static ExpressionTree skipParentheses(ExpressionTree tree) {
+	    if (tree.is(Tree.Kind.PARENTHESISED_EXPRESSION)) {
+	      return skipParentheses(((ParenthesisedExpressionTree) tree).expression());
+	    }else if (tree.is(Kind.CALL_EXPRESSION)){
+	    	CallExpressionTree call = (CallExpressionTree)tree;
+	    	List<Tree> children = new ArrayList<>();
+	    	Iterator<Tree> it = call.childrenIterator();
+	    	while (it.hasNext()){
+	    		Tree child = it.next();
+	    		if (child!=null){
+	    			children.add(child);
+	    		}
+	    	}
+	    	if (children.size()==1 && children.get(0)instanceof ExpressionTree){
+	    		return skipParentheses((ExpressionTree)children.get(0));
+	    	}
+	    	return tree;
+	    	
+	    } else {
+	    	return tree;
+	    }
+	  }
 
 }
