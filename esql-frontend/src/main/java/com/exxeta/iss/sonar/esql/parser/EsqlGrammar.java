@@ -538,7 +538,7 @@ public class EsqlGrammar {
 		return b.<LoopStatementTreeImpl>nonterminal()
 				.is(f.loopStatementWithLabel(LABEL(), b.token(COLON), b.token(EsqlNonReservedKeyword.LOOP),
 						STATEMENTS(), b.token(EsqlNonReservedKeyword.END),
-						b.token(EsqlNonReservedKeyword.LOOP), LABEL(), b.token(EsqlLegacyGrammar.EOS)
+						b.token(EsqlNonReservedKeyword.LOOP), b.optional(LABEL()), b.token(EsqlLegacyGrammar.EOS)
 
 		));
 	}
@@ -553,7 +553,7 @@ public class EsqlGrammar {
 				.is(f.repeatStatementWithLabel(
 						LABEL(), b.token(COLON), b.token(EsqlNonReservedKeyword.REPEAT), STATEMENTS(), 
 						b.token(EsqlNonReservedKeyword.UNTIL), EXPRESSION(), b.token(EsqlNonReservedKeyword.END), 
-						b.token(EsqlNonReservedKeyword.REPEAT), LABEL(), b.token(EsqlLegacyGrammar.EOS)
+						b.token(EsqlNonReservedKeyword.REPEAT), b.optional(LABEL()), b.token(EsqlLegacyGrammar.EOS)
 						));
 	}
 
@@ -602,7 +602,7 @@ public class EsqlGrammar {
 				.is(f.whileStatementWithLabel(
 						LABEL(), b.token(COLON), b.token(EsqlNonReservedKeyword.WHILE), EXPRESSION(), 
 						b.token(EsqlNonReservedKeyword.DO), STATEMENTS(), b.token(EsqlNonReservedKeyword.END), 
-						b.token(EsqlNonReservedKeyword.WHILE), LABEL(), b.token(EsqlLegacyGrammar.EOS)
+						b.token(EsqlNonReservedKeyword.WHILE), b.optional(LABEL()), b.token(EsqlLegacyGrammar.EOS)
 						));
 	}
 

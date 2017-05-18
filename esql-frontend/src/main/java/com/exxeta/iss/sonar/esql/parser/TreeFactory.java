@@ -43,7 +43,6 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.SetColumnTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.SqlStateTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
 import com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator;
-import com.exxeta.iss.sonar.esql.parser.TreeFactory.Tuple;
 import com.exxeta.iss.sonar.esql.tree.expression.LikeExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
 import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
@@ -1606,17 +1605,17 @@ public class TreeFactory {
 
 	public LoopStatementTreeImpl loopStatementWithLabel(LabelTreeImpl label, InternalSyntaxToken colon,
 			InternalSyntaxToken loopKeyword, StatementsTreeImpl statements, InternalSyntaxToken endKeyword,
-			InternalSyntaxToken loopKeyword2, LabelTreeImpl label2, InternalSyntaxToken semi) {
+			InternalSyntaxToken loopKeyword2, Optional<LabelTreeImpl> label2, InternalSyntaxToken semi) {
 			return new LoopStatementTreeImpl(label, colon, loopKeyword, statements, endKeyword, loopKeyword2,
-					label2, semi);
+					label2.isPresent()?label2.get():null, semi);
 	}
 
 	public RepeatStatementTreeImpl repeatStatementWithLabel(LabelTreeImpl label, InternalSyntaxToken colon,
 			InternalSyntaxToken repeatKeyword, StatementsTreeImpl statements,
 			InternalSyntaxToken untilKeyword, ExpressionTree condition, InternalSyntaxToken endKeyword,
-			InternalSyntaxToken repeatKeyword2, LabelTreeImpl label2, InternalSyntaxToken semi) {
+			InternalSyntaxToken repeatKeyword2, Optional<LabelTreeImpl> label2, InternalSyntaxToken semi) {
 			return new RepeatStatementTreeImpl(label, colon, repeatKeyword, statements, untilKeyword, condition,
-					endKeyword, repeatKeyword2, label2, semi);
+					endKeyword, repeatKeyword2, label2.isPresent()?label2.get():null, semi);
 	}
 
 	public RepeatStatementTreeImpl repeatStatementWoLabel(InternalSyntaxToken repeatKeyword,
@@ -1629,9 +1628,9 @@ public class TreeFactory {
 	public WhileStatementTreeImpl whileStatementWithLabel(LabelTreeImpl label, InternalSyntaxToken colon,
 			InternalSyntaxToken whileKeyword, ExpressionTree condition, InternalSyntaxToken doKeyword,
 			StatementsTreeImpl statements, InternalSyntaxToken endKeyword, InternalSyntaxToken whileKeyword2,
-			LabelTreeImpl label2, InternalSyntaxToken semi) {
+			Optional<LabelTreeImpl> label2, InternalSyntaxToken semi) {
 			return new WhileStatementTreeImpl(label, colon, whileKeyword, condition, doKeyword, statements,
-					endKeyword, whileKeyword2, label2, semi);
+					endKeyword, whileKeyword2, label2.isPresent()?label2.get():null, semi);
 	}
 
 	public WhileStatementTreeImpl whileStatementWoLabel(InternalSyntaxToken whileKeyword, ExpressionTree condition,
