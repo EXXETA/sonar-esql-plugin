@@ -33,7 +33,7 @@ public class PropagateToLabelCheck extends DoubleDispatchVisitorCheck {
 	@Override
 	public void visitPropagateStatement(PropagateStatementTree tree) {
 		super.visitPropagateStatement(tree);
-		if ("LABEL".equalsIgnoreCase(tree.targetType().text())){
+		if (tree.targetType()!=null && "LABEL".equalsIgnoreCase(tree.targetType().text())){
 			addIssue(new PreciseIssue(this, new IssueLocation(tree, tree, MESSAGE)));
 		}
 	}
