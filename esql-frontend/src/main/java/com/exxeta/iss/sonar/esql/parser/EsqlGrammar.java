@@ -56,7 +56,10 @@ import com.exxeta.iss.sonar.esql.tree.impl.declaration.IntervalDataTypeTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.IntervalQualifierTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.NamespaceTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.ParameterListTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.declaration.PathElementNameTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.declaration.PathElementNamespaceTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.PathElementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.declaration.PathElementTypeTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.ProgramTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.ArrayLiteralTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.IntervalExpressionTreeImpl;
@@ -835,19 +838,43 @@ public class EsqlGrammar {
 	public PathElementTreeImpl PATH_ELEMENT() {
 		return b.<PathElementTreeImpl>nonterminal(
 				Kind.PATH_ELEMENT).is(
-						f.pathElement(
-								b.optional(f.newTriple1(b.token(EsqlPunctuator.LPARENTHESIS),
-										CALL_EXPRESSION(),
-										b.token(EsqlPunctuator.RPARENTHESIS))),
-								b.optional(f.newTuple31(b.optional(b.firstOf(NAMESPACE(),
-										f.newTriple2(b.token(EsqlPunctuator.LCURLYBRACE), EXPRESSION(),
-												b.token(EsqlPunctuator.RCURLYBRACE)),
-										b.token(EsqlPunctuator.STAR))), b.token(EsqlPunctuator.COLON))),
-								b.firstOf(b.token(EsqlLegacyGrammar.IDENTIFIER),
-										f.newTriple3(b.token(EsqlPunctuator.LCURLYBRACE), EXPRESSION(),
-												b.token(EsqlPunctuator.RCURLYBRACE)),
-										b.token(EsqlPunctuator.STAR), INDEX()),
-								b.optional(INDEX())));
+						f.finishPathElement(
+								b.firstOf (
+								f.pathElement(
+										b.optional(PATH_ELEMENT_TYPE()),
+										b.optional(PATH_ELEMENT_NAMESPACE()),
+										PATH_ELEMENT_NAME(),
+										b.optional(INDEX())
+										
+								),
+								f.pathElement(INDEX()),
+								f.pathElement(PATH_ELEMENT_TYPE())
+								)
+					));
+	}
+	
+	public PathElementTypeTreeImpl PATH_ELEMENT_TYPE() {
+		return b.<PathElementTypeTreeImpl>nonterminal(Kind.PATH_ELEMENT_TYPE).is(
+				f.pathElementType(b.token(EsqlPunctuator.LPARENTHESIS),
+					CALL_EXPRESSION(),	b.token(EsqlPunctuator.RPARENTHESIS))
+				);	}
+	
+	public PathElementNamespaceTreeImpl PATH_ELEMENT_NAMESPACE(){
+		return b.<PathElementNamespaceTreeImpl>nonterminal(Kind.PATH_ELEMENT_NAMESPACE)
+				.is(f.pathElementNamespace(b.optional(b.firstOf(NAMESPACE(),
+						f.newTriple2(b.token(EsqlPunctuator.LCURLYBRACE), EXPRESSION(),
+								b.token(EsqlPunctuator.RCURLYBRACE)),
+						b.token(EsqlPunctuator.STAR))), b.token(EsqlPunctuator.COLON)));
+	}
+	
+	public PathElementNameTreeImpl PATH_ELEMENT_NAME(){
+		return b.<PathElementNameTreeImpl>nonterminal(Kind.PATH_ELEMENT_NAME)
+				.is(f.pathElementName(
+						b.firstOf(b.token(EsqlLegacyGrammar.IDENTIFIER),
+								f.newTriple3(b.token(EsqlPunctuator.LCURLYBRACE), CALL_EXPRESSION(),
+										b.token(EsqlPunctuator.RCURLYBRACE)),
+								b.token(EsqlPunctuator.STAR))
+				));
 	}
 
 	public IndexTreeImpl INDEX() {

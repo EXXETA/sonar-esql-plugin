@@ -82,7 +82,7 @@ public class UnusedRoutineCheck extends DoubleDispatchVisitorCheck {
 	@Override
 	public void visitCallExpression(CallExpressionTree tree) {
 		if (tree.functionName() != null) {
-			calledRoutines.add(tree.functionName().pathElement().name().text());
+			calledRoutines.add(tree.functionName().pathElement().name().name().text());
 		}
 		super.visitCallExpression(tree);
 	}

@@ -33,7 +33,10 @@ import com.exxeta.iss.sonar.esql.api.tree.IntervalDataTypeTree;
 import com.exxeta.iss.sonar.esql.api.tree.IntervalQualifierTree;
 import com.exxeta.iss.sonar.esql.api.tree.NamespaceTree;
 import com.exxeta.iss.sonar.esql.api.tree.PathClauseTree;
+import com.exxeta.iss.sonar.esql.api.tree.PathElementNameTree;
+import com.exxeta.iss.sonar.esql.api.tree.PathElementNamespaceTree;
 import com.exxeta.iss.sonar.esql.api.tree.PathElementTree;
+import com.exxeta.iss.sonar.esql.api.tree.PathElementTypeTree;
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.tree.SchemaNameTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
@@ -583,6 +586,18 @@ public abstract class DoubleDispatchVisitor implements TreeVisitor {
 	}
 
 	public void visitLikeExpression(LikeExpressionTree tree) {
+		scanChildren(tree);
+	}
+
+	public void visitPathElementNamespace(PathElementNamespaceTree tree) {
+		scanChildren(tree);
+	}
+
+	public void visitPathElementType(PathElementTypeTree tree) {
+		scanChildren(tree);
+	}
+
+	public void visitPathElementName(PathElementNameTree tree) {
 		scanChildren(tree);
 	}
 

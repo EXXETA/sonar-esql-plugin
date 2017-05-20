@@ -57,7 +57,10 @@ import com.exxeta.iss.sonar.esql.tree.impl.declaration.IntervalQualifierTreeImpl
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.NamespaceTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.ParameterListTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.PathClauseTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.declaration.PathElementNameTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.declaration.PathElementNamespaceTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.PathElementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.declaration.PathElementTypeTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.ProgramTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.SchemaNameTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.ArrayLiteralTreeImpl;
@@ -1422,45 +1425,68 @@ public class TreeFactory {
 				content.second().isPresent() ? content.second().get() : null, closeBracket);
 	}
 
-	public PathElementTreeImpl pathElement(
-			Optional<Triple<InternalSyntaxToken, ExpressionTree, InternalSyntaxToken>> type,
-			Optional<Tuple<Optional<Object>, InternalSyntaxToken>> namespace, Object name,
-			Optional<IndexTreeImpl> index) {
+	public PathElementTreeImpl finishPathElement(PathElementTreeImpl tree){
+		return tree;
+	}
+	
+	public PathElementTreeImpl pathElement(Optional<PathElementTypeTreeImpl> type, Optional<PathElementNamespaceTreeImpl> namespace, 
+			PathElementNameTreeImpl name, Optional<IndexTreeImpl> index) {
 
 		PathElementTreeImpl pathElement = new PathElementTreeImpl();
 
-		if (type.isPresent()) {
-			pathElement.setType(type.get().first(),	type.get().second(), type.get().third());
+		if (type.isPresent()){
+			pathElement.type(type.get());
 		}
+		if (namespace.isPresent()){
+			pathElement.namespace(namespace.get());
+		}
+		pathElement.name(name);
+		if (index.isPresent()){
+			pathElement.index(index.get());
+		}
+		return pathElement;
+	}
+	
+	public PathElementTreeImpl pathElement(IndexTreeImpl index) {
+		PathElementTreeImpl pathElement = new PathElementTreeImpl();
+		pathElement.index(index);
+		return pathElement;
+	}
+	
+	public PathElementTreeImpl pathElement(PathElementTypeTreeImpl type) {
+		PathElementTreeImpl pathElement = new PathElementTreeImpl();
+		pathElement.type(type);
+		return pathElement;
+	}
+	
+	public PathElementTypeTreeImpl pathElementType(InternalSyntaxToken openParen, ExpressionTree typeExpression,
+			InternalSyntaxToken closeParen){
+		return new PathElementTypeTreeImpl(openParen, typeExpression, closeParen);
+	}
 
-		if (namespace.isPresent()) {
-			Optional<Object> first = namespace.get().first();
+	public PathElementNamespaceTreeImpl pathElementNamespace(Optional<Object> first, InternalSyntaxToken colon){
 			if (first.isPresent()) {
 				if (first.get() instanceof Triple) {
 					Triple<InternalSyntaxToken, ExpressionTree, InternalSyntaxToken> t = (Triple) first.get();
-					pathElement.namespace(t.first(), t.second(), t.third(), namespace.get().second());
+					return new PathElementNamespaceTreeImpl(t.first(), t.second(), t.third(), colon);
 				} else if (first.get() instanceof NamespaceTree) {
-					pathElement.namespace((NamespaceTree) first.get(), namespace.get().second());
+					return new PathElementNamespaceTreeImpl((NamespaceTree) first.get(), colon);
 				} else {
-					pathElement.namesapce((InternalSyntaxToken) first.get(), namespace.get().second());
+					return new PathElementNamespaceTreeImpl((InternalSyntaxToken) first.get(),colon);
 				}
 			} else {
-				pathElement.namespace(namespace.get().second());
+				return new PathElementNamespaceTreeImpl(colon);
 			}
-		}
+
+	}
+
+	public PathElementNameTreeImpl pathElementName(Object name){
 		if (name instanceof Triple) {
 			Triple<InternalSyntaxToken, ExpressionTree, InternalSyntaxToken> triple = (Triple) name;
-			pathElement.name(triple.first(), triple.second(), triple.third());
-		} else if (name instanceof InternalSyntaxToken){
-			pathElement.name((InternalSyntaxToken) name);
+			return new PathElementNameTreeImpl(triple.first(), triple.second(), triple.third());
 		} else {
-			pathElement.index((IndexTreeImpl) name);
+			return new PathElementNameTreeImpl((InternalSyntaxToken) name);
 		}
-		if (index.isPresent()) {
-			pathElement.index(index.get());
-		}
-
-		return pathElement;
 	}
 
 	public DecimalDataTypeTreeImpl decimalSize(InternalSyntaxToken openParen, InternalSyntaxToken precision,
