@@ -233,7 +233,7 @@ public class TreeFactory {
 	}
 
 	private static Kind getPrefixOperator(InternalSyntaxToken token) {
-		Kind kind = PREFIX_KIND_BY_VALUE.get(token.text());
+		Kind kind = PREFIX_KIND_BY_VALUE.get(token.text().toUpperCase());
 		if (kind == null) {
 			throw new IllegalArgumentException("Mapping not found for unary operator " + token.text().toUpperCase());
 		}
