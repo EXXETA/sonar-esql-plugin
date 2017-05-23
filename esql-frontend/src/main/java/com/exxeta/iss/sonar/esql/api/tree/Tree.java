@@ -242,7 +242,10 @@ public interface Tree {
 		UNARY_PLUS(UnaryExpressionTree.class),
 		UNARY_MINUS(UnaryExpressionTree.class),
 		EXPRESSION(ExpressionTree.class), 
-		STATEMENT(StatementTree.class);
+		STATEMENT(StatementTree.class), 
+		PATH_ELEMENT_NAMESPACE(PathElementNamespaceTree.class), 
+		PATH_ELEMENT_TYPE(PathElementTypeTree.class), 
+		PATH_ELEMENT_NAME(PathElementNameTree.class);
 
 		final Class<? extends Tree> associatedInterface;
 

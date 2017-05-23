@@ -32,7 +32,9 @@ public class SetStatementTest {
 		.matches("SET a = b.c;")
 		.matches("SET i = 0;")
 		.matches("SET OutputRoot=InputRoot;")
-		.matches("SET a = PASSTHRU('aaaaa' VALUES ('aaaa'));");
+		.matches("SET a = PASSTHRU('aaaaa' VALUES ('aaaa'));")
+		.matches("SET outRef.ns36:eventPayLoad.(XMLNSC.NamespaceDecl)=NULL;")
+		;
 		
 
 		

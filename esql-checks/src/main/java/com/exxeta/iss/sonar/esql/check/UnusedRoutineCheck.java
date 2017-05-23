@@ -38,22 +38,20 @@ public class UnusedRoutineCheck extends DoubleDispatchVisitorCheck {
 
 	private static final String MESSAGE = "Remove the unused %s \"%s\".";
 
-	private Set<String> calledProcedures = new HashSet<>();
+	private Set<String> calledRoutines = new HashSet<>();
 	private HashMap<String, CreateProcedureStatementTree> declaredProcedures = new HashMap<>();
-	private Set<String> calledFunctions = new HashSet<>();
 	private HashMap<String, CreateFunctionStatementTree> declaredFunctions = new HashMap<>();
 
 	@Override
 	public void visitCreateModuleStatement(CreateModuleStatementTree tree) {
-		calledFunctions.clear();
-		calledProcedures.clear();
+		calledRoutines.clear();
 		declaredFunctions.clear();
 		declaredProcedures.clear();
 		super.visitCreateModuleStatement(tree);
-		for (String function : calledFunctions) {
+		for (String function : calledRoutines) {
 			declaredFunctions.remove(function);
 		}
-		for (String procedure : calledProcedures) {
+		for (String procedure : calledRoutines) {
 			declaredProcedures.remove(procedure);
 		}
 		
@@ -84,7 +82,7 @@ public class UnusedRoutineCheck extends DoubleDispatchVisitorCheck {
 	@Override
 	public void visitCallExpression(CallExpressionTree tree) {
 		if (tree.functionName() != null) {
-			calledFunctions.add(tree.functionName().pathElement().name().text());
+			calledRoutines.add(tree.functionName().pathElement().name().name().text());
 		}
 		super.visitCallExpression(tree);
 	}
@@ -92,7 +90,7 @@ public class UnusedRoutineCheck extends DoubleDispatchVisitorCheck {
 	@Override
 	public void visitCallStatement(CallStatementTree tree) {
 		if (tree.routineName() != null) {
-			calledProcedures.add(tree.routineName().text());
+			calledRoutines.add(tree.routineName().text());
 		}
 		super.visitCallStatement(tree);
 	}

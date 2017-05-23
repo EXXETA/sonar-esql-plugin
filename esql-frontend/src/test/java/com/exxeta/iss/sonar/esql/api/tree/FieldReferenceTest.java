@@ -41,7 +41,9 @@ public class FieldReferenceTest {
 		.matches("\"Item\"")
 		.matches("[]")
 		.matches("a[i-1]")
-		.notMatches("(XML.Element)")// IIB accepts this Element although it is not allowed by the documentation.
+		.matches("(XML.Element)")// IIB accepts this Element although it is not allowed by the documentation.
+		.matches("PRICE")
+		.notMatches("a a")
 		;
 		
 

@@ -31,10 +31,6 @@ public class UnusedRoutineCheckTest {
 		
 		EsqlCheckVerifier.issues(check, new File("src/test/resources/procedureName.esql"))
 		.next()
-		.atLine(5)
-		.withMessage(
-				"Remove the unused procedure \"tooLongProcedureNameBecauseItHasMoreThan30characters\".")
-		.next()
 		.atLine(8)
 		.withMessage(
 				"Remove the unused procedure \"procedureOk\".")

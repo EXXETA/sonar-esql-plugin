@@ -19,149 +19,52 @@ package com.exxeta.iss.sonar.esql.tree.impl.declaration;
 
 import java.util.Iterator;
 
-import com.google.common.collect.Iterators;
-
-import com.exxeta.iss.sonar.esql.api.tree.NamespaceTree;
 import com.exxeta.iss.sonar.esql.api.tree.PathElementTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
-import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
-import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
-import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
-import com.google.common.base.Functions;
+import com.google.common.collect.Iterators;
 
 public class PathElementTreeImpl extends EsqlTree implements PathElementTree {
 
-	private InternalSyntaxToken typeOpenParen;
-	private ExpressionTree typeExpression;
-	private InternalSyntaxToken typeCloseParen;
-	private NamespaceTree namespace;
-	private InternalSyntaxToken namespaceCurlyOpen;
-	private ExpressionTree namespaceExpression;
-	private InternalSyntaxToken namespaceCurlyClose;
-	private InternalSyntaxToken namespaceStar;
-	private InternalSyntaxToken colon;
-	private InternalSyntaxToken nameCurlyOpen;
-	private ExpressionTree nameExpression;
-	private InternalSyntaxToken nameCurlyClose;
-	private InternalSyntaxToken name;
+	private PathElementTypeTreeImpl type;
+	private PathElementNamespaceTreeImpl namespace;
+	private PathElementNameTreeImpl name;
 	private IndexTreeImpl index;
 
-	public void setType(InternalSyntaxToken openParen, ExpressionTree typeExpression,
-			InternalSyntaxToken closeParen) {
-		this.typeOpenParen = openParen;
-		this.typeExpression = typeExpression;
-		this.typeCloseParen = closeParen;
-
+	public void type(PathElementTypeTreeImpl type){
+		this.type=type;
 	}
-
-	public void name(InternalSyntaxToken nameCurlyOpen, ExpressionTree nameExpression,
-			InternalSyntaxToken nameCurlyClose) {
-		this.nameCurlyOpen = nameCurlyOpen;
-		this.nameExpression = nameExpression;
-		this.nameCurlyClose = nameCurlyClose;
-
+	
+	public void namespace(PathElementNamespaceTreeImpl namespace){
+		this.namespace=namespace;
 	}
-
-	public void name(InternalSyntaxToken name) {
-		this.name = name;
-
+	
+	public void name(PathElementNameTreeImpl name){
+		this.name=name;
 	}
-
+	
 	public void index(IndexTreeImpl index) {
 		this.index = index;
-
-	}
-
-	public void namespace(InternalSyntaxToken namespaceCurlyOpen, ExpressionTree namespaceExpression,
-			InternalSyntaxToken namespaceCurlyClose, InternalSyntaxToken colon) {
-		this.namespaceCurlyOpen = namespaceCurlyOpen;
-		this.namespaceExpression = namespaceExpression;
-		this.namespaceCurlyClose = namespaceCurlyClose;
-		this.colon = colon;
-	}
-
-	public void namespace(NamespaceTree namespace, InternalSyntaxToken colon) {
-		this.namespace = namespace;
-		this.colon = colon;
-
-	}
-
-	public void namespace(InternalSyntaxToken colon) {
-		this.colon = colon;
-
-	}
-
-	public void namesapce(InternalSyntaxToken namespaceStar, InternalSyntaxToken second) {
-		this.namespaceStar = namespaceStar;
-
+		
 	}
 
 	@Override
-	public InternalSyntaxToken typeOpenParen() {
-		return typeOpenParen;
+	public PathElementTypeTreeImpl type() {
+		return type;
 	}
-
+	
 	@Override
-	public ExpressionTree typeExpression() {
-		return typeExpression;
-	}
-
-	@Override
-	public InternalSyntaxToken typeCloseParen() {
-		return typeCloseParen;
-	}
-
-	@Override
-	public NamespaceTree namespace() {
+	public PathElementNamespaceTreeImpl namespace() {
 		return namespace;
 	}
-
+	
 	@Override
-	public InternalSyntaxToken namespaceCurlyOpen() {
-		return namespaceCurlyOpen;
-	}
-
-	@Override
-	public ExpressionTree namespaceExpression() {
-		return namespaceExpression;
-	}
-
-	@Override
-	public InternalSyntaxToken namespaceCurlyClose() {
-		return namespaceCurlyClose;
-	}
-
-	@Override
-	public InternalSyntaxToken namespaceStar() {
-		return namespaceStar;
-	}
-
-	@Override
-	public InternalSyntaxToken colon() {
-		return colon;
-	}
-
-	@Override
-	public InternalSyntaxToken nameCurlyOpen() {
-		return nameCurlyOpen;
-	}
-
-	@Override
-	public ExpressionTree nameExpression() {
-		return nameExpression;
-	}
-
-	@Override
-	public InternalSyntaxToken nameCurlyClose() {
-		return nameCurlyClose;
-	}
-
-	@Override
-	public InternalSyntaxToken name() {
+	public PathElementNameTreeImpl name() {
 		return name;
 	}
+
+
 
 	@Override
 	public IndexTreeImpl index() {
@@ -181,10 +84,7 @@ public class PathElementTreeImpl extends EsqlTree implements PathElementTree {
 
 	@Override
 	public Iterator<Tree> childrenIterator() {
-		return Iterators.forArray(typeOpenParen,typeExpression,
-				typeCloseParen, namespace, namespaceCurlyOpen, namespaceExpression,
-						namespaceCurlyClose, namespaceStar, colon, nameCurlyOpen, nameExpression, nameCurlyClose, name,
-						index);
+		return Iterators.forArray(type, namespace, name, index);
 	}
 
 }
