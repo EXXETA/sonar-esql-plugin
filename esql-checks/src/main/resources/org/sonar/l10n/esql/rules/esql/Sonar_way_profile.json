@@ -1,0 +1,19 @@
+{
+  "name": "Sonar way",
+  "ruleKeys": [
+  	"ElseIfWithoutElse",
+  	"EmptyBlock",
+  	"IterateStatement",
+  	"LineLength",
+  	"MissingNewlineAtEndOfFile",
+  	"NestedIfDepth",
+  	"NonReservedKeyword",
+  	"OneStatementPerLine",
+  	"ParsingError",
+  	"PropagateToLabel",
+  	"TooManyIterateOrLeaveInLoop",
+  	"TooManyLinesInFile",
+  	"UnusedRoutine"
+  ]
+}
+  

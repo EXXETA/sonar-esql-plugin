@@ -1,0 +1,57 @@
+
+CREATE COMPUTE MODULE ABC
+
+	
+   
+   CREATE PROCEDURE caseCheck()
+   BEGIN
+
+	CASE size
+	  WHEN minimum + 0 THEN
+	    SET description = 'small';
+	  WHEN minimum + 1 THEN
+	    SET description = 'medium';        
+	  WHEN minimum + 2 THEN
+	    SET description = 'large';
+	    CALL handleLargeObject();
+	  ELSE
+	    SET description = 'unknown';
+	    CALL handleError();
+	END CASE;
+
+CASE 
+	WHEN i <> 0 THEN
+    CALL handleI(i);
+  WHEN j> 1 THEN
+    CALL handleIZeroAndPositiveJ(j);
+  ELSE
+    CALL handleAllOtherCases(j);
+END CASE;
+
+
+	SET MonthText = 
+	   CASE CurrentMonth
+	      WHEN '01' THEN 'January' 
+	      WHEN '02' THEN 'February'
+	      WHEN '03' THEN 'March' 
+	      WHEN '04' THEN 'April' 
+	      WHEN '05' THEN 'May' 
+	      WHEN '06' THEN 'June' 
+	      ELSE 'Second half of year' 
+	   END;
+     SET MonthText = 
+	   CASE  
+	      WHEN Month = '01' THEN 'January' 
+	      WHEN Month = '02' THEN 'February'
+	      WHEN Month = '03' THEN 'March' 
+	      WHEN Month = '04' THEN 'April' 
+	      WHEN Month = '05' THEN 'May' 
+	      WHEN Month = '06' THEN 'June' 
+	      ELSE 'Second half of year' 
+	   END;
+	   
+   
+   END;
+   
+
+END MODULE;

@@ -1,0 +1,25 @@
+CREATE COMPUTE MODULE ProcessCardAccount
+
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		IF FALSE THEN
+			IF FALSE THEN
+				IF FALSE THEN
+					IF FALSE THEN --Non compliant
+						SET OutputRoot=InputRoot;
+					END IF;
+				ELSEIF FALSE THEN --Compliant
+					IF FALSE THEN --Non compliant
+						SET OutputRoot=InputRoot;
+					END IF;
+				END IF;
+			END IF;
+		ELSE
+		END IF;
+	END;
+
+	CREATE FUNCTION Main2() RETURNS BOOLEAN
+	BEGIN
+	END;
+
+END MODULE;

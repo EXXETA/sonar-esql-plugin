@@ -1,1 +1,17 @@
 /target/
+/bin/
+esql-plugin/.settings/
+esql-frontend/.settings/
+esql-checks/.settings/
+esql-checks-test/.classpath
+esql-checks-test/.gitignore
+esql-checks-test/.project
+esql-checks/.classpath
+esql-checks/.gitignore
+esql-checks/.project
+esql-checks-test/.settings/
+esql-frontend/.classpath
+esql-frontend/.gitignore
+esql-frontend/.project
+.settings/
+.classpath

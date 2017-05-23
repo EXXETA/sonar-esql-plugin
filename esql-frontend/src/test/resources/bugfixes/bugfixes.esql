@@ -1,0 +1,169 @@
+BROKER SCHEMA a.b.c
+PATH x.y.z, r.t.z
+
+CREATE COMPUTE MODULE ABC
+
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+          CASE chCheckSqlState 
+                  WHEN Const_getSqlDbOk() THEN 
+                          -- do nothing, just come back 
+                  WHEN Const_getSqlDbDed() THEN
+                   SET description = 'medium';
+          END CASE; 
+	END;
+
+  CREATE FUNCTION STD_isWeekendFromDate(IN dtValue DATE) RETURNS BOOLEAN 
+  BEGIN 
+          --see http://publib.boulder.ibm.com/infocenter/wmbhelp/v6r1m0/index.jsp?topic=/com.ibm.etools.mft.doc/ak05420_.htm 
+          DECLARE intDayInWeek        INTEGER EXTRACT(DAYOFWEEK FROM dtValue);
+  
+  
+		IF FALSE THEN
+                -- If we are running on PROD, simply return the given bic 
+                   RETURN ch_bic; 
+           ELSE 
+                   -- If we are NOT running on PROD, replace the 8th Character with '0' 
+                   RETURN OVERLAY(ch_bic PLACING '0' FROM 8 FOR 1);  
+		END IF;
+
+		IF FALSE THEN
+               RETURN chValue; 
+          ELSEIF intLength>intExpectedLength THEN 
+                  RETURN SUBSTRING(chValue FROM 1 FOR intExpectedLength); 
+          ELSE 
+                  RETURN OVERLAY(SPACE(intExpectedLength) PLACING COALESCE(chValue, '') FROM 1);
+          END IF; 
+
+  END;
+
+   CREATE PROCEDURE ThrowDisqualify() 
+   BEGIN 
+           THROW USER EXCEPTION 
+                   SEVERITY Const_getExceptionListSeverityError();
+                   
+          CASE chCheckSqlState 
+              WHEN -1 THEN 
+                   SET refEnvironment.{Const_getEnvironmentName()}.STD_SFL.MRM.XGRZA10_UEBERGABE_BEREICH.XGRZA10_UEBERGABE_HEADER.XGRZA10_SEVERITY_CODE 
+                           = '  '; 
+           WHEN 0 THEN 
+           WHEN 2 THEN 
+          END CASE; 
+                   
+   END; 
+   
+   CREATE PROCEDURE escape()
+   BEGIN
+   		IF data."position" = 0 THEN
+   		END IF;
+   		IF data."position-b" = 0 THEN
+   		END IF;
+   		IF data."position""-b" = 0 THEN
+   		END IF;
+   END;
+   
+   CREATE PROCEDURE keywords()
+   BEGIN
+   
+   IF c NOT IN (A,B,c) THEN
+   END IF;
+   IF c BETWEEN a AND b THEN
+   END IF;
+   IF c BETWEEN c."from" AND currentDayIntervalRef."until" THEN
+   END IF;
+
+	        HOUSENR_LOOP: LOOP
+	               SET tmpChar = SUBSTRING(houseNumber FROM pos FOR 1);
+	               IF CONTAINS('0123456789', tmpChar)THEN
+	                       SET tmpNumber = tmpNumber||tmpChar;
+	               ELSE
+	                       SET houseNumberAdd = SUBSTRING(houseNumber AFTER tmpNumber);
+	                       SET houseNumber = tmpNumber;
+	                       LEAVE HOUSENR_LOOP;
+	               END IF;
+	               SET pos = pos +1;
+	               SET pos = pos -1;
+	               IF pos > strLength THEN
+	                       LEAVE HOUSENR_LOOP;
+	               END IF;
+	        END LOOP HOUSENR_LOOP;
+
+
+
+SET OutRef."From" = eMailFrom;
+
+
+DECLARE asOfDateTS TIMESTAMP CAST(asOfDate, TIME '00:00:00' AS TIMESTAMP);
+
+SET Environment.Variables.Source = InputRoot.XMLNSC.ns:{SAPBW_INFO_MESSAGE_TYPE}.Data.item."_-bic_-detecsour";
+
+ATTACH bpFSAAssocRef TO OutputRoot.XMLNSC.ens:Envelope.ens:Body.tns:TFeed.tns:BusinessPartner[2] AS PREVIOUSSIBLING;         
+   
+   IF NOT first THEN
+   END IF;
+   
+   DECLARE a DECIMAL ROUND(b, 2 MODE ROUND_HALF_UP);
+   DECLARE a DECIMAL ROUND(CAST(b AS DECIMAL(18,4)), 2 MODE ROUND_HALF_UP);
+   
+   
+	SET CacheFile.AccountTypeRecords[] = refAccountType.[];
+	SET OutputRoot.XMLNSC.Error.ExceptionList.[I] = InputExceptionList.*[I];
+	SET OutputLocalEnvironment.a = ASBITSTREAM( OutputRoot.[<] OPTIONS FolderBitStream CCSID 1208 ) ;
+   
+   DECLARE midnight TIME '00:00:00';
+	SET A = FOR ALL Body.Invoice.Purchases."Item"[] AS I (I.Quantity <= 50);
+	DELETE FROM Database.{Source}.{Schema}.{Table} As R WHERE R.Name = 'Joe';
+
+	SET duration = (stateRef.Endtime - stateRef.Starttime) HOUR TO SECOND;
+	CALL ABC() into OutputRoot.ABC;
+	SET a = b('a');
+	SET a = b('a' || 'b');
+	IF (a IS NULL) THEN
+	END IF;
+	
+	
+	CREATE FIELD OutputRoot.SOAP.Body.t:P VALUE TIMESTAMP '1970-01-01 23:59:59';
+
+SET inoid = THE(SELECT FIELDVALUE(v.a) FROM vehicle.fb:VEHICLE[] AS v WHERE v.fb:c = Environment.Variables.F);
+
+CALL com.daimler.mbb.wmb.logInfoActivityListBuilt(OutBodyRef);
+
+
+DECLARE MonthInterval INTERVAL CAST(COALESCE(SecurityConfigCache.XMLNSC.SecurityConfiguration.TimeLDMDataToLive, 15) AS INTERVAL DAY);
+
+CALL a();
+
+
+
+SET OutputRoot.MQMD.Expiry = CURRENT_GMTTIMESTAMP + INTERVAL '2' DAY;
+
+IF (FIELDNAME(rOut) NOT LIKE('MQ%')) THEN END IF;
+
+CALL com.daimler.mbb.wmb.log4j_1_1(MessageFlowLabel, ExecutionGroupLabel, 'INFO', TRIM(COALESCE(logId || ' ','')) || COALESCE(logText,'<null>')) INTO rc;
+
+--IF NOT isNullOrEmpty(Response.(XMLNSC.Attribute).timestamp) THEN --Is not valid ESQL according to ibm reference
+--END IF;
+
+DECLARE prevA REFERENCE TO OutputRoot.XMLNSC.ens:Envelope.ens:Header.a[i-1];
+
+
+SET S = SUBSTRING(S FROM P + LENGTH(Delim));
+
+SET msgBody = SUBSTRING(msgBody FROM 1 FOR UDP_Log_Size_kB * 1024);
+
+
+	
+   END;
+
+CREATE PROCEDURE InsertV(
+INOUT p_id CHARACTER,
+INOUT p_state CHARACTER,
+INOUT p_ResultCode INTEGER,
+INOUT p_ResultText CHARACTER
+)
+LANGUAGE DATABASE
+EXTERNAL NAME "A.V.INSERT";
+   
+
+END MODULE;
+
