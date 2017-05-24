@@ -62,10 +62,10 @@ public final class CheckList {
         IdenticalExpressionOnBinaryOperatorCheck.class,
         IfConditionalAlwaysTrueOrFalseCheck.class,
         DuplicateConditionIfElseAndCaseWhensCheck.class,
-        BooleanInversionCheck.class
+        BooleanInversionCheck.class,
+        HardCodedCredentialsCheck.class
         /*
         
-        HardCodedCredentialsCheck
         HardcodedIpCheck
         HardcodedURICheck
         IdenticalOperandOnBinaryExpressionCheck
