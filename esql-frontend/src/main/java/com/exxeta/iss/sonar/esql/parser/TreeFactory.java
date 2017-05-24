@@ -1276,14 +1276,14 @@ public class TreeFactory {
 				closeParenToken);
 	}
 
-	public CallExpressionTreeImpl callExpression(Object firstOf) {
+	public ExpressionTree callExpression(Object firstOf) {
 		if (firstOf instanceof FunctionTree) {
 			return new CallExpressionTreeImpl((FunctionTree) firstOf);
 		} else if (firstOf instanceof Tuple) {
 			Tuple<FieldReferenceTreeImpl, ParameterListTreeImpl> t = (Tuple) firstOf;
 			return new CallExpressionTreeImpl(t.first(), t.second());
 		} else if (firstOf instanceof ExpressionTree) {
-			return new CallExpressionTreeImpl((ExpressionTree)firstOf);
+			return (ExpressionTree)firstOf;
 		} else {
 			return new CallExpressionTreeImpl((FieldReferenceTreeImpl) firstOf);
 		}

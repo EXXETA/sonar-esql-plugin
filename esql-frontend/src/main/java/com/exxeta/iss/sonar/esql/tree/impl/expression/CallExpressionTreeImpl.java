@@ -32,26 +32,25 @@ import com.exxeta.iss.sonar.esql.tree.impl.declaration.FieldReferenceTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.ParameterListTreeImpl;
 import com.google.common.collect.Iterators;
 
-public class CallExpressionTreeImpl extends EsqlTree implements CallExpressionTree, TypableTree{
+public class CallExpressionTreeImpl extends EsqlTree implements CallExpressionTree, TypableTree {
 
 	private FunctionTree function;
 	private FieldReferenceTreeImpl functionName;
 	private ParameterListTreeImpl parameters;
 	private ExpressionTree expression;
-	  private TypeSet types = TypeSet.emptyTypeSet();
-
+	private TypeSet types = TypeSet.emptyTypeSet();
 
 	public CallExpressionTreeImpl(FunctionTree function) {
-		this.function=function; 
+		this.function = function;
 	}
 
 	public CallExpressionTreeImpl(FieldReferenceTreeImpl functionName, ParameterListTreeImpl parameters) {
-		this.functionName=functionName;
-		this.parameters=parameters;
+		this.functionName = functionName;
+		this.parameters = parameters;
 	}
 
 	public CallExpressionTreeImpl(FieldReferenceTreeImpl functionName) {
-		this.functionName=functionName;
+		this.functionName = functionName;
 	}
 
 	public CallExpressionTreeImpl(ExpressionTree expression) {
@@ -81,7 +80,7 @@ public class CallExpressionTreeImpl extends EsqlTree implements CallExpressionTr
 	@Override
 	public void accept(DoubleDispatchVisitor visitor) {
 		visitor.visitCallExpression(this);
-		
+
 	}
 
 	@Override
@@ -93,10 +92,10 @@ public class CallExpressionTreeImpl extends EsqlTree implements CallExpressionTr
 	public Iterator<Tree> childrenIterator() {
 		return Iterators.forArray(expression, function, functionName, parameters);
 	}
-	
-	  @Override
-	  public void add(Type type) {
-	    types.add(type);
-	  }	
+
+	@Override
+	public void add(Type type) {
+		types.add(type);
+	}
 
 }
