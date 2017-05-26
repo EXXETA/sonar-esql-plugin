@@ -64,10 +64,10 @@ public final class CheckList {
         DuplicateConditionIfElseAndCaseWhensCheck.class,
         BooleanInversionCheck.class,
         HardCodedCredentialsCheck.class,
-        HardcodedIpCheck.class
+        HardcodedIpCheck.class,
+        HardcodedURICheck.class
         /*
         
-        HardcodedURICheck
         IdenticalOperandOnBinaryExpressionCheck
         SwitchWithTooManyCasesCheck
 

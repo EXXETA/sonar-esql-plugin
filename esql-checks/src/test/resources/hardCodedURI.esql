@@ -1,0 +1,27 @@
+CREATE COMPUTE MODULE ProcessCardAccount
+
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+	 	SET fileName = '//my-network-drive/folder/file.txt'; -- Noncompliant
+  		SET stuffs = '';
+		SET path = '/home/path/to/my/file.txt'; -- Noncompliant [[sc=14;ec=41]] {{Refactor your code to get this URI from a customizable parameter.}}
+		SET ABC.filename = 'c:\test'; --Noncompliant
+		
+		SET fileName = '\\blah\blah\'; -- Noncompliant {{Refactor your code to get this URI from a customizable parameter.}}
+	    SET fileNAME = s; -- Compliant
+	    SET stuff = '/home/path/to/my/file.txt'; -- Compliant  - requires a variable with adequate name
+	    SET this.fileName = '/home/path/to/my/file.txt'; -- Noncompliant
+	    SET stuffs = '/home/path/to/my/file.txt'; -- Compliant - require a variable with adequate name
+	
+	    SET fileNAME = s || '//' || s; -- Noncompliant {{Remove this hard-coded path-delimiter.}}
+	    SET fileNAME = s || '\\' || s; -- Noncompliant {{Remove this hard-coded path-delimiter.}}t
+	    SET fileNAME = s || 'hello' || s; -- Compliant
+	    SET fileNAME = 'c:\blah\blah\blah.txt'; -- Noncompliant
+	
+	    SET fIleNaMe = 14 - 2;
+	
+	    SET v1 = s || '//' || s; -- Compliant - not a file name
+    
+	END;
+
+END MODULE;
