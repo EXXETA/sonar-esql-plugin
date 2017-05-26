@@ -9,6 +9,6 @@ import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
 public class BooleanLiteralCheckTest {
 	@Test
 	public void test(){
-		 EsqlCheckVerifier.verify(new BooleanLiteralCheck(), new File("src/test/resources/BooleanLiteralCheck.esql"));
+		 EsqlCheckVerifier.verify(new BooleanLiteralCheck(), new File("src/test/resources/booleanLiteralCheck.esql"));
 	}
 }
