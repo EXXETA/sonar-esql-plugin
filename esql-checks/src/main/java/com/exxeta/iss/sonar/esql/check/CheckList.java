@@ -65,15 +65,13 @@ public final class CheckList {
         BooleanInversionCheck.class,
         HardCodedCredentialsCheck.class,
         HardcodedIpCheck.class,
-        HardcodedURICheck.class
+        HardcodedURICheck.class,
+        BooleanLiteralCheck.class
         /*
         
         IdenticalOperandOnBinaryExpressionCheck
         SwitchWithTooManyCasesCheck
 
-        IdenticalCasesInSwitchCheck
-
-        BooleanLiteralCheck
         FloatEqualityCheck
         
         
