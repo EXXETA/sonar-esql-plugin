@@ -19,18 +19,42 @@ package com.exxeta.iss.sonar.esql.api.tree;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertNotNull;
+
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.api.tree.statement.LogStatementTree;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.LogStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class LogStatementTest {
+public class LogStatementTest extends EsqlTreeModelTest<LogStatementTreeImpl> {
 	@Test
-	public void moveStatement(){
+	public void logStatement(){
 		
 		assertThat(Kind.LOG_STATEMENT)
 		.matches("LOG EVENT SEVERITY 1 CATALOG 'BIPmsgs' MESSAGE 2951 VALUES(1,2,3,4);")
 		.matches("LOG USER TRACE EXCEPTION VALUES(SQLSTATE, 'DivideByZero');");
 
+	}
+	
+	@Test
+	public void getterTest() throws Exception{
+		LogStatementTree tree = parse("LOG EVENT SEVERITY 1 CATALOG 'BIPmsgs' MESSAGE 2951 VALUES(1,2,3,4);", Kind.LOG_STATEMENT);
+		assertNotNull(tree);
+		assertNotNull(tree.logKeyword());
+		assertEquals("LOG", tree.logKeyword().text());
+		assertNotNull(tree.eventKeyword());
+		assertEquals("EVENT", tree.eventKeyword().text());
+		assertNull(tree.userKeyword());
+		assertNull(tree.traceKeyword());
+		assertNull(tree.fullKeyword());
+		assertNull(tree.exceptionKeyword());
+		assertNotNull(tree.severityKeyword());
+		assertEquals(tree.severityKeyword().text(), "SEVERITY");
 	}
 	
 }
