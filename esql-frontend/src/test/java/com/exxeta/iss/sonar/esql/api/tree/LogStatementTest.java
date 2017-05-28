@@ -33,17 +33,17 @@ import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
 public class LogStatementTest extends EsqlTreeModelTest<LogStatementTreeImpl> {
 	@Test
-	public void logStatement(){
-		
-		assertThat(Kind.LOG_STATEMENT)
-		.matches("LOG EVENT SEVERITY 1 CATALOG 'BIPmsgs' MESSAGE 2951 VALUES(1,2,3,4);")
-		.matches("LOG USER TRACE EXCEPTION VALUES(SQLSTATE, 'DivideByZero');");
+	public void logStatement() {
+
+		assertThat(Kind.LOG_STATEMENT).matches("LOG EVENT SEVERITY 1 CATALOG 'BIPmsgs' MESSAGE 2951 VALUES(1,2,3,4);")
+				.matches("LOG USER TRACE EXCEPTION VALUES(SQLSTATE, 'DivideByZero');");
 
 	}
-	
+
 	@Test
-	public void getterTest() throws Exception{
-		LogStatementTree tree = parse("LOG EVENT SEVERITY 1 CATALOG 'BIPmsgs' MESSAGE 2951 VALUES(1,2,3,4);", Kind.LOG_STATEMENT);
+	public void modelTest() throws Exception {
+		LogStatementTree tree = parse("LOG EVENT SEVERITY 1 CATALOG 'BIPmsgs' MESSAGE 2951 VALUES(1,2,3,4);",
+				Kind.LOG_STATEMENT);
 		assertNotNull(tree);
 		assertNotNull(tree.logKeyword());
 		assertEquals("LOG", tree.logKeyword().text());
@@ -55,6 +55,25 @@ public class LogStatementTest extends EsqlTreeModelTest<LogStatementTreeImpl> {
 		assertNull(tree.exceptionKeyword());
 		assertNotNull(tree.severityKeyword());
 		assertEquals(tree.severityKeyword().text(), "SEVERITY");
+		assertNotNull(tree.severityExpression());
+		assertTrue(tree.severityExpression().is(Kind.NUMERIC_LITERAL));
+
+		assertNotNull(tree.catalogKeyword());
+		assertEquals(tree.catalogKeyword().text(), "CATALOG");
+		assertNotNull(tree.catalogExpression());
+		assertTrue(tree.catalogExpression().is(Kind.STRING_LITERAL));
+
+		assertNotNull(tree.messageKeyword());
+		assertEquals(tree.messageKeyword().text(), "MESSAGE");
+		assertNotNull(tree.messageExpression());
+		assertTrue(tree.messageExpression().is(Kind.NUMERIC_LITERAL));
+
+		assertNotNull(tree.valuesKeyword());
+		assertEquals(tree.valuesKeyword().text(), "VALUES");
+		assertNotNull(tree.valueExpressions());
+
+		assertNotNull(tree.semi());
+
 	}
-	
+
 }

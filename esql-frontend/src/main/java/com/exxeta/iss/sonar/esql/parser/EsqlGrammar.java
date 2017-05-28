@@ -61,7 +61,6 @@ import com.exxeta.iss.sonar.esql.tree.impl.declaration.PathElementNamespaceTreeI
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.PathElementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.PathElementTypeTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.ProgramTreeImpl;
-import com.exxeta.iss.sonar.esql.tree.impl.expression.ArrayLiteralTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.IntervalExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.LiteralTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.ParenthesisedExpressionTreeImpl;
@@ -455,7 +454,7 @@ public class EsqlGrammar {
 						b.token(RPARENTHESIS), 
 						b.optional(b.firstOf(
 								f.newTuple47(b.token(EsqlNonReservedKeyword.IN), FIELD_REFERENCE()),
-								f.newTriple4(b.token(EsqlNonReservedKeyword.EXTERNAL),b.token(EsqlNonReservedKeyword.SCHEMA), b.token(EsqlLegacyGrammar.IDENTIFIER))
+								f.newTriple4(b.token(EsqlNonReservedKeyword.EXTERNAL),b.token(EsqlNonReservedKeyword.SCHEMA), CALL_EXPRESSION())
 						)),
 						b.optional(f.newTuple48(b.token(EsqlNonReservedKeyword.INTO), FIELD_REFERENCE())),
 						b.token(EsqlLegacyGrammar.EOS)
@@ -778,12 +777,6 @@ public class EsqlGrammar {
 	public ExpressionTree EXPRESSION() {
 		return b.<ExpressionTree>nonterminal(Kind.EXPRESSION).is(f.expression(LOGICAL_OR_EXPRESSION()));
 	}
-
-	public LiteralTreeImpl LIST_LITERAL() {
-		return b.<LiteralTreeImpl>nonterminal(Kind.LIST_LITERAL)
-				.is(f.listLiteral(b.token(EsqlLegacyGrammar.LIST_LITERAL)));
-	}
-
 	public LiteralTreeImpl TIME_LITERAL() {
 		return b.<LiteralTreeImpl>nonterminal(Kind.TIME_LITERAL)
 				.is(f.timeLiteral(b.token(EsqlLegacyGrammar.TIME_LITERAL)));
@@ -821,7 +814,7 @@ public class EsqlGrammar {
 
 	public ExpressionTree PRIMARY_EXPRESSION() {
 		return b.<ExpressionTree>nonterminal(EsqlLegacyGrammar.primaryExpression)
-				.is(b.firstOf(INTERVAL_LITERAL(), LITERAL(), ARRAY_LITERAL(), INTERVAL_EXPRESSION(), LIST_LITERAL(),
+				.is(b.firstOf(INTERVAL_LITERAL(), LITERAL(), INTERVAL_EXPRESSION(),
 						TIME_LITERAL(), DATE_LITERAL(), TIMESTAMP_LITERAL(), PARENTHESISED_EXPRESSION()));
 	}
 
@@ -901,20 +894,6 @@ public class EsqlGrammar {
 						NUMERIC_LITERAL(), HEX_LITERAL(), STRING_LITERAL()));
 	}
 
-	public ArrayLiteralTreeImpl ARRAY_ELEMENT_LIST() {
-		return b.<ArrayLiteralTreeImpl>nonterminal()
-				.is(f.newArrayLiteralWithElements(b.zeroOrMore(b.token(EsqlPunctuator.COMMA)), EXPRESSION(),
-						b.zeroOrMore(f.newTuple3(b.oneOrMore(b.token(EsqlPunctuator.COMMA)), EXPRESSION()))));
-	}
-
-	public ArrayLiteralTreeImpl ARRAY_LITERAL() {
-		return b.<ArrayLiteralTreeImpl>nonterminal(Kind.ARRAY_LITERAL)
-				.is(f.completeArrayLiteral(b.token(EsqlPunctuator.LBRACKET),
-						b.optional(b.firstOf(ARRAY_ELEMENT_LIST(),
-								f.newArrayLiteralWithElidedElements(b.oneOrMore(b.token(EsqlPunctuator.COMMA))))),
-						b.token(EsqlPunctuator.RBRACKET)));
-	}
-
 	public ParenthesisedExpressionTreeImpl PARENTHESISED_EXPRESSION() {
 		return b.<ParenthesisedExpressionTreeImpl>nonterminal(Kind.PARENTHESISED_EXPRESSION)
 				.is(f.parenthesisedExpression(b.token(EsqlPunctuator.LPARENTHESIS), EXPRESSION(),
@@ -990,7 +969,7 @@ public class EsqlGrammar {
 						f.newTuple66(b.firstOf(b.token(EsqlNonReservedKeyword.PREVIOUSSIBLING),b.token(EsqlNonReservedKeyword.NEXTSIBLING),b.token(EsqlNonReservedKeyword.FIRSTCHILD),b.token(EsqlNonReservedKeyword.LASTCHILD)),b.token(EsqlNonReservedKeyword.OF))),
 				FIELD_REFERENCE(),
 				b.optional(f.newTuple67(b.token(EsqlNonReservedKeyword.AS), FIELD_REFERENCE())),
-				b.optional(f.newTuple68(b.token(EsqlNonReservedKeyword.DOMAIN), EXPRESSION())),
+				b.optional(f.newTuple68(b.token(EsqlNonReservedKeyword.DOMAIN), CALL_EXPRESSION())),
 				b.optional(b.firstOf(REPEAT_CLAUSE(), FROM_CLAUSE(), PARSE_CLAUSE(), VALUES_CLAUSE())),
 				b.token(EsqlLegacyGrammar.EOS)
 				));

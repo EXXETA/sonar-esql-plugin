@@ -17,7 +17,6 @@
  */
 package com.exxeta.iss.sonar.esql.parser;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -63,7 +62,6 @@ import com.exxeta.iss.sonar.esql.tree.impl.declaration.PathElementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.PathElementTypeTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.ProgramTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.SchemaNameTreeImpl;
-import com.exxeta.iss.sonar.esql.tree.impl.expression.ArrayLiteralTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.BetweenExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.BinaryExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.CallExpressionTreeImpl;
@@ -1357,41 +1355,6 @@ public class TreeFactory {
 		return new LiteralTreeImpl(Kind.STRING_LITERAL, hexToken);
 	}
 
-	public ArrayLiteralTreeImpl newArrayLiteralWithElements(Optional<List<InternalSyntaxToken>> commaTokens,
-			ExpressionTree element, Optional<List<Tuple<List<InternalSyntaxToken>, ExpressionTree>>> restElements) {
-		List<Tree> elementsAndCommas = Lists.newArrayList();
-
-		// Elided array element at the beginning, e.g [ ,a]
-		if (commaTokens.isPresent()) {
-			elementsAndCommas.addAll(commaTokens.get());
-		}
-
-		// First element
-		elementsAndCommas.add(element);
-
-		// Other elements
-		if (restElements.isPresent()) {
-			for (Tuple<List<InternalSyntaxToken>, ExpressionTree> t : restElements.get()) {
-				elementsAndCommas.addAll(t.first());
-				elementsAndCommas.add(t.second());
-			}
-		}
-
-		return new ArrayLiteralTreeImpl(elementsAndCommas);
-	}
-
-	public ArrayLiteralTreeImpl completeArrayLiteral(InternalSyntaxToken openBracketToken,
-			Optional<ArrayLiteralTreeImpl> elements, InternalSyntaxToken closeBracket) {
-		if (elements.isPresent()) {
-			return elements.get().complete(openBracketToken, closeBracket);
-		}
-		return new ArrayLiteralTreeImpl(openBracketToken, closeBracket);
-	}
-
-	public ArrayLiteralTreeImpl newArrayLiteralWithElidedElements(List<InternalSyntaxToken> commaTokens) {
-		return new ArrayLiteralTreeImpl(new ArrayList<Tree>(commaTokens));
-	}
-
 	public ParenthesisedExpressionTreeImpl parenthesisedExpression(InternalSyntaxToken openParenToken,
 			ExpressionTree expression, InternalSyntaxToken closeParenToken) {
 		return new ParenthesisedExpressionTreeImpl(openParenToken, expression, closeParenToken);
@@ -1582,16 +1545,19 @@ public class TreeFactory {
 						: new SeparatedList<>(Collections.<ExpressionTree>emptyList(),
 								Collections.<InternalSyntaxToken>emptyList()),
 				closeParen, semi);
-		/*
-		 * if (qualifiers.isPresent()){ if (qualifiers.get() instanceof Tuple){
-		 * Tuple<InternalSyntaxToken,FieldReferenceTreeImpl> inClause =
-		 * (Tuple)qualifiers.get(); result.inClause(inClause.first(),
-		 * inClause.second()); }else {
-		 * Triple<InternalSyntaxToken,InternalSyntaxToken,InternalSyntaxToken>
-		 * externalSchemaClause = (Triple)qualifiers.get();
-		 * result.externalSchema(externalSchemaClause.first(),
-		 * externalSchemaClause.second(), externalSchemaClause.third()); } }
-		 */
+		
+		if (qualifiers.isPresent()) {
+			if (qualifiers.get() instanceof Tuple) {
+				Tuple<InternalSyntaxToken, FieldReferenceTreeImpl> inClause = (Tuple) qualifiers.get();
+				result.inClause(inClause.first(), inClause.second());
+			} else {
+				Triple<InternalSyntaxToken, InternalSyntaxToken, ExpressionTree> externalSchemaClause = (Triple) qualifiers
+						.get();
+				result.externalSchema(externalSchemaClause.first(), externalSchemaClause.second(),
+						externalSchemaClause.third());
+			}
+		}
+		 
 		if (intoClause.isPresent()) {
 			result.intoClause(intoClause.get().first(), intoClause.get().second());
 		}

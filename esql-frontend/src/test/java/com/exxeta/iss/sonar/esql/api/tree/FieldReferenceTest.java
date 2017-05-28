@@ -44,6 +44,7 @@ public class FieldReferenceTest {
 		.matches("(XML.Element)")// IIB accepts this Element although it is not allowed by the documentation.
 		.matches("PRICE")
 		.notMatches("a a")
+		.matches("cursor")
 		;
 		
 

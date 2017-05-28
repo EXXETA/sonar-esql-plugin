@@ -27,7 +27,9 @@ public class WhileStatementTest {
 	@Test
 	public void whileStatement(){
 		assertThat(Kind.WHILE_STATEMENT)
-		.matches("X : WHILE i <= 3 DO SET i = i + 1;  END WHILE X;");
+		.matches("X : WHILE i <= 3 DO SET i = i + 1;  END WHILE X;")
+		.matches("WHILE i <= 3 DO SET i = i + 1;  END WHILE;")
+		;
 
 	}
 	
