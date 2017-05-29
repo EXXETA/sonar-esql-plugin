@@ -130,7 +130,7 @@ public class CreateProcedureStatementTreeImpl extends EsqlTree implements Create
 	public Iterator<Tree> childrenIterator() {
 		return Iterators.concat(Iterators.forArray(createKeyword, procedureKeyword, identifier, openingParenthesis),
 				parameterList.elementsAndSeparators(Functions.<ParameterTree> identity()),
-				Iterators.forArray(closingParenthesis, returnType, resultSet, routineBody));
+				Iterators.forArray(closingParenthesis, returnType, language, resultSet, routineBody));
 	}
 
 	@Override

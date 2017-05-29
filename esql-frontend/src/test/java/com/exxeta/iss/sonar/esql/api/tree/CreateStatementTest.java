@@ -27,6 +27,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.api.tree.statement.ParseClauseTree;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CallStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
@@ -85,6 +86,27 @@ public class CreateStatementTest  extends EsqlTreeModelTest<CreateStatementTreeI
 		assertNotNull(tree.parseClause());
 		assertNotNull(tree.semi());
 		assertEquals(tree.semi().text(), ";");
+		
+		//ParseClause
+		ParseClauseTree parseClause = tree.parseClause();
+		assertNotNull(parseClause);
+		assertNotNull(parseClause.parseKeyword());
+		assertEquals(parseClause.parseKeyword().text(), "PARSE");
+		assertNotNull(parseClause.openingParenthesis());
+		assertEquals(parseClause.openingParenthesis().text(), "(");
+		assertNotNull(parseClause.options());
+		assertNull(parseClause.encodingKeyword());
+		assertNull(parseClause.encoding());
+		assertNull(parseClause.ccsidKeyword());
+		assertNull(parseClause.ccsid());
+		assertNull(parseClause.setKeyword());
+		assertNull(parseClause.set());
+		assertNull(parseClause.typeKeyword());
+		assertNull(parseClause.type());
+		assertNull(parseClause.formatKeyword());
+		assertNull(parseClause.format());
+		assertNotNull(parseClause.closingParenthesis());
+		assertEquals(parseClause.closingParenthesis().text(), ")");
 		
 	}
 	

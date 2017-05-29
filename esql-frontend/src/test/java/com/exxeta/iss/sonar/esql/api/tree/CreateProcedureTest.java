@@ -18,13 +18,19 @@
 package com.exxeta.iss.sonar.esql.api.tree;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.ResultSetTree;
+import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
 
-public class CreateRoutineTest {
+public class CreateProcedureTest extends EsqlTreeModelTest<CreateProcedureStatementTree>{
 
 	
 	@Test
@@ -36,6 +42,29 @@ public class CreateRoutineTest {
 		;
 		
 	}
-	
+
+	@Test
+	public void modelTest() throws Exception{
+		CreateProcedureStatementTree tree = parse("CREATE PROCEDURE myProc1 (IN P1 INT, OUT P2 INT) LANGUAGE DATABASE DYNAMIC RESULT SETS 2 EXTERNAL NAME \"myschema.myproc1\";", Kind.CREATE_PROCEDURE_STATEMENT);
+		assertNotNull(tree);
+		assertNotNull(tree.createKeyword());
+		assertEquals(tree.createKeyword().text(),"CREATE");
+		assertNotNull(tree.procedureKeyword());
+		assertNotNull(tree.identifier());
+		assertNotNull(tree.openingParenthesis());
+		assertNotNull(tree.parameterList());
+		assertNotNull(tree.closingParenthesis());
+		assertNull(tree.returnType());
+		assertNotNull(tree.language());
+		assertNotNull(tree.resultSet());
+		assertNotNull(tree.routineBody());
+		
+		ResultSetTree resultSet = tree.resultSet();
+		assertNotNull(resultSet.dynamicKeyword());
+		assertNotNull(resultSet.resultKeyword());
+		assertNotNull(resultSet.setsKeyword());
+		assertNotNull(resultSet.integer());
+		
+	}
 	
 }

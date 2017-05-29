@@ -130,7 +130,7 @@ public class CreateFunctionStatementTreeImpl extends EsqlTree implements CreateF
 	public Iterator<Tree> childrenIterator() {
 		return Iterators.concat(Iterators.forArray(createKeyword, functionKeyword, identifier, openingParenthesis),
 				parameterList.elementsAndSeparators(Functions.<ParameterTree> identity()),
-				Iterators.forArray(closingParenthesis, returnType, resultSet, routineBody));
+				Iterators.forArray(closingParenthesis, returnType, language, resultSet, routineBody));
 	}
 
 	@Override
