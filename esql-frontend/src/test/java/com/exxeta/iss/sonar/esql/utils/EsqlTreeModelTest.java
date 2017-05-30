@@ -86,6 +86,10 @@ public abstract class EsqlTreeModelTest<T extends Tree> {
 		}
 	}
 
+	protected ProgramTree parse(String content) {
+		return (ProgramTree) getParser(EsqlLegacyGrammar.PROGRAM).parse(content);
+	}
+
 	protected SymbolModelImpl symbolModel(CompatibleInputFile file, Settings settings) throws IOException {
 		ProgramTree root = (ProgramTree) getParser(EsqlLegacyGrammar.PROGRAM).parse(file.contents());
 		return (SymbolModelImpl) new EsqlVisitorContext(root, file, settings).getSymbolModel();

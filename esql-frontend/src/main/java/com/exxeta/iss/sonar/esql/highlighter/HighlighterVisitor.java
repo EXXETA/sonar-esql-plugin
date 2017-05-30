@@ -32,6 +32,7 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.CreateFunctionStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateModuleStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.DeclareStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.SetStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitor;
 import com.exxeta.iss.sonar.esql.compat.CompatibleInputFile;
 import com.exxeta.iss.sonar.esql.lexer.EsqlReservedKeyword;
@@ -53,10 +54,6 @@ public class HighlighterVisitor extends SubscriptionVisitor{
 	  public List<Kind> nodesToVisit() {
 	    return ImmutableList.<Kind>builder()
 	      .add(
-	        Kind.DECLARE_STATEMENT,
-	        Kind.CREATE_FUNCTION_STATEMENT,
-	        Kind.CREATE_MODULE_STATEMENT,
-	        Kind.CREATE_PROCEDURE_STATEMENT,
 	        Kind.NUMERIC_LITERAL,
 	        Kind.STRING_LITERAL,
 	        Kind.TOKEN)
@@ -78,23 +75,7 @@ public class HighlighterVisitor extends SubscriptionVisitor{
 	    SyntaxToken token = null;
 	    TypeOfText code = null;
 
-	    if (tree.is(Kind.DECLARE_STATEMENT)) {
-	      token = ((DeclareStatementTree) tree).constantKeyword();
-	      code = TypeOfText.KEYWORD;
-
-	    } else if (tree.is(Kind.CREATE_FUNCTION_STATEMENT)) {
-		      token = ((CreateFunctionStatementTree) tree).functionKeyword();
-		      code = TypeOfText.KEYWORD;
-
-	    } else if (tree.is(Kind.CREATE_PROCEDURE_STATEMENT)) {
-		      token = ((CreateProcedureStatementTree) tree).procedureKeyword();
-		      code = TypeOfText.KEYWORD;
-
-	    } else if (tree.is(Kind.CREATE_MODULE_STATEMENT)) {
-		      token = ((CreateModuleStatementTree) tree).moduleKeyword();
-		      code = TypeOfText.KEYWORD;
-
-	    } else if (tree.is(Kind.TOKEN)) {
+	    if (tree.is(Kind.TOKEN)) {
 	      highlightToken((InternalSyntaxToken) tree);
 
 	    } else if (tree.is(Kind.STRING_LITERAL)) {
