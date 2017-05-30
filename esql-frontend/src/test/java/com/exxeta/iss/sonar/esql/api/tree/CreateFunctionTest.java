@@ -26,7 +26,6 @@ import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateFunctionStatementTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.ResultSetTree;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
 

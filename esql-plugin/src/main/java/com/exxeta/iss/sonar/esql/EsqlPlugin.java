@@ -40,6 +40,8 @@ public class EsqlPlugin implements Plugin {
 	public static final String TEST_FRAMEWORK_KEY = PROPERTY_PREFIX + ".testframework";
 	public static final String TEST_FRAMEWORK_DEFAULT = "";
 
+	  public static final String IGNORE_HEADER_COMMENTS = PROPERTY_PREFIX + ".ignoreHeaderComments";
+	  public static final Boolean IGNORE_HEADER_COMMENTS_DEFAULT_VALUE = true;
 	@Override
 	public void define(Context context) {
 		context.addExtensions(EsqlLanguage.class, EsqlSquidSensor.class,

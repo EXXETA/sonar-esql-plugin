@@ -1,0 +1,36 @@
+CREATE FUNCTION sayHello() 
+BEGIN
+  DECLARE a INTEGER 0; -- +1 declare statement
+  SET a = a + 1; -- +1 set statement
+
+  if (false) THEN-- +1 if statement
+  BEGIN -- +0 compound statement
+    THROW USER EXCEPTION; -- +1 throw statement
+    END;
+  END IF;
+
+  label: -- +0 labelled statement
+  LOOP -- +1 for statement
+    LEAVE label; -- +1 leave statement
+  END LOOP label;
+
+  a: while false  -- +1 while statement
+  DO
+    ITERATE a; -- +1 iterate statement
+  END WHILE a;
+
+  REPEAT -- +1 do-while statement
+  UNTIL false
+  END REPEAT;
+
+  CASE param -- +1 switch statement
+    WHEN 0 THEN
+    	CALL A(); -- +1 call statement
+    WHEN 1 THEN
+    	CALL B(); -- +1 call statement
+    ELSE
+    	CALL C(); --+1 call statement
+   END CASE;
+
+  return 1; -- +1 return statement
+END;

@@ -346,9 +346,11 @@ public class EsqlSquidSensor implements Sensor {
 
     @Override
     public List<TreeVisitor> getProductDependentTreeVisitors() {
-      metricsVisitor = new MetricsVisitor(
+        boolean ignoreHeaderComments = ignoreHeaderComments(context);
+
+        metricsVisitor = new MetricsVisitor(
         context,
-        noSonarFilter,
+        ignoreHeaderComments,
         fileLinesContextFactory,
         isAtLeastSq62);
       return Arrays.asList(metricsVisitor, new HighlighterVisitor(context));
@@ -385,6 +387,10 @@ public class EsqlSquidSensor implements Sensor {
       // unnecessary in SonarLint context
     }
 
+  }
+
+  private static boolean ignoreHeaderComments(SensorContext context) {
+	    return context.settings().getBoolean(EsqlPlugin.IGNORE_HEADER_COMMENTS);
   }
 
   private static boolean isSonarLint(SensorContext context) {

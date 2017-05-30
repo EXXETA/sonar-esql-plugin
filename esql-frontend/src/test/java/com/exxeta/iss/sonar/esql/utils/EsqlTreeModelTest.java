@@ -80,19 +80,19 @@ public abstract class EsqlTreeModelTest<T extends Tree> {
 	protected ProgramTree parse(File file) {
 		try {
 			String content = new String(Files.readAllBytes(file.toPath()));
-			return (ProgramTree) getParser(Kind.PROGRAM).parse(content);
+			return (ProgramTree) getParser(EsqlLegacyGrammar.PROGRAM).parse(content);
 		} catch (IOException e) {
 			throw new IllegalStateException(e);
 		}
 	}
 
 	protected SymbolModelImpl symbolModel(CompatibleInputFile file, Settings settings) throws IOException {
-		ProgramTree root = (ProgramTree) getParser(Kind.PROGRAM).parse(file.contents());
+		ProgramTree root = (ProgramTree) getParser(EsqlLegacyGrammar.PROGRAM).parse(file.contents());
 		return (SymbolModelImpl) new EsqlVisitorContext(root, file, settings).getSymbolModel();
 	}
 
 	protected EsqlVisitorContext context(CompatibleInputFile file) throws IOException {
-		ProgramTree root = (ProgramTree) getParser(Kind.PROGRAM).parse(file.contents());
+		ProgramTree root = (ProgramTree) getParser(EsqlLegacyGrammar.PROGRAM).parse(file.contents());
 		return new EsqlVisitorContext(root, file, null);
 	}
 

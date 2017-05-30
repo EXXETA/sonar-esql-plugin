@@ -1,0 +1,14 @@
+-- Apart from this line, only executable lines should contain non-blank comments
+BROKER SCHEMA a.b.c
+CREATE COMPUTE --1 
+MODULE ABC
+
+CREATE PROCEDURE Procedure() --1  
+	BEGIN --1
+		PROPAGATE --1 
+		TO LABEL 'ABC';
+		PROPAGATE TO --1 
+		TERMINAL 1;
+	END;
+
+END MODULE;

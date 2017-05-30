@@ -1,0 +1,24 @@
+CREATE COMPUTE MODULE TestFlow_Compute
+	CREATE PROCEDURE Procedure() 
+	BEGIN
+		PROPAGATE TO LABEL 'ABC';
+		PROPAGATE TO TERMINAL 1;
+		IF FALSE THEN
+			IF FALSE THEN
+				IF FALSE THEN
+					IF FALSE THEN --Non compliant
+						SET OutputRoot=InputRoot;
+					END IF;
+				ELSEIF A = B THEN --Compliant
+					IF TRUE THEN --Non compliant
+						SET OutputRoot=InputRoot;
+					END IF;
+				ELSEIF A = B THEN --Compliant
+				ELSEIF FALSE THEN --Compliant
+				END IF;
+			END IF;
+		ELSE
+		END IF;
+		
+	END;
+END MODULE;

@@ -52,31 +52,28 @@ public class MetricsVisitor extends SubscriptionVisitor {
   private final SensorContext sensorContext;
   private final boolean saveExecutableLines;
   private InputFile inputFile;
-  private NoSonarFilter noSonarFilter;
+  private final Boolean ignoreHeaderComments;
   private FileLinesContextFactory fileLinesContextFactory;
-  private Map<InputFile, Set<Integer>> projectLinesOfCode;
+  private Map<InputFile, Set<Integer>> projectExecutableLines;
 
   private int moduleComplexity;
   private int functionComplexity;
   private RangeDistributionBuilder functionComplexityDistribution;
   private RangeDistributionBuilder fileComplexityDistribution;
 
-  public MetricsVisitor(
-    SensorContext context, NoSonarFilter noSonarFilter,
-    FileLinesContextFactory fileLinesContextFactory, boolean saveExecutableLines
-  ) {
-    this.sensorContext = context;
-    this.noSonarFilter = noSonarFilter;
-    this.fileLinesContextFactory = fileLinesContextFactory;
-    this.projectLinesOfCode = new HashMap<>();
-    this.saveExecutableLines = saveExecutableLines;
-  }
+  public MetricsVisitor(SensorContext context, Boolean ignoreHeaderComments, FileLinesContextFactory fileLinesContextFactory, boolean saveExecutableLines) {
+	    this.sensorContext = context;
+	    this.ignoreHeaderComments = ignoreHeaderComments;
+	    this.fileLinesContextFactory = fileLinesContextFactory;
+	    this.projectExecutableLines = new HashMap<>();
+	    this.saveExecutableLines = saveExecutableLines;
+	  }
 
   /**
-   * Returns lines of code for files in project
+   * Returns executable lines of code for files in project
    */
-  public Map<InputFile, Set<Integer>> linesOfCode() {
-    return projectLinesOfCode;
+  public Map<InputFile, Set<Integer>> executableLines() {
+    return projectExecutableLines;
   }
 
   @Override
@@ -143,31 +140,29 @@ public class MetricsVisitor extends SubscriptionVisitor {
   }
 
   private void saveLineMetrics(TreeVisitorContext context) {
-    LineVisitor lineVisitor = new LineVisitor(context.getTopTree());
-    int linesNumber = lineVisitor.getLinesNumber();
-    Set<Integer> linesOfCode = lineVisitor.getLinesOfCode();
-    projectLinesOfCode.put(inputFile, linesOfCode);
+	    LineVisitor lineVisitor = new LineVisitor(context.getTopTree());
+	    Set<Integer> linesOfCode = lineVisitor.getLinesOfCode();
 
-    saveMetricOnFile(CoreMetrics.NCLOC, lineVisitor.getLinesOfCodeNumber());
+	    saveMetricOnFile(CoreMetrics.NCLOC, lineVisitor.getLinesOfCodeNumber());
 
-    CommentLineVisitor commentVisitor = new CommentLineVisitor(context.getTopTree());
-    Set<Integer> commentLines = commentVisitor.getCommentLines();
+	    CommentLineVisitor commentVisitor = new CommentLineVisitor(context.getTopTree(), ignoreHeaderComments);
+	    Set<Integer> commentLines = commentVisitor.getCommentLines();
 
-    saveMetricOnFile(CoreMetrics.COMMENT_LINES, commentVisitor.getCommentLineNumber());
-    noSonarFilter.noSonarInFile(this.inputFile, commentVisitor.noSonarLines());
+	    saveMetricOnFile(CoreMetrics.COMMENT_LINES, commentVisitor.getCommentLineNumber());
 
-    FileLinesContext fileLinesContext = fileLinesContextFactory.createFor(this.inputFile);
-    for (int line = 1; line <= linesNumber; line++) {
-      int isCodeLine = linesOfCode.contains(line) ? 1 : 0;
-      fileLinesContext.setIntValue(CoreMetrics.NCLOC_DATA_KEY, line, isCodeLine);
-      fileLinesContext.setIntValue(CoreMetrics.COMMENT_LINES_DATA_KEY, line, commentLines.contains(line) ? 1 : 0);
-    }
-    if (saveExecutableLines) {
-      Set<Integer> executableLines = new ExecutableLineVisitor(context.getTopTree()).getExecutableLines();
-      executableLines.stream().forEach(line -> fileLinesContext.setIntValue(CoreMetrics.EXECUTABLE_LINES_DATA_KEY, line, 1));
-    }
-    fileLinesContext.save();
-  }
+	    FileLinesContext fileLinesContext = fileLinesContextFactory.createFor(this.inputFile);
+
+	    linesOfCode.forEach(line -> fileLinesContext.setIntValue(CoreMetrics.NCLOC_DATA_KEY, line, 1));
+	    commentLines.forEach(line -> fileLinesContext.setIntValue(CoreMetrics.COMMENT_LINES_DATA_KEY, line, 1));
+
+	    Set<Integer> executableLines = new ExecutableLineVisitor(context.getTopTree()).getExecutableLines();
+	    projectExecutableLines.put(inputFile, executableLines);
+
+	    if (saveExecutableLines) {
+	      executableLines.stream().forEach(line -> fileLinesContext.setIntValue(CoreMetrics.EXECUTABLE_LINES_DATA_KEY, line, 1));
+	    }
+	    fileLinesContext.save();
+	  }
 
   private <T extends Serializable> void saveMetricOnFile(Metric metric, T value) {
     sensorContext.<T>newMeasure()
