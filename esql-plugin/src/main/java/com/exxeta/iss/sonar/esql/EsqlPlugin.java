@@ -17,10 +17,8 @@
  */
 package com.exxeta.iss.sonar.esql;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
 import org.sonar.api.Plugin;
+import org.sonar.api.PropertyType;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
 
@@ -29,6 +27,7 @@ import com.exxeta.iss.sonar.esql.metrics.EsqlMetrics;
 public class EsqlPlugin implements Plugin {
 
 	  private static final String GENERAL = "General";
+	  private static final String ESQL_CATEGORY = "Esql";
 
 	// Global ESQL constants
 	public static final String FALSE = "false";
@@ -47,14 +46,26 @@ public class EsqlPlugin implements Plugin {
 		context.addExtensions(EsqlLanguage.class, EsqlSquidSensor.class,
 				new EsqlRulesDefinition(context.getSonarQubeVersion()), EsqlProfile.class, EsqlMetrics.class);
 		
-		  context.addExtension(PropertyDefinition.builder(FILE_SUFFIXES_KEY)
+		  context.addExtensions(PropertyDefinition.builder(FILE_SUFFIXES_KEY)
 			        .defaultValue(FILE_SUFFIXES_DEFVALUE)
 			        .name("File Suffixes")
 			        .description("Comma-separated list of suffixes for files to analyze.")
 			        .subCategory(GENERAL)
+			        .category(ESQL_CATEGORY)
 			        .onQualifiers(Qualifiers.PROJECT)
-			        .build());
+			        .build(),
 			      
+	      PropertyDefinition.builder(EsqlPlugin.IGNORE_HEADER_COMMENTS)
+	        .defaultValue(EsqlPlugin.IGNORE_HEADER_COMMENTS_DEFAULT_VALUE.toString())
+	        .name("Ignore header comments")
+	        .description("True to not count file header comments in comment metrics.")
+	        .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
+	        .subCategory(GENERAL)
+	        .category(ESQL_CATEGORY)
+	        .type(PropertyType.BOOLEAN)
+	        .build()
+        );
+
 
 	}
 
