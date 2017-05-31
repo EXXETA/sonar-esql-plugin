@@ -39,9 +39,9 @@ public class PathElementNamespaceTreeImpl extends EsqlTree implements PathElemen
 
 	}
 
-	public PathElementNamespaceTreeImpl(InternalSyntaxToken namespaceStar, InternalSyntaxToken second) {
+	public PathElementNamespaceTreeImpl(InternalSyntaxToken namespaceStar, InternalSyntaxToken colon) {
 		this.namespaceStar = namespaceStar;
-
+		this.colon=colon;
 	}
 
 	@Override
