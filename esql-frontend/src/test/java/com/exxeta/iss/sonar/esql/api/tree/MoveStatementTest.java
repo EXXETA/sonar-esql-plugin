@@ -25,7 +25,9 @@ import static org.junit.Assert.assertNull;
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.MoveStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.NameClausesTreeImpl;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
 public class MoveStatementTest extends EsqlTreeModelTest<MoveStatementTreeImpl>{
@@ -52,6 +54,22 @@ public class MoveStatementTest extends EsqlTreeModelTest<MoveStatementTreeImpl>{
 		assertNotNull(tree.nameClauses());
 		assertNotNull(tree.semi());
 		assertEquals(tree.semi().text(), ";");
+		NameClausesTreeImpl nameClauses = tree.nameClauses();
+		assertNotNull(nameClauses.typeKeyword());
+		assertNotNull(nameClauses.typeExpression());
+		assertNull(nameClauses.namespaceKeyword());
+		assertNull(nameClauses.namespaceExpression());
+		assertNull(nameClauses.namespaceStar());
+		assertNotNull(nameClauses.nameKeyword());
+		assertNotNull(nameClauses.nameExpression());
+		
+		assertNull(nameClauses.identityKeyword());
+		assertNull(nameClauses.pathElement());
+		assertNull(nameClauses.repeatKeyword()); 
+		assertNull(nameClauses.repeatTypeKeyword()); 
+		assertNull(nameClauses.repeatNameKeyword()); 
+
+		
 		
 	}
 	
