@@ -26,9 +26,12 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ParseClauseTree;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.FromClauseTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.ValuesClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
 
@@ -119,7 +122,22 @@ public class CreateStatementTest  extends EsqlTreeModelTest<CreateStatementTreeI
 		FromClauseTreeImpl fromClause = tree.fromClause();
 		assertNotNull(fromClause.fromKeyword());
 		assertNotNull(fromClause.fieldReference());
+
+			
+		tree = parse("CREATE FIELD OutputRoot.XMLNS.TestCase.Root.Attribute IDENTITY (XML.Attribute)NSpace1:Attribute VALUE 'Attrib Value';",Kind.CREATE_STATEMENT);
+		ValuesClauseTreeImpl valuesClause = tree.valuesClause();
 		
+		assertNotNull(valuesClause.identityKeyword());
+		assertNotNull(valuesClause.identity());
+		assertNull(valuesClause.typeKeyword());
+		assertNull(valuesClause.type());
+		assertNull(valuesClause.namespaceKeyword());
+		assertNull(valuesClause.namespace());
+		assertNull(valuesClause.nameKeyword());
+		assertNull(valuesClause.name());
+		
+		assertNotNull(valuesClause.valueKeyword());
+		assertNotNull(valuesClause.value());
 		
 	}
 	
