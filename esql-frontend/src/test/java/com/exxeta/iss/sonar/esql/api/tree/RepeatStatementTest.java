@@ -18,17 +18,37 @@
 package com.exxeta.iss.sonar.esql.api.tree;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.api.tree.statement.RepeatStatementTree;
+import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class RepeatStatementTest {
+public class RepeatStatementTest extends EsqlTreeModelTest<RepeatStatementTree>{
 	@Test
 	public void repeatStatement(){
 		assertThat(Kind.REPEAT_STATEMENT)
-		.matches("X : REPEAT SET i = i + 1; UNTIL  i>= 3 END REPEAT X;");
+		.matches("X : REPEAT SET i = i + 1; UNTIL  i>= 3 END REPEAT X;")
+		.matches("REPEAT SET i = i + 1; UNTIL  i>= 3 END REPEAT;");
 
 	}
 	
+	@Test
+	public void modelTest() throws Exception {
+		RepeatStatementTree tree = parse("X : REPEAT SET i = i + 1; UNTIL  i>= 3 END REPEAT X;", Kind.REPEAT_STATEMENT);
+		assertNotNull(tree);
+		assertNotNull(tree.label());
+		assertNotNull(tree.colon());
+		assertNotNull(tree.repeatKeyword());
+		assertNotNull(tree.statements());
+		assertNotNull(tree.untilKeyword());
+		assertNotNull(tree.condition());
+		assertNotNull(tree.endKeyword());
+		assertNotNull(tree.repeatKeyword2());
+		assertNotNull(tree.label2());
+		assertNotNull(tree.colon());
+		assertNotNull(tree.semi());
+	}
 }

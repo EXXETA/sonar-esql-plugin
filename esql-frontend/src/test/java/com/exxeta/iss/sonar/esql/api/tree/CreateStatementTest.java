@@ -19,7 +19,6 @@ package com.exxeta.iss.sonar.esql.api.tree;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -28,7 +27,6 @@ import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ParseClauseTree;
-import com.exxeta.iss.sonar.esql.tree.impl.statement.CallStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.FromClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
