@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateModuleStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
@@ -33,20 +34,20 @@ public class CreateModuleStatementTreeImpl extends EsqlTree implements CreateMod
 	private final InternalSyntaxToken createKeyword;
 	private final InternalSyntaxToken moduleType;
 	private final InternalSyntaxToken moduleKeyword;
-	private final InternalSyntaxToken moduleName;
+	private final IdentifierTree moduleName;
 	private final List<StatementTree> moduleStatementsList;
 	private final InternalSyntaxToken endKeyword;
 	private final InternalSyntaxToken moduleKeyword2;
 
 	public CreateModuleStatementTreeImpl(InternalSyntaxToken createKeyword, InternalSyntaxToken moduleType,
-			InternalSyntaxToken moduleKeyword, InternalSyntaxToken moduleName,
+			InternalSyntaxToken moduleKeyword, IdentifierTree indentifier,
 			List<StatementTree> moduleStatementsList, InternalSyntaxToken endKeyword,
 			InternalSyntaxToken moduleKeyword2) {
 		super();
 		this.createKeyword = createKeyword;
 		this.moduleType = moduleType;
 		this.moduleKeyword = moduleKeyword;
-		this.moduleName = moduleName;
+		this.moduleName = indentifier;
 		this.moduleStatementsList = moduleStatementsList;
 		this.endKeyword = endKeyword;
 		this.moduleKeyword2 = moduleKeyword2;
@@ -68,7 +69,7 @@ public class CreateModuleStatementTreeImpl extends EsqlTree implements CreateMod
 	}
 
 	@Override
-	public InternalSyntaxToken moduleName() {
+	public IdentifierTree moduleName() {
 		return moduleName;
 	}
 

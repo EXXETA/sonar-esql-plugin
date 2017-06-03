@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.esql.api.tree.symbols;
+package com.exxeta.iss.sonar.esql.tree.symbols;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,8 +25,14 @@ import java.util.Map;
 import com.exxeta.iss.sonar.esql.api.symbols.SymbolModelBuilder;
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
+import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.api.tree.statement.BeginEndStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.BlockTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.CreateFunctionStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateFunctionStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateProcedureStatementTreeImpl;
 
 /**
  * This visitor creates scopes.
@@ -38,7 +44,7 @@ public class ScopeVisitor extends DoubleDispatchVisitor {
   private Map<Tree, Scope> treeScopeMap;
 
   // List of block trees for which scope is created for another tree (e.g. function declaration or for statement)
-  private List<BlockTree> skippedBlocks;
+  private List<BeginEndStatementTree> skippedBlocks;
 
   public Map<Tree, Scope> getTreeScopeMap() {
     return treeScopeMap;
@@ -51,7 +57,7 @@ public class ScopeVisitor extends DoubleDispatchVisitor {
     this.skippedBlocks = new ArrayList<>();
     this.treeScopeMap = new HashMap<>();
 
-    newFunctionScope(tree);
+    newRoutineScope(tree);
     super.visitProgram(tree);
     leaveScope();
   }
@@ -68,6 +74,27 @@ public class ScopeVisitor extends DoubleDispatchVisitor {
     }
   }
 
+  @Override
+	public void visitCreateFunctionStatement(CreateFunctionStatementTree tree) {
+	  newRoutineScope(tree);
+	    ((CreateFunctionStatementTreeImpl) tree).scope(currentScope);
+
+	    skipBlock(tree.routineBody());
+		super.visitCreateFunctionStatement(tree);
+
+	    leaveScope();
+	}
+
+  @Override
+	public void visitCreateProcedureStatement(CreateProcedureStatementTree tree) {
+	  newRoutineScope(tree);
+	    ((CreateProcedureStatementTreeImpl) tree).scope(currentScope);
+
+	    skipBlock(tree.routineBody());
+		super.visitCreateProcedureStatement(tree);
+
+	    leaveScope();
+	}
 
   private void leaveScope() {
     if (currentScope != null) {
@@ -75,7 +102,7 @@ public class ScopeVisitor extends DoubleDispatchVisitor {
     }
   }
 
-  private void newFunctionScope(Tree tree) {
+  private void newRoutineScope(Tree tree) {
     newScope(tree, false);
   }
 
@@ -89,11 +116,11 @@ public class ScopeVisitor extends DoubleDispatchVisitor {
     symbolModel.addScope(currentScope);
   }
 
-/*  private void skipBlock(Tree tree) {
-    if (tree.is(Kind.BLOCK)) {
-      skippedBlocks.add((BlockTree) tree);
+  private void skipBlock(Tree tree) {
+    if (tree.is(Kind.BEGIN_END_STATEMENT)) {
+      skippedBlocks.add((BeginEndStatementTree) tree);
     }
-  }*/
+  }
 
   private boolean isScopeAlreadyCreated(BlockTree tree) {
     return skippedBlocks.contains(tree);

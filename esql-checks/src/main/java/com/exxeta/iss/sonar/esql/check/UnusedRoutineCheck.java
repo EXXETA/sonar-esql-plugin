@@ -75,7 +75,7 @@ public class UnusedRoutineCheck extends DoubleDispatchVisitorCheck {
 
 	@Override
 	public void visitCreateFunctionStatement(CreateFunctionStatementTree tree) {
-		declaredFunctions.put(tree.identifier().text(), tree);
+		declaredFunctions.put(tree.identifier().name(), tree);
 		super.visitCreateFunctionStatement(tree);
 	}
 

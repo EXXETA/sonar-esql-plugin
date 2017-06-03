@@ -20,6 +20,7 @@ package com.exxeta.iss.sonar.esql.tree.impl.statement;
 import java.util.Iterator;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateFunctionStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.LanguageTree;
@@ -30,16 +31,17 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.RoutineBodyTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
 import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
+import com.exxeta.iss.sonar.esql.tree.impl.expression.IdentifierTreeImpl;
 import com.google.common.base.Functions;
 import com.google.common.collect.Iterators;
 
-public class CreateFunctionStatementTreeImpl extends EsqlTree implements CreateFunctionStatementTree {
+public class CreateFunctionStatementTreeImpl extends CreateRoutineTreeImpl implements CreateFunctionStatementTree {
 
 	private final SyntaxToken createKeyword;
 
 	private final SyntaxToken functionKeyword;
 
-	private final SyntaxToken identifier;
+	private final IdentifierTree identifier;
 
 	private final SyntaxToken openingParenthesis;
 
@@ -55,7 +57,7 @@ public class CreateFunctionStatementTreeImpl extends EsqlTree implements CreateF
 	private final RoutineBodyTree routineBody;
 
 	public CreateFunctionStatementTreeImpl(SyntaxToken createKeyword, SyntaxToken functionKeyword,
-			SyntaxToken identifier, SyntaxToken openingParenthesis, SeparatedList<ParameterTree> parameterList,
+			IdentifierTree identifier, SyntaxToken openingParenthesis, SeparatedList<ParameterTree> parameterList,
 			SyntaxToken closingParenthesis, ReturnTypeTree returnType, LanguageTree language, ResultSetTree resultSet,
 			RoutineBodyTree routineBody) {
 		super();
@@ -82,7 +84,7 @@ public class CreateFunctionStatementTreeImpl extends EsqlTree implements CreateF
 	}
 
 	@Override
-	public SyntaxToken identifier() {
+	public IdentifierTree identifier() {
 		return identifier;
 	}
 

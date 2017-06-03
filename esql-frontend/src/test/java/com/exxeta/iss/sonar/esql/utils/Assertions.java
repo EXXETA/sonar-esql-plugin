@@ -64,7 +64,7 @@ public class Assertions {
 
     private void parseTillEof(String input) {
       EsqlTree tree = (EsqlTree) actual.parse(input);
-      InternalSyntaxToken lastToken = (InternalSyntaxToken) tree.getLastToken();
+      InternalSyntaxToken lastToken = (InternalSyntaxToken) tree.lastToken();
       int eofIndex = input.length();
       if (lastToken.toIndex() != eofIndex) {
         throw new RecognitionException(
@@ -111,7 +111,7 @@ public class Assertions {
       isNotNull();
       try {
         EsqlTree tree = (EsqlTree) actual.parse(prefixToBeMatched + remainingInput);
-        SyntaxToken lastToken = tree.getLastToken();
+        SyntaxToken lastToken = tree.lastToken();
 
         if (prefixToBeMatched.length() != lastToken.column() + lastToken.text().length()) {
           throw new RecognitionException(0,

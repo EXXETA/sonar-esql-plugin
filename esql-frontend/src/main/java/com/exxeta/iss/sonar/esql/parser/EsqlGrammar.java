@@ -32,6 +32,7 @@ import com.exxeta.iss.sonar.esql.api.tree.SchemaNameTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.ComplexFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.DateTimeFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.FieldFunctionTree;
@@ -44,6 +45,7 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree
 import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
 import com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator;
 import com.exxeta.iss.sonar.esql.lexer.EsqlReservedKeyword;
+import com.exxeta.iss.sonar.esql.lexer.EsqlTokenType;
 import com.exxeta.iss.sonar.esql.tree.expression.LikeExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.BrokerSchemaStatementTreeImpl;
@@ -165,7 +167,7 @@ public class EsqlGrammar {
 	public CreateFunctionStatementTreeImpl CREATE_FUNCTION_STATEMENT() {
 		return b.<CreateFunctionStatementTreeImpl>nonterminal(Kind.CREATE_FUNCTION_STATEMENT)
 				.is(f.createFunctionStatement(b.token(EsqlNonReservedKeyword.CREATE),
-						b.token(EsqlNonReservedKeyword.FUNCTION), b.token(EsqlLegacyGrammar.IDENTIFIER),
+						b.token(EsqlNonReservedKeyword.FUNCTION), BINDING_IDENTIFIER(),
 						b.token(EsqlPunctuator.LPARENTHESIS), b.optional(PARAMETER()),
 						b.zeroOrMore(f.newTuple22(b.token(EsqlPunctuator.COMMA), PARAMETER())),
 						b.token(EsqlPunctuator.RPARENTHESIS), b.optional(RETURN_TYPE()), b.optional(LANGUAGE()),
@@ -175,6 +177,21 @@ public class EsqlGrammar {
 
 	}
 
+	public IdentifierTree IDENTIFIER_REFERENCE() {
+		return b.<IdentifierTree>nonterminal(EsqlLegacyGrammar.IDENTIFIER_REFERENCE)
+				.is(f.identifierReference(b.token(EsqlTokenType.IDENTIFIER)));
+	}
+
+	public IdentifierTree BINDING_IDENTIFIER() {
+		    return b.<IdentifierTree>nonterminal(EsqlLegacyGrammar.BINDING_IDENTIFIER)
+		      .is(f.bindingIdentifier(b.token(EsqlTokenType.IDENTIFIER))
+		      );
+	}
+
+	public IdentifierTree IDENTIFIER_NAME() {
+	    return b.<IdentifierTree>nonterminal()
+	      .is(f.identifierName(b.token(EsqlLegacyGrammar.IDENTIFIER_NAME)));
+	}
 	public ResultSetTreeImpl RESULT_SET() {
 		return b.<ResultSetTreeImpl>nonterminal(Kind.RESULT_SET)
 				.is(f.resultSet(b.token(EsqlNonReservedKeyword.DYNAMIC), b.token(EsqlNonReservedKeyword.RESULT),
@@ -202,7 +219,7 @@ public class EsqlGrammar {
 		return b.<ParameterTreeImpl>nonterminal(Kind.PARAMETER).is(f.parameter(
 				b.optional(b.firstOf(b.token(EsqlNonReservedKeyword.IN), b.token(EsqlNonReservedKeyword.OUT),
 						b.token(EsqlNonReservedKeyword.INOUT))),
-				CALL_EXPRESSION(),
+				BINDING_IDENTIFIER(),
 				b.optional(b.firstOf(b.token(EsqlNonReservedKeyword.NAME), b.token(EsqlNonReservedKeyword.NAMESPACE),
 						f.newTuple8(b.optional(b.token(EsqlNonReservedKeyword.CONSTANT)),
 								DATA_TYPE())))));
@@ -216,7 +233,7 @@ public class EsqlGrammar {
 	public ExternalRoutineBodyTreeImpl EXTERNAL_ROUTINE_BODY() {
 		return b.<ExternalRoutineBodyTreeImpl>nonterminal(Kind.EXTERNAL_ROUTINE_BODY)
 				.is(f.externalRoutineBody(b.token(EsqlNonReservedKeyword.EXTERNAL),
-						b.token(EsqlNonReservedKeyword.NAME), b.token(EsqlLegacyGrammar.IDENTIFIER_WITH_QUOTES),
+						b.token(EsqlNonReservedKeyword.NAME), b.token(EsqlLegacyGrammar.IDENTIFIER_NAME_WITH_QUOTES),
 						b.token(EsqlLegacyGrammar.EOS)
 						));
 	}
@@ -224,7 +241,7 @@ public class EsqlGrammar {
 	public CreateProcedureStatementTree CREATE_PROCEDURE_STATEMENT() {
 		return b.<CreateProcedureStatementTree>nonterminal(Kind.CREATE_PROCEDURE_STATEMENT)
 				.is(f.createProcedureStatement(b.token(EsqlNonReservedKeyword.CREATE),
-						b.token(EsqlNonReservedKeyword.PROCEDURE), b.token(EsqlLegacyGrammar.IDENTIFIER),
+						b.token(EsqlNonReservedKeyword.PROCEDURE), BINDING_IDENTIFIER(),
 						b.token(EsqlPunctuator.LPARENTHESIS), b.optional(PARAMETER()),
 						b.zeroOrMore(f.newTuple10(b.token(EsqlPunctuator.COMMA), PARAMETER())),
 						b.token(EsqlPunctuator.RPARENTHESIS), b.optional(RETURN_TYPE()), b.optional(LANGUAGE()),
@@ -238,7 +255,7 @@ public class EsqlGrammar {
 				.is(f.createModuleStatement(b.token(EsqlNonReservedKeyword.CREATE),
 						b.firstOf(b.token(EsqlNonReservedKeyword.COMPUTE), b.token(EsqlNonReservedKeyword.DATABASE),
 								b.token(EsqlNonReservedKeyword.FILTER)),
-						b.token(EsqlNonReservedKeyword.MODULE), b.token(EsqlLegacyGrammar.IDENTIFIER),
+						b.token(EsqlNonReservedKeyword.MODULE), BINDING_IDENTIFIER(),
 						b.zeroOrMore(b.firstOf(ROUTINE_DECLARATION(), DECLARE_STATEMENT())),
 						b.token(EsqlNonReservedKeyword.END), b.token(EsqlNonReservedKeyword.MODULE),
 						b.token(EsqlLegacyGrammar.EOS)));
@@ -265,8 +282,8 @@ public class EsqlGrammar {
 	}
 
 	public SchemaNameTree SCHEMA_NAME() {
-		return b.<SchemaNameTree>nonterminal(Kind.SCHEMA_NAME).is(f.schemaName(b.token(EsqlLegacyGrammar.IDENTIFIER),
-				b.zeroOrMore(f.newTuple5(b.token(DOT), b.token(EsqlLegacyGrammar.IDENTIFIER)))));
+		return b.<SchemaNameTree>nonterminal(Kind.SCHEMA_NAME).is(f.schemaName(b.token(EsqlLegacyGrammar.IDENTIFIER_NAME),
+				b.zeroOrMore(f.newTuple5(b.token(DOT), b.token(EsqlLegacyGrammar.IDENTIFIER_NAME)))));
 	}
 
 	public StatementTree STATEMENT() {
@@ -350,7 +367,7 @@ public class EsqlGrammar {
 	public ForFunctionTreeImpl FOR_FUNCTION() {
 		return b.<ForFunctionTreeImpl>nonterminal(Kind.FOR_FUNCTION).is(f.forFunction(
 				b.token(EsqlNonReservedKeyword.FOR), b.optional(b.firstOf(b.token(EsqlNonReservedKeyword.ALL),b.token(EsqlNonReservedKeyword.SOME),b.token(EsqlNonReservedKeyword.ANY))),
-				FIELD_REFERENCE(), b.optional(f.newTuple108(b.token(EsqlNonReservedKeyword.AS), b.token(EsqlLegacyGrammar.IDENTIFIER))), //TODO use AliasedFieldReference
+				FIELD_REFERENCE(), b.optional(f.newTuple108(b.token(EsqlNonReservedKeyword.AS), b.token(EsqlLegacyGrammar.IDENTIFIER_NAME))), //TODO use AliasedFieldReference
 				b.token(EsqlPunctuator.LPARENTHESIS), EXPRESSION(), b.token(EsqlPunctuator.RPARENTHESIS) 
 				));
 	}
@@ -442,7 +459,7 @@ public class EsqlGrammar {
 						b.optional(LABEL()), b.token(EsqlLegacyGrammar.EOS)));
 	}
 	public LabelTreeImpl LABEL(){
-		return b.<LabelTreeImpl>nonterminal(Kind.LABEL).is(f.label(b.token(EsqlLegacyGrammar.IDENTIFIER)));
+		return b.<LabelTreeImpl>nonterminal(Kind.LABEL).is(f.label(IDENTIFIER_NAME()));
 	}
 	
 	public CallStatementTreeImpl CALL_STATEMENT() {
@@ -476,8 +493,8 @@ public class EsqlGrammar {
 	public DeclareStatementTreeImpl DECLARE_STATEMENT() {
 		return b.<DeclareStatementTreeImpl>nonterminal(Kind.DECLARE_STATEMENT)
 				.is(f.declareStatement(
-						b.token(EsqlNonReservedKeyword.DECLARE), b.token(EsqlLegacyGrammar.IDENTIFIER),
-						b.zeroOrMore(f.newTuple42(b.token(COMMA),b.token(EsqlLegacyGrammar.IDENTIFIER))),
+						b.token(EsqlNonReservedKeyword.DECLARE), BINDING_IDENTIFIER(),
+						b.zeroOrMore(f.newTuple42(b.token(COMMA),BINDING_IDENTIFIER())),
 						b.optional(b.firstOf(b.token(EsqlNonReservedKeyword.SHARED),b.token(EsqlNonReservedKeyword.EXTERNAL))),
 						b.firstOf(f.newTuple43(b.optional(b.token(EsqlNonReservedKeyword.CONSTANT)),  DATA_TYPE()),b.token(EsqlNonReservedKeyword.NAMESPACE), b.token(EsqlNonReservedKeyword.NAME)),
 						b.optional(EXPRESSION()), b.token(EsqlLegacyGrammar.EOS)
@@ -820,12 +837,12 @@ public class EsqlGrammar {
 
 	public FieldReferenceTreeImpl FIELD_REFERENCE() {
 		return b.<FieldReferenceTreeImpl>nonterminal(Kind.FIELD_REFERENCE)
-				.is(f.fieldReference(b.firstOf(PATH_ELEMENT(), b.token(EsqlLegacyGrammar.IDENTIFIER) ),
+				.is(f.fieldReference(b.firstOf(PATH_ELEMENT(), b.token(EsqlLegacyGrammar.IDENTIFIER_NAME) ),
 						b.zeroOrMore(f.newTuple21(b.token(EsqlPunctuator.DOT), PATH_ELEMENT()))));
 	}
 
 	public NamespaceTreeImpl NAMESPACE() {
-		return b.<NamespaceTreeImpl>nonterminal(Kind.NAMESPACE).is(f.namespace(b.token(EsqlLegacyGrammar.IDENTIFIER)));
+		return b.<NamespaceTreeImpl>nonterminal(Kind.NAMESPACE).is(f.namespace(b.token(EsqlLegacyGrammar.IDENTIFIER_NAME)));
 	}
 
 	public PathElementTreeImpl PATH_ELEMENT() {
@@ -863,7 +880,7 @@ public class EsqlGrammar {
 	public PathElementNameTreeImpl PATH_ELEMENT_NAME(){
 		return b.<PathElementNameTreeImpl>nonterminal(Kind.PATH_ELEMENT_NAME)
 				.is(f.pathElementName(
-						b.firstOf(b.token(EsqlLegacyGrammar.IDENTIFIER),
+						b.firstOf(b.token(EsqlLegacyGrammar.IDENTIFIER_NAME),
 								f.newTriple3(b.token(EsqlPunctuator.LCURLYBRACE), CALL_EXPRESSION(),
 										b.token(EsqlPunctuator.RCURLYBRACE)),
 								b.token(EsqlPunctuator.STAR))
@@ -1031,14 +1048,14 @@ public class EsqlGrammar {
 	
 	public ForStatementTreeImpl FOR_STATEMENT() {
 		return b.<ForStatementTreeImpl>nonterminal(Kind.FOR_STATEMENT).is(f.forStatement(
-				b.token(EsqlNonReservedKeyword.FOR), b.token(EsqlLegacyGrammar.IDENTIFIER), b.token(EsqlNonReservedKeyword.AS),
+				b.token(EsqlNonReservedKeyword.FOR), b.token(EsqlLegacyGrammar.IDENTIFIER_NAME), b.token(EsqlNonReservedKeyword.AS),
 				FIELD_REFERENCE(), b.token(EsqlNonReservedKeyword.DO), STATEMENTS(),b.token(EsqlNonReservedKeyword.END), b.token(EsqlNonReservedKeyword.FOR),
 				b.token(EsqlLegacyGrammar.EOS)
 		));
 	}
 	public MoveStatementTreeImpl MOVE_STATEMENT() {
 		return b.<MoveStatementTreeImpl>nonterminal(Kind.MOVE_STATEMENT).is(f.moveStatement(
-				b.token(EsqlNonReservedKeyword.MOVE), b.token(EsqlLegacyGrammar.IDENTIFIER),
+				b.token(EsqlNonReservedKeyword.MOVE), b.token(EsqlLegacyGrammar.IDENTIFIER_NAME),
 				b.firstOf(f.newTuple77(b.token(EsqlNonReservedKeyword.TO), FIELD_REFERENCE()), b.token(EsqlNonReservedKeyword.PARENT),
 						f.newTuple78(b.firstOf(b.token(EsqlNonReservedKeyword.FIRSTCHILD),b.token(EsqlNonReservedKeyword.LASTCHILD),
 								b.token(EsqlNonReservedKeyword.PREVIOUSSIBLING),b.token(EsqlNonReservedKeyword.NEXTSIBLING)), NAME_CLAUSES())
@@ -1062,7 +1079,7 @@ public class EsqlGrammar {
 	public DeleteFromStatementTreeImpl DELETE_FROM_STATEMENT(){
 		return b.<DeleteFromStatementTreeImpl>nonterminal(Kind.DELETE_FROM_STATEMENT).is (f.deleteFromStatement(
 				b.token(EsqlNonReservedKeyword.DELETE),b.token(EsqlReservedKeyword.FROM),FIELD_REFERENCE(),
-				b.optional(f.newTuple83(b.token(EsqlNonReservedKeyword.AS), b.token(EsqlLegacyGrammar.IDENTIFIER))), //TODO use AliasedFieldReference
+				b.optional(f.newTuple83(b.token(EsqlNonReservedKeyword.AS), b.token(EsqlLegacyGrammar.IDENTIFIER_NAME))), //TODO use AliasedFieldReference
 				b.optional(f.newTuple84(b.token(EsqlNonReservedKeyword.WHERE), EXPRESSION())),
 				b.token(EsqlLegacyGrammar.EOS)
 		));
@@ -1091,7 +1108,7 @@ public class EsqlGrammar {
 		return b.<UpdateStatementTreeImpl>nonterminal(Kind.UPDATE_STATEMENT).is(f.updateStatement(
 				b.token(EsqlNonReservedKeyword.UPDATE), 
 				FIELD_REFERENCE(), 
-				b.optional(f.newTuple88(b.token(EsqlNonReservedKeyword.AS), b.token(EsqlLegacyGrammar.IDENTIFIER))), //TODO use AliasedFieldReference
+				b.optional(f.newTuple88(b.token(EsqlNonReservedKeyword.AS), b.token(EsqlLegacyGrammar.IDENTIFIER_NAME))), //TODO use AliasedFieldReference
 				b.token(EsqlNonReservedKeyword.SET), 
 				SET_COLUMN(), b.zeroOrMore(f.newTuple89(b.token(EsqlPunctuator.COMMA), SET_COLUMN())),
 				b.optional(f.newTuple90(b.token(EsqlNonReservedKeyword.WHERE), EXPRESSION())),
@@ -1103,7 +1120,7 @@ public class EsqlGrammar {
 	
 	public SetColumnTreeImpl SET_COLUMN(){
 		return b.<SetColumnTreeImpl>nonterminal(Kind.SET_COLUMN).is(f.setColumn(
-				b.token(EsqlLegacyGrammar.IDENTIFIER), b.token(EsqlPunctuator.EQUAL), EXPRESSION()
+				b.token(EsqlLegacyGrammar.IDENTIFIER_NAME), b.token(EsqlPunctuator.EQUAL), EXPRESSION()
 				));
 	}
 	
@@ -1202,7 +1219,7 @@ public class EsqlGrammar {
 	
 	public AliasedFieldReferenceTreeImpl ALIASED_FIELD_REFERENCE(){
 		return b.<AliasedFieldReferenceTreeImpl>nonterminal(Kind.ALIASED_FIELD_REFERENCE).is(f.finishAliasFieldReference(
-				b.firstOf(f.aliasFieldReference(FIELD_REFERENCE(), b.token(EsqlNonReservedKeyword.AS), b.token(EsqlLegacyGrammar.IDENTIFIER)) , 
+				b.firstOf(f.aliasFieldReference(FIELD_REFERENCE(), b.token(EsqlNonReservedKeyword.AS), b.token(EsqlLegacyGrammar.IDENTIFIER_NAME)) , 
 						f.aliasFieldReference(FIELD_REFERENCE())
 		)));
 	}
@@ -1217,7 +1234,7 @@ public class EsqlGrammar {
 	
 	public AliasedExpressionTreeImpl ALIASED_EXPRESSION(){
 		return b.<AliasedExpressionTreeImpl>nonterminal(Kind.ALIASED_EXPRESSION).is(f.finishAliasedExpression(
-				b.firstOf(f.aliasedExpression(EXPRESSION(), b.token(EsqlNonReservedKeyword.AS), b.token(EsqlLegacyGrammar.IDENTIFIER)) , 
+				b.firstOf(f.aliasedExpression(EXPRESSION(), b.token(EsqlNonReservedKeyword.AS), b.token(EsqlLegacyGrammar.IDENTIFIER_NAME)) , 
 						f.aliasedExpression(EXPRESSION())
 		)));
 	}

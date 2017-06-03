@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.esql.api.tree.symbols;
+package com.exxeta.iss.sonar.esql.tree.symbols;
 
 import java.util.LinkedList;
 import java.util.List;

@@ -20,6 +20,7 @@ package com.exxeta.iss.sonar.esql.tree.impl.statement;
 import java.util.Iterator;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.LanguageTree;
@@ -33,13 +34,13 @@ import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
 import com.google.common.base.Functions;
 import com.google.common.collect.Iterators;
 
-public class CreateProcedureStatementTreeImpl extends EsqlTree implements CreateProcedureStatementTree {
+public class CreateProcedureStatementTreeImpl extends CreateRoutineTreeImpl implements CreateProcedureStatementTree {
 
 	private final SyntaxToken createKeyword;
 
 	private final SyntaxToken procedureKeyword;
 
-	private final SyntaxToken identifier;
+	private final IdentifierTree identifier;
 
 	private final SyntaxToken openingParenthesis;
 
@@ -55,7 +56,7 @@ public class CreateProcedureStatementTreeImpl extends EsqlTree implements Create
 	private final RoutineBodyTree routineBody;
 
 	public CreateProcedureStatementTreeImpl(SyntaxToken createKeyword, SyntaxToken procedureKeyword,
-			SyntaxToken identifier, SyntaxToken openingParenthesis, SeparatedList<ParameterTree> parameterList,
+			IdentifierTree identifier, SyntaxToken openingParenthesis, SeparatedList<ParameterTree> parameterList,
 			SyntaxToken closingParenthesis, ReturnTypeTree returnType, LanguageTree language, ResultSetTree resultSet,
 			RoutineBodyTree routineBody) {
 		super();
@@ -82,7 +83,7 @@ public class CreateProcedureStatementTreeImpl extends EsqlTree implements Create
 	}
 
 	@Override
-	public SyntaxToken identifier() {
+	public IdentifierTree identifier() {
 		return identifier;
 	}
 

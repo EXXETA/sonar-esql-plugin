@@ -9,17 +9,14 @@ import org.sonar.check.Rule;
 
 import com.exxeta.iss.sonar.esql.api.tree.PathElementTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
-import com.exxeta.iss.sonar.esql.api.tree.expression.CallExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
-import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
-import com.exxeta.iss.sonar.esql.api.tree.statement.CallStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.DeclareStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.SetStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
 import com.exxeta.iss.sonar.esql.tree.expression.LiteralTree;
 import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.FieldReferenceTreeImpl;
-import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 
 @Rule(key = "HardCodedCredentials")
 public class HardCodedCredentialsCheck extends DoubleDispatchVisitorCheck {
@@ -44,7 +41,11 @@ public class HardCodedCredentialsCheck extends DoubleDispatchVisitorCheck {
 
 
 	private boolean isPasswordVariableName(FieldReferenceTreeImpl fieldReference) {
-		return isPasswordVariableName(fieldReference.pathElement().name().name()) || isPasswordVariableName(fieldReference.pathElements());
+		return isPasswordVariableName(fieldReference.pathElement().name().name().text()) || isPasswordVariableName(fieldReference.pathElements());
+	}
+
+	private boolean isPasswordVariableName(IdentifierTree identifier) {
+		return isPasswordVariableName(identifier.name());
 	}
 
 
@@ -60,17 +61,17 @@ public class HardCodedCredentialsCheck extends DoubleDispatchVisitorCheck {
 		Iterator<PathElementTree> nameListIter = pathElements.iterator();
 		while (nameListIter.hasNext()) {
 			PathElementTree pathElement= nameListIter.next();
-			if (isPasswordVariableName(pathElement.name().name())) {
+			if (isPasswordVariableName(pathElement.name().name().text())) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	private boolean isPasswordVaribleName(SeparatedList<InternalSyntaxToken> nameList) {
-		Iterator<InternalSyntaxToken> nameListIter = nameList.iterator();
+	private boolean isPasswordVaribleName(SeparatedList<IdentifierTree> nameList) {
+		Iterator<IdentifierTree> nameListIter = nameList.iterator();
 		while (nameListIter.hasNext()) {
-			InternalSyntaxToken name = nameListIter.next();
+			IdentifierTree name = nameListIter.next();
 			if (isPasswordVariableName(name)) {
 				return true;
 			}
@@ -89,8 +90,8 @@ public class HardCodedCredentialsCheck extends DoubleDispatchVisitorCheck {
 		return initializer != null && initializer.is(Tree.Kind.STRING_LITERAL);
 	}
 
-	private static boolean isPasswordVariableName(SyntaxToken token) {
-		return PASSWORD_VARIABLE_PATTERN.matcher(token.text()).find();
+	private static boolean isPasswordVariableName(String token) {
+		return PASSWORD_VARIABLE_PATTERN.matcher(token).find();
 	}
 
 	private void reportIssue(Tree tree) {

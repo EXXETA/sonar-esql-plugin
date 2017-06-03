@@ -32,6 +32,7 @@ import com.exxeta.iss.sonar.esql.api.tree.SchemaNameTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.AliasedExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.AliasedFieldReferenceTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.FunctionTree;
@@ -65,6 +66,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.declaration.SchemaNameTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.BetweenExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.BinaryExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.CallExpressionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.expression.IdentifierTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.InExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.IntervalExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.IsExpressionTreeImpl;
@@ -256,17 +258,17 @@ public class TreeFactory {
 				elseClause.isPresent() ? elseClause.get() : null, endToken, ifToken2, semiToken);
 	}
 
-	public DeclareStatementTreeImpl declareStatement(InternalSyntaxToken declareToken, InternalSyntaxToken name,
-			Optional<List<Tuple<InternalSyntaxToken, InternalSyntaxToken>>> restNames,
+	public DeclareStatementTreeImpl declareStatement(InternalSyntaxToken declareToken, IdentifierTree identfier,
+			Optional<List<Tuple<InternalSyntaxToken,IdentifierTree>>> rest,
 			Optional<InternalSyntaxToken> sharedExt, Object dataType, Optional<ExpressionTree> initialValue,
 			InternalSyntaxToken semi) {
 		if (dataType instanceof Tuple) {
 			Tuple<Optional<InternalSyntaxToken>, DataTypeTreeImpl> dt = (Tuple) dataType;
-			return new DeclareStatementTreeImpl(declareToken, nameList(name, restNames),
+			return new DeclareStatementTreeImpl(declareToken, nameList(identfier, rest),
 					sharedExt.isPresent() ? sharedExt.get() : null, dt.first().isPresent() ? dt.first().get() : null,
 					dt.second(), initialValue.isPresent() ? initialValue.get() : null, semi);
 		} else {
-			return new DeclareStatementTreeImpl(declareToken, nameList(name, restNames),
+			return new DeclareStatementTreeImpl(declareToken, nameList(identfier, rest),
 					sharedExt.isPresent() ? sharedExt.get() : null, (InternalSyntaxToken) dataType,
 					initialValue.isPresent() ? initialValue.get() : null, semi);
 		}
@@ -1016,16 +1018,16 @@ public class TreeFactory {
 		return new SeparatedList<>(elements.build(), commas.build());
 	}
 
-	private static SeparatedList<InternalSyntaxToken> nameList(InternalSyntaxToken element,
-			Optional<List<Tuple<InternalSyntaxToken, InternalSyntaxToken>>> rest) {
+	private static SeparatedList<IdentifierTree> nameList(IdentifierTree identfier,
+			Optional<List<Tuple<InternalSyntaxToken, IdentifierTree>>> rest) {
 
-		ImmutableList.Builder<InternalSyntaxToken> elements = ImmutableList.builder();
+		ImmutableList.Builder<IdentifierTree> elements = ImmutableList.builder();
 		ImmutableList.Builder<InternalSyntaxToken> commas = ImmutableList.builder();
 
-		elements.add(element);
+		elements.add(identfier);
 
 		if (rest.isPresent()) {
-			for (Tuple<InternalSyntaxToken, InternalSyntaxToken> pair : rest.get()) {
+			for (Tuple<InternalSyntaxToken, IdentifierTree> pair : rest.get()) {
 				InternalSyntaxToken commaToken = pair.first();
 
 				commas.add(commaToken);
@@ -1091,7 +1093,7 @@ public class TreeFactory {
 	}
 
 	public CreateFunctionStatementTreeImpl createFunctionStatement(InternalSyntaxToken createKeyword,
-			InternalSyntaxToken functionKeyword, InternalSyntaxToken identifier, InternalSyntaxToken openingParenthesis,
+			InternalSyntaxToken functionKeyword, IdentifierTree identifier, InternalSyntaxToken openingParenthesis,
 			Optional<ParameterTree> parameter, Optional<List<Tuple<InternalSyntaxToken, ParameterTree>>> restParameter,
 			InternalSyntaxToken closingParenthesis, Optional<ReturnTypeTreeImpl> returnType,
 			Optional<LanguageTreeImpl> language, Optional<ResultSetTreeImpl> resultSet,
@@ -1112,7 +1114,7 @@ public class TreeFactory {
 	}
 
 	public CreateProcedureStatementTreeImpl createProcedureStatement(InternalSyntaxToken createKeyword,
-			InternalSyntaxToken procedureKeyword, InternalSyntaxToken identifier,
+			InternalSyntaxToken procedureKeyword, IdentifierTree identifier,
 			InternalSyntaxToken openingParenthesis, Optional<ParameterTree> parameter,
 			Optional<List<Tuple<InternalSyntaxToken, ParameterTree>>> restParameter,
 			InternalSyntaxToken closingParenthesis, Optional<ReturnTypeTreeImpl> returnType,
@@ -1146,20 +1148,20 @@ public class TreeFactory {
 		}
 	}
 
-	public ParameterTreeImpl parameter(Optional<InternalSyntaxToken> directionIndicator, ExpressionTree expression,
+	public ParameterTreeImpl parameter(Optional<InternalSyntaxToken> directionIndicator, IdentifierTree identifier,
 			Optional<Object> optional) {
 		if (optional.isPresent()) {
 			if (optional.get() instanceof Tuple) {
 				Tuple<Optional<InternalSyntaxToken>, DataTypeTreeImpl> t = (Tuple) optional.get();
 				return new ParameterTreeImpl(directionIndicator.isPresent() ? directionIndicator.get() : null,
-						expression, t.first().isPresent() ? t.first().get() : null, t.second());
+						identifier, t.first().isPresent() ? t.first().get() : null, t.second());
 			} else {
 				return new ParameterTreeImpl(directionIndicator.isPresent() ? directionIndicator.get() : null,
-						expression, (InternalSyntaxToken) optional.get());
+						identifier, (InternalSyntaxToken) optional.get());
 			}
 
 		} else {
-			return new ParameterTreeImpl(directionIndicator.isPresent() ? directionIndicator.get() : null, expression);
+			return new ParameterTreeImpl(directionIndicator.isPresent() ? directionIndicator.get() : null, identifier);
 
 		}
 	}
@@ -1181,11 +1183,11 @@ public class TreeFactory {
 	}
 
 	public CreateModuleStatementTreeImpl createModuleStatement(InternalSyntaxToken createKeyword,
-			InternalSyntaxToken moduleType, InternalSyntaxToken moduleKeyword, InternalSyntaxToken moduleName,
+			InternalSyntaxToken moduleType, InternalSyntaxToken moduleKeyword, IdentifierTree indentifier,
 			Optional<List<StatementTree>> optional, InternalSyntaxToken endKeyword, InternalSyntaxToken moduleKeyword2,
 			InternalSyntaxToken semi) {
 		List<StatementTree> moduleStatementsList = optionalList(optional);
-		return new CreateModuleStatementTreeImpl(createKeyword, moduleType, moduleKeyword, moduleName,
+		return new CreateModuleStatementTreeImpl(createKeyword, moduleType, moduleKeyword, indentifier,
 				moduleStatementsList, endKeyword, moduleKeyword2);
 	}
 
@@ -1518,8 +1520,8 @@ public class TreeFactory {
 				expression, semiToken);
 	}
 
-	public LabelTreeImpl label(InternalSyntaxToken labelName) {
-		return new LabelTreeImpl(labelName);
+	public LabelTreeImpl label(IdentifierTree identifierTree) {
+		return new LabelTreeImpl(identifierTree);
 	}
 
 	public IterateStatementTreeImpl iterateStatement(InternalSyntaxToken iterateKeyword, LabelTreeImpl label,
@@ -2194,5 +2196,17 @@ public class TreeFactory {
 	public StatementsTreeImpl statements(Optional<List<StatementTree>> listOfStatements){
 		return new StatementsTreeImpl(optionalList(listOfStatements));
 	}
+
+	public IdentifierTree identifierReference(InternalSyntaxToken identifier) {
+		return new IdentifierTreeImpl(Kind.IDENTIFIER_REFERENCE, identifier);
+	}
+
+	public IdentifierTree bindingIdentifier(InternalSyntaxToken identifier) {
+		return new IdentifierTreeImpl(Kind.BINDING_IDENTIFIER, identifier);
+	}
+	public IdentifierTree identifierName(InternalSyntaxToken identifier) {
+	    return new IdentifierTreeImpl(Kind.PROPERTY_IDENTIFIER, identifier);
+	}
+
 
 }

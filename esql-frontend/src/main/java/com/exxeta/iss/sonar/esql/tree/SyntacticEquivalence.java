@@ -14,6 +14,8 @@ import com.google.common.base.Objects;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import javax.annotation.Nullable;
 
 public final class SyntacticEquivalence {
@@ -91,14 +93,7 @@ public final class SyntacticEquivalence {
 	      return skipParentheses(((ParenthesisedExpressionTree) tree).expression());
 	    }else if (tree.is(Kind.CALL_EXPRESSION)){
 	    	CallExpressionTree call = (CallExpressionTree)tree;
-	    	List<Tree> children = new ArrayList<>();
-	    	Iterator<Tree> it = call.childrenIterator();
-	    	while (it.hasNext()){
-	    		Tree child = it.next();
-	    		if (child!=null){
-	    			children.add(child);
-	    		}
-	    	}
+	    	List<Tree> children = call.childrenStream().filter(b -> b!=null).collect(Collectors.toList());
 	    	if (children.size()==1 && children.get(0)instanceof ExpressionTree){
 	    		return skipParentheses((ExpressionTree)children.get(0));
 	    	}

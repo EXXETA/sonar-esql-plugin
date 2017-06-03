@@ -113,12 +113,12 @@ public class InternalSyntaxTrivia extends EsqlTree implements SyntaxTrivia {
   }
 
   @Override
-  public SyntaxToken getFirstToken() {
+  public SyntaxToken firstToken() {
     return this;
   }
 
   @Override
-  public SyntaxToken getLastToken() {
+  public SyntaxToken lastToken() {
     return this;
   }
 }

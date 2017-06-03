@@ -19,18 +19,20 @@ package com.exxeta.iss.sonar.esql.tree.impl.expression;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 import com.exxeta.iss.sonar.esql.api.symbols.Symbol;
 import com.exxeta.iss.sonar.esql.api.symbols.Type;
 import com.exxeta.iss.sonar.esql.api.symbols.TypeSet;
+import com.exxeta.iss.sonar.esql.api.symbols.Usage;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
-import com.exxeta.iss.sonar.esql.api.tree.symbols.Scope;
 import com.exxeta.iss.sonar.esql.api.tree.symbols.type.TypableTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
+import com.exxeta.iss.sonar.esql.tree.symbols.Scope;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterators;
@@ -39,6 +41,7 @@ public class IdentifierTreeImpl extends EsqlTree implements IdentifierTree, Typa
 
 	  private final InternalSyntaxToken nameToken;
 	  private final Kind kind;
+	  private Usage usage = null;
 	  private Symbol symbol = null;
 	  private TypeSet types = TypeSet.emptyTypeSet();
 	  private Scope scope;
@@ -69,9 +72,22 @@ public class IdentifierTreeImpl extends EsqlTree implements IdentifierTree, Typa
 	  }
 
 	  @Override
-	  public Symbol symbol() {
-	    return symbol;
+	  public Optional<Usage> symbolUsage() {
+	    return Optional.ofNullable(usage);
 	  }
+
+	  @Override
+	  public final Optional<Symbol> symbol() {
+	    if (usage == null) {
+	      return Optional.empty();
+	    }
+	    return Optional.of(usage.symbol());
+	  }
+
+	  public void setSymbolUsage(Usage usage) {
+	    this.usage = usage;
+	  }
+
 
 	  public void setSymbol(Symbol symbol) {
 	    this.symbol = symbol;

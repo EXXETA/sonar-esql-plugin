@@ -32,7 +32,6 @@ import org.sonar.sslr.grammar.GrammarRuleKey;
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
-import com.exxeta.iss.sonar.esql.api.tree.symbols.SymbolModelImpl;
 import com.exxeta.iss.sonar.esql.api.visitors.EsqlVisitorContext;
 import com.exxeta.iss.sonar.esql.compat.CompatibleInputFile;
 import com.exxeta.iss.sonar.esql.parser.EsqlGrammar;
@@ -40,6 +39,7 @@ import com.exxeta.iss.sonar.esql.parser.EsqlLegacyGrammar;
 import com.exxeta.iss.sonar.esql.parser.EsqlNodeBuilder;
 import com.exxeta.iss.sonar.esql.parser.TreeFactory;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
+import com.exxeta.iss.sonar.esql.tree.symbols.SymbolModelImpl;
 import com.google.common.base.Charsets;
 import com.sonar.sslr.api.typed.ActionParser;
 

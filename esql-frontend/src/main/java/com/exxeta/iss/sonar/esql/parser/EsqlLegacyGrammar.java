@@ -19,6 +19,7 @@ package com.exxeta.iss.sonar.esql.parser;
 
 import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.COLON;
 import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.COMMA;
+import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.CONCAT;
 import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.DIV;
 import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.DOT;
 import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.EQUAL;
@@ -37,7 +38,6 @@ import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.RCURLYBRACE;
 import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.RPARENTHESIS;
 import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.SEMI;
 import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.STAR;
-import static com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator.CONCAT;
 
 import org.sonar.sslr.grammar.GrammarRuleKey;
 import org.sonar.sslr.grammar.LexerlessGrammarBuilder;
@@ -49,16 +49,17 @@ import com.exxeta.iss.sonar.esql.lexer.EsqlLexer;
 import com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator;
 import com.exxeta.iss.sonar.esql.lexer.EsqlReservedKeyword;
 import com.sonar.sslr.api.GenericTokenType;
+import static com.exxeta.iss.sonar.esql.lexer.EsqlTokenType.IDENTIFIER;
 
 public enum EsqlLegacyGrammar implements GrammarRuleKey {
 	EOF, PROGRAM, EOS, LITERAL, BOOLEAN_LITERAL, NULL_LITERAL, NUMERIC_LITERAL, HEX_LITERAL, 
-	STRING_LITERAL, SPACING, IDENTIFIER, IDENTIFIER_WO_QUOTES, IDENTIFIER_WITH_QUOTES
+	STRING_LITERAL, SPACING, IDENTIFIER_NAME, IDENTIFIER_NAME_WO_QUOTES, IDENTIFIER_NAME_WITH_QUOTES
 	, DATE_LITERAL, TIME_LITERAL, TIMESTAMP_LITERAL, 
 	 SPACING_NO_LINE_BREAK_NOT_FOLLOWED_BY_LINE_BREAK, SPACING_NO_LB, NEXT_NOT_LB, 
 	SPACING_NOT_SKIPPED, LINE_TERMINATOR_SEQUENCE, EOS_NO_LB, LETTER_OR_DIGIT, reservedKeyword, 
 	intervalLiteral, intervalQualifier, keyword, nonReservedKeyword, dataType, 
 	leftHandSideExpression, unaryExpression, multiplicativeExpression, additiveExpression, 
-	relationalExpression, equalityExpression, primaryExpression;
+	relationalExpression, equalityExpression, primaryExpression, IDENTIFIER_REFERENCE, BINDING_IDENTIFIER;
 
 	private final String internalName;
 
@@ -110,9 +111,9 @@ public enum EsqlLegacyGrammar implements GrammarRuleKey {
 
 		b.rule(EOF).is(b.token(GenericTokenType.EOF, b.endOfInput())).skip();
 
-		b.rule(IDENTIFIER).is(b.firstOf(IDENTIFIER_WO_QUOTES, IDENTIFIER_WITH_QUOTES));
-		b.rule(IDENTIFIER_WO_QUOTES).is(b.nextNot(LITERAL), SPACING, b.regexp(EsqlLexer.IDENTIFIER));
-		b.rule(IDENTIFIER_WITH_QUOTES).is(SPACING, b.regexp(EsqlLexer.IDENTIFIER_WITH_QUOTES));
+		b.rule(IDENTIFIER).is(b.firstOf(IDENTIFIER_NAME_WO_QUOTES, IDENTIFIER_NAME_WITH_QUOTES));
+		b.rule(IDENTIFIER_NAME_WO_QUOTES).is(b.nextNot(LITERAL), SPACING, b.regexp(EsqlLexer.IDENTIFIER));
+		b.rule(IDENTIFIER_NAME_WITH_QUOTES).is(SPACING, b.regexp(EsqlLexer.IDENTIFIER_WITH_QUOTES));
 		b.rule(NUMERIC_LITERAL).is(SPACING, b.token(EsqlTokenType.NUMBER, b.regexp(EsqlLexer.NUMERIC_LITERAL)),
 				SPACING);
 		b.rule(STRING_LITERAL).is(SPACING, b.token(EsqlTokenType.STRING, b.regexp(EsqlLexer.LITERAL)), SPACING);
@@ -211,6 +212,9 @@ public enum EsqlLegacyGrammar implements GrammarRuleKey {
 	public static LexerlessGrammarBuilder createGrammarBuilder() {
 		LexerlessGrammarBuilder b = LexerlessGrammarBuilder.create();
 
+		 b.rule(IDENTIFIER_NAME).is(
+			      SPACING,IDENTIFIER);
+		
 		lexical(b);
 		b.setRootRule(PROGRAM);
 		return b;

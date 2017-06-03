@@ -1,7 +1,7 @@
 package com.exxeta.iss.sonar.esql.check;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.sonar.check.Rule;
 
@@ -27,13 +27,7 @@ public class IfConditionalAlwaysTrueOrFalseCheck extends DoubleDispatchVisitorCh
 		if (tree.is(Kind.BOOLEAN_LITERAL)) {
 			addIssue(tree, MESSAGE);
 		} else {
-			Iterator<Tree> iterator = tree.childrenIterator();
-			ArrayList<Tree> list = new ArrayList<>();
-			while (iterator.hasNext()){
-				Tree child = iterator.next();
-				if (child!=null)
-					list.add(child);
-			}
+			List<Tree> list = tree.childrenStream().filter(b -> b != null).collect(Collectors.toList());
 			if (list.size()==1){
 				if (list.get(0).is(Kind.BOOLEAN_LITERAL)){
 					addIssue(list.get(0), MESSAGE);
