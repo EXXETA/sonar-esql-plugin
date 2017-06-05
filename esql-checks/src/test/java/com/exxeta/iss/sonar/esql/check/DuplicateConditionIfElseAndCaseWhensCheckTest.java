@@ -12,6 +12,7 @@ public class DuplicateConditionIfElseAndCaseWhensCheckTest {
 		 EsqlCheckVerifier.issues(new DuplicateConditionIfElseAndCaseWhensCheck(), new File("src/test/resources/caseTest.esql"))
 	        .next().atLine(8).withMessage("This WHEN duplicates the one on line 6.")
 	        .next().atLine(20).withMessage("This WHEN duplicates the one on line 18.")
+	        .next().atLine(31).withMessage("This WHEN duplicates the one on line 29.")
 	        .noMore();
 	  }
 	@Test

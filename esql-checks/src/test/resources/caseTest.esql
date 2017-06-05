@@ -25,6 +25,13 @@ CREATE COMPUTE MODULE ProcessCardAccount
 		    CALL handleError();
 		END CASE;
 
+		CASE size
+		  WHEN minimum + 0 THEN
+		    SET description = 'small';
+		  WHEN minimum + 0 THEN
+		    SET description = 'medium';        
+		END CASE;
+
 	END;
 
 END MODULE;

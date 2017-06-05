@@ -1,0 +1,29 @@
+CREATE COMPUTE MODULE CardinalityInLoop
+
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		WHILE ( I < CARDINALITY (InputRoot.MRM.A.B.C[])) DO
+			SET I = I + 1;
+			
+		END WHILE;
+		
+		SET ARRAY_SIZE = CARDINALITY (InputRoot.MRM.A.B.C[]);
+		WHILE ( I < ARRAY_SIZE ) DO
+			SET I = I + 1;
+			
+		END WHILE;
+		
+		L : LOOP
+			SET I = I + 1;
+			IF I > CARDINALITY (InputRoot.MRM.A.B.C[]) THEN
+				LEAVE L;
+			END IF;
+		END LOOP L;
+		
+		REPEAT
+			SET I = I + 1;
+		UNTIL ( I > CARDINALITY (InputRoot.MRM.A.B.C[]))
+		END REPEAT;
+	END;
+
+END MODULE;

@@ -1,0 +1,22 @@
+<p>This rule applies whenever an <code>CASE</code> statement is not followed by an <code>ELSE</code> statement.</p>
+<p>The requirement for a <code>ELSE</code> statement is defensive programming. </p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+	CASE size
+	WHEN 0 THEN
+	    SET description = 'small';
+	WHEN 1 THEN
+	    SET description = 'medium';        
+	END CASE;</pre>
+<h2>Compliant Solution</h2>
+<pre>
+	CASE size
+	WHEN 0 THEN
+	    SET description = 'small';
+	WHEN 1 THEN
+	    SET description = 'medium';        
+	ELSE
+	    SET description = 'unknown';
+	    CALL handleError();
+	END CASE;</pre>
+</pre>

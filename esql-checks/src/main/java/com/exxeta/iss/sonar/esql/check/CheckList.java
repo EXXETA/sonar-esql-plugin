@@ -66,16 +66,10 @@ public final class CheckList {
         HardCodedCredentialsCheck.class,
         HardcodedIpCheck.class,
         HardcodedURICheck.class,
-        BooleanLiteralCheck.class
-        /*
-        
-        IdenticalOperandOnBinaryExpressionCheck
-        SwitchWithTooManyCasesCheck
-
-        FloatEqualityCheck
-        
-        
-        */
+        BooleanLiteralCheck.class,
+        CaseWithoutElseCheck.class,
+        CardinalityInLoopCheck.class,
+        LoopWithoutLeaveCheck.class
         );
   }
 
