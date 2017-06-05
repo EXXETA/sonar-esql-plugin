@@ -69,7 +69,7 @@ public class UnusedRoutineCheck extends DoubleDispatchVisitorCheck {
 
 	@Override
 	public void visitCreateProcedureStatement(CreateProcedureStatementTree tree) {
-		declaredProcedures.put(tree.identifier().text(), tree);
+		declaredProcedures.put(tree.identifier().name(), tree);
 		super.visitCreateProcedureStatement(tree);
 	}
 

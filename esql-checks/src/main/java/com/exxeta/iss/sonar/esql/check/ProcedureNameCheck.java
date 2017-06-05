@@ -53,8 +53,8 @@ public class ProcedureNameCheck extends DoubleDispatchVisitorCheck {
 	@Override
 	public void visitCreateProcedureStatement(CreateProcedureStatementTree tree) {
 		super.visitCreateProcedureStatement(tree);
-		if (!pattern.matcher(tree.identifier().text()).matches()){
-			 addIssue(new PreciseIssue(this, new IssueLocation(tree.identifier(), tree.identifier(), "Rename procedure \""+tree.identifier().text()+"\" to match the regular expression "+format+".")));
+		if (!pattern.matcher(tree.identifier().name()).matches()){
+			 addIssue(new PreciseIssue(this, new IssueLocation(tree.identifier(), tree.identifier(), "Rename procedure \""+tree.identifier().name()+"\" to match the regular expression "+format+".")));
 			 
 		}
 		

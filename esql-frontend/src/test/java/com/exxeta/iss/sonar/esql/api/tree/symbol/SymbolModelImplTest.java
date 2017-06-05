@@ -26,25 +26,13 @@ public class SymbolModelImplTest extends EsqlTreeModelTest<ProgramTree> {
     assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.FUNCTION)).extracting("name").containsOnly("f", "func");
     assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.PROCEDURE)).extracting("name").containsOnly("p1", "p2");
 
-    assertThat(SYMBOL_MODEL.getSymbols("a")).hasSize(3);
-    assertThat(SYMBOL_MODEL.getSymbols("arguments")).hasSize(2);
-    assertThat(SYMBOL_MODEL.getSymbols("this")).hasSize(3);
-    assertThat(SYMBOL_MODEL.getSymbols("Object")).hasSize(1);
-    assertThat(SYMBOL_MODEL.getSymbols("window")).hasSize(1);
+    assertThat(SYMBOL_MODEL.getSymbols("a")).hasSize(2);
   }
 
   @Test
   public void symbols_scope() {
     Symbol f = (Symbol) SYMBOL_MODEL.getSymbols("f").toArray()[0];
     assertThat(f.scope().tree().is(Tree.Kind.PROGRAM)).isTrue();
-    Symbol e = (Symbol) SYMBOL_MODEL.getSymbols("e").toArray()[0];
-    assertThat(e.scope().tree().is(Tree.Kind.ALIASED_EXPRESSION)).isTrue();
-  }
-
-  @Test
-  public void for_object_loops() throws Exception {
-    Symbol i = (Symbol) SYMBOL_MODEL.getSymbols("i").toArray()[0];
-    assertThat(i.usages()).hasSize(2);
   }
 
   @Test
