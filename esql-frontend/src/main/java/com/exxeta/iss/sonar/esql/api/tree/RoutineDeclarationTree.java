@@ -17,8 +17,13 @@
  */
 package com.exxeta.iss.sonar.esql.api.tree;
 
+import com.exxeta.iss.sonar.esql.api.tree.statement.ParameterTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.RoutineBodyTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
+import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
 
 public interface RoutineDeclarationTree extends StatementTree{
-
+	RoutineBodyTree routineBody();
+	SeparatedList<ParameterTree> parameterList();
+	
 }

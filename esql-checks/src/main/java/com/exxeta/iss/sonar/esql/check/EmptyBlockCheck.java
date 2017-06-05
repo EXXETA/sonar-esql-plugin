@@ -34,7 +34,7 @@ public class EmptyBlockCheck extends DoubleDispatchVisitorCheck {
 @Override
 public void visitStatements(StatementsTree tree) {
 	if (tree.statements().isEmpty()){
-		addIssue(new PreciseIssue(this, new IssueLocation(tree.getParent() , MESSAGE)));
+		addIssue(new PreciseIssue(this, new IssueLocation(tree.parent() , MESSAGE)));
 	}
 	super.visitStatements(tree);
 }

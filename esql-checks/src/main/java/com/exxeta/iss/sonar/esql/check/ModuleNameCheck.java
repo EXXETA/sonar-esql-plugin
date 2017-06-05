@@ -49,10 +49,10 @@ public class ModuleNameCheck extends DoubleDispatchVisitorCheck {
 	@Override
 	public void visitCreateModuleStatement(CreateModuleStatementTree tree) {
 		super.visitCreateModuleStatement(tree);
-		if (!pattern.matcher(tree.moduleName().text()).matches()) {
+		if (!pattern.matcher(tree.moduleName().name()).matches()) {
 			addIssue(
 					new PreciseIssue(this, new IssueLocation(tree.moduleName(), tree.moduleName(), "Rename module \""
-							+ tree.moduleName().text() + "\" to match the regular expression " + format + ".")));
+							+ tree.moduleName().name() + "\" to match the regular expression " + format + ".")));
 
 		}
 	}

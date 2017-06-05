@@ -22,7 +22,7 @@ import java.util.Set;
 import javax.annotation.Nullable;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
-import com.exxeta.iss.sonar.esql.api.tree.symbols.Scope;
+import com.exxeta.iss.sonar.esql.tree.symbols.Scope;
 
 
 public interface SymbolModel {

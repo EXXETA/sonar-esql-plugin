@@ -22,6 +22,7 @@ import java.util.Iterator;
 import com.google.common.collect.Iterators;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.LabelTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
@@ -29,14 +30,14 @@ import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 
 public class LabelTreeImpl extends EsqlTree implements LabelTree {
 
-	private final InternalSyntaxToken name;
+	private final IdentifierTree name;
 
-	public LabelTreeImpl(InternalSyntaxToken labelName) {
-		this.name = labelName;
+	public LabelTreeImpl(IdentifierTree name) {
+		this.name = name;
 	}
 
 	@Override
-	public InternalSyntaxToken name() {
+	public IdentifierTree name() {
 		return name;
 	}
 

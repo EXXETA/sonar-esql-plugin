@@ -19,7 +19,7 @@ package com.exxeta.iss.sonar.esql.api.symbols;
 
 import java.util.Set;
 
-import com.exxeta.iss.sonar.esql.api.tree.symbols.Scope;
+import com.exxeta.iss.sonar.esql.tree.symbols.Scope;
 
 
 public interface SymbolModelBuilder {

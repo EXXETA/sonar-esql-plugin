@@ -28,7 +28,7 @@ public class IdentifierTest {
 
 	@Test
 	public void identifier(){
-		assertThat(EsqlLegacyGrammar.IDENTIFIER)
+		assertThat(EsqlLegacyGrammar.IDENTIFIER_NAME)
 		.matches("data")
 		.matches("\"data\"")
 		.matches("\"position-b\"")

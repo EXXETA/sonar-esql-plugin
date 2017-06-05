@@ -17,7 +17,7 @@
  */
 package com.exxeta.iss.sonar.esql.api.tree;
 
-import java.util.Iterator;
+import java.util.stream.Stream;
 
 import org.sonar.sslr.grammar.GrammarRuleKey;
 
@@ -25,6 +25,7 @@ import com.exxeta.iss.sonar.esql.api.tree.expression.BetweenExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.BinaryExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.CallExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.InExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.IntervalExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.IsExpressionTree;
@@ -106,15 +107,24 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.WhileStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.Kinds;
 import com.exxeta.iss.sonar.esql.tree.expression.LiteralTree;
+import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
 
 public interface Tree {
 	boolean is(Kind... kind);
 
-	void accept(DoubleDispatchVisitor visitor);
+  SyntaxToken lastToken();
 
-    Tree getParent();
-    
-	Iterator<Tree> childrenIterator();
+  SyntaxToken firstToken();
+
+  boolean isAncestorOf(Tree tree);
+
+  void accept(DoubleDispatchVisitor visitor);
+
+  Stream<EsqlTree> descendants();
+
+  Stream<Tree> childrenStream();
+
+  Tree parent();
 
 
 	public enum Kind implements GrammarRuleKey, Kinds {
@@ -245,7 +255,10 @@ public interface Tree {
 		STATEMENT(StatementTree.class), 
 		PATH_ELEMENT_NAMESPACE(PathElementNamespaceTree.class), 
 		PATH_ELEMENT_TYPE(PathElementTypeTree.class), 
-		PATH_ELEMENT_NAME(PathElementNameTree.class);
+		PATH_ELEMENT_NAME(PathElementNameTree.class), 
+		IDENTIFIER_REFERENCE(IdentifierTree.class), 
+		BINDING_IDENTIFIER(IdentifierTree.class),
+		PROPERTY_IDENTIFIER(IdentifierTree.class);
 
 		final Class<? extends Tree> associatedInterface;
 

@@ -18,6 +18,12 @@
 package com.exxeta.iss.sonar.esql.tree.impl;
 
 import java.util.Iterator;
+import java.util.Objects;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
+
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 
@@ -26,7 +32,7 @@ public abstract class EsqlTree implements Tree {
 	private Tree parent;
 
 	public int getLine() {
-		return getFirstToken().line();
+		return firstToken().line();
 	}
 
 	@Override
@@ -43,19 +49,54 @@ public abstract class EsqlTree implements Tree {
 
 	public abstract Kind getKind();
 
+	 @Override
+	  public boolean isAncestorOf(Tree tree) {
+	    Tree parentTree = tree.parent();
+	    if (this.equals(parentTree)) {
+	      return true;
+	    }
+	    if (parentTree == null) {
+	      return false;
+	    }
+	    return this.isAncestorOf(parentTree);
+	  }
+	 
+	 @Override
+	  public Stream<EsqlTree> descendants() {
+	    if (this.isLeaf()) {
+	      return Stream.empty();
+	    }
+	    Stream<EsqlTree> kins = childrenStream().filter(Objects::nonNull)
+	      .filter(tree -> tree instanceof EsqlTree)
+	      .map(tree -> (EsqlTree) tree);
+	    for (Iterator<Tree> iterator = this.childrenIterator(); iterator.hasNext();) {
+	      Tree tree = iterator.next();
+	      if (tree != null) {
+	        kins = Stream.concat(kins, tree.descendants());
+	      }
+	    }
+	    return kins;
+	  }
+	 
+	  @Override
+	  public Stream<Tree> childrenStream() {
+	    return StreamSupport.stream(Spliterators.spliteratorUnknownSize(childrenIterator(), Spliterator.ORDERED), false);
+	  }
+
+	
 	public abstract Iterator<Tree> childrenIterator();
 
 	public boolean isLeaf() {
 		return false;
 	}
 
-	public SyntaxToken getLastToken() {
+	public SyntaxToken lastToken() {
 		SyntaxToken lastToken = null;
 		Iterator<Tree> childrenIterator = childrenIterator();
 		while (childrenIterator.hasNext()) {
 			EsqlTree child = (EsqlTree) childrenIterator.next();
 			if (child != null) {
-				SyntaxToken childLastToken = child.getLastToken();
+				SyntaxToken childLastToken = child.lastToken();
 				if (childLastToken != null) {
 					lastToken = childLastToken;
 				}
@@ -64,7 +105,7 @@ public abstract class EsqlTree implements Tree {
 		return lastToken;
 	}
 
-	public SyntaxToken getFirstToken() {
+	public SyntaxToken firstToken() {
 		Iterator<Tree> childrenIterator = childrenIterator();
 		Tree child;
 		do {
@@ -74,14 +115,14 @@ public abstract class EsqlTree implements Tree {
 				throw new IllegalStateException("Tree has no non-null children " + getKind());
 			}
 		} while (child == null);
-		return ((EsqlTree) child).getFirstToken();
+		return ((EsqlTree) child).firstToken();
 	}
 
 	public void setParent(Tree parent) {
 		this.parent = parent;
 	}
 
-	public Tree getParent() {
+	public Tree parent() {
 		return parent;
 	}
 }

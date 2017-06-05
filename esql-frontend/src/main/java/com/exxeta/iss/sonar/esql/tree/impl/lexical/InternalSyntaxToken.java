@@ -134,12 +134,12 @@ public class InternalSyntaxToken extends EsqlTree implements SyntaxToken {
 	  }
 
 	  @Override
-	  public SyntaxToken getFirstToken() {
+	  public SyntaxToken firstToken() {
 	    return this;
 	  }
 
 	  @Override
-	  public SyntaxToken getLastToken() {
+	  public SyntaxToken lastToken() {
 	    return this;
 	  }
 
