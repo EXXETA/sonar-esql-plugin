@@ -10,7 +10,7 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.WhileStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.CallExpressionTreeImpl;
 
-@Rule(key="CardinalityInLoop")
+@Rule(key = "CardinalityInLoop")
 public class CardinalityInLoopCheck extends DoubleDispatchVisitorCheck {
 
 	private static final String MESSAGE = "Avoid using CARDINALITY in loops.";
@@ -33,12 +33,11 @@ public class CardinalityInLoopCheck extends DoubleDispatchVisitorCheck {
 		super.visitLoopStatement(tree);
 	}
 
-	
 	private void checkCardinalityInDecendants(Tree tree) {
-		 tree.descendants().filter(d -> d.is(Kind.CALL_EXPRESSION))
-				.filter(d -> (((CallExpressionTreeImpl) d).functionName().pathElement().name().name().text())
-						.equalsIgnoreCase("CARDINALITY")).forEach(d->addIssue(d, MESSAGE));
+		tree.descendants().filter(d -> d.is(Kind.CALL_EXPRESSION))
+				.filter(d -> "CARDINALITY".equalsIgnoreCase(
+						(((CallExpressionTreeImpl) d).functionName().pathElement().name().name().text())))
+				.forEach(d -> addIssue(d, MESSAGE));
 	}
-
 
 }

@@ -113,9 +113,7 @@ public class HoistedSymbolVisitor extends DoubleDispatchVisitor {
 	}
 
 	private void addUsages(DeclareStatementTree tree) {
-		Scope scope = currentScope;
-
-		scope = getFunctionScope();
+		Scope scope = getFunctionScope();
 
 		for (IdentifierTree bindingElement : tree.nameList()) {
 			Symbol.Kind variableKind = getVariableKind(tree);

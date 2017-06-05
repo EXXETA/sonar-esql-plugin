@@ -70,6 +70,63 @@ public final class CheckList {
         CaseWithoutElseCheck.class,
         CardinalityInLoopCheck.class,
         LoopWithoutLeaveCheck.class
+        /*
+        
+        IdenticalOperandOnBinaryExpressionCheck
+        SwitchWithTooManyCasesCheck
+
+        FloatEqualityCheck
+        
+        - Parameters should have a direction
+
+- EXTERNAL immer mit initial value
+
+- Environment Variables in the Variables-Subtree
+
+- Use the SOAP domain not soap in the xmlnsc domain
+
+- Use the xmlnsc domain not the xml or xmlns domain
+
+-Duplicate function or procedure name
+
+- Comments and code in the same line
+
+- No comment before modlue, function or procedure
+
+- Uppercase keywords
+
+- IF/ELSEIF should be CASE
+
+- Too many parameter in function/procedure
+
+- DELETE FROM ohne WHERE
+
+- BITSTREAM is deprecated
+
+- DO NOT USE SLEEP
+
+- Do not use SELECT *
+
+- LOOP without LEAVE
+
+- Unreachable code after THROW or RETURN
+
+- Empty main method (Only retrun true)
+
+- Empty method
+
+- SOAP version should be 1.2 or 1.1
+
+- Unknown MessageDomain
+
+- Do not use EVAL
+
+- Unused variable
+
+
+        
+        
+        */
         );
   }
 

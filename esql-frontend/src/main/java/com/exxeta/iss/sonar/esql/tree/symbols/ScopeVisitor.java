@@ -66,13 +66,13 @@ public class ScopeVisitor extends DoubleDispatchVisitor {
   }
 
   @Override
-  public void visitBlock(BlockTree tree) {
+  public void visitBeginEndStatement(BeginEndStatementTree tree) {
     if (isScopeAlreadyCreated(tree)) {
-      super.visitBlock(tree);
+      super.visitBeginEndStatement(tree);
 
     } else {
       newBlockScope(tree);
-      super.visitBlock(tree);
+      super.visitBeginEndStatement(tree);
       leaveScope();
     }
   }
@@ -146,7 +146,7 @@ public class ScopeVisitor extends DoubleDispatchVisitor {
     }
   }
 
-  private boolean isScopeAlreadyCreated(BlockTree tree) {
+  private boolean isScopeAlreadyCreated(BeginEndStatementTree tree) {
     return skippedBlocks.contains(tree);
   }
 
