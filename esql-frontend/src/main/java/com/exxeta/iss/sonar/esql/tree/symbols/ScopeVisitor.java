@@ -28,8 +28,11 @@ import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.statement.BeginEndStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.BlockTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.CaseStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateFunctionStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.LoopStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.RepeatStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateFunctionStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateProcedureStatementTreeImpl;
@@ -73,6 +76,13 @@ public class ScopeVisitor extends DoubleDispatchVisitor {
       leaveScope();
     }
   }
+  
+  @Override
+	public void visitCaseStatement(CaseStatementTree tree) {
+	newBlockScope(tree);
+		super.visitCaseStatement(tree);
+		leaveScope();
+	}
 
   @Override
 	public void visitCreateFunctionStatement(CreateFunctionStatementTree tree) {
@@ -96,6 +106,20 @@ public class ScopeVisitor extends DoubleDispatchVisitor {
 	    leaveScope();
 	}
 
+  @Override
+	public void visitRepeatStatement(RepeatStatementTree tree) {
+	  	newBlockScope(tree);
+		super.visitRepeatStatement(tree);
+		leaveScope();
+	}
+  
+  @Override
+	public void visitLoopStatement(LoopStatementTree tree) {
+		newBlockScope(tree);
+		super.visitLoopStatement(tree);
+		leaveScope();
+	}
+  
   private void leaveScope() {
     if (currentScope != null) {
       currentScope = currentScope.outer();
@@ -126,4 +150,6 @@ public class ScopeVisitor extends DoubleDispatchVisitor {
     return skippedBlocks.contains(tree);
   }
 
+  //TODO other loops?
+  
 }
