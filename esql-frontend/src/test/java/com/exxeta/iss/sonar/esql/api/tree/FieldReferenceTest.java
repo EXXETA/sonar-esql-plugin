@@ -55,13 +55,13 @@ public class FieldReferenceTest extends EsqlTreeModelTest<FieldReferenceTree> {
 	@Test
 	public void fielReference() {
 		assertThat(Kind.FIELD_REFERENCE)
+		.matches("(XML.Element)NSpace1:Element1[2]")
 			.matches("a")
 			.matches("InputRoot")
 			.notMatches("a.")
 			.matches("a.b[]")
 			.matches("a.b[].c")
 			.notMatches("")
-			.matches("(XML.Element)NSpace1:Element1[2]")
 			.matches("Body.Invoice.Purchases.\"Item\"[]");
 		
 	}

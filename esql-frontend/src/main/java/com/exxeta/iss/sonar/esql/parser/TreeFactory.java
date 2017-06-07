@@ -1281,7 +1281,7 @@ public class TreeFactory {
 		if (firstOf instanceof FunctionTree) {
 			return new CallExpressionTreeImpl((FunctionTree) firstOf);
 		} else if (firstOf instanceof Tuple) {
-			Tuple<FieldReferenceTreeImpl, ParameterListTreeImpl> t = (Tuple) firstOf;
+			Tuple<VariableReferenceTree, ParameterListTreeImpl> t = (Tuple) firstOf;
 			return new CallExpressionTreeImpl(t.first(), t.second());
 		} else if (firstOf instanceof ExpressionTree) {
 			return (ExpressionTree)firstOf;

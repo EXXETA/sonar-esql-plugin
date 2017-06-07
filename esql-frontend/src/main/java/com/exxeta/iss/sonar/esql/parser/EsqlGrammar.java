@@ -742,7 +742,7 @@ public class EsqlGrammar {
 	
 	public ExpressionTree CALL_EXPRESSION() {
 		return b.<ExpressionTree>nonterminal(Kind.CALL_EXPRESSION).is(f.callExpression(
-				b.firstOf(FUNCTION(), PRIMARY_EXPRESSION(), f.newTuple24(FIELD_REFERENCE(), ARGUMENT_CLAUSE()), VARIABLE_REFERENCE())));
+				b.firstOf(FUNCTION(), PRIMARY_EXPRESSION(), f.newTuple24(VARIABLE_REFERENCE(), ARGUMENT_CLAUSE()), VARIABLE_REFERENCE())));
 	}
 
 	public ParameterListTreeImpl ARGUMENT_CLAUSE() {
@@ -843,7 +843,7 @@ public class EsqlGrammar {
 
 	public FieldReferenceTreeImpl FIELD_REFERENCE() {
 		return b.<FieldReferenceTreeImpl>nonterminal(Kind.FIELD_REFERENCE)
-				.is(f.fieldReference(b.firstOf(PATH_ELEMENT(), b.token(EsqlLegacyGrammar.IDENTIFIER_NAME) ),
+				.is(f.fieldReference(PATH_ELEMENT(),
 						b.zeroOrMore(f.newTuple21(b.token(EsqlPunctuator.DOT), PATH_ELEMENT()))));
 	}
 

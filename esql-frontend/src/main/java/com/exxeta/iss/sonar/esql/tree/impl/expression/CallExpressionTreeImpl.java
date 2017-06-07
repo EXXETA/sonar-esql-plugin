@@ -45,8 +45,8 @@ public class CallExpressionTreeImpl extends EsqlTree implements CallExpressionTr
 		this.function = function;
 	}
 
-	public CallExpressionTreeImpl(FieldReferenceTreeImpl functionName, ParameterListTreeImpl parameters) {
-		this.variableReference = functionName;
+	public CallExpressionTreeImpl(VariableReferenceTree variableReference, ParameterListTreeImpl parameters) {
+		this.variableReference = variableReference;
 		this.parameters = parameters;
 	}
 

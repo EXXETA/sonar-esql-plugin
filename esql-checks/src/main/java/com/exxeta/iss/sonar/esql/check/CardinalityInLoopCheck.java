@@ -4,6 +4,7 @@ import org.sonar.check.Rule;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.LoopStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.RepeatStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.WhileStatementTree;
@@ -35,8 +36,9 @@ public class CardinalityInLoopCheck extends DoubleDispatchVisitorCheck {
 
 	private void checkCardinalityInDecendants(Tree tree) {
 		tree.descendants().filter(d -> d.is(Kind.CALL_EXPRESSION))
+			.filter(d -> ((CallExpressionTreeImpl) d).functionName().is(Kind.IDENTIFIER_REFERENCE))
 				.filter(d -> "CARDINALITY".equalsIgnoreCase(
-						(((CallExpressionTreeImpl) d).functionName().pathElement().name().name().text())))
+						(((IdentifierTree)((CallExpressionTreeImpl) d).functionName()).name())))
 				.forEach(d -> addIssue(d, MESSAGE));
 	}
 

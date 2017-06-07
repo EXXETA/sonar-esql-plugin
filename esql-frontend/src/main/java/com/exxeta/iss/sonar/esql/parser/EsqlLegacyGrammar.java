@@ -111,7 +111,9 @@ public enum EsqlLegacyGrammar implements GrammarRuleKey {
 
 		b.rule(EOF).is(b.token(GenericTokenType.EOF, b.endOfInput())).skip();
 
-		b.rule(IDENTIFIER).is(b.firstOf(IDENTIFIER_NAME_WO_QUOTES, IDENTIFIER_NAME_WITH_QUOTES));
+		b.rule(IDENTIFIER).is(b.nextNot(LITERAL), SPACING, b.regexp(EsqlLexer.IDENTIFIER), b.nextNot(COLON), b.nextNot(DOT));
+		 b.rule(IDENTIFIER_NAME).is(
+			      SPACING,b.firstOf(IDENTIFIER_NAME_WO_QUOTES, IDENTIFIER_NAME_WITH_QUOTES));
 		b.rule(IDENTIFIER_NAME_WO_QUOTES).is(b.nextNot(LITERAL), SPACING, b.regexp(EsqlLexer.IDENTIFIER));
 		b.rule(IDENTIFIER_NAME_WITH_QUOTES).is(SPACING, b.regexp(EsqlLexer.IDENTIFIER_WITH_QUOTES));
 		b.rule(NUMERIC_LITERAL).is(SPACING, b.token(EsqlTokenType.NUMBER, b.regexp(EsqlLexer.NUMERIC_LITERAL)),
@@ -212,8 +214,6 @@ public enum EsqlLegacyGrammar implements GrammarRuleKey {
 	public static LexerlessGrammarBuilder createGrammarBuilder() {
 		LexerlessGrammarBuilder b = LexerlessGrammarBuilder.create();
 
-		 b.rule(IDENTIFIER_NAME).is(
-			      SPACING,IDENTIFIER);
 		
 		lexical(b);
 		b.setRootRule(PROGRAM);
