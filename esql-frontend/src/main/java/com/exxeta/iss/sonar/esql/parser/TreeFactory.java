@@ -33,6 +33,7 @@ import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.VariableReferenceTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.AliasedExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.AliasedFieldReferenceTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.FunctionTree;
@@ -1285,7 +1286,7 @@ public class TreeFactory {
 		} else if (firstOf instanceof ExpressionTree) {
 			return (ExpressionTree)firstOf;
 		} else {
-			return new CallExpressionTreeImpl((FieldReferenceTreeImpl) firstOf);
+			return new CallExpressionTreeImpl((VariableReferenceTree) firstOf);
 		}
 	}
 
@@ -1513,11 +1514,16 @@ public class TreeFactory {
 
 	}
 
-	public SetStatementTreeImpl setStatement(InternalSyntaxToken setKeyword, FieldReferenceTreeImpl fieldReference,
+	public SetStatementTreeImpl setStatement(InternalSyntaxToken setKeyword, ExpressionTree name,
 			Optional<InternalSyntaxToken> type, InternalSyntaxToken equal, ExpressionTree expression,
 			InternalSyntaxToken semiToken) {
-		return new SetStatementTreeImpl(setKeyword, fieldReference, type.isPresent() ? type.get() : null, equal,
-				expression, semiToken);
+		if (name instanceof FieldReferenceTreeImpl){
+			return new SetStatementTreeImpl(setKeyword, (FieldReferenceTreeImpl)name, type.isPresent() ? type.get() : null, equal,
+					expression, semiToken);
+		} else {
+			return new SetStatementTreeImpl(setKeyword, (IdentifierTreeImpl)name, type.isPresent() ? type.get() : null, equal,
+					expression, semiToken);
+		}
 	}
 
 	public LabelTreeImpl label(IdentifierTree identifierTree) {
@@ -2206,6 +2212,10 @@ public class TreeFactory {
 	}
 	public IdentifierTree identifierName(InternalSyntaxToken identifier) {
 	    return new IdentifierTreeImpl(Kind.PROPERTY_IDENTIFIER, identifier);
+	}
+
+	public VariableReferenceTree variableReference(VariableReferenceTree variableReference) {
+		return variableReference;
 	}
 
 

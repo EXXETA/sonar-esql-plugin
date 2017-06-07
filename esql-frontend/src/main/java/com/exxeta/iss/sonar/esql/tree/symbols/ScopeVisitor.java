@@ -27,7 +27,6 @@ import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.statement.BeginEndStatementTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.BlockTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CaseStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateFunctionStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree;

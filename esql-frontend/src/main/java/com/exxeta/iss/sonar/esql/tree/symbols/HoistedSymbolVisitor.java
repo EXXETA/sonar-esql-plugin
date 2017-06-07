@@ -8,7 +8,7 @@ import com.exxeta.iss.sonar.esql.api.symbols.Usage;
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.BlockTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.BeginEndStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CaseStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateFunctionStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree;
@@ -41,15 +41,16 @@ public class HoistedSymbolVisitor extends DoubleDispatchVisitor {
 	}
 
 	@Override
-	public void visitBlock(BlockTree tree) {
+	public void visitBeginEndStatement(BeginEndStatementTree tree) {
 		if (!treeScopeMap.containsKey(tree)) {
-			super.visitBlock(tree);
+			super.visitBeginEndStatement(tree);
 
 		} else {
 			enterScope(tree);
-			super.visitBlock(tree);
+			super.visitBeginEndStatement(tree);
 			leaveScope();
 		}
+	
 	}
 
 	@Override

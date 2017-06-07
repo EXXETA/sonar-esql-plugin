@@ -6,12 +6,8 @@ import com.exxeta.iss.sonar.esql.api.symbols.Usage;
 import com.exxeta.iss.sonar.esql.api.tree.RoutineDeclarationTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
-import com.exxeta.iss.sonar.esql.api.tree.function.FunctionTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.ParameterTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.RoutineBodyTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
-import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
 import com.exxeta.iss.sonar.esql.tree.symbols.Scope;
 
 public abstract class CreateRoutineTreeImpl extends EsqlTree implements RoutineDeclarationTree{

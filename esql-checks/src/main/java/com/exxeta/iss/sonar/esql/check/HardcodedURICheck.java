@@ -7,16 +7,18 @@ import javax.annotation.Nullable;
 
 import org.sonar.check.Rule;
 
+import com.exxeta.iss.sonar.esql.api.tree.FieldReferenceTree;
 import com.exxeta.iss.sonar.esql.api.tree.PathElementTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.BinaryExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.VariableReferenceTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.SetStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
 import com.exxeta.iss.sonar.esql.tree.SyntacticEquivalence;
 import com.exxeta.iss.sonar.esql.tree.expression.LiteralTree;
-import com.exxeta.iss.sonar.esql.tree.impl.declaration.FieldReferenceTreeImpl;
 import com.exxeta.iss.sonar.esql.utils.LiteralUtils;
 
 @Rule(key = "HardcodedURI")
@@ -41,13 +43,31 @@ public class HardcodedURICheck extends DoubleDispatchVisitorCheck {
 
 	@Override
 	public void visitSetStatement(SetStatementTree tree) {
-		if (isFileNameFieldReference(tree.fieldReference())) {
+		if (isFileNameFieldReference(tree.variableReference()) ) {
 			checkExpression(tree.expression());
 		}
 		super.visitSetStatement(tree);
 	}
 
-	private boolean isFileNameFieldReference(FieldReferenceTreeImpl fieldReference) {
+	private boolean isFileNameFieldReference(VariableReferenceTree variableReference) {
+		if (variableReference instanceof FieldReferenceTree){
+			return isFileNameFieldReference((FieldReferenceTree)variableReference);
+		} else {
+			return isFileNameFieldReference((IdentifierTree)variableReference);
+		}
+	}
+
+	private boolean isFileNameFieldReference(IdentifierTree identifier) {
+		if (identifier==null){
+			return false;
+		}
+		return VARIABLE_NAME_PATTERN.matcher(identifier.name()).find();
+	}
+
+	private boolean isFileNameFieldReference(FieldReferenceTree fieldReference) {
+		if (fieldReference==null){
+			return false;
+		}
 		if (VARIABLE_NAME_PATTERN.matcher(fieldReference.pathElement().name().name().text()).find()) {
 			return true;
 		}

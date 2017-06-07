@@ -26,7 +26,7 @@ import com.exxeta.iss.sonar.esql.tree.declaration.BindingElementTree;
 import com.exxeta.iss.sonar.esql.tree.symbols.Scope;
 
 
-public interface IdentifierTree extends ExpressionTree, BindingElementTree {
+public interface IdentifierTree extends VariableReferenceTree, BindingElementTree {
 
 	  SyntaxToken identifierToken();
 

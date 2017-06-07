@@ -33,6 +33,7 @@ import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.VariableReferenceTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.ComplexFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.DateTimeFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.FieldFunctionTree;
@@ -592,9 +593,14 @@ public class EsqlGrammar {
 				));
 	}
 	
+	public VariableReferenceTree VARIABLE_REFERENCE(){
+		return b.<VariableReferenceTree>nonterminal(Kind.VARIABLE_REFERENCE)
+				.is(f.variableReference(b.firstOf(IDENTIFIER_REFERENCE(), FIELD_REFERENCE())));
+	}
+	
 	public SetStatementTreeImpl SET_STATEMENT() {
 		return b.<SetStatementTreeImpl>nonterminal(Kind.SET_STATEMENT).is(f.setStatement(
-				b.token(EsqlNonReservedKeyword.SET), FIELD_REFERENCE(),
+				b.token(EsqlNonReservedKeyword.SET), VARIABLE_REFERENCE(),
 				b.optional(b.firstOf(b.token(EsqlNonReservedKeyword.TYPE), b.token(EsqlNonReservedKeyword.NAMESPACE),
 						b.token(EsqlNonReservedKeyword.NAME), b.token(EsqlNonReservedKeyword.VALUE))),
 				b.token(EsqlPunctuator.EQUAL), EXPRESSION(), b.token(EsqlLegacyGrammar.EOS)));
@@ -736,7 +742,7 @@ public class EsqlGrammar {
 	
 	public ExpressionTree CALL_EXPRESSION() {
 		return b.<ExpressionTree>nonterminal(Kind.CALL_EXPRESSION).is(f.callExpression(
-				b.firstOf(FUNCTION(), PRIMARY_EXPRESSION(), f.newTuple24(FIELD_REFERENCE(), ARGUMENT_CLAUSE()), FIELD_REFERENCE())));
+				b.firstOf(FUNCTION(), PRIMARY_EXPRESSION(), f.newTuple24(FIELD_REFERENCE(), ARGUMENT_CLAUSE()), VARIABLE_REFERENCE())));
 	}
 
 	public ParameterListTreeImpl ARGUMENT_CLAUSE() {

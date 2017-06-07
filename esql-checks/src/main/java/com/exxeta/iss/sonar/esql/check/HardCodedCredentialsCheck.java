@@ -7,16 +7,17 @@ import javax.annotation.Nullable;
 
 import org.sonar.check.Rule;
 
+import com.exxeta.iss.sonar.esql.api.tree.FieldReferenceTree;
 import com.exxeta.iss.sonar.esql.api.tree.PathElementTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.VariableReferenceTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.DeclareStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.SetStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
 import com.exxeta.iss.sonar.esql.tree.expression.LiteralTree;
 import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
-import com.exxeta.iss.sonar.esql.tree.impl.declaration.FieldReferenceTreeImpl;
 
 @Rule(key = "HardCodedCredentials")
 public class HardCodedCredentialsCheck extends DoubleDispatchVisitorCheck {
@@ -33,18 +34,33 @@ public class HardCodedCredentialsCheck extends DoubleDispatchVisitorCheck {
 
 	@Override
 	public void visitSetStatement(SetStatementTree tree) {
-		if (isPasswordVariableName(tree.fieldReference()) && isStringLiteral(tree.expression())){
+		if (isPasswordVariableName(tree.variableReference()) && isStringLiteral(tree.expression())){
 			reportIssue(tree.expression());
 		}
 		super.visitSetStatement(tree);
 	}
 
 
-	private boolean isPasswordVariableName(FieldReferenceTreeImpl fieldReference) {
+	private boolean isPasswordVariableName(VariableReferenceTree variableReference) {
+		if (variableReference instanceof FieldReferenceTree){
+			return isPasswordVariableName((FieldReferenceTree)variableReference);
+		} else {
+			return isPasswordVariableName((IdentifierTree)variableReference);
+		}
+	}
+
+
+	private boolean isPasswordVariableName(FieldReferenceTree fieldReference) {
+		if (fieldReference==null) {
+			return false;
+		}
 		return isPasswordVariableName(fieldReference.pathElement().name().name().text()) || isPasswordVariableName(fieldReference.pathElements());
 	}
 
 	private boolean isPasswordVariableName(IdentifierTree identifier) {
+		if (identifier==null){
+			return false;
+		}
 		return isPasswordVariableName(identifier.name());
 	}
 

@@ -32,6 +32,7 @@ import com.exxeta.iss.sonar.esql.api.tree.expression.IsExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.LikeExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ParenthesisedExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.UnaryExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.VariableReferenceTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.AliasedExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.AliasedFieldReferenceTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.CaseFunctionTree;
@@ -258,7 +259,8 @@ public interface Tree {
 		PATH_ELEMENT_NAME(PathElementNameTree.class), 
 		IDENTIFIER_REFERENCE(IdentifierTree.class), 
 		BINDING_IDENTIFIER(IdentifierTree.class),
-		PROPERTY_IDENTIFIER(IdentifierTree.class);
+		PROPERTY_IDENTIFIER(IdentifierTree.class), 
+		VARIABLE_REFERENCE(VariableReferenceTree.class);
 
 		final Class<? extends Tree> associatedInterface;
 

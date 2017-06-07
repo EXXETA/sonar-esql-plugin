@@ -25,10 +25,13 @@ import com.exxeta.iss.sonar.esql.api.symbols.Usage;
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.BlockTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.BeginEndStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateFunctionStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.DeclareStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.SetMultimap;
 
 /**
  * This visitor creates new symbols for not hoisted variables (like class name)
@@ -40,6 +43,7 @@ public class SymbolVisitor extends DoubleDispatchVisitor {
 	private SymbolModelBuilder symbolModel;
 	private Scope currentScope;
 	private Map<Tree, Scope> treeScopeMap;
+	private SetMultimap<Scope, String> declaredBlockScopeNames = HashMultimap.create();
 
 	public SymbolVisitor(Map<Tree, Scope> treeScopeMap) {
 		this.treeScopeMap = treeScopeMap;
@@ -70,13 +74,28 @@ public class SymbolVisitor extends DoubleDispatchVisitor {
 	}
 
 	@Override
-	public void visitBlock(BlockTree tree) {
+	public void visitDeclareStatement(DeclareStatementTree tree) {
+		for (IdentifierTree identifier : tree.nameList()) {
+			scan(identifier);
+			declaredBlockScopeNames.put(currentScope, identifier.name());
+		}
+	}
+
+	@Override
+	public void visitIdentifier(IdentifierTree tree) {
+		if (tree.is(Tree.Kind.IDENTIFIER_REFERENCE)) {
+			addUsageFor(tree, Usage.Kind.READ);
+		}
+	}
+
+	@Override
+	public void visitBeginEndStatement(BeginEndStatementTree tree) {
 		if (isScopeAlreadyEntered(tree)) {
-			super.visitBlock(tree);
+			super.visitBeginEndStatement(tree);
 
 		} else {
 			enterScope(tree);
-			super.visitBlock(tree);
+			super.visitBeginEndStatement(tree);
 			leaveScope();
 		}
 	}
@@ -99,14 +118,20 @@ public class SymbolVisitor extends DoubleDispatchVisitor {
 	 */
 	private boolean addUsageFor(IdentifierTree identifier, Usage.Kind kind) {
 		Symbol symbol = currentScope.lookupSymbol(identifier.name());
-		if (symbol != null) {
+		if (symbol != null && !isUndeclaredBlockScopedSymbol(symbol)) {
 			symbol.addUsage(identifier, kind);
 			return true;
 		}
 		return false;
 	}
 
-	private boolean isScopeAlreadyEntered(BlockTree tree) {
+	private boolean isUndeclaredBlockScopedSymbol(Symbol symbol) {
+		return (symbol.is(Symbol.Kind.VARIABLE) || symbol.is(Symbol.Kind.CONST_VARIABLE)
+				|| symbol.is(Symbol.Kind.EXTERNAL_VARIABLE)) && currentScope.equals(symbol.scope())
+				&& !declaredBlockScopeNames.get(currentScope).contains(symbol.name());
+	}
+
+	private boolean isScopeAlreadyEntered(BeginEndStatementTree tree) {
 		return !treeScopeMap.containsKey(tree);
 	}
 

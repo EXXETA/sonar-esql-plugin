@@ -1,0 +1,14 @@
+CREATE COMPUTE MODULE testModule
+
+	DECLARE a INTEGER 3;
+	DECLARE b INTEGER 2;
+	DECLARE writeOnly INTEGER 0;
+	DECLARE unused INTEGER 42;
+	DECLARE p INTEGER 10;
+
+	CREATE PROCEDURE aComplicatedMultiplication(IN p INTEGER)
+	BEGIN
+		SET writeOnly = a * b * p;
+	END;
+
+END MODULE;
