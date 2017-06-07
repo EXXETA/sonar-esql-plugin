@@ -69,7 +69,8 @@ public final class CheckList {
         BooleanLiteralCheck.class,
         CaseWithoutElseCheck.class,
         CardinalityInLoopCheck.class,
-        LoopWithoutLeaveCheck.class
+        LoopWithoutLeaveCheck.class,
+        EmptyMainFunctionCheck.class
         /*
         
         IdenticalOperandOnBinaryExpressionCheck

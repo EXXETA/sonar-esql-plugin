@@ -15,19 +15,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.esql.api.tree.statement;
+package com.exxeta.iss.sonar.esql.check;
 
-import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
-import com.exxeta.iss.sonar.esql.tree.impl.statement.LabelTreeImpl;
+import java.io.File;
 
-public interface BeginEndStatementTree extends StatementTree{
-	LabelTreeImpl labelName1();
-	InternalSyntaxToken colon();
-	InternalSyntaxToken beginKeyword();
-	InternalSyntaxToken notKeyword();
-	InternalSyntaxToken atomicKeyword();
-	StatementsTree statements();
-	InternalSyntaxToken endKeyword();
-	LabelTree labelName2();
-	InternalSyntaxToken semiToken();
+import org.junit.Test;
+
+import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
+
+public class EmptyMainFunctionCheckTest {
+	@Test
+	public void testIgnoreMain() throws Exception {
+		EmptyMainFunctionCheck check = new EmptyMainFunctionCheck();
+
+		EsqlCheckVerifier.issues(check, new File("src/test/resources/emptyMainFunction.esql"))
+		.next().atLine(3).withMessage("Remove this empty Main function, or fill it with code.")
+				.noMore();
+	}
+
 }
