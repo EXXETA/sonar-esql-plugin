@@ -70,7 +70,9 @@ public final class CheckList {
         CaseWithoutElseCheck.class,
         CardinalityInLoopCheck.class,
         LoopWithoutLeaveCheck.class,
-        EmptyMainFunctionCheck.class
+        EmptyMainFunctionCheck.class,
+        UnknownMessageDomainCheck.class,
+        ParameterWithDirectionCheck.class
         /*
         
         IdenticalOperandOnBinaryExpressionCheck
@@ -111,8 +113,6 @@ public final class CheckList {
 - LOOP without LEAVE
 
 - Unreachable code after THROW or RETURN
-
-- Empty main method (Only retrun true)
 
 - Empty method
 

@@ -1,0 +1,10 @@
+CREATE COMPUTE MODULE TestFlow_Compute
+	CREATE FUNCTION message_domain() RETURNS BOOLEAN
+	BEGIN
+		SET OutputRoot.XMLNSC.test='a'; -- Compliant
+		SET OutputRoot.MRM.test='a';  -- Compliant
+		SET OutputRoot.MLNSC.test='a';  -- Noncompliant
+		SET OutputRoot.XMLNS.test='a'; -- Compliant
+		RETURN TRUE;
+	END;
+END MODULE;
