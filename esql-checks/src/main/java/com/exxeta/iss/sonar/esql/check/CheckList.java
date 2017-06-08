@@ -72,7 +72,8 @@ public final class CheckList {
         LoopWithoutLeaveCheck.class,
         EmptyMainFunctionCheck.class,
         UnknownMessageDomainCheck.class,
-        ParameterWithDirectionCheck.class
+        ParameterWithDirectionCheck.class,
+        DeleteFromWithoutWhereCheck.class
         /*
         
         IdenticalOperandOnBinaryExpressionCheck
@@ -80,8 +81,6 @@ public final class CheckList {
 
         FloatEqualityCheck
         
-        - Parameters should have a direction
-
 - EXTERNAL immer mit initial value
 
 - Environment Variables in the Variables-Subtree
@@ -90,7 +89,7 @@ public final class CheckList {
 
 - Use the xmlnsc domain not the xml or xmlns domain
 
--Duplicate function or procedure name
+- Duplicate function or procedure name
 
 - Comments and code in the same line
 
@@ -102,8 +101,6 @@ public final class CheckList {
 
 - Too many parameter in function/procedure
 
-- DELETE FROM ohne WHERE
-
 - BITSTREAM is deprecated
 
 - DO NOT USE SLEEP
@@ -114,11 +111,7 @@ public final class CheckList {
 
 - Unreachable code after THROW or RETURN
 
-- Empty method
-
 - SOAP version should be 1.2 or 1.1
-
-- Unknown MessageDomain
 
 - Do not use EVAL
 

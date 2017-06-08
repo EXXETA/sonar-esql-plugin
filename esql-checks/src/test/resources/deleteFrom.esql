@@ -1,0 +1,10 @@
+CREATE COMPUTE MODULE a
+
+	CREATE PROCEDURE delete()
+	BEGIN
+		DELETE FROM Database.SHAREHOLDINGS; --Noncompliant
+		DELETE FROM Database.SHAREHOLDINGS AS S; --Noncompliant
+		DELETE FROM Database.SHAREHOLDINGS AS S WHERE S.ACCOUNTNO = InputBody.AccountNumber; --Compliant
+	END;
+
+END MODULE;
