@@ -1,0 +1,5 @@
+<p>When using SElect the needed fields should be specified instead of selecting all fields using <code>*</code></p>
+<h2>Noncompliant Code Example</h2>
+<pre>SELECT * FROM Database.SHAREHOLDINGS AS S</pre>
+<h2>Compliant Solution</h2>
+<pre>SELECT C.Name, C.Address FROM Database.Customer AS C</pre>

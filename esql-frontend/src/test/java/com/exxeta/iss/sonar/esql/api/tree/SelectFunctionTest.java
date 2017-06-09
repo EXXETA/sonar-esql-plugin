@@ -18,12 +18,16 @@
 package com.exxeta.iss.sonar.esql.api.tree;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
-
-public class SelectFunctionTest {
+import com.exxeta.iss.sonar.esql.api.tree.function.SelectFunctionTree;
+import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
+public class SelectFunctionTest extends EsqlTreeModelTest<SelectFunctionTree>{
 
 	@Test
 	public void selectFunction() {
@@ -59,6 +63,18 @@ public class SelectFunctionTest {
 		assertThat(Kind.WHERE_CLAUSE)
 		.matches("WHERE A = B")
 		.matches("WHERE CON.a=a  AND CON.b NOT IN('C', 'I')");
+	}
+	
+	@Test
+	public void modelTest() throws Exception{
+		SelectFunctionTree tree = parse("SELECT * FROM Database.Datasource.SchemaName.Table As A Where A.A>10", Kind.SELECT_FUNCTION);
+		assertNotNull(tree);
+		assertNotNull(tree.selectClause());
+		assertNotNull(tree.fromClause());
+		assertNotNull(tree.whereClause());
+		assertTrue(tree.selectClause().aliasedFieldReferenceList().get(0).expression().is(Kind.FIELD_REFERENCE));
+		FieldReferenceTree field = (FieldReferenceTree)tree.selectClause().aliasedFieldReferenceList().get(0).expression();
+		assertEquals(field.pathElement().name().name().text(),"*");
 	}
 
 }

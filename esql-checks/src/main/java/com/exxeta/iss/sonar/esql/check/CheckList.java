@@ -73,8 +73,12 @@ public final class CheckList {
         EmptyMainFunctionCheck.class,
         UnknownMessageDomainCheck.class,
         ParameterWithDirectionCheck.class,
-        DeleteFromWithoutWhereCheck.class
+        DeleteFromWithoutWhereCheck.class,
+        SelectAllCheck.class
+        
         /*
+        
+        - Do not use SELECT *
         
         IdenticalOperandOnBinaryExpressionCheck
         SwitchWithTooManyCasesCheck
@@ -104,8 +108,6 @@ public final class CheckList {
 - BITSTREAM is deprecated
 
 - DO NOT USE SLEEP
-
-- Do not use SELECT *
 
 - LOOP without LEAVE
 

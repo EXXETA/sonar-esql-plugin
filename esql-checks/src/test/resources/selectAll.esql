@@ -1,0 +1,12 @@
+CREATE COMPUTE MODULE a
+
+	CREATE PROCEDURE delete()
+	BEGIN
+		SET a = SELECT * FROM Database.SHAREHOLDINGS; --Noncompliant
+		SET a = SELECT S.* FROM Database.SHAREHOLDINGS AS S; --Noncompliant
+		SET a = SELECT COUNT(*) FROM Database.SHAREHOLDINGS AS S WHERE S.ACCOUNTNO = InputBody.AccountNumber; --Compliant
+		SET a = SELECT A FROM Database.SHAREHOLDINGS; --Compliant
+		SET a = SELECT S.A FROM Database.SHAREHOLDINGS AS S; --Compliant
+	END;
+
+END MODULE;
