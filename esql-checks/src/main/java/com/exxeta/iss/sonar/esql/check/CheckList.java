@@ -74,7 +74,8 @@ public final class CheckList {
         UnknownMessageDomainCheck.class,
         ParameterWithDirectionCheck.class,
         DeleteFromWithoutWhereCheck.class,
-        SelectAllCheck.class
+        SelectAllCheck.class,
+        SleepCheck.class
         
         /*
         
