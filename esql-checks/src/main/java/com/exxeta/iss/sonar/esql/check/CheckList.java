@@ -75,7 +75,9 @@ public final class CheckList {
         ParameterWithDirectionCheck.class,
         DeleteFromWithoutWhereCheck.class,
         SelectAllCheck.class,
-        SleepCheck.class
+        SleepCheck.class,
+        EvalCheck.class,
+        BitstreamCheck.class
         
         /*
         
@@ -108,15 +110,11 @@ public final class CheckList {
 
 - BITSTREAM is deprecated
 
-- DO NOT USE SLEEP
-
 - LOOP without LEAVE
 
 - Unreachable code after THROW or RETURN
 
 - SOAP version should be 1.2 or 1.1
-
-- Do not use EVAL
 
 - Unused variable
 
