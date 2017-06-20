@@ -77,11 +77,10 @@ public final class CheckList {
         SelectAllCheck.class,
         SleepCheck.class,
         EvalCheck.class,
-        BitstreamCheck.class
+        BitstreamCheck.class,
+        CaseWithTooManyWhensCheck.class
         
         /*
-        
-        - Do not use SELECT *
         
         IdenticalOperandOnBinaryExpressionCheck
         SwitchWithTooManyCasesCheck
@@ -108,17 +107,13 @@ public final class CheckList {
 
 - Too many parameter in function/procedure
 
-- BITSTREAM is deprecated
-
-- LOOP without LEAVE
-
 - Unreachable code after THROW or RETURN
 
 - SOAP version should be 1.2 or 1.1
 
 - Unused variable
 
-
+- ExcessiveReturnsCheck
         
         
         */
