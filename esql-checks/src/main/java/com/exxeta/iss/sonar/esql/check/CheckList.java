@@ -78,26 +78,18 @@ public final class CheckList {
         SleepCheck.class,
         EvalCheck.class,
         BitstreamCheck.class,
-        CaseWithTooManyWhensCheck.class
+        CaseWithTooManyWhensCheck.class,
+        InitializeVariablesCheck.class
         
         /*
         
         IdenticalOperandOnBinaryExpressionCheck
-        SwitchWithTooManyCasesCheck
-
-        FloatEqualityCheck
-        
-- EXTERNAL immer mit initial value
 
 - Environment Variables in the Variables-Subtree
 
 - Use the SOAP domain not soap in the xmlnsc domain
 
 - Use the xmlnsc domain not the xml or xmlns domain
-
-- Duplicate function or procedure name
-
-- Comments and code in the same line
 
 - No comment before modlue, function or procedure
 

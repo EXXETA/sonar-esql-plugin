@@ -11,7 +11,7 @@ public class CaseWithTooManyWhensCheckTest {
 	@Test
 	public void test(){
 		CaseWithTooManyWhensCheck test = new CaseWithTooManyWhensCheck();
-		test.maximumCases=2;
+		test.maximumWhens=2;
 		EsqlCheckVerifier.verify(test, new File("src/test/resources/caseWithTooManyWhens.esql"));
 	}
 }
