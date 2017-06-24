@@ -79,7 +79,8 @@ public final class CheckList {
         EvalCheck.class,
         BitstreamCheck.class,
         CaseWithTooManyWhensCheck.class,
-        InitializeVariablesCheck.class
+        InitializeVariablesCheck.class,
+        UndocumentedModuleCheck.class
         
         /*
         

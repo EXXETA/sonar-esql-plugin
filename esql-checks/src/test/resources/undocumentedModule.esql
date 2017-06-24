@@ -1,0 +1,39 @@
+CREATE COMPUTE MODULE Module1 --Noncompliant
+
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE myInt INTEGER 1;
+		DECLARE myInt2 INTEGER;
+		
+	END;
+
+END MODULE;
+
+/*
+ *
+ */
+CREATE COMPUTE MODULE Module2 --Noncompliant
+
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE myInt INTEGER 1;
+		DECLARE myInt2 INTEGER;
+		
+	END;
+
+END MODULE;
+
+/*
+ * This module filters data base on the message type.
+ * It has the sample code of the second module in the ESQL file.
+ */
+ CREATE COMPUTE MODULE Module3 --Compliant
+
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE myInt INTEGER 1;
+		DECLARE myInt2 INTEGER;
+		
+	END;
+
+END MODULE;
