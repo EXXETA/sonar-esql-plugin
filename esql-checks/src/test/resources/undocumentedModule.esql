@@ -9,6 +9,7 @@ CREATE COMPUTE MODULE Module1 --Noncompliant
 
 END MODULE;
 
+--This comment is irrelevant.
 /*
  *
  */

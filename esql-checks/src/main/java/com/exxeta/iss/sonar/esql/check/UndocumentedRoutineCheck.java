@@ -5,20 +5,31 @@ import org.sonar.check.Rule;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxTrivia;
-import com.exxeta.iss.sonar.esql.api.tree.statement.CreateModuleStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.CreateFunctionStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
 
-@Rule(key="UndocumentedModule")
-public class UndocumentedModuleCheck extends DoubleDispatchVisitorCheck{
+@Rule(key="UndocumentedRoutine")
+public class UndocumentedRoutineCheck extends DoubleDispatchVisitorCheck{
 
 	@Override
-	public void visitCreateModuleStatement(CreateModuleStatementTree tree) {
+	public void visitCreateFunctionStatement(CreateFunctionStatementTree tree) {
 		String comment = getComment(tree);
 		
 		if (comment == null || isEmptyComment(comment)){
-			addIssue(tree, "Document this module");
+			addIssue(tree, "Document this function.");
 		}
 	}
+	
+	@Override
+	public void visitCreateProcedureStatement(CreateProcedureStatementTree tree) {
+		String comment = getComment(tree);
+		
+		if (comment == null || isEmptyComment(comment)){
+			addIssue(tree, "Document this procedure.");
+		}
+	}
+	
 	
 	private static String getComment(Tree tree){
 		for (SyntaxTrivia syntaxTrivia : tree.firstToken().trivias()){

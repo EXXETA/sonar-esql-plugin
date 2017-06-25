@@ -80,11 +80,12 @@ public final class CheckList {
         BitstreamCheck.class,
         CaseWithTooManyWhensCheck.class,
         InitializeVariablesCheck.class,
-        UndocumentedModuleCheck.class
+        UndocumentedModuleCheck.class,
+        UndocumentedRoutineCheck.class
         
         /*
         
-        IdenticalOperandOnBinaryExpressionCheck
+        For 2.1.0
 
 - Environment Variables in the Variables-Subtree
 
@@ -92,23 +93,28 @@ public final class CheckList {
 
 - Use the xmlnsc domain not the xml or xmlns domain
 
-- No comment before modlue, function or procedure
-
-- Uppercase keywords
-
-- IF/ELSEIF should be CASE
+- No comment before module, function or procedure
 
 - Too many parameter in function/procedure
 
-- Unreachable code after THROW or RETURN
-
 - SOAP version should be 1.2 or 1.1
+
+- ExcessiveReturnsCheck
+  
+        
+ Backlog       
+        
+ IdenticalOperandOnBinaryExpressionCheck
+
+- Unreachable code after THROW or RETURN
 
 - Unused variable
 
-- ExcessiveReturnsCheck
-        
-        
+ - Uppercase keywords
+
+- IF/ELSEIF should be CASE
+
+       
         */
         );
   }
