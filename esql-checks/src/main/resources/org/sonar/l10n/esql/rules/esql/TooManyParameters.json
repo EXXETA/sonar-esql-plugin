@@ -1,13 +1,13 @@
 {
-  "title": "Routiness should be documented",
+  "title": "Routines should not have too many parameters",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",
-    "constantCost": "10min"
+    "constantCost": "20min"
   },
   "tags": [
-    "convention"
+    "brain-overload"
   ],
   "defaultSeverity": "Major"
 }

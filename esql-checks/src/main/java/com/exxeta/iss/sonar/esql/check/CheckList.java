@@ -81,7 +81,8 @@ public final class CheckList {
         CaseWithTooManyWhensCheck.class,
         InitializeVariablesCheck.class,
         UndocumentedModuleCheck.class,
-        UndocumentedRoutineCheck.class
+        UndocumentedRoutineCheck.class,
+        TooManyParametersCheck.class
         
         /*
         
@@ -93,13 +94,10 @@ public final class CheckList {
 
 - Use the xmlnsc domain not the xml or xmlns domain
 
-- No comment before module, function or procedure
-
-- Too many parameter in function/procedure
-
 - SOAP version should be 1.2 or 1.1
 
 - ExcessiveReturnsCheck
+  
   
         
  Backlog       
