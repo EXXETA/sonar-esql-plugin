@@ -46,7 +46,7 @@ public class CreateFunctionTest extends EsqlTreeModelTest<CreateFunctionStatemen
 		assertNotNull(tree);
 		assertNotNull(tree.createKeyword());
 		assertEquals(tree.createKeyword().text(),"CREATE");
-		assertNotNull(tree.functionKeyword());
+		assertNotNull(tree.routineType());
 		assertNotNull(tree.identifier());
 		assertNotNull(tree.openingParenthesis());
 		assertNotNull(tree.parameterList());

@@ -17,13 +17,36 @@
  */
 package com.exxeta.iss.sonar.esql.api.tree;
 
+import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
+import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
+import com.exxeta.iss.sonar.esql.api.tree.statement.LanguageTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ParameterTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.ResultSetTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.ReturnTypeTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.RoutineBodyTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
 import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
 
 public interface RoutineDeclarationTree extends StatementTree{
-	RoutineBodyTree routineBody();
+	
+	SyntaxToken createKeyword();
+
+	SyntaxToken routineType();
+
+	IdentifierTree identifier();
+
+	SyntaxToken openingParenthesis();
+
 	SeparatedList<ParameterTree> parameterList();
+
+	SyntaxToken closingParenthesis();
+
+	ReturnTypeTree returnType();
+
+	LanguageTree language();
+
+	ResultSetTree resultSet();
+
+	RoutineBodyTree routineBody();
 	
 }
