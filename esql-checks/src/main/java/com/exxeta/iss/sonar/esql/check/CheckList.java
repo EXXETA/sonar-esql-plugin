@@ -82,7 +82,8 @@ public final class CheckList {
         InitializeVariablesCheck.class,
         UndocumentedModuleCheck.class,
         UndocumentedRoutineCheck.class,
-        TooManyParametersCheck.class
+        TooManyParametersCheck.class,
+        VariablesSubtreeCheck.class
         
         /*
         

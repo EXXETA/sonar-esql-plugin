@@ -1,0 +1,11 @@
+CREATE COMPUTE MODULE Module1
+
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		SET Environment.ABC='ABC'; --Noncompliant
+		SET Environment.{abc}='ABC'; --Noncompliant
+		SET Environment.Variables.abc='ABC'; --Compliant
+		
+	END;
+
+END MODULE;
