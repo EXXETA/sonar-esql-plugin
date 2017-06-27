@@ -84,22 +84,17 @@ public final class CheckList {
         UndocumentedRoutineCheck.class,
         TooManyParametersCheck.class,
         VariablesSubtreeCheck.class,
-        XmlnscDomainCheck.class
+        XmlnscDomainCheck.class,
+        RoutineWithExcessiveReturnsCheck.class
         
         /*
         
-        For 2.1.0
-
+ Backlog       
+        
 - Use the SOAP domain not soap in the xmlnsc domain
 
 - SOAP version should be 1.2 or 1.1
-
-- ExcessiveReturnsCheck
   
-  
-        
- Backlog       
-        
  IdenticalOperandOnBinaryExpressionCheck
 
 - Unreachable code after THROW or RETURN
