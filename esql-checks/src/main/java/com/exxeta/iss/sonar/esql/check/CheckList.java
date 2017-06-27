@@ -83,17 +83,14 @@ public final class CheckList {
         UndocumentedModuleCheck.class,
         UndocumentedRoutineCheck.class,
         TooManyParametersCheck.class,
-        VariablesSubtreeCheck.class
+        VariablesSubtreeCheck.class,
+        XmlnscDomainCheck.class
         
         /*
         
         For 2.1.0
 
-- Environment Variables in the Variables-Subtree
-
 - Use the SOAP domain not soap in the xmlnsc domain
-
-- Use the xmlnsc domain not the xml or xmlns domain
 
 - SOAP version should be 1.2 or 1.1
 

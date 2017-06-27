@@ -1,0 +1,17 @@
+CREATE COMPUTE MODULE Module1
+
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+
+		CREATE LASTCHILD OF OutputRoot DOMAIN 'XMLNS' NAME 'XMLNS'; --Noncompliant
+		CREATE LASTCHILD OF OutputRoot DOMAIN 'XML' NAME 'XML'; --Noncompliant
+		CREATE LASTCHILD OF OutputRoot DOMAIN 'XMLNSC' NAME 'XMLNSC'; --Compliant
+		
+		SET OutputRoot.XML.abc.abc='ABC'; --Noncompliant
+		SET OutputRoot.XMLNS.abc.abc='ABC'; --Noncompliant
+		SET OutputRoot.XMLNSC.abc.abc='ABC'; --Compliant
+		
+		
+	END;
+
+END MODULE;

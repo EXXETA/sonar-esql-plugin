@@ -1,0 +1,14 @@
+{
+  "title": "Do not use the domains XMLNS and XML",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "20min"
+  },
+  "tags": [
+    "misra",
+    "cert"
+  ],
+  "defaultSeverity": "Major"
+}
