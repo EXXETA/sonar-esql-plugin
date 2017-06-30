@@ -1,0 +1,23 @@
+BROKER SCHEMA esb.common.node.validate
+PATH esb.common.system;
+
+-------------------------------------------------------------------------------------------
+DECLARE Validate	EXTERNAL BOOLEAN FALSE;
+---------------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------
+CREATE PROCEDURE Validate_ParseDomain()
+	-----------------------------------------------------------
+	BEGIN
+		
+		DECLARE inCCSID 	INT 		InputProperties.CodedCharSetId;                     
+		DECLARE inEncoding 	INT 		InputProperties.Encoding; 
+		DECLARE options 	INTEGER 	BITOR( ValidateContentAndValue, ValidateExceptionList, ValidateImmediate ); 
+		
+		SET 	OutputRoot.XMLNSC 	= 	NULL;
+		DECLARE inBitStream 			BLOB ASBITSTREAM(InputRoot.XMLNSC, inEncoding, inCCSID);
+		
+		-- PARSE parms are optional, comma must be there
+		CREATE LASTCHILD OF OutputRoot  DOMAIN('XMLNSC') PARSE(inBitStream, inEncoding, inCCSID,,,, options); 
+
+END;
