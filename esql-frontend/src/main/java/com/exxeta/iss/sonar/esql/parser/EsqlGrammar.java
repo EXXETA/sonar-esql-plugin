@@ -75,6 +75,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.function.CastFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.ExtractFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.ForFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.FromClauseExpressionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.ListConstructorFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.OverlayFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.PassthruFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.PositionFunctionTreeImpl;
@@ -317,7 +318,7 @@ public class EsqlGrammar {
 	}
 	
 	private ComplexFunctionTree COMPLEX_FUNCTION(){
-		return b.firstOf(CAST_FUNCTION(), CASE_FUNCTION(), SELECT_FUNCTION(), ROW_CONSTRUCTOR_FUNCTION());
+		return b.firstOf(CAST_FUNCTION(), CASE_FUNCTION(), SELECT_FUNCTION(), ROW_CONSTRUCTOR_FUNCTION(), LIST_CONSTRUCTOR_FUNCTION());
 	}	
 
 	private MiscellaneousFunctionTree MISCELLANEOUS_FUNCTION(){
@@ -1024,12 +1025,19 @@ public class EsqlGrammar {
 	
 	public ParseClauseTreeImpl PARSE_CLAUSE(){
 		return b.<ParseClauseTreeImpl>nonterminal(Kind.PARSE_CLAUSE). is(f.parseClause(
-				b.token(EsqlNonReservedKeyword.PARSE), b.token(LPARENTHESIS),ARGUMENT_LIST(),
-				b.zeroOrMore(f.newTuple75(b.firstOf(b.token(EsqlNonReservedKeyword.ENCODING), b.token(EsqlNonReservedKeyword.CCSID), 
-						b.token(EsqlNonReservedKeyword.SET), b.token(EsqlNonReservedKeyword.TYPE), 
-						b.token(EsqlNonReservedKeyword.FORMAT), b.token(EsqlNonReservedKeyword.OPTIONS)), 
-						EXPRESSION()
-				)),
+				b.token(EsqlNonReservedKeyword.PARSE), b.token(LPARENTHESIS),
+				FIELD_REFERENCE()
+				,b.optional(b.firstOf( 
+						b.oneOrMore(f.newTuple117(b.token(EsqlPunctuator.COMMA), b.optional(CALL_EXPRESSION()))),
+						b.oneOrMore(f.newTuple118(b.firstOf(
+							b.token(EsqlNonReservedKeyword.OPTIONS), 
+							b.token(EsqlNonReservedKeyword.ENCODING), 
+							b.token(EsqlNonReservedKeyword.CCSID), 
+							b.token(EsqlNonReservedKeyword.SET), 
+							b.token(EsqlNonReservedKeyword.TYPE), 
+							b.token(EsqlNonReservedKeyword.FORMAT)
+						), b.optional(CALL_EXPRESSION())))
+						)),
 				b.token(RPARENTHESIS)
 				
 		));
@@ -1238,9 +1246,15 @@ public class EsqlGrammar {
 		));
 	}
 	
+	public ListConstructorFunctionTreeImpl LIST_CONSTRUCTOR_FUNCTION(){
+		return b.<ListConstructorFunctionTreeImpl>nonterminal(Kind.LIST_CONSTRUCTOR_FUNCTION).is(f.listConstructorFunction(
+				b.token(EsqlNonReservedKeyword.LIST), b.token(EsqlPunctuator.LCURLYBRACE), ARGUMENT_LIST(), b.token(EsqlPunctuator.RCURLYBRACE)
+		));
+	}
+	
 	public AliasedExpressionTreeImpl ALIASED_EXPRESSION(){
 		return b.<AliasedExpressionTreeImpl>nonterminal(Kind.ALIASED_EXPRESSION).is(f.finishAliasedExpression(
-				b.firstOf(f.aliasedExpression(EXPRESSION(), b.token(EsqlNonReservedKeyword.AS), b.token(EsqlLegacyGrammar.IDENTIFIER_NAME)) , 
+				b.firstOf(f.aliasedExpression(EXPRESSION(), b.token(EsqlNonReservedKeyword.AS), FIELD_REFERENCE()) , 
 						f.aliasedExpression(EXPRESSION())
 		)));
 	}

@@ -17,14 +17,13 @@
  */
 package com.exxeta.iss.sonar.esql.api.tree.function;
 
-import com.exxeta.iss.sonar.esql.api.tree.FieldReferenceTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
-import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
+import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 
-public interface AliasedExpressionTree extends Tree{
-	ExpressionTree expression();
-	InternalSyntaxToken asKeyword();
-	FieldReferenceTree alias();
-
+public interface ListConstructorFunctionTree extends ComplexFunctionTree{
+	InternalSyntaxToken listKeyword();
+	InternalSyntaxToken openingCurlyBrace();
+	SeparatedList<Tree> expressions();
+	InternalSyntaxToken closingCurlyBrace();
 }

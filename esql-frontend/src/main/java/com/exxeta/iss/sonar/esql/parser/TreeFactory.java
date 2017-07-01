@@ -82,6 +82,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.function.CastFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.ExtractFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.ForFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.FromClauseExpressionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.ListConstructorFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.OverlayFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.PassthruFunctionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.function.PositionFunctionTreeImpl;
@@ -796,6 +797,14 @@ public class TreeFactory {
 	}
 
 	public <T, U> Tuple<T, U> newTuple116(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple117(T first, U second) {
+		return newTuple(first, second);
+	}
+
+	public <T, U> Tuple<T, U> newTuple118(T first, U second) {
 		return newTuple(first, second);
 	}
 
@@ -1730,41 +1739,11 @@ public class TreeFactory {
 	}
 
 	public ParseClauseTreeImpl parseClause(InternalSyntaxToken parseKeyword, InternalSyntaxToken openingParenthesis,
-			SeparatedList<Tree> options, Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> parameters,
+			FieldReferenceTreeImpl fieldReference,
+			Optional<List<Tuple<InternalSyntaxToken, Optional<ExpressionTree>>>> parameters,
 			InternalSyntaxToken closingParenthesis) {
 
-		InternalSyntaxToken encodingKeyword = null;
-		ExpressionTree encoding = null;
-		InternalSyntaxToken ccsidKeyword = null;
-		ExpressionTree ccsid = null;
-		InternalSyntaxToken setKeyword = null;
-		ExpressionTree set = null;
-		InternalSyntaxToken typeKeyword = null;
-		ExpressionTree type = null;
-		InternalSyntaxToken formatKeyword = null;
-		ExpressionTree format = null;
-
-		if (parameters.isPresent())
-			for (Tuple<InternalSyntaxToken, ExpressionTree> param : parameters.get()) {
-				if ("ENCODING".equalsIgnoreCase(param.first().text())) {
-					encodingKeyword = param.first();
-					encoding = param.second();
-				} else if ("CCSID".equalsIgnoreCase(param.first().text())) {
-					ccsidKeyword = param.first();
-					ccsid = param.second();
-				} else if ("SET".equalsIgnoreCase(param.first().text())) {
-					setKeyword = param.first();
-					set = param.second();
-				} else if ("TYPE".equalsIgnoreCase(param.first().text())) {
-					typeKeyword = param.first();
-					type = param.second();
-				} else if ("FORMAT".equalsIgnoreCase(param.first().text())) {
-					formatKeyword = param.first();
-					format = param.second();
-				}
-			}
-		return new ParseClauseTreeImpl(parseKeyword, openingParenthesis, options, encodingKeyword, encoding,
-				ccsidKeyword, ccsid, setKeyword, set, typeKeyword, type, formatKeyword, format, closingParenthesis);
+		return new ParseClauseTreeImpl(parseKeyword, openingParenthesis, fieldReference, parameters.isPresent()?parameters.get():null, closingParenthesis);
 	}
 
 	public DeleteStatementTreeImpl deleteStatement(InternalSyntaxToken deleteKeyword, Object qualifier,
@@ -2161,7 +2140,7 @@ public class TreeFactory {
 		return new SelectClauseTreeImpl(aggregationType, openingParenthesis, aggregationExpression, closingParenthesis);
 	}
 
-	public AliasedExpressionTreeImpl aliasedExpression(ExpressionTree expression, InternalSyntaxToken asKeyword, InternalSyntaxToken alias) {
+	public AliasedExpressionTreeImpl aliasedExpression(ExpressionTree expression, InternalSyntaxToken asKeyword, FieldReferenceTreeImpl alias) {
 		return new AliasedExpressionTreeImpl(expression, asKeyword, alias);
 	}
 
@@ -2216,6 +2195,11 @@ public class TreeFactory {
 
 	public VariableReferenceTree variableReference(VariableReferenceTree variableReference) {
 		return variableReference;
+	}
+
+	public ListConstructorFunctionTreeImpl listConstructorFunction(InternalSyntaxToken listKeyword, InternalSyntaxToken openingCurlyBrace,
+			SeparatedList<Tree> argumentList, InternalSyntaxToken closingCurlyBrace) {
+		return new ListConstructorFunctionTreeImpl(listKeyword, openingCurlyBrace, argumentList, closingCurlyBrace);
 	}
 
 

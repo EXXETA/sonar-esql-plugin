@@ -18,52 +18,106 @@
 package com.exxeta.iss.sonar.esql.tree.impl.statement;
 
 import java.util.Iterator;
+import java.util.List;
 
+import com.exxeta.iss.sonar.esql.api.EsqlNonReservedKeyword;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ParseClauseTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
+import com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator;
+import com.exxeta.iss.sonar.esql.parser.TreeFactory.Tuple;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
-import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
+import com.exxeta.iss.sonar.esql.tree.impl.declaration.FieldReferenceTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
-import com.google.common.base.Functions;
 import com.google.common.collect.Iterators;
+import com.sonar.sslr.api.typed.Optional;
 
 public class ParseClauseTreeImpl extends EsqlTree implements ParseClauseTree{
 
 	private InternalSyntaxToken parseKeyword;
 	private InternalSyntaxToken openingParenthesis;
-	private SeparatedList<Tree> options;
-	private InternalSyntaxToken encodingKeyword;
-	private ExpressionTree encoding;
-	private InternalSyntaxToken ccsidKeyword;
-	private ExpressionTree ccsid;
-	private InternalSyntaxToken setKeyword;
-	private ExpressionTree set;
-	private InternalSyntaxToken typeKeyword;
-	private ExpressionTree type;
-	private InternalSyntaxToken formatKeyword;
-	private ExpressionTree format;
+	private FieldReferenceTreeImpl fieldReference;
+	
+	private InternalSyntaxToken optionsSeparator;
+	private ExpressionTree optionsExpression;
+	private InternalSyntaxToken encodingSeparator;
+	private ExpressionTree encodingExpression;
+	private InternalSyntaxToken ccsidSeparator;
+	private ExpressionTree ccsidExpression;
+	private InternalSyntaxToken setSeparator;
+	private ExpressionTree setExpression;
+	private InternalSyntaxToken typeSeparator;
+	private ExpressionTree typeExpression;
+	private InternalSyntaxToken formatSeparator;
+	private ExpressionTree formatExpression;
 	private InternalSyntaxToken closingParenthesis;
+
+	private boolean commaSeparated;
+	
 	public ParseClauseTreeImpl(InternalSyntaxToken parseKeyword, InternalSyntaxToken openingParenthesis,
-			SeparatedList<Tree> options, InternalSyntaxToken encodingKeyword, ExpressionTree encoding,
-			InternalSyntaxToken ccsidKeyword, ExpressionTree ccsid, InternalSyntaxToken setKeyword, ExpressionTree set,
-			InternalSyntaxToken typeKeyword, ExpressionTree type, InternalSyntaxToken formatKeyword,
-			ExpressionTree format, InternalSyntaxToken closingParenthesis) {
+			FieldReferenceTreeImpl fieldReference,
+			List<Tuple<InternalSyntaxToken, Optional<ExpressionTree>>> parameters, InternalSyntaxToken closingParenthesis) {
 		super();
 		this.parseKeyword = parseKeyword;
 		this.openingParenthesis = openingParenthesis;
-		this.options = options;
-		this.encodingKeyword = encodingKeyword;
-		this.encoding = encoding;
-		this.ccsidKeyword = ccsidKeyword;
-		this.ccsid = ccsid;
-		this.setKeyword = setKeyword;
-		this.set = set;
-		this.typeKeyword = typeKeyword;
-		this.type = type;
-		this.formatKeyword = formatKeyword;
-		this.format = format;
+		this.fieldReference=fieldReference;
+		if (parameters != null) {
+			commaSeparated = parameters.get(0).first().is(EsqlPunctuator.COMMA);
+			if (commaSeparated) {
+				if (parameters.size()>0){
+					optionsSeparator = parameters.get(0).first();
+					optionsExpression = parameters.get(0).second().isPresent()?parameters.get(0).second().get():null;
+				}
+				if (parameters.size()>1){
+					encodingSeparator = parameters.get(1).first();
+					encodingExpression = parameters.get(1).second().isPresent()?parameters.get(1).second().get():null;
+				}
+				if (parameters.size()>2){
+					ccsidSeparator = parameters.get(2).first();
+					ccsidExpression = parameters.get(2).second().isPresent()?parameters.get(2).second().get():null;
+				}
+				if (parameters.size()>3){
+					setSeparator = parameters.get(3).first();
+					setExpression = parameters.get(3).second().isPresent()?parameters.get(3).second().get():null;
+				}
+				if (parameters.size()>4){
+					typeSeparator = parameters.get(4).first();
+					typeExpression = parameters.get(4).second().isPresent()?parameters.get(4).second().get():null;
+				}
+				if (parameters.size()>5){
+					formatSeparator = parameters.get(5).first();
+					formatExpression = parameters.get(5).second().isPresent()?parameters.get(5).second().get():null;
+				}
+			} else {
+				for (Tuple<InternalSyntaxToken, Optional<ExpressionTree>> tuple : parameters) {
+					if (tuple.first().is(EsqlNonReservedKeyword.OPTIONS)){
+						optionsSeparator = tuple.first();
+						optionsExpression = tuple.second().get();
+					}
+					if (tuple.first().is(EsqlNonReservedKeyword.ENCODING)){
+						encodingSeparator = tuple.first();
+						encodingExpression = tuple.second().get();
+					}
+					if (tuple.first().is(EsqlNonReservedKeyword.CCSID)){
+						ccsidSeparator = tuple.first();
+						ccsidExpression = tuple.second().get();
+					}
+					if (tuple.first().is(EsqlNonReservedKeyword.SET)){
+						setSeparator = tuple.first();
+						setExpression = tuple.second().get();
+					}
+					if (tuple.first().is(EsqlNonReservedKeyword.TYPE)){
+						typeSeparator = tuple.first();
+						typeExpression = tuple.second().get();
+					}
+					if (tuple.first().is(EsqlNonReservedKeyword.FORMAT)){
+						formatSeparator = tuple.first();
+						formatExpression = tuple.second().get();
+					}
+				}
+			}
+		}
 		this.closingParenthesis = closingParenthesis;
 	}
 	@Override
@@ -75,48 +129,82 @@ public class ParseClauseTreeImpl extends EsqlTree implements ParseClauseTree{
 		return openingParenthesis;
 	}
 	@Override
-	public SeparatedList<Tree> options() {
-		return options;
+	public FieldReferenceTreeImpl fieldReference() {
+		return fieldReference;
 	}
+
 	@Override
-	public InternalSyntaxToken encodingKeyword() {
-		return encodingKeyword;
+	public InternalSyntaxToken optionsSeparator() {
+		return optionsSeparator;
 	}
+
 	@Override
-	public ExpressionTree encoding() {
-		return encoding;
+	public ExpressionTree optionsExpression() {
+		return optionsExpression;
 	}
+
 	@Override
-	public InternalSyntaxToken ccsidKeyword() {
-		return ccsidKeyword;
+	public InternalSyntaxToken encodingSeparator() {
+		return encodingSeparator;
 	}
+
+
 	@Override
-	public ExpressionTree ccsid() {
-		return ccsid;
+	public ExpressionTree encodingExpression() {
+		return encodingExpression;
 	}
+
+
 	@Override
-	public InternalSyntaxToken setKeyword() {
-		return setKeyword;
+	public InternalSyntaxToken ccsidSeparator() {
+		return ccsidSeparator;
 	}
+
+
 	@Override
-	public ExpressionTree set() {
-		return set;
+	public ExpressionTree ccsidExpression() {
+		return ccsidExpression;
 	}
+
+
 	@Override
-	public InternalSyntaxToken typeKeyword() {
-		return typeKeyword;
+	public InternalSyntaxToken setSeparator() {
+		return setSeparator;
 	}
+
+
 	@Override
-	public ExpressionTree type() {
-		return type;
+	public ExpressionTree setExpression() {
+		return setExpression;
 	}
+
+
 	@Override
-	public InternalSyntaxToken formatKeyword() {
-		return formatKeyword;
+	public InternalSyntaxToken typeSeparator() {
+		return typeSeparator;
 	}
+
+
 	@Override
-	public ExpressionTree format() {
-		return format;
+	public ExpressionTree typeExpression() {
+		return typeExpression;
+	}
+
+
+	@Override
+	public InternalSyntaxToken formatSeparator() {
+		return formatSeparator;
+	}
+
+
+	@Override
+	public ExpressionTree formatExpression() {
+		return formatExpression;
+	}
+
+
+	public boolean isCommaSeparated() {
+		return commaSeparated;
 	}
 	@Override
 	public InternalSyntaxToken closingParenthesis() {
@@ -132,8 +220,13 @@ public class ParseClauseTreeImpl extends EsqlTree implements ParseClauseTree{
 	}
 	@Override
 	public Iterator<Tree> childrenIterator() {
-		return Iterators.concat(Iterators.forArray(parseKeyword, openingParenthesis), options.elementsAndSeparators(Functions.<Tree> identity()),
-				Iterators.forArray(encodingKeyword, encoding, ccsidKeyword, ccsid, setKeyword, set, typeKeyword, type, formatKeyword, format, closingParenthesis));
+		return Iterators.forArray(parseKeyword, openingParenthesis, fieldReference,
+				optionsSeparator, optionsExpression,
+				encodingSeparator, encodingExpression,
+				ccsidSeparator, ccsidExpression,
+				setSeparator, setExpression,
+				typeSeparator, typeExpression,
+				formatSeparator, formatExpression, closingParenthesis);
 	}
 	
 	
