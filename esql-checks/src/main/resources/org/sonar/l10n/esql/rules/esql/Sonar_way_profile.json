@@ -12,7 +12,7 @@
   	"HardcodedIp",
   	"HardcodedURI",
   	"IdenticalExpressionOnBinaryOperator",
-  	"IfConditionAlwaysTrueOrFalse",
+  	"IfConditionalAlwaysTrueOrFalse",
   	"IterateStatement",
   	"LineLength",
   	"MissingNewlineAtEndOfFile",
