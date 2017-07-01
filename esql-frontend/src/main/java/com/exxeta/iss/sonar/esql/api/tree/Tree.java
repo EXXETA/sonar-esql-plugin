@@ -39,6 +39,7 @@ import com.exxeta.iss.sonar.esql.api.tree.function.CaseFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.CastFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.ExtractFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.ForFunctionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.ListConstructorFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.OverlayFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.PassthruFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.PositionFunctionTree;
@@ -260,7 +261,8 @@ public interface Tree {
 		IDENTIFIER_REFERENCE(IdentifierTree.class), 
 		BINDING_IDENTIFIER(IdentifierTree.class),
 		PROPERTY_IDENTIFIER(IdentifierTree.class), 
-		VARIABLE_REFERENCE(VariableReferenceTree.class);
+		VARIABLE_REFERENCE(VariableReferenceTree.class), 
+		LIST_CONSTRUCTOR_FUNCTION(ListConstructorFunctionTree.class);
 
 		final Class<? extends Tree> associatedInterface;
 

@@ -23,28 +23,23 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
-import com.exxeta.iss.sonar.esql.tree.impl.function.RowConstructorFunctionTreeImpl;
+import com.exxeta.iss.sonar.esql.api.tree.function.ListConstructorFunctionTree;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class RowConstructorFunctionTest extends EsqlTreeModelTest<RowConstructorFunctionTreeImpl>{
+public class ListConstructorFunctionTest extends EsqlTreeModelTest<ListConstructorFunctionTree>{
 
 	@Test
-	public void rowConstructorFunction() {
-		assertThat(Kind.ROW_CONSTRUCTOR_FUNCTION)
-		.matches("ROW('granary' AS bread, 'riesling' AS wine, 'stilton' AS cheese)");
-		assertThat(Kind.SET_STATEMENT)
-		.matches("SET OutputRoot.XMLNS.Data = ROW('granary' AS bread, 'riesling' AS wine, 'stilton' AS cheese);");
+	public void listConstructorFunction() {
+		assertThat(Kind.LIST_CONSTRUCTOR_FUNCTION)
+		.matches("LIST{InputBody.Car.color, 'green', 'blue'}");
 	}
-	
 	@Test
-	public void modelTest() throws Exception{
-		RowConstructorFunctionTreeImpl tree = parse ("ROW('granary' AS bread, 'riesling' AS wine, 'stilton' AS cheese)", Kind.ROW_CONSTRUCTOR_FUNCTION);
-		assertNotNull(tree.rowKeyword());
-		assertNotNull(tree.openingParenthesis());
-		assertNotNull(tree.aliasedExpressions());
-		assertNotNull(tree.closingParenthesis());
-		
+	public void modelTest() throws Exception {
+		ListConstructorFunctionTree tree = parse("LIST{InputBody.Car.color, 'green', 'blue'}", Kind.LIST_CONSTRUCTOR_FUNCTION);
+		assertNotNull(tree.listKeyword());
+		assertNotNull(tree.openingCurlyBrace());
+		assertNotNull(tree.expressions());
+		assertNotNull(tree.closingCurlyBrace());
 	}
-	
 	
 }

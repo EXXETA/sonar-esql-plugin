@@ -26,8 +26,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
-import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
-import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ParseClauseTree;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.FromClauseTreeImpl;
@@ -62,6 +60,7 @@ public class CreateStatementTest  extends EsqlTreeModelTest<CreateStatementTreeI
 	public void parseClause(){
 		assertThat(Kind.PARSE_CLAUSE)
 		.matches("PARSE(inBitStream, inEncoding, inCCSID, 'DP3UK14002001', 'TestCase', 'XML1', options)")
+		.matches("PARSE(inBitStream, inEncoding, inCCSID,,,, options)");
 		;
 	}
 	@Test
@@ -102,17 +101,22 @@ public class CreateStatementTest  extends EsqlTreeModelTest<CreateStatementTreeI
 		assertEquals(parseClause.parseKeyword().text(), "PARSE");
 		assertNotNull(parseClause.openingParenthesis());
 		assertEquals(parseClause.openingParenthesis().text(), "(");
-		assertNotNull(parseClause.options());
-		assertNull(parseClause.encodingKeyword());
-		assertNull(parseClause.encoding());
-		assertNull(parseClause.ccsidKeyword());
-		assertNull(parseClause.ccsid());
-		assertNull(parseClause.setKeyword());
-		assertNull(parseClause.set());
-		assertNull(parseClause.typeKeyword());
-		assertNull(parseClause.type());
-		assertNull(parseClause.formatKeyword());
-		assertNull(parseClause.format());
+		
+		assertNotNull(parseClause.fieldReference());
+		assertNotNull(parseClause.optionsSeparator());
+		assertNotNull(parseClause.optionsExpression());
+		assertNotNull(parseClause.encodingSeparator());
+		assertNotNull(parseClause.encodingExpression());
+		assertNotNull(parseClause.ccsidSeparator());
+		assertNotNull(parseClause.ccsidExpression());
+		assertNotNull(parseClause.setSeparator());
+		assertNotNull(parseClause.setExpression());
+		assertNotNull(parseClause.typeSeparator());
+		assertNotNull(parseClause.typeExpression());
+		assertNotNull(parseClause.formatSeparator());
+		assertNotNull(parseClause.formatExpression());
+		
+		
 		assertNotNull(parseClause.closingParenthesis());
 		assertEquals(parseClause.closingParenthesis().text(), ")");
 
