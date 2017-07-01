@@ -1,0 +1,11 @@
+BROKER SCHEMA mapping.esql
+
+
+-- AS pathExpression instead of AS filedReference 
+
+DECLARE STATUS_YN_MAPPING SHARED CONSTANT ROW ROW (
+	'ACTIVE' 	AS list[1].bBoolean,
+	'Y'  		AS list[1].sBoolean,
+	'INACTIVE' 	AS list[2].bBoolean,
+	'N'   		AS list[2].sBoolean
+);

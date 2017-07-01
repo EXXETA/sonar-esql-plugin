@@ -1,0 +1,19 @@
+BROKER SCHEMA mapping.esql
+
+-- LIST constructor not present in parser
+
+CREATE PROCEDURE CheckValidOptiom ( IN option CHARACTER ) RETURNS BOOLEAN
+	-----------------------------------------------------------------------------------------
+	--  Check if option exists in list  --
+	-----------------------------------------------------------------------------------------
+	BEGIN
+		RETURN option IN(
+			LIST{	'A',
+					'B',
+					'C',
+					'D',
+					'E',
+					'F',
+					'G',
+					'H'});
+	END;
