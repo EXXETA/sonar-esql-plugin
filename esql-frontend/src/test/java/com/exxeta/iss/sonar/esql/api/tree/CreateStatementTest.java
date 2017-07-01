@@ -29,6 +29,7 @@ import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ParseClauseTree;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.FromClauseTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.ParseClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ValuesClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
@@ -53,6 +54,9 @@ public class CreateStatementTest  extends EsqlTreeModelTest<CreateStatementTreeI
 		.matches("CREATE LASTCHILD OF OutputRoot.XMLNS.TestCase.Root IDENTITY (XML.Element)NSpace1:Element1[2] VALUE 'Element 2 Value';")
 		.matches("CREATE LASTCHILD OF OutputRoot DOMAIN('MRM');")
 		.matches("CREATE LASTCHILD OF OutputRoot DOMAIN('MRM') PARSE(inBitStream, inEncoding, inCCSID, 'DP3UK14002001', 'TestCase', 'XML1', options);")
+		.matches("CREATE LASTCHILD OF OutputRoot DOMAIN('MRM') PARSE(inBitStream ENCODING inEncoding CCSID inCCSID);")
+		.matches("CREATE LASTCHILD OF OutputRoot DOMAIN('MRM') PARSE(inBitStream SET 'abc' TYPE 'TestCase' FORMAT 'XML1');")
+		.matches("CREATE LASTCHILD OF OutputRoot DOMAIN('MRM') PARSE(inBitStream OPTIONS options);")
 		;
 	}
 	
@@ -60,7 +64,9 @@ public class CreateStatementTest  extends EsqlTreeModelTest<CreateStatementTreeI
 	public void parseClause(){
 		assertThat(Kind.PARSE_CLAUSE)
 		.matches("PARSE(inBitStream, inEncoding, inCCSID, 'DP3UK14002001', 'TestCase', 'XML1', options)")
-		.matches("PARSE(inBitStream, inEncoding, inCCSID,,,, options)");
+		.matches("PARSE(inBitStream, inEncoding, inCCSID,,,, options)")
+		.matches("PARSE(inBitStream, inEncoding, inCCSID,,,'XML1')")
+		.matches("PARSE(inBitStream)");
 		;
 	}
 	@Test
@@ -95,7 +101,7 @@ public class CreateStatementTest  extends EsqlTreeModelTest<CreateStatementTreeI
 		assertEquals(tree.semi().text(), ";");
 		
 		//ParseClause
-		ParseClauseTree parseClause = tree.parseClause();
+		ParseClauseTreeImpl parseClause = tree.parseClause();
 		assertNotNull(parseClause);
 		assertNotNull(parseClause.parseKeyword());
 		assertEquals(parseClause.parseKeyword().text(), "PARSE");
@@ -120,6 +126,8 @@ public class CreateStatementTest  extends EsqlTreeModelTest<CreateStatementTreeI
 		assertNotNull(parseClause.closingParenthesis());
 		assertEquals(parseClause.closingParenthesis().text(), ")");
 
+		assertTrue(parseClause.isCommaSeparated());
+		
 		tree = parse("CREATE LASTCHILD OF OutputRoot From InputRoot.A;", Kind.CREATE_STATEMENT);
 		
 		assertNotNull(tree.fromClause());
