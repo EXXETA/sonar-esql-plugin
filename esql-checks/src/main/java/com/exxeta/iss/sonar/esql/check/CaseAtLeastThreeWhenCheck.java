@@ -25,7 +25,7 @@ import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
 import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
 import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
 
-@Rule(key = "CaseAtLeastThreeWhenCheck")
+@Rule(key = "CaseAtLeastThreeWhen")
 public class CaseAtLeastThreeWhenCheck extends DoubleDispatchVisitorCheck {
 
 	@Override
