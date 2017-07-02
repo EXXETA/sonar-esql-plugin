@@ -18,12 +18,15 @@
 package com.exxeta.iss.sonar.esql.api.tree;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.ForStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class ForStatementTest {
+public class ForStatementTest extends EsqlTreeModelTest<ForStatementTreeImpl>{
 
 	@Test
 	public void forStatement() {
@@ -33,4 +36,22 @@ public class ForStatementTest {
 
 	}
 	
+	
+	@Test
+	public void modelTest() throws Exception{
+		ForStatementTreeImpl tree = parse("FOR source AS Environment.SourceData.Folder[] DO SET A = 1; SET B = 2; END FOR;", Kind.FOR_STATEMENT);
+		
+		assertNotNull(tree);
+		
+		assertNotNull(tree.forKeyword());
+		assertNotNull(tree.correlationName());
+		assertNotNull(tree.asKeyword());
+		assertNotNull(tree.fieldReference());
+		assertNotNull(tree.doKeyword());
+		assertNotNull(tree.statements());
+		assertNotNull(tree.forKeyword2());
+		assertNotNull(tree.endKeyword());
+		assertNotNull(tree.semi());
+		
+	}
 }
