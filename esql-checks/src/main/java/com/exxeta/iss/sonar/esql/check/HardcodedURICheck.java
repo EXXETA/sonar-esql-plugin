@@ -91,7 +91,8 @@ public class HardcodedURICheck extends DoubleDispatchVisitorCheck {
 		Iterator<PathElementTree> iter = fieldReference.pathElements().iterator();
 		while (iter.hasNext()) {
 			PathElementTree pathElement = iter.next();
-			if (pathElement.name()!=null && VARIABLE_NAME_PATTERN.matcher(pathElement.name().name().text()).find()) {
+			if (pathElement.name()!=null && pathElement.name().name()!=null
+					&& VARIABLE_NAME_PATTERN.matcher(pathElement.name().name().text()).find()) {
 				return true;
 			}
 		}
