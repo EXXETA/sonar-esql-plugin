@@ -6,6 +6,7 @@ CREATE COMPUTE MODULE ProcessCardAccount
   		SET stuffs = '';
 		SET path = '/home/path/to/my/file.txt'; -- Noncompliant [[sc=14;ec=41]] {{Refactor your code to get this URI from a customizable parameter.}}
 		SET ABC.filename = 'c:\test'; --Noncompliant
+		SET OutputRoot.[1].filename = 'c:\test'; --Noncompliant
 		
 		SET fileName = '\\blah\blah\'; -- Noncompliant {{Refactor your code to get this URI from a customizable parameter.}}
 	    SET fileNAME = s; -- Compliant
