@@ -42,7 +42,7 @@ public class CallStatementTreeImpl extends EsqlTree implements CallStatementTree
 	private FieldReferenceTreeImpl schemaReference;
 	private InternalSyntaxToken externalKeyword;
 	private InternalSyntaxToken schemaKeyword;
-	private InternalSyntaxToken externalSchemaName;
+	private ExpressionTree externalSchemaName;
 	private InternalSyntaxToken intoKeyword;
 	private FieldReferenceTreeImpl intoTarget;
 	private InternalSyntaxToken semi;
@@ -64,7 +64,7 @@ public class CallStatementTreeImpl extends EsqlTree implements CallStatementTree
 		
 	}
 
-	public void externalSchema(InternalSyntaxToken externalKeyword, InternalSyntaxToken schemaKeyword, InternalSyntaxToken externalSchemaName) {
+	public void externalSchema(InternalSyntaxToken externalKeyword, InternalSyntaxToken schemaKeyword, ExpressionTree externalSchemaName) {
 		this.externalKeyword=externalKeyword;
 		this.schemaKeyword=schemaKeyword;
 		this.externalSchemaName=externalSchemaName;
@@ -123,7 +123,7 @@ public class CallStatementTreeImpl extends EsqlTree implements CallStatementTree
 	}
 
 	@Override
-	public InternalSyntaxToken externalSchemaName() {
+	public ExpressionTree externalSchemaName() {
 		return externalSchemaName;
 	}
 

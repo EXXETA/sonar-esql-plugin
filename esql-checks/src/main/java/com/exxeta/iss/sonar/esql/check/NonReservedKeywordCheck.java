@@ -22,9 +22,9 @@ import java.util.Set;
 import org.sonar.check.Rule;
 
 import com.exxeta.iss.sonar.esql.api.EsqlNonReservedKeyword;
+import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.DeclareStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
-import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.google.common.collect.ImmutableSet;
 
 @Rule(key = NonReservedKeywordCheck.CHECK_KEY)
@@ -36,9 +36,9 @@ public class NonReservedKeywordCheck extends DoubleDispatchVisitorCheck {
 	@Override
 	public void visitDeclareStatement(DeclareStatementTree tree) {
 		for (int i=0;i<tree.nameList().size();i++){
-			InternalSyntaxToken variableName = tree.nameList().get(i);
-			if (nonReservedKeywords.contains(variableName.text())){
-				addIssue(variableName, String.format(MESSAGE, variableName.text()));
+			IdentifierTree variableName = tree.nameList().get(i);
+			if (nonReservedKeywords.contains(variableName.name())){
+				addIssue(variableName, String.format(MESSAGE, variableName.name()));
 			}
 		}
 		super.visitDeclareStatement(tree);

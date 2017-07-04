@@ -37,6 +37,7 @@ public class CommentLineVisitor extends SubscriptionVisitor {
   // seenFirstToken is required to track header comments (header comments are saved as trivias of first non-trivia token)
   private boolean seenFirstToken;
 
+  private boolean ignoreHeaderComments;
   private EsqlCommentAnalyser commentAnalyser = new EsqlCommentAnalyser();
 
   @Override
@@ -44,7 +45,10 @@ public class CommentLineVisitor extends SubscriptionVisitor {
     return ImmutableList.of(Tree.Kind.TOKEN);
   }
 
-  public CommentLineVisitor(Tree tree) {
+  public CommentLineVisitor(Tree tree, boolean ignoreHeaderComments) {
+    this.ignoreHeaderComments = ignoreHeaderComments;
+
+	  
     this.comments.clear();
     this.noSonarLines.clear();
     this.seenFirstToken = false;
@@ -54,7 +58,7 @@ public class CommentLineVisitor extends SubscriptionVisitor {
   @Override
   public void visitNode(Tree tree) {
     for (SyntaxTrivia trivia : ((SyntaxToken) tree).trivias()) {
-      if (seenFirstToken) {
+      if ((ignoreHeaderComments && seenFirstToken) || !ignoreHeaderComments) {
         String[] commentLines = commentAnalyser.getContents(trivia.text())
           .split("(\r)?\n|\r", -1);
         int lineNumber = trivia.line();

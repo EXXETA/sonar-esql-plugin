@@ -17,22 +17,39 @@
  */
 package com.exxeta.iss.sonar.esql.api.tree.expression;
 
-import javax.annotation.Nullable;
+import java.util.Optional;
 
 import com.exxeta.iss.sonar.esql.api.symbols.Symbol;
+import com.exxeta.iss.sonar.esql.api.symbols.Usage;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
-import com.exxeta.iss.sonar.esql.api.tree.symbols.Scope;
 import com.exxeta.iss.sonar.esql.tree.declaration.BindingElementTree;
+import com.exxeta.iss.sonar.esql.tree.symbols.Scope;
 
 
-public interface IdentifierTree extends ExpressionTree, BindingElementTree {
+public interface IdentifierTree extends VariableReferenceTree, BindingElementTree {
 
 	  SyntaxToken identifierToken();
 
 	  String name();
 
-	  @Nullable
-	  Symbol symbol();
+	  /**
+	   * @return {@link Usage} corresponding to this identifier. Empty optional is returned when there is no symbol available for this identifier (see {@link IdentifierTree#symbol()})
+	   */
+	  Optional<Usage> symbolUsage();
 
+	  /**
+	   * @return {@link Symbol} which is referenced by this identifier. No {@link Symbol} is returned in several cases:
+	   * <ul>
+	   *   <li>for {@link Kind#PROPERTY_IDENTIFIER}</li>
+	   *   <li>for unresolved symbol (i.e. symbol being read without being written)</li>
+	   * </ul>
+	   * Note that {@link Kind#BINDING_IDENTIFIER} (used for symbol declaration) always has corresponding symbol.
+	   * Note that this method is a shortcut for {@link IdentifierTree#symbolUsage()#symbol()}.
+	   */
+	  Optional<Symbol> symbol();
+
+	  /**
+	   * @return {@link Scope} instance in which this identifier appear
+	   */
 	  Scope scope();
 	}

@@ -56,7 +56,57 @@ public final class CheckList {
         UnusedRoutineCheck.class,
         EmptyBlockCheck.class,
         EmptyFileCheck.class,
-        UselessParenthesesCheck.class
+        UselessParenthesesCheck.class,
+        CaseAtLeastThreeWhenCheck.class,
+        FileHeaderCheck.class,
+        IdenticalExpressionOnBinaryOperatorCheck.class,
+        IfConditionalAlwaysTrueOrFalseCheck.class,
+        DuplicateConditionIfElseAndCaseWhensCheck.class,
+        BooleanInversionCheck.class,
+        HardCodedCredentialsCheck.class,
+        HardcodedIpCheck.class,
+        HardcodedURICheck.class,
+        BooleanLiteralCheck.class,
+        CaseWithoutElseCheck.class,
+        CardinalityInLoopCheck.class,
+        LoopWithoutLeaveCheck.class,
+        EmptyMainFunctionCheck.class,
+        UnknownMessageDomainCheck.class,
+        ParameterWithDirectionCheck.class,
+        DeleteFromWithoutWhereCheck.class,
+        SelectAllCheck.class,
+        SleepCheck.class,
+        EvalCheck.class,
+        BitstreamCheck.class,
+        CaseWithTooManyWhensCheck.class,
+        InitializeVariablesCheck.class,
+        UndocumentedModuleCheck.class,
+        UndocumentedRoutineCheck.class,
+        TooManyParametersCheck.class,
+        VariablesSubtreeCheck.class,
+        XmlnscDomainCheck.class,
+        RoutineWithExcessiveReturnsCheck.class
+        
+        /*
+        
+ Backlog       
+        
+- Use the SOAP domain not soap in the xmlnsc domain
+
+- SOAP version should be 1.2 or 1.1
+  
+ IdenticalOperandOnBinaryExpressionCheck
+
+- Unreachable code after THROW or RETURN
+
+- Unused variable
+
+ - Uppercase keywords
+
+- IF/ELSEIF should be CASE
+
+       
+        */
         );
   }
 

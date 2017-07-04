@@ -67,11 +67,7 @@ public class ParenthesisedExpressionTreeImpl extends EsqlTree implements Parenth
 
   @Override
   public Iterator<Tree> childrenIterator() {
-    return Iterators.<Tree>concat(
-      Iterators.singletonIterator(openParenthesis),
-      Iterators.singletonIterator(expression),
-      Iterators.singletonIterator(closeParenthesis)
-    );
+    return Iterators.forArray(openParenthesis,expression,closeParenthesis);
   }
 
   @Override

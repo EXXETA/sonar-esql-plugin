@@ -25,84 +25,122 @@ import com.exxeta.iss.sonar.esql.api.symbols.Usage;
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.BlockTree;
-import com.exxeta.iss.sonar.esql.api.tree.symbols.Scope;
+import com.exxeta.iss.sonar.esql.api.tree.statement.BeginEndStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.CreateFunctionStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.DeclareStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.SetMultimap;
 
 /**
- * This visitor creates new symbols for not hoisted variables (like class name) and implicitly declared variables (declared without keyword).
- * Also it creates usages for all known symbols.
+ * This visitor creates new symbols for not hoisted variables (like class name)
+ * and implicitly declared variables (declared without keyword). Also it creates
+ * usages for all known symbols.
  */
 public class SymbolVisitor extends DoubleDispatchVisitor {
 
-  private SymbolModelBuilder symbolModel;
-  private Scope currentScope;
-  private Map<Tree, Scope> treeScopeMap;
+	private SymbolModelBuilder symbolModel;
+	private Scope currentScope;
+	private Map<Tree, Scope> treeScopeMap;
+	private SetMultimap<Scope, String> declaredBlockScopeNames = HashMultimap.create();
 
-  public SymbolVisitor(Map<Tree, Scope> treeScopeMap) {
-    this.treeScopeMap = treeScopeMap;
-  }
+	public SymbolVisitor(Map<Tree, Scope> treeScopeMap) {
+		this.treeScopeMap = treeScopeMap;
+	}
 
-  @Override
-  public void visitProgram(ProgramTree tree) {
-    this.symbolModel = (SymbolModelBuilder) getContext().getSymbolModel();
-    this.currentScope = null;
+	@Override
+	public void visitProgram(ProgramTree tree) {
+		this.symbolModel = (SymbolModelBuilder) getContext().getSymbolModel();
+		this.currentScope = null;
 
-    enterScope(tree);
-    super.visitProgram(tree);
-    leaveScope();
-  }
+		enterScope(tree);
+		super.visitProgram(tree);
+		leaveScope();
+	}
 
+	@Override
+	public void visitCreateFunctionStatement(CreateFunctionStatementTree tree) {
+		enterScope(tree);
+		super.visitCreateFunctionStatement(tree);
+		leaveScope();
+	}
 
-  @Override
-  public void visitBlock(BlockTree tree) {
-    if (isScopeAlreadyEntered(tree)) {
-      super.visitBlock(tree);
+	@Override
+	public void visitCreateProcedureStatement(CreateProcedureStatementTree tree) {
+		enterScope(tree);
+		super.visitCreateProcedureStatement(tree);
+		leaveScope();
+	}
 
-    } else {
-      enterScope(tree);
-      super.visitBlock(tree);
-      leaveScope();
-    }
-  }
+	@Override
+	public void visitDeclareStatement(DeclareStatementTree tree) {
+		for (IdentifierTree identifier : tree.nameList()) {
+			scan(identifier);
+			declaredBlockScopeNames.put(currentScope, identifier.name());
+		}
+	}
 
+	@Override
+	public void visitIdentifier(IdentifierTree tree) {
+		if (tree.is(Tree.Kind.IDENTIFIER_REFERENCE)) {
+			addUsageFor(tree, Usage.Kind.READ);
+		}
+	}
 
-  private void leaveScope() {
-    if (currentScope != null) {
-      currentScope = currentScope.outer();
-    }
-  }
+	@Override
+	public void visitBeginEndStatement(BeginEndStatementTree tree) {
+		if (isScopeAlreadyEntered(tree)) {
+			super.visitBeginEndStatement(tree);
 
-  private void enterScope(Tree tree) {
-    currentScope = treeScopeMap.get(tree);
-    if (currentScope == null) {
-      throw new IllegalStateException("No scope found for the tree");
-    }
-  }
+		} else {
+			enterScope(tree);
+			super.visitBeginEndStatement(tree);
+			leaveScope();
+		}
+	}
 
-  /**
-   * @return true if symbol found and usage recorded, false otherwise.
-   */
-  private boolean addUsageFor(IdentifierTree identifier, Usage.Kind kind) {
-    Symbol symbol = currentScope.lookupSymbol(identifier.name());
-    if (symbol != null) {
-      symbol.addUsage(Usage.create(identifier, kind));
-      return true;
-    }
-    return false;
-  }
+	private void leaveScope() {
+		if (currentScope != null) {
+			currentScope = currentScope.outer();
+		}
+	}
 
-  private boolean isScopeAlreadyEntered(BlockTree tree) {
-    return !treeScopeMap.containsKey(tree);
-  }
+	private void enterScope(Tree tree) {
+		currentScope = treeScopeMap.get(tree);
+		if (currentScope == null) {
+			throw new IllegalStateException("No scope found for the tree");
+		}
+	}
 
-  private Scope getFunctionScope() {
-    Scope scope = currentScope;
-    while (scope.isBlock()) {
-      scope = scope.outer();
-    }
-    return scope;
-  }
+	/**
+	 * @return true if symbol found and usage recorded, false otherwise.
+	 */
+	private boolean addUsageFor(IdentifierTree identifier, Usage.Kind kind) {
+		Symbol symbol = currentScope.lookupSymbol(identifier.name());
+		if (symbol != null && !isUndeclaredBlockScopedSymbol(symbol)) {
+			symbol.addUsage(identifier, kind);
+			return true;
+		}
+		return false;
+	}
 
- 
+	private boolean isUndeclaredBlockScopedSymbol(Symbol symbol) {
+		return (symbol.is(Symbol.Kind.VARIABLE) || symbol.is(Symbol.Kind.CONST_VARIABLE)
+				|| symbol.is(Symbol.Kind.EXTERNAL_VARIABLE)) && currentScope.equals(symbol.scope())
+				&& !declaredBlockScopeNames.get(currentScope).contains(symbol.name());
+	}
+
+	private boolean isScopeAlreadyEntered(BeginEndStatementTree tree) {
+		return !treeScopeMap.containsKey(tree);
+	}
+
+	private Scope getFunctionScope() {
+		Scope scope = currentScope;
+		while (scope.isBlock()) {
+			scope = scope.outer();
+		}
+		return scope;
+	}
+
 }

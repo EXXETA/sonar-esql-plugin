@@ -53,11 +53,11 @@ public class FunctionNameCheck extends DoubleDispatchVisitorCheck {
 	@Override
 	public void visitCreateFunctionStatement(CreateFunctionStatementTree tree) {
 		super.visitCreateFunctionStatement(tree);
-		if (!pattern.matcher(tree.identifier().text()).matches()) {
-			if (!ignoreMain || !tree.identifier().text().equalsIgnoreCase("Main"))
+		if (!pattern.matcher(tree.identifier().name()).matches()) {
+			if (!ignoreMain || !"Main".equalsIgnoreCase(tree.identifier().name()))
 			addIssue(
 					new PreciseIssue(this, new IssueLocation(tree.identifier(), tree.identifier(), "Rename function \""
-							+ tree.identifier().text() + "\" to match the regular expression " + format + ".")));
+							+ tree.identifier().name() + "\" to match the regular expression " + format + ".")));
 
 		}
 

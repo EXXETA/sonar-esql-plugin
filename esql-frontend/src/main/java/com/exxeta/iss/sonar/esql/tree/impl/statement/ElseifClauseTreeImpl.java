@@ -31,13 +31,13 @@ import com.google.common.collect.Iterators;
 public class ElseifClauseTreeImpl extends EsqlTree implements ElseifClauseTree {
 
 	  private InternalSyntaxToken elseifKeyword;
-	  private ExpressionTree expression;
+	  private ExpressionTree condition;
 	  private InternalSyntaxToken thenKeyword;
 	  private final StatementsTreeImpl statements;
 
-	  public ElseifClauseTreeImpl(InternalSyntaxToken elseifKeyword, ExpressionTree expression, InternalSyntaxToken thenToken, StatementsTreeImpl statements) {
+	  public ElseifClauseTreeImpl(InternalSyntaxToken elseifKeyword, ExpressionTree condition, InternalSyntaxToken thenToken, StatementsTreeImpl statements) {
 		    this.elseifKeyword = elseifKeyword;
-		    this.expression=expression;
+		    this.condition=condition;
 		    this.thenKeyword=thenToken;
 		    this.statements = statements;
 
@@ -55,8 +55,8 @@ public class ElseifClauseTreeImpl extends EsqlTree implements ElseifClauseTree {
 	  }
 	  
 	  @Override
-	  public ExpressionTree expression() {
-		return expression;
+	  public ExpressionTree condition() {
+		return condition;
 	}
 	  
 	  @Override
@@ -77,7 +77,7 @@ public class ElseifClauseTreeImpl extends EsqlTree implements ElseifClauseTree {
 	  @Override
 	  public Iterator<Tree> childrenIterator() {
 		  
-		  return Iterators.forArray(elseifKeyword, expression, thenKeyword, statements);
+		  return Iterators.forArray(elseifKeyword, condition, thenKeyword, statements);
 	  }
 
 	  @Override

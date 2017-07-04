@@ -104,7 +104,7 @@ public class TooManyIterateOrLeaveInLoopCheck extends DoubleDispatchVisitorCheck
 	@Override
 	public void visitWhileStatement(WhileStatementTree tree) {
 		if (tree.label() != null) {
-			enterScope(tree.label().name().text());
+			enterScope(tree.label().name().name());
 		} else {
 			enterScope(null);
 		}
@@ -116,7 +116,7 @@ public class TooManyIterateOrLeaveInLoopCheck extends DoubleDispatchVisitorCheck
 	@Override
 	public void visitRepeatStatement(RepeatStatementTree tree) {
 		if (tree.label() != null) {
-			enterScope(tree.label().name().text());
+			enterScope(tree.label().name().name());
 		} else {
 			enterScope(null);
 		}
@@ -128,7 +128,7 @@ public class TooManyIterateOrLeaveInLoopCheck extends DoubleDispatchVisitorCheck
 	@Override
 	public void visitLoopStatement(LoopStatementTree tree) {
 		if (tree.label() != null) {
-			enterScope(tree.label().name().text());
+			enterScope(tree.label().name().name());
 		} else {
 			enterScope(null);
 		}
@@ -140,7 +140,7 @@ public class TooManyIterateOrLeaveInLoopCheck extends DoubleDispatchVisitorCheck
 	@Override
 	public void visitBeginEndStatement(BeginEndStatementTree tree) {
 		if (tree.labelName1() != null) {
-			enterScope(tree.labelName1().name().text());
+			enterScope(tree.labelName1().name().name());
 		} else {
 			enterScope(null);
 		}
@@ -159,7 +159,7 @@ public class TooManyIterateOrLeaveInLoopCheck extends DoubleDispatchVisitorCheck
 
 	private void increaseNumberOfJumpInScopes(SyntaxToken jump, @Nullable LabelTree label) {
 		for (JumpTarget jumpTarget : jumpTargets) {
-			String labelName = label == null ? null : label.name().text();
+			String labelName = label == null ? null : label.name().name();
 			jumpTarget.jumps.add(jump);
 
 			if (Objects.equal(labelName, jumpTarget.label)) {

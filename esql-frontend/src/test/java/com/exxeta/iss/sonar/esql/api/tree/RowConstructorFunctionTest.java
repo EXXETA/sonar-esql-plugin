@@ -18,12 +18,15 @@
 package com.exxeta.iss.sonar.esql.api.tree;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.tree.impl.function.RowConstructorFunctionTreeImpl;
+import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class RowConstructorFunctionTest {
+public class RowConstructorFunctionTest extends EsqlTreeModelTest<RowConstructorFunctionTreeImpl>{
 
 	@Test
 	public void rowConstructorFunction() {
@@ -32,5 +35,16 @@ public class RowConstructorFunctionTest {
 		assertThat(Kind.SET_STATEMENT)
 		.matches("SET OutputRoot.XMLNS.Data = ROW('granary' AS bread, 'riesling' AS wine, 'stilton' AS cheese);");
 	}
+	
+	@Test
+	public void modelTest() throws Exception{
+		RowConstructorFunctionTreeImpl tree = parse ("ROW('granary' AS bread, 'riesling' AS wine, 'stilton' AS cheese)", Kind.ROW_CONSTRUCTOR_FUNCTION);
+		assertNotNull(tree.rowKeyword());
+		assertNotNull(tree.openingParenthesis());
+		assertNotNull(tree.aliasedExpressions());
+		assertNotNull(tree.closingParenthesis());
+		
+	}
+	
 	
 }

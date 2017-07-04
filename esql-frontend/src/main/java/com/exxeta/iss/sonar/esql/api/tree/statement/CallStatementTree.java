@@ -42,7 +42,7 @@ public interface CallStatementTree extends StatementTree {
 
 	InternalSyntaxToken schemaKeyword();
 
-	InternalSyntaxToken externalSchemaName();
+	ExpressionTree externalSchemaName();
 
 	InternalSyntaxToken intoKeyword();
 

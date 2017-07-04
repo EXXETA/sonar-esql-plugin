@@ -37,8 +37,8 @@ public class IssueLocation {
   }
 
   public IssueLocation(Tree firstTree, Tree lastTree, @Nullable String message) {
-    this.firstToken = ((EsqlTree) firstTree).getFirstToken();
-    this.lastToken = ((EsqlTree) lastTree).getLastToken();
+    this.firstToken = ((EsqlTree) firstTree).firstToken();
+    this.lastToken = ((EsqlTree) lastTree).lastToken();
     this.message = message;
   }
 

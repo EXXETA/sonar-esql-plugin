@@ -18,12 +18,12 @@
 package com.exxeta.iss.sonar.esql.api.tree.statement;
 
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.VariableReferenceTree;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
-import com.exxeta.iss.sonar.esql.tree.impl.declaration.FieldReferenceTreeImpl;
 
 public interface SetStatementTree extends StatementTree {
 	SyntaxToken setKeyword();
-	FieldReferenceTreeImpl fieldReference();
+	VariableReferenceTree variableReference();
 	SyntaxToken type();
 	SyntaxToken equalSign();
 	ExpressionTree expression();

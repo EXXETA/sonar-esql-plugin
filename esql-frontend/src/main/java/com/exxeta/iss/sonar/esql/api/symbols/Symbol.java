@@ -17,23 +17,28 @@
  */
 package com.exxeta.iss.sonar.esql.api.symbols;
 
-import com.exxeta.iss.sonar.esql.api.tree.symbols.Scope;
-import com.exxeta.iss.sonar.esql.tree.impl.expression.IdentifierTreeImpl;
-import com.google.common.annotations.Beta;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
+import com.exxeta.iss.sonar.esql.tree.impl.expression.IdentifierTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.symbols.Scope;
+import com.google.common.annotations.Beta;
+
 @Beta
 public class Symbol {
 
   public enum Kind {
     VARIABLE("variable"),
+    CONST_VARIABLE("read-only variable"),
+    EXTERNAL_VARIABLE("user defined property"),
     FUNCTION("function"),
     PROCEDURE("procedure"),
-    MODULE("module");
+    MODULE("module"), 
+    PARAMETER("parameter");
 
     private final String value;
 
@@ -62,11 +67,15 @@ public class Symbol {
     this.types = TypeSet.emptyTypeSet();
   }
 
-  public void addUsage(Usage usage) {
-    usages.add(usage);
-    ((IdentifierTreeImpl) usage.identifierTree()).setSymbol(this);
-  }
+  private void addUsage(Usage usage) {
+	    usages.add(usage);
+	    ((IdentifierTreeImpl) usage.identifierTree()).setSymbolUsage(usage);
+	  }
 
+	  public void addUsage(IdentifierTree identifierTree, Usage.Kind usageKind) {
+	    final Usage usage = new Usage(identifierTree, usageKind, this);
+	    addUsage(usage);
+	  }
   public Collection<Usage> usages() {
     return Collections.unmodifiableList(usages);
   }

@@ -1,0 +1,12 @@
+CREATE COMPUTE MODULE ABC
+   CREATE PROCEDURE caseCheck()
+   BEGIN
+   
+   	IF NOT ( A>=B ) THEN
+   		SET C = NOT(C<D);
+   	END IF;
+   END;
+   
+
+END MODULE;
+   

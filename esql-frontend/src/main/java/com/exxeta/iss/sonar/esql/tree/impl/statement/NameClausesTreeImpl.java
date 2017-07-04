@@ -134,7 +134,7 @@ public class NameClausesTreeImpl extends EsqlTree implements NameClausesTree {
 
 	@Override
 	public Iterator<Tree> childrenIterator() {
-		return Iterators.forArray(typeKeyword, typeExpression, namespaceKeyword, nameExpression, namespaceStar,
+		return Iterators.forArray(typeKeyword, typeExpression, namespaceKeyword, namespaceExpression, namespaceStar,
 				nameKeyword, nameExpression, identityKeyword, pathElement, repeatKeyword, repeatTypeKeyword,
 				repeatNameKeyword);
 	}

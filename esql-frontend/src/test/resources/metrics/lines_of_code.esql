@@ -1,0 +1,4 @@
+CREATE FUNCTION sayHello() 
+BEGIN
+  CALL alert('Hello World!');
+END;

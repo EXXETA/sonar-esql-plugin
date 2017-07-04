@@ -1,0 +1,16 @@
+{
+  "title": "The message domain is undefined.",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "10min"
+  },
+  "tags": [
+    "bug",
+    "cert",
+    "unused",
+    "pitfall"
+  ],
+  "defaultSeverity": "Major"
+}

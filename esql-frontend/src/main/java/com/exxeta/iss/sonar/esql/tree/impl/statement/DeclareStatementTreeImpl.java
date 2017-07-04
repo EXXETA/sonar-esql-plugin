@@ -23,6 +23,7 @@ import com.google.common.collect.Iterators;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.DeclareStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
@@ -34,7 +35,7 @@ import com.google.common.base.Functions;
 public class DeclareStatementTreeImpl  extends EsqlTree implements DeclareStatementTree {
 
 	private InternalSyntaxToken declareToken;
-	private SeparatedList<InternalSyntaxToken> nameList;
+	private SeparatedList<IdentifierTree> nameList;
 	private InternalSyntaxToken sharedExt;
 	private InternalSyntaxToken namesapce;
 	private InternalSyntaxToken constantKeyword;
@@ -43,7 +44,7 @@ public class DeclareStatementTreeImpl  extends EsqlTree implements DeclareStatem
 	private InternalSyntaxToken semi;
 
 
-	public DeclareStatementTreeImpl(InternalSyntaxToken declareToken, SeparatedList<InternalSyntaxToken> nameList,
+	public DeclareStatementTreeImpl(InternalSyntaxToken declareToken, SeparatedList<IdentifierTree> nameList,
 			InternalSyntaxToken sharedExt, InternalSyntaxToken namesapce, ExpressionTree initialValueExpression,
 			InternalSyntaxToken semi) {
 		super();
@@ -57,7 +58,7 @@ public class DeclareStatementTreeImpl  extends EsqlTree implements DeclareStatem
 	
 	
 
-	public DeclareStatementTreeImpl(InternalSyntaxToken declareToken, SeparatedList<InternalSyntaxToken> nameList,
+	public DeclareStatementTreeImpl(InternalSyntaxToken declareToken, SeparatedList<IdentifierTree> nameList,
 			InternalSyntaxToken sharedExt, InternalSyntaxToken constantKeyword, DataTypeTreeImpl dataType,
 			ExpressionTree initialValueExpression, InternalSyntaxToken semi) {
 		super();
@@ -80,7 +81,7 @@ public class DeclareStatementTreeImpl  extends EsqlTree implements DeclareStatem
 
 
 	@Override
-	public SeparatedList<InternalSyntaxToken> nameList() {
+	public SeparatedList<IdentifierTree> nameList() {
 		return nameList;
 	}
 
@@ -137,7 +138,7 @@ public class DeclareStatementTreeImpl  extends EsqlTree implements DeclareStatem
 	  public Iterator<Tree> childrenIterator() {
 		  return Iterators.concat(
 				  	Iterators.singletonIterator(declareToken),
-				  	nameList.elementsAndSeparators(Functions.<InternalSyntaxToken>identity()),
+				  	nameList.elementsAndSeparators(Functions.<IdentifierTree>identity()),
 				  	Iterators.forArray(sharedExt, namesapce, constantKeyword, dataType, initialValueExpression, semi)
 				  );
 	  }
@@ -146,5 +147,19 @@ public class DeclareStatementTreeImpl  extends EsqlTree implements DeclareStatem
 	  public void accept(DoubleDispatchVisitor visitor) {
 	    visitor.visitDeclareStatement(this);
 	  }
+
+
+
+	@Override
+	public boolean isExternal() {
+		return sharedExt!=null && "EXTERNAL".equalsIgnoreCase(sharedExt.text());
+	}
+
+
+
+	@Override
+	public boolean isConstant() {
+		return constantKeyword!=null;
+	}
 
 }

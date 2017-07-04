@@ -18,17 +18,56 @@
 package com.exxeta.iss.sonar.esql.api.tree;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
+import com.exxeta.iss.sonar.esql.api.tree.statement.ControlsTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.MessageSourceTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.PropagateStatementTree;
+import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
+import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class PropagateStatementTest {
+public class PropagateStatementTest extends EsqlTreeModelTest<PropagateStatementTree>{
 	@Test
 	public void propagateStatement(){
 		assertThat(Kind.PROPAGATE_STATEMENT)
-		.matches("PROPAGATE TO LABEL 'ABC';");
+		.matches("PROPAGATE TO LABEL 'ABC';")
+		.matches("PROPAGATE;");
+		
 
+	}
+	
+	@Test
+	public void modelTest() throws Exception{
+		PropagateStatementTree tree = parse("PROPAGATE TO LABEL 'abc' FINALIZE NONE DELETE NONE;", Kind.PROPAGATE_STATEMENT);
+		assertNotNull(tree.propagateKeyword());
+		assertNotNull(tree.toKeyword());
+		assertNotNull(tree.targetType());
+		assertNotNull(tree.target());
+		assertNotNull(tree.messageSource());
+		assertNotNull(tree.controls());
+		assertNotNull(tree.semi());
+		MessageSourceTree messageSource = tree.messageSource();
+		
+		assertNull(messageSource.environmentKeyword());
+		assertNull(messageSource.environment());
+		assertNull(messageSource.messageKeyword()); 
+		assertNull(messageSource.message()); 
+		assertNull(messageSource.exceptionKeyword());
+		assertNull(messageSource.exception());
+		
+		
+		ControlsTree controls = tree.controls();
+		
+		assertNotNull(controls.finalizeKeyword());
+		assertNotNull(controls.finalizeType());
+		assertNotNull(controls.deleteKeyword());
+		assertNotNull(controls.deleteType());
 	}
 	
 	

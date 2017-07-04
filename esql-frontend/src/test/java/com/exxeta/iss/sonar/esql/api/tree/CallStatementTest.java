@@ -18,29 +18,55 @@
 package com.exxeta.iss.sonar.esql.api.tree;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.CallStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class CallStatementTest {
-
+public class CallStatementTest extends EsqlTreeModelTest<CallStatementTreeImpl> {
 
 	@Test
-	public void callStatement(){
+	public void callStatement() {
 		assertThat(Kind.CALL_STATEMENT)
-		.matches("CALL myProc1();")
-		.matches("CALL a.b.c.myProc1();")
-		.matches("CALL myProc1() INTO cursor;")
-		.matches("CALL myProc1() INTO OutputRoot.XMLNS.TestValue1;");
+			.matches("CALL myProc1();")
+			.matches("CALL a.b.c.myProc1();")
+			.matches("CALL myProc1() INTO cursor;")
+			.matches("CALL myProc1() INTO OutputRoot.XMLNS.TestValue1;")
+			.matches("CALL myProc1() EXTERNAL SCHEMA 'test';")
+			.matches("CALL myProc1() IN Database.test;")
+			;
 
 	}
-	
+
 	@Test
-	public void fielReference(){
-		assertThat(Kind.FIELD_REFERENCE)
-		.matches("cursor");
+	public void modelTest() throws Exception {
+		CallStatementTreeImpl tree = parse("CALL myProc1() INTO cursor;", Kind.CALL_STATEMENT);
+		assertNotNull(tree);
+		assertNotNull(tree.callKeyword());
+		assertEquals("CALL", tree.callKeyword().text());
+		assertNotNull(tree.routineName());
+		assertNotNull(tree.openParen());
+		assertEquals(tree.openParen().text(), "(");
+		assertNotNull(tree.parameterList());
+		assertFalse(tree.parameterList().iterator().hasNext());
+		assertNotNull(tree.closeParen());
+		assertEquals(tree.closeParen().text(), ")");
+		assertNotNull(tree.intoKeyword());
+		assertEquals(tree.intoKeyword().text(), "INTO");
+		assertNotNull(tree.intoTarget());
+		assertNotNull(tree.semi());
+		assertNull(tree.inKeyword());
+		assertNull(tree.schemaReference());
+		assertNull(tree.externalKeyword());
+		assertNull(tree.schemaKeyword());
+		assertNull(tree.externalSchemaName());
+		
 	}
-	
-	
+
 }

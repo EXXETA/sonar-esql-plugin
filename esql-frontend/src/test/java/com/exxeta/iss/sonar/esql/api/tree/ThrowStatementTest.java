@@ -18,20 +18,44 @@
 package com.exxeta.iss.sonar.esql.api.tree;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.api.tree.statement.ThrowStatementTree;
+import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class ThrowStatementTest {
+public class ThrowStatementTest extends EsqlTreeModelTest<ThrowStatementTree> {
 	@Test
-	public void throwStatement(){
-		assertThat(Kind.THROW_STATEMENT)
-		.matches("THROW USER EXCEPTION;")
-		.matches("THROW USER EXCEPTION CATALOG 'BIPmsgs' MESSAGE 2951 VALUES(1,2,3,4,5,6,7,8) ;")
-		.matches("THROW USER EXCEPTION CATALOG 'BIPmsgs' MESSAGE 2951 VALUES('The SQL State: ', SQLSTATE, 'The SQL Code: ', SQLCODE, 'The SQLNATIVEERROR: ', SQLNATIVEERROR,    'The SQL Error Text: ', SQLERRORTEXT ) ;")
-		.matches("THROW USER EXCEPTION CATALOG 'BIPmsgs' MESSAGE 2951;");
+	public void throwStatement() {
+		assertThat(Kind.THROW_STATEMENT).matches("THROW USER EXCEPTION;")
+				.matches("THROW USER EXCEPTION CATALOG 'BIPmsgs' MESSAGE 2951 VALUES(1,2,3,4,5,6,7,8) ;")
+				.matches(
+						"THROW USER EXCEPTION CATALOG 'BIPmsgs' MESSAGE 2951 VALUES('The SQL State: ', SQLSTATE, 'The SQL Code: ', SQLCODE, 'The SQLNATIVEERROR: ', SQLNATIVEERROR,    'The SQL Error Text: ', SQLERRORTEXT ) ;")
+				.matches("THROW USER EXCEPTION CATALOG 'BIPmsgs' MESSAGE 2951;");
 
 	}
-	
+
+	@Test
+	public void modelTest() throws Exception {
+		ThrowStatementTree tree = parse("THROW USER EXCEPTION CATALOG 'BIPmsgs' MESSAGE 2951 VALUES(1,2,3,4,5,6,7,8) ;",
+				Kind.THROW_STATEMENT);
+
+		assertNotNull(tree.throwKeyword());
+		assertNotNull(tree.userKeyword());
+		assertNotNull(tree.exceptionKeyword());
+		assertNull(tree.severityKeyword());
+		assertNull(tree.severity());
+		assertNotNull(tree.catalogKeyword());
+		assertNotNull(tree.catalog());
+		assertNotNull(tree.messageKeyword());
+		assertNotNull(tree.message());
+		assertNotNull(tree.valuesKeyword());
+		assertNotNull(tree.values());
+		assertNotNull(tree.semi());
+
+	}
+
 }

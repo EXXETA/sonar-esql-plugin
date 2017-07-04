@@ -20,23 +20,28 @@ package com.exxeta.iss.sonar.esql.api.tree.statement;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
-import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
+import com.exxeta.iss.sonar.esql.tree.impl.declaration.FieldReferenceTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 
 public interface ParseClauseTree extends Tree {
 
 	
 	SyntaxToken parseKeyword();
 	SyntaxToken openingParenthesis();
-	SeparatedList<Tree> options();
-	SyntaxToken encodingKeyword();
-	ExpressionTree encoding();
-	SyntaxToken ccsidKeyword();
-	ExpressionTree ccsid();
-	SyntaxToken setKeyword();
-	ExpressionTree set();
-	SyntaxToken typeKeyword();
-	ExpressionTree type();
-	SyntaxToken formatKeyword();
-	ExpressionTree format();
+	FieldReferenceTreeImpl fieldReference();
+	
+	InternalSyntaxToken optionsSeparator();
+	ExpressionTree optionsExpression();
+	InternalSyntaxToken encodingSeparator();
+	ExpressionTree encodingExpression();
+	InternalSyntaxToken ccsidSeparator();
+	ExpressionTree ccsidExpression();
+	InternalSyntaxToken setSeparator();
+	ExpressionTree setExpression();
+	InternalSyntaxToken typeSeparator();
+	ExpressionTree typeExpression();
+	InternalSyntaxToken formatSeparator();
+	ExpressionTree formatExpression();
+
 	SyntaxToken closingParenthesis();
 }

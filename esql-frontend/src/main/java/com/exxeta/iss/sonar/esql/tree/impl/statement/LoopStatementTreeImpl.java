@@ -115,7 +115,7 @@ public class LoopStatementTreeImpl extends EsqlTree implements LoopStatementTree
 	@Override
 	public Iterator<Tree> childrenIterator() {
 		return Iterators.forArray(label, colon, loopKeyword, statements,
-				endKeyword, loopKeyword2, semi);
+				endKeyword, loopKeyword2, label2, semi);
 	}
 
 }

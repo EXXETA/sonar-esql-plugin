@@ -1,0 +1,4 @@
+-- copyright 2012
+-- foo
+CREATE COMPUTE MODULE ABC
+END MODULE;

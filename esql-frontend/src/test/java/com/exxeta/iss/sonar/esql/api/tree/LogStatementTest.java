@@ -19,18 +19,61 @@ package com.exxeta.iss.sonar.esql.api.tree;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
 
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertNotNull;
+
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.api.tree.statement.LogStatementTree;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.LogStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class LogStatementTest {
+public class LogStatementTest extends EsqlTreeModelTest<LogStatementTreeImpl> {
 	@Test
-	public void moveStatement(){
-		
-		assertThat(Kind.LOG_STATEMENT)
-		.matches("LOG EVENT SEVERITY 1 CATALOG 'BIPmsgs' MESSAGE 2951 VALUES(1,2,3,4);")
-		.matches("LOG USER TRACE EXCEPTION VALUES(SQLSTATE, 'DivideByZero');");
+	public void logStatement() {
+
+		assertThat(Kind.LOG_STATEMENT).matches("LOG EVENT SEVERITY 1 CATALOG 'BIPmsgs' MESSAGE 2951 VALUES(1,2,3,4);")
+				.matches("LOG USER TRACE EXCEPTION VALUES(SQLSTATE, 'DivideByZero');");
 
 	}
-	
+
+	@Test
+	public void modelTest() throws Exception {
+		LogStatementTree tree = parse("LOG EVENT SEVERITY 1 CATALOG 'BIPmsgs' MESSAGE 2951 VALUES(1,2,3,4);",
+				Kind.LOG_STATEMENT);
+		assertNotNull(tree);
+		assertNotNull(tree.logKeyword());
+		assertEquals("LOG", tree.logKeyword().text());
+		assertNotNull(tree.eventKeyword());
+		assertEquals("EVENT", tree.eventKeyword().text());
+		assertNull(tree.userKeyword());
+		assertNull(tree.traceKeyword());
+		assertNull(tree.fullKeyword());
+		assertNull(tree.exceptionKeyword());
+		assertNotNull(tree.severityKeyword());
+		assertEquals(tree.severityKeyword().text(), "SEVERITY");
+		assertNotNull(tree.severityExpression());
+		assertTrue(tree.severityExpression().is(Kind.NUMERIC_LITERAL));
+
+		assertNotNull(tree.catalogKeyword());
+		assertEquals(tree.catalogKeyword().text(), "CATALOG");
+		assertNotNull(tree.catalogExpression());
+		assertTrue(tree.catalogExpression().is(Kind.STRING_LITERAL));
+
+		assertNotNull(tree.messageKeyword());
+		assertEquals(tree.messageKeyword().text(), "MESSAGE");
+		assertNotNull(tree.messageExpression());
+		assertTrue(tree.messageExpression().is(Kind.NUMERIC_LITERAL));
+
+		assertNotNull(tree.valuesKeyword());
+		assertEquals(tree.valuesKeyword().text(), "VALUES");
+		assertNotNull(tree.valueExpressions());
+
+		assertNotNull(tree.semi());
+
+	}
+
 }

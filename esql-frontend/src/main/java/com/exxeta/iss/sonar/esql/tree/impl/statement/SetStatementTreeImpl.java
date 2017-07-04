@@ -23,26 +23,28 @@ import com.google.common.collect.Iterators;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.VariableReferenceTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.SetStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.FieldReferenceTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.expression.IdentifierTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 
 public class SetStatementTreeImpl extends EsqlTree implements SetStatementTree{
 
 	private InternalSyntaxToken setKeyword;
-	private FieldReferenceTreeImpl fieldReference;
+	private VariableReferenceTree variableReference;
 	private InternalSyntaxToken type;
 	private InternalSyntaxToken equalSign;
 	private ExpressionTree expression;
 	private final InternalSyntaxToken semiToken;
 
-	public SetStatementTreeImpl(InternalSyntaxToken setKeyword, FieldReferenceTreeImpl fieldReference,
+	public SetStatementTreeImpl(InternalSyntaxToken setKeyword, VariableReferenceTree variableReference,
 			InternalSyntaxToken type, InternalSyntaxToken equalSign, ExpressionTree expression, InternalSyntaxToken semiToken) {
 		super();
 		this.setKeyword = setKeyword;
-		this.fieldReference = fieldReference;
+		this.variableReference = variableReference;
 		this.type = type;
 		this.equalSign = equalSign;
 		this.expression = expression;
@@ -53,8 +55,8 @@ public class SetStatementTreeImpl extends EsqlTree implements SetStatementTree{
 		return setKeyword;
 	}
 	@Override
-	public FieldReferenceTreeImpl fieldReference() {
-		return fieldReference;
+	public VariableReferenceTree variableReference() {
+		return variableReference;
 	}
 	@Override
 	public InternalSyntaxToken type() {
@@ -83,7 +85,7 @@ public class SetStatementTreeImpl extends EsqlTree implements SetStatementTree{
 	}
 	@Override
 	public Iterator<Tree> childrenIterator() {
-		return Iterators.forArray(setKeyword, fieldReference, type, equalSign, expression, semiToken);
+		return Iterators.forArray(setKeyword, variableReference, type, equalSign, expression, semiToken);
 	}
 	
 

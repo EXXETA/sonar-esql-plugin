@@ -1,0 +1,39 @@
+CREATE COMPUTE MODULE ABC
+
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+	
+	
+/**
+ * NOK
+ */
+
+SET result = (a = b) AND (a = b); -- Noncompliant
+
+SET result = a = b OR a = b; -- Noncompliant
+
+SET result = 5 / 5; -- Noncompliant
+
+SET result = 5 - 5; -- Noncompliant
+
+SET result = a <> a; -- Noncompliant
+
+SET result = a = a; -- Noncompliant
+
+
+/**
+ * OK
+ */
+
+SET result = a = b;
+
+SET result = a = b AND a = c;
+
+SET result = a = b OR a = c;
+
+SET result = 5 / x;
+
+SET result = 5 - x;
+
+END;
+END MODULE;

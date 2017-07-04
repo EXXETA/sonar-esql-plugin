@@ -25,6 +25,7 @@ import java.util.Set;
 import org.sonar.check.Rule;
 
 import com.exxeta.iss.sonar.esql.api.tree.expression.CallExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CallStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateFunctionStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateModuleStatementTree;
@@ -69,20 +70,20 @@ public class UnusedRoutineCheck extends DoubleDispatchVisitorCheck {
 
 	@Override
 	public void visitCreateProcedureStatement(CreateProcedureStatementTree tree) {
-		declaredProcedures.put(tree.identifier().text(), tree);
+		declaredProcedures.put(tree.identifier().name(), tree);
 		super.visitCreateProcedureStatement(tree);
 	}
 
 	@Override
 	public void visitCreateFunctionStatement(CreateFunctionStatementTree tree) {
-		declaredFunctions.put(tree.identifier().text(), tree);
+		declaredFunctions.put(tree.identifier().name(), tree);
 		super.visitCreateFunctionStatement(tree);
 	}
 
 	@Override
 	public void visitCallExpression(CallExpressionTree tree) {
-		if (tree.functionName() != null) {
-			calledRoutines.add(tree.functionName().pathElement().name().name().text());
+		if (tree.functionName() instanceof IdentifierTree) {
+			calledRoutines.add(((IdentifierTree)tree.functionName()).name());
 		}
 		super.visitCallExpression(tree);
 	}

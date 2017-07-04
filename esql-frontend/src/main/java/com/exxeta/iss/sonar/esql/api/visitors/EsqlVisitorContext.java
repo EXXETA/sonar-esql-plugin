@@ -23,8 +23,8 @@ import org.sonar.api.config.Settings;
 
 import com.exxeta.iss.sonar.esql.api.symbols.SymbolModel;
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
-import com.exxeta.iss.sonar.esql.api.tree.symbols.SymbolModelImpl;
 import com.exxeta.iss.sonar.esql.compat.CompatibleInputFile;
+import com.exxeta.iss.sonar.esql.tree.symbols.SymbolModelImpl;
 
 public class EsqlVisitorContext implements TreeVisitorContext {
 

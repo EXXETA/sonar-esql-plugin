@@ -24,6 +24,7 @@ import com.exxeta.iss.sonar.esql.api.symbols.TypeSet;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.CallExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.VariableReferenceTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.FunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.symbols.type.TypableTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
@@ -32,26 +33,25 @@ import com.exxeta.iss.sonar.esql.tree.impl.declaration.FieldReferenceTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.ParameterListTreeImpl;
 import com.google.common.collect.Iterators;
 
-public class CallExpressionTreeImpl extends EsqlTree implements CallExpressionTree, TypableTree{
+public class CallExpressionTreeImpl extends EsqlTree implements CallExpressionTree, TypableTree {
 
 	private FunctionTree function;
-	private FieldReferenceTreeImpl functionName;
+	private VariableReferenceTree variableReference;
 	private ParameterListTreeImpl parameters;
 	private ExpressionTree expression;
-	  private TypeSet types = TypeSet.emptyTypeSet();
-
+	private TypeSet types = TypeSet.emptyTypeSet();
 
 	public CallExpressionTreeImpl(FunctionTree function) {
-		this.function=function; 
+		this.function = function;
 	}
 
-	public CallExpressionTreeImpl(FieldReferenceTreeImpl functionName, ParameterListTreeImpl parameters) {
-		this.functionName=functionName;
-		this.parameters=parameters;
+	public CallExpressionTreeImpl(VariableReferenceTree variableReference, ParameterListTreeImpl parameters) {
+		this.variableReference = variableReference;
+		this.parameters = parameters;
 	}
 
-	public CallExpressionTreeImpl(FieldReferenceTreeImpl functionName) {
-		this.functionName=functionName;
+	public CallExpressionTreeImpl(VariableReferenceTree variableReference) {
+		this.variableReference = variableReference;
 	}
 
 	public CallExpressionTreeImpl(ExpressionTree expression) {
@@ -64,8 +64,8 @@ public class CallExpressionTreeImpl extends EsqlTree implements CallExpressionTr
 	}
 
 	@Override
-	public FieldReferenceTreeImpl functionName() {
-		return functionName;
+	public VariableReferenceTree functionName() {
+		return variableReference;
 	}
 
 	@Override
@@ -81,7 +81,7 @@ public class CallExpressionTreeImpl extends EsqlTree implements CallExpressionTr
 	@Override
 	public void accept(DoubleDispatchVisitor visitor) {
 		visitor.visitCallExpression(this);
-		
+
 	}
 
 	@Override
@@ -91,12 +91,12 @@ public class CallExpressionTreeImpl extends EsqlTree implements CallExpressionTr
 
 	@Override
 	public Iterator<Tree> childrenIterator() {
-		return Iterators.forArray(expression, function, functionName, parameters);
+		return Iterators.forArray(expression, function, variableReference, parameters);
 	}
-	
-	  @Override
-	  public void add(Type type) {
-	    types.add(type);
-	  }	
+
+	@Override
+	public void add(Type type) {
+		types.add(type);
+	}
 
 }

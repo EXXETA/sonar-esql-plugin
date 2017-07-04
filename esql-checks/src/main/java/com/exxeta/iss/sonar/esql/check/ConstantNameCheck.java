@@ -50,14 +50,14 @@ public class ConstantNameCheck extends DoubleDispatchVisitorCheck {
 	public void visitDeclareStatement(DeclareStatementTree tree) {
 		super.visitDeclareStatement(tree);
 
-		boolean isConstant = (tree.constantKeyword() != null) || (tree.sharedExt()!=null && tree.sharedExt().text().equalsIgnoreCase("EXTERNAL"));
+		boolean isConstant = (tree.constantKeyword() != null) || (tree.sharedExt()!=null && "EXTERNAL".equalsIgnoreCase(tree.sharedExt().text()));
 
 		if (isConstant) {
 			for (int i = 0; i < tree.nameList().size(); i++) {
-				if (!pattern.matcher(tree.nameList().get(i).text()).matches()) {
+				if (!pattern.matcher(tree.nameList().get(i).name()).matches()) {
 					addIssue(new PreciseIssue(this,
 							new IssueLocation(tree.nameList().get(i), tree.nameList().get(i),
-									"Rename constant \"" + tree.nameList().get(i).text()
+									"Rename constant \"" + tree.nameList().get(i).name()
 											+ "\" to match the regular expression " + format + ".")));
 
 				}

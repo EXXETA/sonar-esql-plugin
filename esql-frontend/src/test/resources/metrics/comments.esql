@@ -1,0 +1,12 @@
+/*
+ * File Header
+ */
+
+/* sayHello function */
+CREATE FUNCTION sayHello() 
+BEGIN
+  --
+  -- say
+  --
+  CALL alert('Hello World!'); -- NOSONAR comment
+END;

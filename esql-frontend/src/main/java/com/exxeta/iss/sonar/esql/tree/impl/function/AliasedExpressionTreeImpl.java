@@ -26,14 +26,15 @@ import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.AliasedExpressionTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
+import com.exxeta.iss.sonar.esql.tree.impl.declaration.FieldReferenceTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 
 public class AliasedExpressionTreeImpl extends EsqlTree implements AliasedExpressionTree{
 	private ExpressionTree expression;
 	private InternalSyntaxToken asKeyword;
-	private InternalSyntaxToken alias;
+	private FieldReferenceTreeImpl alias;
 	public AliasedExpressionTreeImpl(ExpressionTree expression, InternalSyntaxToken asKeyword,
-			InternalSyntaxToken alias) {
+			FieldReferenceTreeImpl alias) {
 		super();
 		this.expression = expression;
 		this.asKeyword = asKeyword;
@@ -48,7 +49,7 @@ public class AliasedExpressionTreeImpl extends EsqlTree implements AliasedExpres
 		return asKeyword;
 	}
 	@Override
-	public InternalSyntaxToken alias() {
+	public FieldReferenceTreeImpl alias() {
 		return alias;
 	}
 	@Override

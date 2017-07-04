@@ -40,7 +40,6 @@ import com.exxeta.iss.sonar.esql.api.tree.PathElementTypeTree;
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.tree.SchemaNameTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
-import com.exxeta.iss.sonar.esql.api.tree.expression.ArrayLiteralTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.BetweenExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.BinaryExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.CallExpressionTree;
@@ -58,6 +57,7 @@ import com.exxeta.iss.sonar.esql.api.tree.function.CastFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.ExtractFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.ForFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.FromClauseExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.ListConstructorFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.OverlayFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.PassthruFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.PositionFunctionTree;
@@ -74,7 +74,6 @@ import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxTrivia;
 import com.exxeta.iss.sonar.esql.api.tree.statement.AttachStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.BeginEndStatementTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.BlockTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CallStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CaseStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ControlsTree;
@@ -166,10 +165,6 @@ public abstract class DoubleDispatchVisitor implements TreeVisitor {
 
 	protected <T extends Tree> void scan(List<T> trees) {
 		trees.forEach(this::scan);
-	}
-
-	public void visitBlock(BlockTree tree) {
-		scanChildren(tree);
 	}
 
 	public void visitDeclareStatement(DeclareStatementTree tree) {
@@ -301,10 +296,6 @@ public abstract class DoubleDispatchVisitor implements TreeVisitor {
 	public void visitUnaryExpression(UnaryExpressionTree tree) {
 		scanChildren(tree);
 
-	}
-
-	public void visitArrayLiteral(ArrayLiteralTree tree) {
-		scanChildren(tree);
 	}
 
 	public void visitParenthesisedExpression(ParenthesisedExpressionTree tree) {
@@ -599,6 +590,11 @@ public abstract class DoubleDispatchVisitor implements TreeVisitor {
 
 	public void visitPathElementName(PathElementNameTree tree) {
 		scanChildren(tree);
+	}
+
+	public void visitListConstructorFunction(ListConstructorFunctionTree tree) {
+		scanChildren(tree);
+		
 	}
 
 }
