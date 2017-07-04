@@ -53,7 +53,7 @@ public class CardinalityInLoopCheck extends DoubleDispatchVisitorCheck {
 
 	private void checkCardinalityInDecendants(Tree tree) {
 		tree.descendants().filter(d -> d.is(Kind.CALL_EXPRESSION))
-			.filter(d -> ((CallExpressionTreeImpl) d).functionName().is(Kind.IDENTIFIER_REFERENCE))
+			.filter(d -> (((CallExpressionTreeImpl) d).functionName()!=null && ((CallExpressionTreeImpl) d).functionName().is(Kind.IDENTIFIER_REFERENCE)))
 				.filter(d -> "CARDINALITY".equalsIgnoreCase(
 						(((IdentifierTree)((CallExpressionTreeImpl) d).functionName()).name())))
 				.forEach(d -> addIssue(d, MESSAGE));

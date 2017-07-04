@@ -24,6 +24,14 @@ CREATE COMPUTE MODULE CardinalityInLoop
 			SET I = I + 1;
 		UNTIL ( I > CARDINALITY (InputRoot.MRM.A.B.C[]))
 		END REPEAT;
+		
+       WHILE LASTMOVE(bc) DO                          
+           SET a = CAST(b AS CHARACTER);  
+       END WHILE;
+
+
+
+
 	END;
 
 END MODULE;
