@@ -64,13 +64,9 @@ public class CreateStatementTest  extends EsqlTreeModelTest<CreateStatementTreeI
 	public void parseClause(){
 		assertThat(Kind.PARSE_CLAUSE)
 		.matches("PARSE(inBitStream, inEncoding, inCCSID, 'DP3UK14002001', 'TestCase', 'XML1', options)")
-<<<<<<< HEAD
-		.matches("PARSE(inBitStream, inEncoding, inCCSID,,,, options)");
-=======
 		.matches("PARSE(inBitStream, inEncoding, inCCSID,,,, options)")
 		.matches("PARSE(inBitStream, inEncoding, inCCSID,,,'XML1')")
 		.matches("PARSE(inBitStream)");
->>>>>>> release/2.1.0
 		;
 	}
 	@Test
