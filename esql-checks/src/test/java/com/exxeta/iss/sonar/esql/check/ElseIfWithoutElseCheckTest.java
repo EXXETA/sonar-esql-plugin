@@ -27,7 +27,7 @@ public class ElseIfWithoutElseCheckTest {
 	 @Test
 	  public void test() {
 		 EsqlCheckVerifier.issues(new ElseIfWithoutElseCheck(), new File("src/test/resources/ifTest.esql"))
-	        .next().atLine(7).withMessage("Add the missing \"ELSE\" clause.")
+	        .next().atLine(8).withMessage("Add the missing \"ELSE\" clause.")
 	        .noMore();
 	  }
 }

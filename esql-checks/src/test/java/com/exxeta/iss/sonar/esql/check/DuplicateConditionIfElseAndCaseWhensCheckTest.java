@@ -35,8 +35,8 @@ public class DuplicateConditionIfElseAndCaseWhensCheckTest {
 	@Test
 	  public void ifTest() {
 		 EsqlCheckVerifier.issues(new DuplicateConditionIfElseAndCaseWhensCheck(), new File("src/test/resources/ifTest.esql"))
-	        .next().atLine(15).withMessage("This branch duplicates the one on line 11.")
-	        .next().atLine(16).withMessage("This branch duplicates the one on line 7.")
+	        .next().atLine(16).withMessage("This branch duplicates the one on line 12.")
+	        .next().atLine(17).withMessage("This branch duplicates the one on line 8.")
 	        .noMore();
 	  }
 }

@@ -27,6 +27,7 @@ import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ElseifClauseTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.IfStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
+import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 
 @Rule(key = "IfConditionalAlwaysTrueOrFalse")
 public class IfConditionalAlwaysTrueOrFalseCheck extends DoubleDispatchVisitorCheck {
@@ -43,7 +44,7 @@ public class IfConditionalAlwaysTrueOrFalseCheck extends DoubleDispatchVisitorCh
 	private void checkTree(Tree tree) {
 		if (tree.is(Kind.BOOLEAN_LITERAL)) {
 			addIssue(tree, MESSAGE);
-		} else {
+		} else if (! (tree instanceof InternalSyntaxToken)) {
 			List<Tree> list = tree.childrenStream().filter(b -> b != null).collect(Collectors.toList());
 			if (list.size()==1){
 				if (list.get(0).is(Kind.BOOLEAN_LITERAL)){
