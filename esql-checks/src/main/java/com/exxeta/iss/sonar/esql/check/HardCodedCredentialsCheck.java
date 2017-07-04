@@ -94,7 +94,8 @@ public class HardCodedCredentialsCheck extends DoubleDispatchVisitorCheck {
 		Iterator<PathElementTree> nameListIter = pathElements.iterator();
 		while (nameListIter.hasNext()) {
 			PathElementTree pathElement= nameListIter.next();
-			if (isPasswordVariableName(pathElement.name().name().text())) {
+			if (pathElement.name()!=null && pathElement.name().name()!=null && 
+					isPasswordVariableName(pathElement.name().name().text())) {
 				return true;
 			}
 		}
