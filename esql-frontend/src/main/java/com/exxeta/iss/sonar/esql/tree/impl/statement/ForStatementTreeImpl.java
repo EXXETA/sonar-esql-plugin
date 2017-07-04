@@ -18,17 +18,14 @@
 package com.exxeta.iss.sonar.esql.tree.impl.statement;
 
 import java.util.Iterator;
-import java.util.List;
-
-import com.google.common.collect.Iterators;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ForStatementTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.FieldReferenceTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
+import com.google.common.collect.Iterators;
 
 public class ForStatementTreeImpl extends EsqlTree implements ForStatementTree {
 	private final InternalSyntaxToken forKeyword;
@@ -114,7 +111,7 @@ public class ForStatementTreeImpl extends EsqlTree implements ForStatementTree {
 	@Override
 	public Iterator<Tree> childrenIterator() {
 		return Iterators.forArray(forKeyword, correlationName, asKeyword, fieldReference,
-				statements, forKeyword2, endKeyword, semi);
+				doKeyword, statements, endKeyword, forKeyword2, semi);
 	}
 
 }

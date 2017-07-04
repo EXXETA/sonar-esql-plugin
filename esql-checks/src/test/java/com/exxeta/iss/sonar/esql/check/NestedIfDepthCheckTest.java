@@ -30,8 +30,8 @@ public class NestedIfDepthCheckTest {
 	    check.maximumNestingLevel=3;
 	    
 		 EsqlCheckVerifier.issues(check, new File("src/test/resources/ifTest.esql"))
-	        .next().atLine(8).withMessage("This if has a nesting level of 4, which is higher than the maximum allowed 3.")
-	        .next().atLine(12).withMessage("This if has a nesting level of 4, which is higher than the maximum allowed 3.")
+	        .next().atLine(9).withMessage("This if has a nesting level of 4, which is higher than the maximum allowed 3.")
+	        .next().atLine(13).withMessage("This if has a nesting level of 4, which is higher than the maximum allowed 3.")
 	        .noMore();
 	  }
 }
