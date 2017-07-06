@@ -29,6 +29,8 @@ public class CaseAtLeastThreeWhenCheckTest {
 		EsqlCheckVerifier.issues(new CaseAtLeastThreeWhenCheck(), new File("src/test/resources/caseTest.esql"))
 		.next().atLine(5).withMessage("Replace this \"case\" statement by \"if\" statements to increase readability.")
 		.next().atLine(28).withMessage("Replace this \"case\" statement by \"if\" statements to increase readability.")
+		.next().atLine(35).withMessage("Replace this \"case\" function by \"if\" statements to increase readability.")
+		.next().atLine(40).withMessage("Replace this \"case\" function by \"if\" statements to increase readability.")
 				.noMore();
 	}
 }
