@@ -29,7 +29,6 @@ import com.exxeta.iss.sonar.esql.api.tree.function.FunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.symbols.type.TypableTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
-import com.exxeta.iss.sonar.esql.tree.impl.declaration.FieldReferenceTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.ParameterListTreeImpl;
 import com.google.common.collect.Iterators;
 

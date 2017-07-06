@@ -24,7 +24,6 @@ import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ExternalRoutineBodyTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
-import com.exxeta.iss.sonar.esql.tree.impl.expression.LiteralTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.google.common.collect.Iterators;
 

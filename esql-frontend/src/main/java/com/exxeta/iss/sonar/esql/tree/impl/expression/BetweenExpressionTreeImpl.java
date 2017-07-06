@@ -21,14 +21,12 @@ import java.util.Iterator;
 
 import com.exxeta.iss.sonar.esql.api.symbols.Type;
 import com.exxeta.iss.sonar.esql.api.symbols.TypeSet;
-import com.exxeta.iss.sonar.esql.api.tree.FieldReferenceTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.BetweenExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.symbols.type.TypableTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
-import com.exxeta.iss.sonar.esql.tree.impl.declaration.ParameterListTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.google.common.collect.Iterators;
 

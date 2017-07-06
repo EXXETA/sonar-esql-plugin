@@ -17,6 +17,12 @@
  */
 package com.exxeta.iss.sonar.esql.tree;
 
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.annotation.Nullable;
+
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.expression.CallExpressionTree;
@@ -27,13 +33,6 @@ import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Objects;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import javax.annotation.Nullable;
 
 public final class SyntacticEquivalence {
 

@@ -28,7 +28,6 @@ import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator;
 import com.exxeta.iss.sonar.esql.parser.TreeFactory.Tuple;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
-import com.exxeta.iss.sonar.esql.tree.impl.declaration.FieldReferenceTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.google.common.collect.Iterators;
 import com.sonar.sslr.api.typed.Optional;
