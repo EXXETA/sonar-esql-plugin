@@ -1739,11 +1739,11 @@ public class TreeFactory {
 	}
 
 	public ParseClauseTreeImpl parseClause(InternalSyntaxToken parseKeyword, InternalSyntaxToken openingParenthesis,
-			FieldReferenceTreeImpl fieldReference,
+			ExpressionTree expression,
 			Optional<List<Tuple<InternalSyntaxToken, Optional<ExpressionTree>>>> parameters,
 			InternalSyntaxToken closingParenthesis) {
 
-		return new ParseClauseTreeImpl(parseKeyword, openingParenthesis, fieldReference, parameters.isPresent()?parameters.get():null, closingParenthesis);
+		return new ParseClauseTreeImpl(parseKeyword, openingParenthesis, expression, parameters.isPresent()?parameters.get():null, closingParenthesis);
 	}
 
 	public DeleteStatementTreeImpl deleteStatement(InternalSyntaxToken deleteKeyword, Object qualifier,

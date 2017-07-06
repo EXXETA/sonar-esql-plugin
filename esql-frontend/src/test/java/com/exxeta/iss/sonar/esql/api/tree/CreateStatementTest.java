@@ -108,7 +108,7 @@ public class CreateStatementTest  extends EsqlTreeModelTest<CreateStatementTreeI
 		assertNotNull(parseClause.openingParenthesis());
 		assertEquals(parseClause.openingParenthesis().text(), "(");
 		
-		assertNotNull(parseClause.fieldReference());
+		assertNotNull(parseClause.expression());
 		assertNotNull(parseClause.optionsSeparator());
 		assertNotNull(parseClause.optionsExpression());
 		assertNotNull(parseClause.encodingSeparator());

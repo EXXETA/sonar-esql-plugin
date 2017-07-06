@@ -151,8 +151,10 @@ SET S = SUBSTRING(S FROM P + LENGTH(Delim));
 
 SET msgBody = SUBSTRING(msgBody FROM 1 FOR UDP_Log_Size_kB * 1024);
 
+SET rUserT.(XMLNSC.Attribute)"wsu:Id" = 'UsernameToken-1';
 
-	
+SET res =  CAST( CURRENT_GMTDATE, GMTTIME '00:00:00' AS GMTTIMESTAMP );
+		
    END;
 
 CREATE PROCEDURE InsertV(

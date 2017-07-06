@@ -1026,7 +1026,7 @@ public class EsqlGrammar {
 	public ParseClauseTreeImpl PARSE_CLAUSE(){
 		return b.<ParseClauseTreeImpl>nonterminal(Kind.PARSE_CLAUSE). is(f.parseClause(
 				b.token(EsqlNonReservedKeyword.PARSE), b.token(LPARENTHESIS),
-				FIELD_REFERENCE()
+				CALL_EXPRESSION()
 				,b.optional(b.firstOf( 
 						b.oneOrMore(f.newTuple117(b.token(EsqlPunctuator.COMMA), b.optional(CALL_EXPRESSION()))),
 						b.oneOrMore(f.newTuple118(b.firstOf(

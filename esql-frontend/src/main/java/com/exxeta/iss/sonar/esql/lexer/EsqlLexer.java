@@ -85,7 +85,7 @@ public final class EsqlLexer {
 
   private static final String IDENTIFIER_START = "(?:[$_" + UNICODE_LETTER + "]|\\\\" + UNICODE_ESCAPE_SEQUENCE + ")";
   private static final String IDENTIFIER_PART = "(?:" + IDENTIFIER_START + "|[" + UNICODE_COMBINING_MARK + UNICODE_DIGIT + UNICODE_CONNECTOR_PUNCTUATION + "])";
-  private static final String IDENTIFIER_PART_ESCAPED = "(?:" + IDENTIFIER_START + "|[" + UNICODE_COMBINING_MARK + UNICODE_DIGIT + UNICODE_CONNECTOR_PUNCTUATION+ "-." + "]|\"\")";
+  private static final String IDENTIFIER_PART_ESCAPED = "(?:" + IDENTIFIER_START + "|[" + UNICODE_COMBINING_MARK + UNICODE_DIGIT + UNICODE_CONNECTOR_PUNCTUATION+ "-.:" + "]|\"\")";
 
   public static final String IDENTIFIER = IDENTIFIER_START + IDENTIFIER_PART + "*+";
   public static final String IDENTIFIER_WITH_QUOTES ="\"(" +IDENTIFIER_PART_ESCAPED + "*+)"+"\"";
@@ -98,9 +98,9 @@ public final class EsqlLexer {
   public static final String WHITESPACE = "[\\n\\r\\t\\u000B\\f\\u0020\\u00A0\\uFEFF\\p{Zs}]";
 
   //TODO needs to be case insensitive?
-  public static final String TIME_LITERAL = "TIME"+WHITESPACE+"+'[0-9]{2}:[0-9]{2}:[0-9]{2}'";
+  public static final String TIME_LITERAL = "(GMT)?TIME"+WHITESPACE+"+'[0-9]{2}:[0-9]{2}:[0-9]{2}'";
   public static final String DATE_LITERAL = "DATE"+WHITESPACE+"+'[0-9]{4}-[0-9]{2}-[0-9]{2}'";
-  public static final String TIMESTAMP_LITERAL = "TIMESTAMP"+WHITESPACE+"+'[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}'";
+  public static final String TIMESTAMP_LITERAL = "(GMT)?TIMESTAMP"+WHITESPACE+"+'[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}'";
 
   
 /*  public static Lexer create(EsqlConfiguration conf) {
