@@ -37,8 +37,8 @@ import com.exxeta.iss.sonar.esql.tree.symbols.Scope;
 import com.google.common.base.Functions;
 import com.google.common.collect.Iterators;
 
-public abstract class CreateRoutineTreeImpl extends EsqlTree implements RoutineDeclarationTree{
-	
+public abstract class CreateRoutineTreeImpl extends EsqlTree implements RoutineDeclarationTree {
+
 	protected final SyntaxToken createKeyword;
 
 	protected final SyntaxToken routineType;
@@ -58,10 +58,11 @@ public abstract class CreateRoutineTreeImpl extends EsqlTree implements RoutineD
 
 	protected final RoutineBodyTree routineBody;
 
-	public CreateRoutineTreeImpl(SyntaxToken createKeyword, SyntaxToken routineType,
-			IdentifierTree identifier, SyntaxToken openingParenthesis, SeparatedList<ParameterTree> parameterList,
-			SyntaxToken closingParenthesis, ReturnTypeTree returnType, LanguageTree language, ResultSetTree resultSet,
-			RoutineBodyTree routineBody) {
+	private Scope scope;
+
+	public CreateRoutineTreeImpl(SyntaxToken createKeyword, SyntaxToken routineType, IdentifierTree identifier,
+			SyntaxToken openingParenthesis, SeparatedList<ParameterTree> parameterList, SyntaxToken closingParenthesis,
+			ReturnTypeTree returnType, LanguageTree language, ResultSetTree resultSet, RoutineBodyTree routineBody) {
 		super();
 		this.createKeyword = createKeyword;
 		this.routineType = routineType;
@@ -128,50 +129,47 @@ public abstract class CreateRoutineTreeImpl extends EsqlTree implements RoutineD
 	@Override
 	public Iterator<Tree> childrenIterator() {
 		return Iterators.concat(Iterators.forArray(createKeyword, routineType, identifier, openingParenthesis),
-				parameterList.elementsAndSeparators(Functions.<ParameterTree> identity()),
+				parameterList.elementsAndSeparators(Functions.<ParameterTree>identity()),
 				Iterators.forArray(closingParenthesis, returnType, language, resultSet, routineBody));
 	}
 
-	
-	  private Scope scope;
+	public final Scope scope() {
+		return scope;
+	}
 
-	  public final Scope scope() {
-	    return scope;
-	  }
+	public final void scope(Scope scope) {
+		this.scope = scope;
+	}
 
-	  public final void scope(Scope scope) {
-	    this.scope = scope;
-	  }
+	public Stream<Usage> outerScopeSymbolUsages() {
+		return SymbolUsagesVisitor.outerScopeSymbolUsages(this);
+	}
 
-	  public Stream<Usage> outerScopeSymbolUsages() {
-	    return SymbolUsagesVisitor.outerScopeSymbolUsages(this);
-	  }
+	private static class SymbolUsagesVisitor extends DoubleDispatchVisitor {
 
-	  private static class SymbolUsagesVisitor extends DoubleDispatchVisitor {
+		private CreateRoutineTreeImpl functionTree;
+		private Stream.Builder<Usage> outerScopeUsages = Stream.builder();
 
-	    private CreateRoutineTreeImpl functionTree;
-	    private Stream.Builder<Usage> outerScopeUsages = Stream.builder();
+		private SymbolUsagesVisitor(CreateRoutineTreeImpl scopeTreeImpl) {
+			this.functionTree = scopeTreeImpl;
+		}
 
-	    private SymbolUsagesVisitor(CreateRoutineTreeImpl scopeTreeImpl) {
-	      this.functionTree = scopeTreeImpl;
-	    }
+		private static Stream<Usage> outerScopeSymbolUsages(CreateRoutineTreeImpl createRoutineTree) {
+			SymbolUsagesVisitor symbolUsagesVisitor = new SymbolUsagesVisitor(createRoutineTree);
+			symbolUsagesVisitor.scan(createRoutineTree.routineBody());
+			symbolUsagesVisitor.scan(createRoutineTree.parameterList());
+			return symbolUsagesVisitor.outerScopeUsages.build();
+		}
 
-	    private static Stream<Usage> outerScopeSymbolUsages(CreateRoutineTreeImpl createRoutineTree) {
-	      SymbolUsagesVisitor symbolUsagesVisitor = new SymbolUsagesVisitor(createRoutineTree);
-	      symbolUsagesVisitor.scan(createRoutineTree.routineBody());
-	      symbolUsagesVisitor.scan(createRoutineTree.parameterList());
-	      return symbolUsagesVisitor.outerScopeUsages.build();
-	    }
+		@Override
+		public void visitIdentifier(IdentifierTree tree) {
+			tree.symbolUsage().ifPresent(usage -> {
+				Tree symbolScopeTree = usage.symbol().scope().tree();
+				if (symbolScopeTree.isAncestorOf(functionTree)) {
+					outerScopeUsages.add(usage);
+				}
+			});
+		}
+	}
 
-	    @Override
-	    public void visitIdentifier(IdentifierTree tree) {
-	      tree.symbolUsage().ifPresent(usage -> {
-	        Tree symbolScopeTree = usage.symbol().scope().tree();
-	        if (symbolScopeTree.isAncestorOf(functionTree)) {
-	          outerScopeUsages.add(usage);
-	        }
-	      });
-	    }
-	  }
-	  
 }

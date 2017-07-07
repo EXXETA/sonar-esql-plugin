@@ -20,9 +20,6 @@ package com.exxeta.iss.sonar.esql.lexer;
 
 public final class EsqlLexer {
 
-  private EsqlLexer() {
-  }
-
   private static final String EXP = "([Ee][+-]?+[0-9_]++)";
   private static final String BINARY_EXP = "([Pp][+-]?+[0-9_]++)";
 
@@ -102,37 +99,7 @@ public final class EsqlLexer {
   public static final String DATE_LITERAL = "DATE"+WHITESPACE+"+'[0-9]{4}-[0-9]{2}-[0-9]{2}'";
   public static final String TIMESTAMP_LITERAL = "(GMT)?TIMESTAMP"+WHITESPACE+"+'[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}'";
 
-  
-/*  public static Lexer create(EsqlConfiguration conf) {
-	  LexerState lexerState = new LexerState();
-    return Lexer.builder()
-        .withCharset(conf.getCharset())
+  private EsqlLexer() {
+  }
 
-        .withFailIfNoChannelToConsumeOneCharacter(true)
-
-        // Channels, which consumes more frequently should come first.
-        // Whitespace character occurs more frequently than any other, and thus come first:
-        .withChannel(new BlackHoleChannel(WHITESPACE + "++"))
-
-        .withChannel(new NewLineChannel(lexerState))
-        
-        // Comments
-        .withChannel(commentRegexp(COMMENT))
-
-        // String Literals
-        
-        .withChannel(regexp(EsqlTokenType.STRING, LITERAL))
-
-        .withChannel(regexp(EsqlTokenType.NUMBER, NUMERIC_LITERAL))
-        .withChannel(regexp(EsqlTokenType.HEX, HEX_LITERAL))
-        .withChannel(regexp(EsqlTokenType.TIME, TIME_LITERAL))
-        .withChannel(regexp(EsqlTokenType.DATE, DATE_LITERAL))
-
-        .withChannel(new IdentifierAndKeywordChannel("[a-zA-Z0-9_]+|\"(?:[^\"]|\"\")+\"", false))
-        .withChannel(new PunctuatorChannel(EsqlPunctuator.values()))
-
-        .withChannel(new UnknownCharacterChannel())
-
-        .build();
-  }*/
 }

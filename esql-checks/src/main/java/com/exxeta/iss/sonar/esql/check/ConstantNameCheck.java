@@ -38,12 +38,12 @@ public class ConstantNameCheck extends DoubleDispatchVisitorCheck {
 
 	private Pattern pattern;
 
-	public String getFormat() {
-		return format;
-	}
-
 	public ConstantNameCheck() {
 		pattern = Pattern.compile(getFormat());
+	}
+
+	public String getFormat() {
+		return format;
 	}
 
 	@Override
