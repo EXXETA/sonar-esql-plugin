@@ -107,14 +107,6 @@ public final class SyntacticEquivalence {
   public static ExpressionTree skipParentheses(ExpressionTree tree) {
 	    if (tree.is(Tree.Kind.PARENTHESISED_EXPRESSION)) {
 	      return skipParentheses(((ParenthesisedExpressionTree) tree).expression());
-	    }else if (tree.is(Kind.CALL_EXPRESSION)){
-	    	CallExpressionTree call = (CallExpressionTree)tree;
-	    	List<Tree> children = call.childrenStream().filter(b -> b!=null).collect(Collectors.toList());
-	    	if (children.size()==1 && children.get(0)instanceof ExpressionTree){
-	    		return skipParentheses((ExpressionTree)children.get(0));
-	    	}
-	    	return tree;
-	    	
 	    } else {
 	    	return tree;
 	    }
