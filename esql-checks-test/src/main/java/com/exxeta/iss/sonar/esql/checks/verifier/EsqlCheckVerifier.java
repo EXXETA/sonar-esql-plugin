@@ -63,10 +63,10 @@ public class EsqlCheckVerifier {
 	 * source file where you expect an issue. For example:
 	 * 
 	 * <pre>
-	 * var x = 1; // Noncompliant {{A message for this line.}}
+	 * var x = 1; -- Noncompliant {{A message for this line.}}
 	 *
-	 * function foo() { // Noncompliant [[effortToFix=2]] [[secondary=+0,+1]]
-	 * 					// [[sc=5;ec=6;el=+0]]
+	 * function foo() { -- Noncompliant [[effortToFix=2]] [[secondary=+0,+1]]
+	 * 					-- [[sc=5;ec=6;el=+0]]
 	 * }
 	 * </pre>
 	 * 
@@ -89,8 +89,8 @@ public class EsqlCheckVerifier {
 	 * each character of issue location.</li>
 	 * 
 	 * <pre>
-	 * x = a && a; // Noncompliant
-	 * // ^^
+	 * x = a && a; -- Noncompliant
+	 * -- ^^
 	 * </pre>
 	 * 
 	 * <li>Since version 2.15 to specify precise secondary location you can
@@ -101,8 +101,8 @@ public class EsqlCheckVerifier {
 	 * location.</li>
 	 * 
 	 * <pre>
-	 * x = a && a; // Noncompliant [[id=SomeID]]
-	 * // S ^^ SomeID {{secondary message}}
+	 * x = a && a; -- Noncompliant [[id=SomeID]]
+	 * -- S ^^ SomeID {{secondary message}}
 	 * </pre>
 	 * 
 	 * <li>In double brackets provide secondary locations with
