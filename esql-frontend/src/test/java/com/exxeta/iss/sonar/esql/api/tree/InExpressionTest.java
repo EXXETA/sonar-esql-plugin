@@ -18,12 +18,18 @@
 package com.exxeta.iss.sonar.esql.api.tree;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.tree.impl.expression.InExpressionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.symbols.type.PrimitiveType;
+import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class InExpressionTest {
+public class InExpressionTest extends EsqlTreeModelTest<InExpressionTreeImpl>{
 
 	@Test
 	public void expression() {
@@ -31,6 +37,18 @@ public class InExpressionTest {
 		.matches("a in (a,b,c)")
 		.matches("a not in (a,b,c)")
 		;
+	}
+	
+	@Test
+	public void modelTest() throws Exception{
+		InExpressionTreeImpl tree = parse("a in (a,b,c)", Kind.IN_EXPRESSION);
+		assertNotNull(tree);
+		assertNotNull(tree.expression());
+		assertNull(tree.notKeyword());
+		assertNotNull(tree.inKeyword());
+		assertNotNull(tree.argumentList());
+		tree.add(PrimitiveType.UNKNOWN);
+		assertTrue(tree.types().contains(PrimitiveType.UNKNOWN));
 	}
 	
 }

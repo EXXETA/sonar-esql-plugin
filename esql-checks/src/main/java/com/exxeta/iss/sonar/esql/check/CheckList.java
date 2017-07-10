@@ -21,7 +21,7 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
-public interface CheckList {
+public final class CheckList {
 
   public static final String REPOSITORY_KEY = "esql";
 
@@ -29,6 +29,8 @@ public interface CheckList {
 
   public static final String SONAR_WAY_PROFILE = "Sonar way";
 
+  private CheckList() {
+  }
 
   public static List<Class> getChecks() {
     return ImmutableList.<Class> of(

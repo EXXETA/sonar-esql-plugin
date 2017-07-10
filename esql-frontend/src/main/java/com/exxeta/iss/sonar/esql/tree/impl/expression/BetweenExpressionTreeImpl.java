@@ -84,10 +84,6 @@ public class BetweenExpressionTreeImpl extends EsqlTree implements BetweenExpres
 		return endpoint2;
 	}
 
-	public TypeSet getTypes() {
-		return types;
-	}
-
 	@Override
 	public TypeSet types() {
 		return types;
