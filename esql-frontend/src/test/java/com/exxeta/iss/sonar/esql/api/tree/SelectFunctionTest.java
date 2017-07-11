@@ -37,6 +37,7 @@ public class SelectFunctionTest extends EsqlTreeModelTest<SelectFunctionTree>{
 		.matches("SELECT P.PartNumber AS a,  P.Description,  P.Price FROM PartsTable.Part[] AS P")
 		.matches("SELECT COUNT(*) FROM Database.{UDP_Schemaname}.DATA AS DAT WHERE CON.a=a  AND CON.b NOT IN('C', 'I')")
 		.matches("SELECT FIELDVALUE(v.a) FROM vehicle.fb:VEHICLE[] AS v WHERE v.fb:c = Environment.Variables.F")
+		.matches("SELECT * FROM Employer AS e, Manager AS m")
 		;
 	}
 	

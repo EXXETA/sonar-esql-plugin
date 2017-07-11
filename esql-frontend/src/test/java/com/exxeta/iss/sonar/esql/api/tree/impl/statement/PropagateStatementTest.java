@@ -24,12 +24,9 @@ import static org.junit.Assert.assertNull;
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
-import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
-import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ControlsTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.MessageSourceTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.PropagateStatementTree;
-import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
 public class PropagateStatementTest extends EsqlTreeModelTest<PropagateStatementTree>{
@@ -37,7 +34,8 @@ public class PropagateStatementTest extends EsqlTreeModelTest<PropagateStatement
 	public void propagateStatement(){
 		assertThat(Kind.PROPAGATE_STATEMENT)
 		.matches("PROPAGATE TO LABEL 'ABC';")
-		.matches("PROPAGATE;");
+		.matches("PROPAGATE;")
+		.matches("PROPAGATE ENVIRONMENT 'DEV' MESSAGE 'msg' EXCEPTION 'exc';");
 		
 
 	}

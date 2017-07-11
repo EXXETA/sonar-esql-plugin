@@ -37,6 +37,9 @@ public class MoveStatementTest extends EsqlTreeModelTest<MoveStatementTreeImpl>{
 		assertThat(Kind.MOVE_STATEMENT)
 		.matches("MOVE sourceCursor NEXTSIBLING;")
 		.matches("MOVE cursor FIRSTCHILD TYPE Name NAME 'Field1';")
+		.matches("MOVE cursor FIRSTCHILD REPEAT TYPE;")
+		.matches("MOVE cursor FIRSTCHILD IDENTITY a;")
+		.matches("MOVE cursor FIRSTCHILD NAMESPACE a;")
 		.matches("MOVE cursor TO OutputRoot;");
 
 	}

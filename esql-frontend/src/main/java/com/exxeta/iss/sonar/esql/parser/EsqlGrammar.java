@@ -1081,11 +1081,11 @@ public class EsqlGrammar {
 	public NameClausesTreeImpl NAME_CLAUSES(){
 		return b.<NameClausesTreeImpl>nonterminal(Kind.NAME_CLAUSES).is(f.nameClauses(
 				b.firstOf(f.newTriple5(b.token(EsqlNonReservedKeyword.REPEAT), b.optional(b.token(EsqlNonReservedKeyword.TYPE)), b.optional(b.token(EsqlNonReservedKeyword.NAME))),
+						f.newTuple79(b.token(EsqlNonReservedKeyword.IDENTITY), PATH_ELEMENT()),
 						f.newTriple6(
 								b.optional(f.newTuple80(b.token(EsqlNonReservedKeyword.TYPE), EXPRESSION())),
 								b.optional(f.newTuple81(b.token(EsqlNonReservedKeyword.NAMESPACE), b.firstOf(b.token(EsqlPunctuator.STAR), EXPRESSION()))),
-								b.optional(f.newTuple82(b.token(EsqlNonReservedKeyword.NAME), EXPRESSION()))),
-						f.newTuple79(b.token(EsqlNonReservedKeyword.IDENTITY), PATH_ELEMENT())
+								b.optional(f.newTuple82(b.token(EsqlNonReservedKeyword.NAME), EXPRESSION())))
 				)
 		));
 	}

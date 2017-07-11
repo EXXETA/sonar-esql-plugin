@@ -29,7 +29,8 @@ public class UpdateStatementTest {
 	@Test
 	public void updateStatement(){
 		assertThat(Kind.UPDATE_STATEMENT)
-		.matches("UPDATE Database.StockPrices AS SP SET PRICE = InputBody.Message.StockPrice WHERE SP.COMPANY = InputBody.Message.Company;");
+		.matches("UPDATE Database.StockPrices AS SP SET PRICE = InputBody.Message.StockPrice WHERE SP.COMPANY = InputBody.Message.Company;")
+		.matches("UPDATE Database.StockPrices AS SP SET PRICE = InputBody.Message.StockPrice, B = 1;");
 
 	}
 	

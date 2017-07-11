@@ -38,6 +38,7 @@ public class BeginEndStatementTest extends EsqlTreeModelTest<BeginEndStatementTr
 		assertNotNull(tree.endKeyword());
 		assertNotNull(tree.semiToken());
 
+		tree = parse("BEGIN NOT ATOMIC CALL A(); END;", Kind.BEGIN_END_STATEMENT);
 	}
 
 	@Test

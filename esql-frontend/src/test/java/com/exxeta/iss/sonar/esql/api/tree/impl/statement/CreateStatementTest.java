@@ -26,7 +26,6 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
-import com.exxeta.iss.sonar.esql.api.tree.statement.ParseClauseTree;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.FromClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ParseClauseTreeImpl;
@@ -73,6 +72,13 @@ public class CreateStatementTest  extends EsqlTreeModelTest<CreateStatementTreeI
 	public void fromClause(){
 		assertThat(Kind.FROM_CLAUSE)
 		.matches("FROM InputRoot.A")
+		;
+	}
+	
+	@Test
+	public void valuesClause(){
+		assertThat(Kind.VALUES_CLAUSE)
+		.matches("TYPE Name  NAMESPACE n NAME 'abc'")
 		;
 	}
 	

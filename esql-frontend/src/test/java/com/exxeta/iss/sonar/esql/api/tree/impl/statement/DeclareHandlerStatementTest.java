@@ -65,7 +65,7 @@ public class DeclareHandlerStatementTest extends EsqlTreeModelTest<DeclareHandle
 		assertNotNull(sqlState.valueText());
 		
 		tree = parse(
-				"DECLARE EXIT HANDLER FOR SQLSTATE LIKE'%' SET a = 2;",
+				"DECLARE EXIT HANDLER FOR SQLSTATE LIKE'%' ESCAPE '$' SET a = 2;",
 				Kind.DECLARE_HANDLER_STATEMENT);
 	}
 
