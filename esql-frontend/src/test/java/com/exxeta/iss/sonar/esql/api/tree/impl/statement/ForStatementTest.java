@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.esql.api.tree;
+package com.exxeta.iss.sonar.esql.api.tree.impl.statement;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
@@ -23,29 +23,35 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
-import com.exxeta.iss.sonar.esql.api.tree.statement.LoopStatementTree;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.ForStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class LoopStatementTest extends EsqlTreeModelTest<LoopStatementTree>{
+public class ForStatementTest extends EsqlTreeModelTest<ForStatementTreeImpl>{
+
 	@Test
-	public void loopStatement(){
-		assertThat(Kind.LOOP_STATEMENT)
-		.matches("X : LOOP  IF i>= 4 THEN LEAVE X; END IF;  SET i = i + 1;END LOOP X;")
-		.matches("LOOP  IF i>= 4 THEN LEAVE X; END IF;  SET i = i + 1;END LOOP;");
+	public void forStatement() {
+		assertThat(Kind.FOR_STATEMENT)
+		.matches("FOR source AS Environment.SourceData.Folder[] DO END FOR;")
+		.matches("FOR source AS Environment.SourceData.Folder[] DO SET A = 1; SET B = 2; END FOR;");
+
 	}
+	
 	
 	@Test
 	public void modelTest() throws Exception{
-		LoopStatementTree tree = parse("X : LOOP  IF i>= 4 THEN LEAVE X; END IF;  SET i = i + 1;END LOOP X;", Kind.LOOP_STATEMENT);
-		assertNotNull(tree.label());
-		assertNotNull(tree.colon());
-		assertNotNull(tree.loopKeyword());
+		ForStatementTreeImpl tree = parse("FOR source AS Environment.SourceData.Folder[] DO SET A = 1; SET B = 2; END FOR;", Kind.FOR_STATEMENT);
+		
+		assertNotNull(tree);
+		
+		assertNotNull(tree.forKeyword());
+		assertNotNull(tree.correlationName());
+		assertNotNull(tree.asKeyword());
+		assertNotNull(tree.fieldReference());
+		assertNotNull(tree.doKeyword());
 		assertNotNull(tree.statements());
+		assertNotNull(tree.forKeyword2());
 		assertNotNull(tree.endKeyword());
-		assertNotNull(tree.loopKeyword2());
-		assertNotNull(tree.label2());
 		assertNotNull(tree.semi());
 		
 	}
-	
 }

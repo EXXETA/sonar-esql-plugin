@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.esql.api.tree;
+package com.exxeta.iss.sonar.esql.api.tree.impl.statement;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
 
@@ -23,15 +23,14 @@ import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 
-public class PassthruStatementTest {
+public class DeleteFromStatementTest {
 
 
 	@Test
-	public void passthruStatement(){
-		assertThat(Kind.PASSTHRU_STATEMENT)
-		.matches("PASSTHRU 'CREATE TABLE Shop.Customers (  CustomerNumber INTEGER,  FirstName      VARCHAR(256),  LastName       VARCHAR(256),  Street         VARCHAR(256),  City           VARCHAR(256),  Country        VARCHAR(256))' TO Database.DSN1;");
+	public void deleteFromStatement(){
+		assertThat(Kind.DELETE_FROM_STATEMENT)
+		.matches("DELETE FROM Database.SHAREHOLDINGS AS S WHERE S.ACCOUNTNO = InputBody.AccountNumber;");
 
 	}
 	
 }
- 

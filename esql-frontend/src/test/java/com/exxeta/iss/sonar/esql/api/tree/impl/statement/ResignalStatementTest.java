@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.esql.api.tree;
+package com.exxeta.iss.sonar.esql.api.tree.impl.statement;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
 
@@ -23,11 +23,11 @@ import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 
-public class AttachStatementTest {
+public class ResignalStatementTest {
 	@Test
-	public void attachStatement(){
-		assertThat(Kind.ATTACH_STATEMENT)
-		.matches("ATTACH ref1 TO OutputRoot.XMLNSC.Data.Order[2] AS LASTCHILD;");
+	public void resignalStatement(){
+		assertThat(Kind.RESIGNAL_STATEMENT)
+		.matches("RESIGNAL;");
 
 	}
 	

@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.esql.api.tree;
+package com.exxeta.iss.sonar.esql.api.tree.impl.statement;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
 
@@ -23,13 +23,11 @@ import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 
-public class InsertStatementTest {
-
-
+public class DetachStatementTest {
 	@Test
-	public void insertStatement(){
-		assertThat(Kind.INSERT_STATEMENT)
-		.matches("INSERT INTO Database.{Source}.{Schema}.{Table} (Name, Value) values ('Joe', 12.34);");
+	public void detachStatement(){
+		assertThat(Kind.DETACH_STATEMENT)
+		.matches("DETACH OutputRoot.test;");
 
 	}
 	

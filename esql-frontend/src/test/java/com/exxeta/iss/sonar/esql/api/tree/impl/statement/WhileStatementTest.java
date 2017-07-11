@@ -15,43 +15,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.esql.api.tree;
+package com.exxeta.iss.sonar.esql.api.tree.impl.statement;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
-import com.exxeta.iss.sonar.esql.tree.impl.statement.ForStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.api.tree.statement.WhileStatementTree;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class ForStatementTest extends EsqlTreeModelTest<ForStatementTreeImpl>{
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
+public class WhileStatementTest extends EsqlTreeModelTest<WhileStatementTree>{
 	@Test
-	public void forStatement() {
-		assertThat(Kind.FOR_STATEMENT)
-		.matches("FOR source AS Environment.SourceData.Folder[] DO END FOR;")
-		.matches("FOR source AS Environment.SourceData.Folder[] DO SET A = 1; SET B = 2; END FOR;");
+	public void whileStatement(){
+		assertThat(Kind.WHILE_STATEMENT)
+		.matches("X : WHILE i <= 3 DO SET i = i + 1;  END WHILE X;")
+		.matches("WHILE i <= 3 DO SET i = i + 1;  END WHILE;")
+		;
 
 	}
 	
-	
 	@Test
 	public void modelTest() throws Exception{
-		ForStatementTreeImpl tree = parse("FOR source AS Environment.SourceData.Folder[] DO SET A = 1; SET B = 2; END FOR;", Kind.FOR_STATEMENT);
-		
+		WhileStatementTree tree = parse("X : WHILE i <= 3 DO SET i = i + 1;  END WHILE X;", Kind.WHILE_STATEMENT);
 		assertNotNull(tree);
-		
-		assertNotNull(tree.forKeyword());
-		assertNotNull(tree.correlationName());
-		assertNotNull(tree.asKeyword());
-		assertNotNull(tree.fieldReference());
+		assertNotNull(tree.label());
+		assertNotNull(tree.colon());
+		assertNotNull(tree.whileKeyword());
+		assertNotNull(tree.condition());
 		assertNotNull(tree.doKeyword());
 		assertNotNull(tree.statements());
-		assertNotNull(tree.forKeyword2());
+		assertEquals(tree.statements().statements().size(),1);
 		assertNotNull(tree.endKeyword());
+		assertNotNull(tree.whileKeyword2());
+		assertNotNull(tree.label());
 		assertNotNull(tree.semi());
-		
+
 	}
 }

@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.esql.api.tree;
+package com.exxeta.iss.sonar.esql.api.tree.impl.statement;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
 
@@ -23,13 +23,12 @@ import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 
-public class UpdateStatementTest {
-
-
+public class ReturnStatementTest {
 	@Test
-	public void updateStatement(){
-		assertThat(Kind.UPDATE_STATEMENT)
-		.matches("UPDATE Database.StockPrices AS SP SET PRICE = InputBody.Message.StockPrice WHERE SP.COMPANY = InputBody.Message.Company;");
+	public void returnStatement(){
+		assertThat(Kind.RETURN_STATEMENT)
+		.matches("RETURN;")
+		.matches("RETURN (PriceTotal/NumItems> 42);");
 
 	}
 	
