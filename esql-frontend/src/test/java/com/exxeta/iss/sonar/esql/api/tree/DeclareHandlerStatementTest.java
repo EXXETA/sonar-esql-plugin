@@ -19,10 +19,12 @@ package com.exxeta.iss.sonar.esql.api.tree;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.api.tree.statement.SqlStateTree;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.DeclareHandlerStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
@@ -49,6 +51,22 @@ public class DeclareHandlerStatementTest extends EsqlTreeModelTest<DeclareHandle
 		assertNotNull(tree.handlerKeyword());
 		assertNotNull(tree.sqlStates());
 		assertNotNull(tree.statement());
+		
+		SqlStateTree sqlState = tree.sqlStates().get(0);
+		assertNotNull(sqlState);
+		
+		
+		assertNotNull(sqlState.sqlstateKeyword());
+		assertNull(sqlState.likeKeyword());
+		assertNull(sqlState.likeText());
+		assertNull(sqlState.escapeKeyword());
+		assertNull(sqlState.escapeText());
+		assertNotNull(sqlState.valueKeyword()); 
+		assertNotNull(sqlState.valueText());
+		
+		tree = parse(
+				"DECLARE EXIT HANDLER FOR SQLSTATE LIKE'%' SET a = 2;",
+				Kind.DECLARE_HANDLER_STATEMENT);
 	}
 
 }
