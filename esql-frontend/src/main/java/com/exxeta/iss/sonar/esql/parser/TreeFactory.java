@@ -932,27 +932,7 @@ public class TreeFactory {
 		return new SeparatedList<>(elements.build(), commas.build());
 	}
 
-	private static SeparatedList<InternalSyntaxToken> tokenList(InternalSyntaxToken element,
-			Optional<List<Tuple<InternalSyntaxToken, InternalSyntaxToken>>> rest) {
-
-		ImmutableList.Builder<InternalSyntaxToken> elements = ImmutableList.builder();
-		ImmutableList.Builder<InternalSyntaxToken> commas = ImmutableList.builder();
-
-		elements.add(element);
-
-		if (rest.isPresent()) {
-			for (Tuple<InternalSyntaxToken, InternalSyntaxToken> pair : rest.get()) {
-				InternalSyntaxToken commaToken = pair.first();
-
-				commas.add(commaToken);
-				elements.add(pair.second());
-			}
-		}
-
-		return new SeparatedList<>(elements.build(), commas.build());
-	}
-
-	private static SeparatedList<IdentifierTree> nameList(IdentifierTree identfier,
+		private static SeparatedList<IdentifierTree> nameList(IdentifierTree identfier,
 			Optional<List<Tuple<InternalSyntaxToken, IdentifierTree>>> rest) {
 
 		ImmutableList.Builder<IdentifierTree> elements = ImmutableList.builder();
@@ -986,25 +966,6 @@ public class TreeFactory {
 
 				commas.add(commaToken);
 				elements.add(pair.second());
-			}
-		}
-
-		return new SeparatedList<>(elements.build(), commas.build());
-	}
-
-	private static SeparatedList<ExpressionTree> asbitstreamParameter(
-			Optional<List<Tuple<InternalSyntaxToken, Optional<ExpressionTree>>>> rest) {
-
-		ImmutableList.Builder<ExpressionTree> elements = ImmutableList.builder();
-		ImmutableList.Builder<InternalSyntaxToken> commas = ImmutableList.builder();
-
-
-		if (rest.isPresent()) {
-			for (Tuple<InternalSyntaxToken, Optional<ExpressionTree>> pair : rest.get()) {
-				InternalSyntaxToken commaToken = pair.first();
-
-				commas.add(commaToken);
-				elements.add(pair.second().isPresent()?pair.second().get():null);
 			}
 		}
 

@@ -137,7 +137,7 @@ public class EsqlSquidSensor implements Sensor {
       success = true;
     } catch (CancellationException e) {
       // do not propagate the exception
-      LOG.debug(e.toString());
+      LOG.debug(e.toString(), e);
     } finally {
       stopProgressReport(progressReport, success);
     }
