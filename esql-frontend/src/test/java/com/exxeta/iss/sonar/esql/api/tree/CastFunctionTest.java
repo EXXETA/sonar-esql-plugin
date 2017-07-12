@@ -32,6 +32,8 @@ public class CastFunctionTest {
 			.matches("CAST(7, 6, 5 AS DATE)")
 			.matches("CAST(7.4e0, 6.5e0, 5.6e0 AS DATE)")
 			.matches("CAST(3.1e0, 4.2e0, 5.3e0, 6.4e0, 7.5e0, 8.6789012e0 AS GMTTIMESTAMP)")
-			.matches("CAST ( 1  AS INTERVAL DAY )");
+			.matches("CAST ( 1  AS INTERVAL DAY )")
+			.matches("CAST ( 1  AS INTERVAL DAY CCSID 1208 ENCODING defaultEncoding DEFAULT 1)")
+			;
 	}
 }
