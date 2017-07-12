@@ -1,0 +1,17 @@
+CREATE FUNCTION f() BEGIN
+   DECLARE a INT 1;
+   SET a = f();
+   SET a = 2;
+   SET c = 2;
+   SET c = 1;
+   SET c = 1;
+   SET c = 2;
+   
+END;
+
+
+
+CREATE FUNCTION recursive(p) BEGIN
+  return recursive(p);
+END;
+

@@ -1,0 +1,3 @@
+﻿CREATE FUNCTION f() BEGIN
+   SET a = f();
+END;
