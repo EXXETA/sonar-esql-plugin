@@ -53,13 +53,6 @@ public class TooManyIterateOrLeaveInLoopCheck extends DoubleDispatchVisitorCheck
 		private List<Tree> jumps = new ArrayList<>();
 
 		/**
-		 * Creates unlabeled target.
-		 */
-		public JumpTarget() {
-			this.label = null;
-		}
-
-		/**
 		 * Creates labeled target.
 		 */
 		public JumpTarget(String label) {
