@@ -348,10 +348,6 @@ public class TreeFactory {
 		return newTuple(first, second);
 	}
 
-	public <T, U> Tuple<T, U> newTuple3(T first, U second) {
-		return newTuple(first, second);
-	}
-
 	public <T, U> Tuple<T, U> newTuple4(T first, U second) {
 		return newTuple(first, second);
 	}
@@ -369,10 +365,6 @@ public class TreeFactory {
 	}
 
 	public <T, U> Tuple<T, U> newTuple8(T first, U second) {
-		return newTuple(first, second);
-	}
-
-	public <T, U> Tuple<T, U> newTuple9(T first, U second) {
 		return newTuple(first, second);
 	}
 
@@ -440,23 +432,11 @@ public class TreeFactory {
 		return newTuple(first, second);
 	}
 
-	public <T, U> Tuple<T, U> newTuple27(T first, U second) {
-		return newTuple(first, second);
-	}
-
 	public <T, U> Tuple<T, U> newTuple28(T first, U second) {
 		return newTuple(first, second);
 	}
 
-	public <T, U> Tuple<T, U> newTuple29(T first, U second) {
-		return newTuple(first, second);
-	}
-
 	public <T, U> Tuple<T, U> newTuple30(T first, U second) {
-		return newTuple(first, second);
-	}
-
-	public <T, U> Tuple<T, U> newTuple31(T first, U second) {
 		return newTuple(first, second);
 	}
 
@@ -508,10 +488,6 @@ public class TreeFactory {
 		return newTuple(first, second);
 	}
 
-	public <T, U> Tuple<T, U> newTuple44(T first, U second) {
-		return newTuple(first, second);
-	}
-
 	public <T, U> Tuple<T, U> newTuple45(T first, U second) {
 		return newTuple(first, second);
 	}
@@ -525,50 +501,6 @@ public class TreeFactory {
 	}
 
 	public <T, U> Tuple<T, U> newTuple48(T first, U second) {
-		return newTuple(first, second);
-	}
-
-	public <T, U> Tuple<T, U> newTuple49(T first, U second) {
-		return newTuple(first, second);
-	}
-
-	public <T, U> Tuple<T, U> newTuple50(T first, U second) {
-		return newTuple(first, second);
-	}
-
-	public <T, U> Tuple<T, U> newTuple51(T first, U second) {
-		return newTuple(first, second);
-	}
-
-	public <T, U> Tuple<T, U> newTuple52(T first, U second) {
-		return newTuple(first, second);
-	}
-
-	public <T, U> Tuple<T, U> newTuple53(T first, U second) {
-		return newTuple(first, second);
-	}
-
-	public <T, U> Tuple<T, U> newTuple54(T first, U second) {
-		return newTuple(first, second);
-	}
-
-	public <T, U> Tuple<T, U> newTuple55(T first, U second) {
-		return newTuple(first, second);
-	}
-
-	public <T, U> Tuple<T, U> newTuple56(T first, U second) {
-		return newTuple(first, second);
-	}
-
-	public <T, U> Tuple<T, U> newTuple57(T first, U second) {
-		return newTuple(first, second);
-	}
-
-	public <T, U> Tuple<T, U> newTuple58(T first, U second) {
-		return newTuple(first, second);
-	}
-
-	public <T, U> Tuple<T, U> newTuple59(T first, U second) {
 		return newTuple(first, second);
 	}
 
@@ -629,10 +561,6 @@ public class TreeFactory {
 	}
 
 	public <T, U> Tuple<T, U> newTuple74(T first, U second) {
-		return newTuple(first, second);
-	}
-
-	public <T, U> Tuple<T, U> newTuple75(T first, U second) {
 		return newTuple(first, second);
 	}
 
@@ -806,10 +734,6 @@ public class TreeFactory {
 
 	public <T, U> Tuple<T, U> newTuple118(T first, U second) {
 		return newTuple(first, second);
-	}
-
-	public <T, U, V> Triple<T, U, V> newTriple1(T first, U second, V third) {
-		return newTriple(first, second, third);
 	}
 
 	public <T, U, V> Triple<T, U, V> newTriple2(T first, U second, V third) {
@@ -1008,27 +932,7 @@ public class TreeFactory {
 		return new SeparatedList<>(elements.build(), commas.build());
 	}
 
-	private static SeparatedList<InternalSyntaxToken> tokenList(InternalSyntaxToken element,
-			Optional<List<Tuple<InternalSyntaxToken, InternalSyntaxToken>>> rest) {
-
-		ImmutableList.Builder<InternalSyntaxToken> elements = ImmutableList.builder();
-		ImmutableList.Builder<InternalSyntaxToken> commas = ImmutableList.builder();
-
-		elements.add(element);
-
-		if (rest.isPresent()) {
-			for (Tuple<InternalSyntaxToken, InternalSyntaxToken> pair : rest.get()) {
-				InternalSyntaxToken commaToken = pair.first();
-
-				commas.add(commaToken);
-				elements.add(pair.second());
-			}
-		}
-
-		return new SeparatedList<>(elements.build(), commas.build());
-	}
-
-	private static SeparatedList<IdentifierTree> nameList(IdentifierTree identfier,
+		private static SeparatedList<IdentifierTree> nameList(IdentifierTree identfier,
 			Optional<List<Tuple<InternalSyntaxToken, IdentifierTree>>> rest) {
 
 		ImmutableList.Builder<IdentifierTree> elements = ImmutableList.builder();
@@ -1062,25 +966,6 @@ public class TreeFactory {
 
 				commas.add(commaToken);
 				elements.add(pair.second());
-			}
-		}
-
-		return new SeparatedList<>(elements.build(), commas.build());
-	}
-
-	private static SeparatedList<ExpressionTree> asbitstreamParameter(
-			Optional<List<Tuple<InternalSyntaxToken, Optional<ExpressionTree>>>> rest) {
-
-		ImmutableList.Builder<ExpressionTree> elements = ImmutableList.builder();
-		ImmutableList.Builder<InternalSyntaxToken> commas = ImmutableList.builder();
-
-
-		if (rest.isPresent()) {
-			for (Tuple<InternalSyntaxToken, Optional<ExpressionTree>> pair : rest.get()) {
-				InternalSyntaxToken commaToken = pair.first();
-
-				commas.add(commaToken);
-				elements.add(pair.second().isPresent()?pair.second().get():null);
 			}
 		}
 
@@ -1739,11 +1624,11 @@ public class TreeFactory {
 	}
 
 	public ParseClauseTreeImpl parseClause(InternalSyntaxToken parseKeyword, InternalSyntaxToken openingParenthesis,
-			FieldReferenceTreeImpl fieldReference,
+			ExpressionTree expression,
 			Optional<List<Tuple<InternalSyntaxToken, Optional<ExpressionTree>>>> parameters,
 			InternalSyntaxToken closingParenthesis) {
 
-		return new ParseClauseTreeImpl(parseKeyword, openingParenthesis, fieldReference, parameters.isPresent()?parameters.get():null, closingParenthesis);
+		return new ParseClauseTreeImpl(parseKeyword, openingParenthesis, expression, parameters.isPresent()?parameters.get():null, closingParenthesis);
 	}
 
 	public DeleteStatementTreeImpl deleteStatement(InternalSyntaxToken deleteKeyword, Object qualifier,

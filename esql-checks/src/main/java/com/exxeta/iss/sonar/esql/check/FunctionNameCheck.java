@@ -42,12 +42,12 @@ public class FunctionNameCheck extends DoubleDispatchVisitorCheck {
 
 	private Pattern pattern;
 
-	public String getFormat() {
-		return format;
-	}
-
 	public FunctionNameCheck() {
 		pattern = Pattern.compile(getFormat());
+	}
+
+	public String getFormat() {
+		return format;
 	}
 
 	@Override

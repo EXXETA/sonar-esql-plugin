@@ -20,9 +20,6 @@ package com.exxeta.iss.sonar.esql.lexer;
 
 public final class EsqlLexer {
 
-  private EsqlLexer() {
-  }
-
   private static final String EXP = "([Ee][+-]?+[0-9_]++)";
   private static final String BINARY_EXP = "([Pp][+-]?+[0-9_]++)";
 
@@ -85,7 +82,7 @@ public final class EsqlLexer {
 
   private static final String IDENTIFIER_START = "(?:[$_" + UNICODE_LETTER + "]|\\\\" + UNICODE_ESCAPE_SEQUENCE + ")";
   private static final String IDENTIFIER_PART = "(?:" + IDENTIFIER_START + "|[" + UNICODE_COMBINING_MARK + UNICODE_DIGIT + UNICODE_CONNECTOR_PUNCTUATION + "])";
-  private static final String IDENTIFIER_PART_ESCAPED = "(?:" + IDENTIFIER_START + "|[" + UNICODE_COMBINING_MARK + UNICODE_DIGIT + UNICODE_CONNECTOR_PUNCTUATION+ "-." + "]|\"\")";
+  private static final String IDENTIFIER_PART_ESCAPED = "(?:" + IDENTIFIER_START + "|[" + UNICODE_COMBINING_MARK + UNICODE_DIGIT + UNICODE_CONNECTOR_PUNCTUATION+ "-.:" + "]|\"\")";
 
   public static final String IDENTIFIER = IDENTIFIER_START + IDENTIFIER_PART + "*+";
   public static final String IDENTIFIER_WITH_QUOTES ="\"(" +IDENTIFIER_PART_ESCAPED + "*+)"+"\"";
@@ -98,41 +95,11 @@ public final class EsqlLexer {
   public static final String WHITESPACE = "[\\n\\r\\t\\u000B\\f\\u0020\\u00A0\\uFEFF\\p{Zs}]";
 
   //TODO needs to be case insensitive?
-  public static final String TIME_LITERAL = "TIME"+WHITESPACE+"+'[0-9]{2}:[0-9]{2}:[0-9]{2}'";
+  public static final String TIME_LITERAL = "(GMT)?TIME"+WHITESPACE+"+'[0-9]{2}:[0-9]{2}:[0-9]{2}'";
   public static final String DATE_LITERAL = "DATE"+WHITESPACE+"+'[0-9]{4}-[0-9]{2}-[0-9]{2}'";
-  public static final String TIMESTAMP_LITERAL = "TIMESTAMP"+WHITESPACE+"+'[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}'";
+  public static final String TIMESTAMP_LITERAL = "(GMT)?TIMESTAMP"+WHITESPACE+"+'[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}'";
 
-  
-/*  public static Lexer create(EsqlConfiguration conf) {
-	  LexerState lexerState = new LexerState();
-    return Lexer.builder()
-        .withCharset(conf.getCharset())
+  private EsqlLexer() {
+  }
 
-        .withFailIfNoChannelToConsumeOneCharacter(true)
-
-        // Channels, which consumes more frequently should come first.
-        // Whitespace character occurs more frequently than any other, and thus come first:
-        .withChannel(new BlackHoleChannel(WHITESPACE + "++"))
-
-        .withChannel(new NewLineChannel(lexerState))
-        
-        // Comments
-        .withChannel(commentRegexp(COMMENT))
-
-        // String Literals
-        
-        .withChannel(regexp(EsqlTokenType.STRING, LITERAL))
-
-        .withChannel(regexp(EsqlTokenType.NUMBER, NUMERIC_LITERAL))
-        .withChannel(regexp(EsqlTokenType.HEX, HEX_LITERAL))
-        .withChannel(regexp(EsqlTokenType.TIME, TIME_LITERAL))
-        .withChannel(regexp(EsqlTokenType.DATE, DATE_LITERAL))
-
-        .withChannel(new IdentifierAndKeywordChannel("[a-zA-Z0-9_]+|\"(?:[^\"]|\"\")+\"", false))
-        .withChannel(new PunctuatorChannel(EsqlPunctuator.values()))
-
-        .withChannel(new UnknownCharacterChannel())
-
-        .build();
-  }*/
 }

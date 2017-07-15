@@ -32,6 +32,9 @@ public class DataTypeTest {
 			.matches("BOOLEAN")
 			.matches("CHAR")
 			.matches("DECIMAL")
+			.matches("INTERVAL YEAR TO MONTH")
+			.matches("INTERVAL DAY TO HOUR")
+			.matches("INTERVAL MINUTE TO SECOND")
 			.notMatches("STRING");
 		
 	}

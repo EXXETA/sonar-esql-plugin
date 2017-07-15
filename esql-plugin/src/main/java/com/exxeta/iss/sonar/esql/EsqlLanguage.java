@@ -23,22 +23,31 @@ import org.sonar.api.resources.AbstractLanguage;
 
 public class EsqlLanguage extends AbstractLanguage {
 
-  public static final String KEY = "esql";
+	public static final String KEY = "esql";
 
-  private Settings settings;
+	private Settings settings;
 
-  public EsqlLanguage(Settings configuration) {
-    super(KEY, "Esql");
-    this.settings = configuration;
-  }
+	public EsqlLanguage(Settings configuration) {
+		super(KEY, "Esql");
+		this.settings = configuration;
+	}
 
-  @Override
-  public String[] getFileSuffixes() {
-    String[] suffixes = settings.getStringArray(EsqlPlugin.FILE_SUFFIXES_KEY);
-    if (suffixes == null || suffixes.length == 0) {
-      suffixes = StringUtils.split(EsqlPlugin.FILE_SUFFIXES_DEFVALUE, ",");
-    }
-    return suffixes;
-  }
+	@Override
+	public String[] getFileSuffixes() {
+		String[] suffixes = settings.getStringArray(EsqlPlugin.FILE_SUFFIXES_KEY);
+		if (suffixes == null || suffixes.length == 0) {
+			suffixes = StringUtils.split(EsqlPlugin.FILE_SUFFIXES_DEFVALUE, ",");
+		}
+		return suffixes;
+	}
 
+	@Override
+	public boolean equals(Object o) {
+		return super.equals(o);
+	}
+	
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
 }

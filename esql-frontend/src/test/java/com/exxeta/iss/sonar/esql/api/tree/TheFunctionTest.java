@@ -18,12 +18,15 @@
 package com.exxeta.iss.sonar.esql.api.tree;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.tree.impl.function.TheFunctionTreeImpl;
+import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class TheFunctionTest {
+public class TheFunctionTest extends EsqlTreeModelTest<TheFunctionTreeImpl> {
 
 	@Test
 	public void theFunction() {
@@ -32,4 +35,15 @@ public class TheFunctionTest {
 			.matches("THE (getList())");
 	}
 
+	@Test
+	public void modelTest() throws Exception {
+		TheFunctionTreeImpl tree = parse("THE (getList())", Kind.THE_FUNCTION);
+		
+		assertNotNull(tree);
+		assertNotNull(tree.theKeyword());
+		assertNotNull(tree.openingParenthesis());
+		assertNotNull(tree.expression());
+		assertNotNull(tree.closingParenthesis());
+	}
+	
 }

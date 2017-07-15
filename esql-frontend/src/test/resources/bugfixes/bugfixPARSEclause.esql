@@ -19,5 +19,6 @@ CREATE PROCEDURE Validate_ParseDomain()
 		
 		-- PARSE parms are optional, comma must be there
 		CREATE LASTCHILD OF OutputRoot  DOMAIN('XMLNSC') PARSE(inBitStream, inEncoding, inCCSID,,,, options); 
-
+		CREATE LASTCHILD OF OutputRoot.XMLNSC PARSE(FIELDVALUE(con)OPTIONS FolderBitStream);
+		
 END;

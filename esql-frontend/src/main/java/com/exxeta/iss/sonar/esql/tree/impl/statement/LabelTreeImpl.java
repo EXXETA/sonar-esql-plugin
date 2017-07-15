@@ -19,14 +19,12 @@ package com.exxeta.iss.sonar.esql.tree.impl.statement;
 
 import java.util.Iterator;
 
-import com.google.common.collect.Iterators;
-
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.LabelTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
-import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
+import com.google.common.collect.Iterators;
 
 public class LabelTreeImpl extends EsqlTree implements LabelTree {
 

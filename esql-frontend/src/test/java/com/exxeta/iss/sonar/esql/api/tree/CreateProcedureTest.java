@@ -27,6 +27,7 @@ import org.junit.Test;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ResultSetTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.ReturnTypeTree;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
 
@@ -39,6 +40,7 @@ public class CreateProcedureTest extends EsqlTreeModelTest<CreateProcedureStatem
 		.matches("CREATE PROCEDURE swapParms (  IN parm1 CHARACTER,  OUT parm2  CHARACTER,  INOUT parm3 CHARACTER )BEGIN   SET parm2 = parm3;   SET parm3 = parm1; END;")
 		.matches("CREATE PROCEDURE InsertVehicle(INOUT p_VehicleIdentifier CHARACTER,INOUT p_MMCAssignmentState CHARACTER,INOUT p_ResultCode INTEGER,INOUT p_ResultText CHARACTER)LANGUAGE DATABASE EXTERNAL NAME \"A.V.INSERT\";")
 		.matches("CREATE PROCEDURE InsertV(INOUT p_id CHARACTER,INOUT p_state CHARACTER,INOUT p_ResultCode INTEGER,INOUT p_ResultText CHARACTER)LANGUAGE DATABASE EXTERNAL NAME \"A.V.INSERT\";")
+		.matches("CREATE PROCEDURE a () RETURNS CHAR NOT NULL BEGIN END;")
 		;
 		
 	}
@@ -58,6 +60,7 @@ public class CreateProcedureTest extends EsqlTreeModelTest<CreateProcedureStatem
 		assertNotNull(tree.language());
 		assertNotNull(tree.resultSet());
 		assertNotNull(tree.routineBody());
+
 		
 		ResultSetTree resultSet = tree.resultSet();
 		assertNotNull(resultSet.dynamicKeyword());
@@ -65,6 +68,19 @@ public class CreateProcedureTest extends EsqlTreeModelTest<CreateProcedureStatem
 		assertNotNull(resultSet.setsKeyword());
 		assertNotNull(resultSet.integer());
 		
+		tree = parse("CREATE PROCEDURE a () RETURNS CHAR NOT NULL BEGIN END;", Kind.CREATE_PROCEDURE_STATEMENT);
+		
+		ReturnTypeTree returnType = tree.returnType();
+		assertNotNull(returnType);
+		assertNotNull(returnType.returnsKeyword());
+		assertNotNull(returnType.dataType());
+		assertNotNull(returnType.notKeyword());
+		assertNotNull(returnType.nullKeyword());
+		assertNull(returnType.nullableKeyword());
+
+		tree = parse("CREATE PROCEDURE a () RETURNS CHAR BEGIN END;", Kind.CREATE_PROCEDURE_STATEMENT);
+		tree = parse("CREATE PROCEDURE a () RETURNS CHAR NULLABLE BEGIN END;", Kind.CREATE_PROCEDURE_STATEMENT);
+
 	}
 	
 }

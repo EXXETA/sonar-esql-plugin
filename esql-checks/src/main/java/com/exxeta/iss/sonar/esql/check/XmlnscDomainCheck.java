@@ -38,7 +38,10 @@ public class XmlnscDomainCheck extends DoubleDispatchVisitorCheck{
 	public void visitFieldReference(FieldReferenceTree tree) {
 		super.visitFieldReference(tree);
 		if (rootElements.contains(tree.pathElement().name().name().text())
-				&& !tree.pathElements().isEmpty()){
+				&& !tree.pathElements().isEmpty() 
+				&& tree.pathElements().get(0)!=null
+				&& tree.pathElements().get(0).name()!=null
+				&& tree.pathElements().get(0).name().name()!=null){
 			String domain = tree.pathElements().get(0).name().name().text();
 			checkDomain(domain, tree.pathElements().get(0));
 		}

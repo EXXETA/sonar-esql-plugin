@@ -31,6 +31,17 @@ CREATE COMPUTE MODULE ProcessCardAccount
 		  WHEN minimum + 0 THEN
 		    SET description = 'medium';        
 		END CASE;
+		
+		SET description = CASE size
+			WHEN minimum + 0 THEN 'small'
+			WHEN minimum + 1 THEN 'medium'
+		END;
+
+		SET description = CASE size
+			WHEN minimum + 0 THEN 'small'
+			WHEN minimum + 1 THEN 'medium'
+			ELSE 'unknown'
+		END;
 
 	END;
 

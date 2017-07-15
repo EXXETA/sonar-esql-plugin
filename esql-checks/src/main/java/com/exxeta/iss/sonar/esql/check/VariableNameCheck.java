@@ -40,13 +40,12 @@ public class VariableNameCheck extends DoubleDispatchVisitorCheck {
 
 	private Pattern pattern;
 
-	public String getFormat() {
-		return format;
-	}
 	public VariableNameCheck() {
 		pattern = Pattern.compile(getFormat());
 	}
-
+	public String getFormat() {
+		return format;
+	}
 	@Override
 	public void visitDeclareStatement(DeclareStatementTree tree) {
 		super.visitDeclareStatement(tree);

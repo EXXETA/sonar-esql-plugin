@@ -18,12 +18,18 @@
 package com.exxeta.iss.sonar.esql.api.tree;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.tree.impl.expression.BetweenExpressionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.symbols.type.PrimitiveType;
+import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class BetweenExpressionTest {
+public class BetweenExpressionTest extends EsqlTreeModelTest<BetweenExpressionTreeImpl>{
 
 	@Test
 	public void expression() {
@@ -32,6 +38,22 @@ public class BetweenExpressionTest {
 		.matches("a not between b and c")
 		.matches("c BETWEEN c.\"from\" AND currentDayIntervalRef")
 		;
+	}
+	
+	@Test
+	public void modelTest() throws Exception{
+		BetweenExpressionTreeImpl tree = parse("a between b and c", Kind.BETWEEN_EXPRESSION);
+		assertNotNull(tree);
+		assertNotNull(tree.expression());
+		assertNull(tree.notKeyword());
+		assertNotNull(tree.betweenKeyword());
+		assertNull(tree.symmetricKeyword());
+		assertNotNull(tree.endpoint1());
+		assertNotNull(tree.andKeyword());
+		assertNotNull(tree.endpoint2());
+		
+		tree.add(PrimitiveType.UNKNOWN);
+		assertTrue(tree.types().contains(PrimitiveType.UNKNOWN));
 	}
 	
 }

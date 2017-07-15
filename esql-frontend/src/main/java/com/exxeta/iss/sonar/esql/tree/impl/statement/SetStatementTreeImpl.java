@@ -19,17 +19,14 @@ package com.exxeta.iss.sonar.esql.tree.impl.statement;
 
 import java.util.Iterator;
 
-import com.google.common.collect.Iterators;
-
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.VariableReferenceTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.SetStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
-import com.exxeta.iss.sonar.esql.tree.impl.declaration.FieldReferenceTreeImpl;
-import com.exxeta.iss.sonar.esql.tree.impl.expression.IdentifierTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
+import com.google.common.collect.Iterators;
 
 public class SetStatementTreeImpl extends EsqlTree implements SetStatementTree{
 

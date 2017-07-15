@@ -28,7 +28,6 @@ import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator;
 import com.exxeta.iss.sonar.esql.parser.TreeFactory.Tuple;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
-import com.exxeta.iss.sonar.esql.tree.impl.declaration.FieldReferenceTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.google.common.collect.Iterators;
 import com.sonar.sslr.api.typed.Optional;
@@ -37,7 +36,7 @@ public class ParseClauseTreeImpl extends EsqlTree implements ParseClauseTree{
 
 	private InternalSyntaxToken parseKeyword;
 	private InternalSyntaxToken openingParenthesis;
-	private FieldReferenceTreeImpl fieldReference;
+	private ExpressionTree expression;
 	
 	private InternalSyntaxToken optionsSeparator;
 	private ExpressionTree optionsExpression;
@@ -56,12 +55,12 @@ public class ParseClauseTreeImpl extends EsqlTree implements ParseClauseTree{
 	private boolean commaSeparated;
 	
 	public ParseClauseTreeImpl(InternalSyntaxToken parseKeyword, InternalSyntaxToken openingParenthesis,
-			FieldReferenceTreeImpl fieldReference,
+			ExpressionTree expression,
 			List<Tuple<InternalSyntaxToken, Optional<ExpressionTree>>> parameters, InternalSyntaxToken closingParenthesis) {
 		super();
 		this.parseKeyword = parseKeyword;
 		this.openingParenthesis = openingParenthesis;
-		this.fieldReference=fieldReference;
+		this.expression=expression;
 		if (parameters != null) {
 			commaSeparated = parameters.get(0).first().is(EsqlPunctuator.COMMA);
 			if (commaSeparated) {
@@ -129,8 +128,8 @@ public class ParseClauseTreeImpl extends EsqlTree implements ParseClauseTree{
 		return openingParenthesis;
 	}
 	@Override
-	public FieldReferenceTreeImpl fieldReference() {
-		return fieldReference;
+	public ExpressionTree expression() {
+		return expression;
 	}
 
 	@Override
@@ -220,7 +219,7 @@ public class ParseClauseTreeImpl extends EsqlTree implements ParseClauseTree{
 	}
 	@Override
 	public Iterator<Tree> childrenIterator() {
-		return Iterators.forArray(parseKeyword, openingParenthesis, fieldReference,
+		return Iterators.forArray(parseKeyword, openingParenthesis, expression,
 				optionsSeparator, optionsExpression,
 				encodingSeparator, encodingExpression,
 				ccsidSeparator, ccsidExpression,

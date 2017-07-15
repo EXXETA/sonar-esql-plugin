@@ -28,6 +28,7 @@ public class CaseWithoutElseCheckTest {
 	  public void test() {
 		 EsqlCheckVerifier.issues(new CaseWithoutElseCheck(), new File("src/test/resources/caseTest.esql"))
 	        .next().atLine(28).withMessage("Add the missing \"ELSE\" clause.")
+	        .next().atLine(35).withMessage("Add the missing \"ELSE\" clause.")
 	        .noMore();
 	  }
 }
