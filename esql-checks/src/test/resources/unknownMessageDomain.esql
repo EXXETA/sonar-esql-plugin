@@ -5,6 +5,8 @@ CREATE COMPUTE MODULE TestFlow_Compute
 		SET OutputRoot.MRM.test='a';  -- Compliant
 		SET OutputRoot.MLNSC.test='a';  -- Noncompliant
 		SET OutputRoot.XMLNS.test='a'; -- Compliant
+		SET OutputRoot.MQRFH2.test='a'; -- Compliant
+		SET OutputRoot.a.test='a'; -- Noncompliant
 		DECLARE refColl REFERENCE TO InputRoot.Collection.[>]; --Compliant
 		SET OutputRoot.HTTPReplyHeader."Content-Type"=contentType; --Compliant
 		RETURN TRUE;
