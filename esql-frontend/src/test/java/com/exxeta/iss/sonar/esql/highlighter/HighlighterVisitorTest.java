@@ -36,111 +36,116 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.sonar.api.batch.fs.InputFile.Type;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.highlighting.TypeOfText;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
-import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.visitors.TreeVisitorContext;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 import com.google.common.base.Charsets;
 
 public class HighlighterVisitorTest extends EsqlTreeModelTest<ProgramTree> {
 
-  private static final Charset CHARSET = Charsets.UTF_8;
+	private static final Charset CHARSET = Charsets.UTF_8;
 
-  private HighlighterVisitor highlighterVisitor;
+	private HighlighterVisitor highlighterVisitor;
 
-  private TreeVisitorContext visitorContext;
-  private SensorContextTester sensorContext;
-  private DefaultInputFile inputFile;
+	private TreeVisitorContext visitorContext;
+	private SensorContextTester sensorContext;
+	private DefaultInputFile inputFile;
 
-  @Rule
-  public TemporaryFolder tempFolder = new TemporaryFolder();
+	@Rule
+	public TemporaryFolder tempFolder = new TemporaryFolder();
 
-  @Before
-  public void setUp() throws IOException {
-    File file = tempFolder.newFile();
-    inputFile = new DefaultInputFile("moduleKey", file.getName())
-      .setLanguage("js")
-      .setType(Type.MAIN)
-      .setCharset(CHARSET);
+	@Before
+	public void setUp() throws IOException {
+		sensorContext = SensorContextTester.create(tempFolder.getRoot());
+		visitorContext = mock(TreeVisitorContext.class);
+		highlighterVisitor = new HighlighterVisitor(sensorContext);
+	}
 
-    sensorContext = SensorContextTester.create(tempFolder.getRoot());
-    visitorContext = mock(TreeVisitorContext.class);
+	private void initFile(String text) throws IOException {
+		File file = tempFolder.newFile();
+		inputFile = new TestInputFileBuilder("moduleKey", file.getName())
+				.setLanguage("esql")
+				.setType(Type.MAIN)
+				.setCharset(CHARSET)
+				.initMetadata(text)
+				.build();
 
-    highlighterVisitor = new HighlighterVisitor(sensorContext);
-    when(visitorContext.getEsqlFile()).thenReturn(wrap(inputFile));
-  }
+		when(visitorContext.getEsqlFile()).thenReturn(wrap(inputFile));
+	}
 
-  private void highlight(String string) throws Exception {
-	    inputFile.initMetadata(string);
-	    Tree tree = parse(string);
-	    when(visitorContext.getTopTree()).thenReturn((ProgramTree) tree);
-	    highlighterVisitor.scanTree(visitorContext);
-	  }
+	private void highlight(String string) throws Exception {
+		initFile(string);
+		Tree tree = parse(string);
+		when(visitorContext.getTopTree()).thenReturn((ProgramTree) tree);
+		highlighterVisitor.scanTree(visitorContext);
+	}
 
-  private void assertHighlighting(int column, int length, TypeOfText type) {
-    assertHighlighting(1, column, length, type);
-  }
+	private void assertHighlighting(int column, int length, TypeOfText type) {
+		assertHighlighting(1, column, length, type);
+	}
 
-  private void assertHighlighting(int line, int column, int length, TypeOfText type) {
-    for (int i = column; i < column + length; i++) {
-      List<TypeOfText> typeOfTexts = sensorContext.highlightingTypeAt("moduleKey:" + inputFile.relativePath(), line, i);
-      assertThat(typeOfTexts).hasSize(1);
-      assertThat(typeOfTexts.get(0)).isEqualTo(type);
-    }
-  }
+	private void assertHighlighting(int line, int column, int length, TypeOfText type) {
+		for (int i = column; i < column + length; i++) {
+			List<TypeOfText> typeOfTexts = sensorContext.highlightingTypeAt("moduleKey:" + inputFile.relativePath(),
+					line, i);
+			assertThat(typeOfTexts).hasSize(1);
+			assertThat(typeOfTexts.get(0)).isEqualTo(type);
+		}
+	}
 
-  @Test
-  public void empty_input() throws Exception {
-    highlight("");
-    assertThat(sensorContext.highlightingTypeAt("moduleKey:" + inputFile.relativePath(), 1, 0)).isEmpty();
-  }
+	@Test
+	public void empty_input() throws Exception {
+		highlight("");
+		assertThat(sensorContext.highlightingTypeAt("moduleKey:" + inputFile.relativePath(), 1, 0)).isEmpty();
+	}
 
-  @Test
-  public void multiline_comment() throws Exception {
-    highlight("/*\nComment\n*/ ");
-    assertHighlighting(1, 0, 2, COMMENT);
-    assertHighlighting(2, 0, 7, COMMENT);
-    assertHighlighting(3, 0, 2, COMMENT);
-  }
+	@Test
+	public void multiline_comment() throws Exception {
+		highlight("/*\nComment\n*/ ");
+		assertHighlighting(1, 0, 2, COMMENT);
+		assertHighlighting(2, 0, 7, COMMENT);
+		assertHighlighting(3, 0, 2, COMMENT);
+	}
 
-  @Test
-  public void single_line_comment() throws Exception {
-    highlight("  --Comment ");
-    assertHighlighting(2, 10, COMMENT);
-  }
+	@Test
+	public void single_line_comment() throws Exception {
+		highlight("  --Comment ");
+		assertHighlighting(2, 10, COMMENT);
+	}
 
-  @Test
-  public void javadoc_comment() throws Exception {
-    highlight("  /**Comment*/ ");
-    assertHighlighting(2, 12, TypeOfText.STRUCTURED_COMMENT);
-  }
+	@Test
+	public void javadoc_comment() throws Exception {
+		highlight("  /**Comment*/ ");
+		assertHighlighting(2, 12, TypeOfText.STRUCTURED_COMMENT);
+	}
 
-  @Test
-  public void numbers() throws Exception {
-    highlight("CREATE FUNCTION a() SET x = 1;");
-    assertHighlighting(28, 1, TypeOfText.CONSTANT);
-  }
+	@Test
+	public void numbers() throws Exception {
+		highlight("CREATE FUNCTION a() SET x = 1;");
+		assertHighlighting(28, 1, TypeOfText.CONSTANT);
+	}
 
-  @Test
-  public void string() throws Exception {
-    highlight("CREATE FUNCTION a() SET x = 'a';");
-    assertHighlighting(28, 3, STRING);
-  }
+	@Test
+	public void string() throws Exception {
+		highlight("CREATE FUNCTION a() SET x = 'a';");
+		assertHighlighting(28, 3, STRING);
+	}
 
-  @Test
-  public void keyword() throws Exception {
-    highlight("CREATE FUNCTION a() SET x = 0;");
-    assertHighlighting(20, 3, KEYWORD);
-  }
+	@Test
+	public void keyword() throws Exception {
+		highlight("CREATE FUNCTION a() SET x = 0;");
+		assertHighlighting(20, 3, KEYWORD);
+	}
 
-  @Test
-  public void byte_order_mark() throws Exception {
-    highlight("\uFEFFDECLARE a CHAR;  --");
-    assertHighlighting(0, 7, KEYWORD);
-  }
+	@Test
+	public void byte_order_mark() throws Exception {
+		highlight("\uFEFFDECLARE a CHAR;  --");
+		assertHighlighting(0, 7, KEYWORD);
+	}
 
 }

@@ -19,9 +19,15 @@ package com.exxeta.iss.sonar.esql.checks.verifier;
 
 import static com.exxeta.iss.sonar.esql.compat.CompatibilityHelper.wrap;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 
 import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.config.MapSettings;
 import org.sonar.api.config.Settings;
 
@@ -57,6 +63,24 @@ public class TestUtils {
 		} catch (IOException e) {
 			throw Throwables.propagate(e);
 		}
+	}
+
+	public static DefaultInputFile createTestInputFile(String baseDir, String relativePath) {
+		return new TestInputFileBuilder("module1", relativePath).setModuleBaseDir(Paths.get(baseDir))
+				.setLanguage("esql").setCharset(StandardCharsets.UTF_8).setType(InputFile.Type.MAIN).build();
+	}
+
+	public static DefaultInputFile createTestInputFile(File baseDir, String relativePath) {
+		return createTestInputFile(baseDir.getAbsolutePath(), relativePath);
+	}
+
+	public static DefaultInputFile createTestInputFile(String relativePath) {
+		return createTestInputFile("", relativePath);
+	}
+
+	public static DefaultInputFile createTestInputFile(File baseDir, String relativePath, Charset charset) {
+		return new TestInputFileBuilder(baseDir.getAbsolutePath(), relativePath)
+				.setModuleBaseDir(Paths.get(baseDir.getAbsolutePath())).setLanguage("esql").setCharset(charset).build();
 	}
 
 	private static Settings settings() {

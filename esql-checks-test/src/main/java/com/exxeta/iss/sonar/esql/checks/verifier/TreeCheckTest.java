@@ -37,7 +37,7 @@ class TreeCheckTest {
 	  }
 
 	  public static Collection<CheckMessage> getIssues(String relativePath, EsqlCheck check) {
-		InputFile file = new TestInputFile(relativePath);
+		InputFile file =  TestUtils.createTestInputFile(relativePath);
 
 	    EsqlVisitorContext context = TestUtils.createContext(file);
 	    List<Issue> issues = check.scanFile(context);

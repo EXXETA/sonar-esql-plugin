@@ -41,6 +41,7 @@ import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.DefaultTextPointer;
 import org.sonar.api.batch.fs.internal.DefaultTextRange;
 import org.sonar.api.batch.fs.internal.FileMetadata;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.rule.CheckFactory;
 import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
@@ -317,12 +318,16 @@ public class EsqlSquidSensorTest {
 
 	
 	private CompatibleInputFile inputFile(String relativePath) {
-		DefaultInputFile inputFile = new DefaultInputFile("moduleKey", relativePath).setModuleBaseDir(baseDir.toPath())
-				.setType(Type.MAIN).setLanguage(EsqlLanguage.KEY).setCharset(StandardCharsets.UTF_8);
+		DefaultInputFile inputFile =  new TestInputFileBuilder("moduleKey", relativePath)
+				.setModuleBaseDir(baseDir.toPath())
+				.setType(Type.MAIN)
+				.setLanguage(EsqlLanguage.KEY)
+				.setCharset(StandardCharsets.UTF_8)
+				.build();
 
 		context.fileSystem().add(inputFile);
 
-		inputFile.initMetadata(new FileMetadata().readMetadata(inputFile.file(), Charsets.UTF_8));
+		inputFile.setMetadata(new FileMetadata().readMetadata(inputFile.file(), Charsets.UTF_8));
 		return wrap(inputFile);
 	}
 

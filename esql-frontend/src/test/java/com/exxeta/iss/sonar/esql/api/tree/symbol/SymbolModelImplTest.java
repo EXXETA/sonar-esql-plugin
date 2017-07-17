@@ -31,11 +31,11 @@ import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.compat.CompatibleInputFile;
 import com.exxeta.iss.sonar.esql.tree.symbols.SymbolModelImpl;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
-import com.exxeta.iss.sonar.esql.utils.TestInputFile;
+import com.exxeta.iss.sonar.esql.utils.TestUtils;
 
 public class SymbolModelImplTest extends EsqlTreeModelTest<ProgramTree> {
 
-  private static final CompatibleInputFile INPUT_FILE = wrap(new TestInputFile("src/test/resources/ast/resolve/symbolModel.esql"));
+  private static final CompatibleInputFile INPUT_FILE = wrap(TestUtils.createTestInputFile("src/test/resources/ast/resolve/symbolModel.esql"));
   private SymbolModelImpl SYMBOL_MODEL = symbolModel(INPUT_FILE);
 
   @Test
