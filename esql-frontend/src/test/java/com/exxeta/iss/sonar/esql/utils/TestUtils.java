@@ -48,7 +48,7 @@ public class TestUtils {
   public static DefaultInputFile createTestInputFile(String baseDir, String relativePath) {
 	    final DefaultInputFile inputFile = new TestInputFileBuilder("module1", relativePath)
 	      .setModuleBaseDir(Paths.get(baseDir))
-	      .setLanguage("js")
+	      .setLanguage("esql")
 	      .setCharset(StandardCharsets.UTF_8)
 	      .setType(InputFile.Type.MAIN).build();
 	    return inputFile;

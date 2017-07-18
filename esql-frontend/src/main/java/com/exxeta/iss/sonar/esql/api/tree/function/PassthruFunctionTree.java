@@ -32,6 +32,6 @@ public interface PassthruFunctionTree extends MiscellaneousFunctionTree{
 	FieldReferenceTree databaseReference();
 	SyntaxToken valuesKeyword();
 	ParameterListTree values();
-	SeparatedList<Tree> argumentList();
+	SeparatedList<ExpressionTree> argumentList();
 	SyntaxToken closingParenthesis();
 }

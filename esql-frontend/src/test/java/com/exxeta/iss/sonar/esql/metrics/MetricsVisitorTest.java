@@ -47,7 +47,7 @@ public class MetricsVisitorTest extends EsqlTreeModelTest {
 
   private static final DefaultInputFile INPUT_FILE = new TestInputFileBuilder("moduleKey", "lines.esql")
     .setModuleBaseDir(MODULE_BASE_DIR.toPath())
-    .setLanguage("js")
+    .setLanguage("esql")
     .setType(InputFile.Type.MAIN)
     .build();
 

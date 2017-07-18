@@ -1147,9 +1147,9 @@ public class TreeFactory {
 		return logical_OR_EXPRESSION;
 	}
 
-	public SeparatedList<Tree> argumentList(ExpressionTree argument,
+	public SeparatedList<ExpressionTree> argumentList(ExpressionTree argument,
 			Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> restArguments) {
-		List<Tree> arguments = Lists.newArrayList();
+		List<ExpressionTree> arguments = Lists.newArrayList();
 		List<InternalSyntaxToken> commas = Lists.newArrayList();
 
 		arguments.add(argument);
@@ -1165,9 +1165,9 @@ public class TreeFactory {
 	}
 
 	public ParameterListTreeImpl argumentClause(InternalSyntaxToken openParenToken,
-			Optional<SeparatedList<Tree>> arguments, InternalSyntaxToken closeParenToken) {
+			Optional<SeparatedList<ExpressionTree>> arguments, InternalSyntaxToken closeParenToken) {
 		return new ParameterListTreeImpl(openParenToken, arguments.isPresent() ? arguments.get()
-				: new SeparatedList<>(Collections.<Tree>emptyList(), Collections.<InternalSyntaxToken>emptyList()),
+				: new SeparatedList<>(Collections.<ExpressionTree>emptyList(), Collections.<InternalSyntaxToken>emptyList()),
 				closeParenToken);
 	}
 
@@ -1922,7 +1922,7 @@ public class TreeFactory {
 	}
 
 	public CastFunctionTreeImpl castFunction(InternalSyntaxToken castKeyword, InternalSyntaxToken openingParenthesis,
-			SeparatedList<Tree> sourceExpressions, InternalSyntaxToken asKeyword, DataTypeTreeImpl dataType,
+			SeparatedList<ExpressionTree> sourceExpressions, InternalSyntaxToken asKeyword, DataTypeTreeImpl dataType,
 			Optional<List<Tuple<InternalSyntaxToken, ExpressionTree>>> parameters, InternalSyntaxToken closingParenthesis) {
 		InternalSyntaxToken ccsidKeyword = null;
 		ExpressionTree ccsidExpression = null;
@@ -2045,7 +2045,7 @@ public class TreeFactory {
 		return new RowConstructorFunctionTreeImpl(rowKeyword, openingParenthesis, aliasedExpressionList(aliasedExpression, rest), closingParenthesis);
 	}
 
-	public PassthruFunctionTreeImpl passthruOldSyntax(SeparatedList<Tree> argumentList) {
+	public PassthruFunctionTreeImpl passthruOldSyntax(SeparatedList<ExpressionTree> argumentList) {
 		return new PassthruFunctionTreeImpl(argumentList);
 	}
 
@@ -2083,7 +2083,7 @@ public class TreeFactory {
 	}
 
 	public ListConstructorFunctionTreeImpl listConstructorFunction(InternalSyntaxToken listKeyword, InternalSyntaxToken openingCurlyBrace,
-			SeparatedList<Tree> argumentList, InternalSyntaxToken closingCurlyBrace) {
+			SeparatedList<ExpressionTree> argumentList, InternalSyntaxToken closingCurlyBrace) {
 		return new ListConstructorFunctionTreeImpl(listKeyword, openingCurlyBrace, argumentList, closingCurlyBrace);
 	}
 

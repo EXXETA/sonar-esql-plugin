@@ -41,10 +41,10 @@ public class PassthruFunctionTreeImpl extends EsqlTree implements PassthruFuncti
 	private FieldReferenceTreeImpl databaseReference;
 	private InternalSyntaxToken valuesKeyword;
 	private ParameterListTreeImpl values;
-	private SeparatedList<Tree> argumentList;
+	private SeparatedList<ExpressionTree> argumentList;
 	private InternalSyntaxToken closingParenthesis;
 
-	public PassthruFunctionTreeImpl(SeparatedList<Tree> argumentList) {
+	public PassthruFunctionTreeImpl(SeparatedList<ExpressionTree> argumentList) {
 		this.argumentList = argumentList;
 	}
 
@@ -56,7 +56,7 @@ public class PassthruFunctionTreeImpl extends EsqlTree implements PassthruFuncti
 		this.databaseReference = databaseReference;
 		this.valuesKeyword = valuesKeyword;
 		this.values = values;
-		this.argumentList = new SeparatedList<>(Collections.<Tree>emptyList(), Collections.<InternalSyntaxToken>emptyList());
+		this.argumentList = new SeparatedList<>(Collections.<ExpressionTree>emptyList(), Collections.<InternalSyntaxToken>emptyList());
 	}
 
 	public void finish(InternalSyntaxToken passthruKeyword, InternalSyntaxToken openingParenthesis,
@@ -102,7 +102,7 @@ public class PassthruFunctionTreeImpl extends EsqlTree implements PassthruFuncti
 	}
 
 	@Override
-	public SeparatedList<Tree> argumentList() {
+	public SeparatedList<ExpressionTree> argumentList() {
 		return argumentList;
 	}
 
@@ -126,7 +126,7 @@ public class PassthruFunctionTreeImpl extends EsqlTree implements PassthruFuncti
 		return Iterators.concat(
 				Iterators.forArray(passthruKeyword, openingParenthesis, expression, toKeyword, databaseReference,
 						valuesKeyword, values),
-				argumentList.elementsAndSeparators(Functions.<Tree>identity()),
+				argumentList.elementsAndSeparators(Functions.<ExpressionTree>identity()),
 				Iterators.singletonIterator(closingParenthesis));
 	}
 

@@ -20,6 +20,7 @@ package com.exxeta.iss.sonar.esql.tree.impl.function;
 import java.util.Iterator;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.ListConstructorFunctionTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
@@ -31,12 +32,12 @@ import com.google.common.collect.Iterators;
 public class ListConstructorFunctionTreeImpl extends EsqlTree implements ListConstructorFunctionTree {
 	private InternalSyntaxToken listKeyword;
 	private InternalSyntaxToken openingCurlyBrace;
-	private SeparatedList<Tree> aliasedExpressions;
+	private SeparatedList<ExpressionTree> aliasedExpressions;
 	private InternalSyntaxToken closingCurlyBrace;
 
 
 	public ListConstructorFunctionTreeImpl(InternalSyntaxToken listKeyword, InternalSyntaxToken openingCurlyBrace,
-			SeparatedList<Tree> aliasedExpressions, InternalSyntaxToken closingCurlyBrace) {
+			SeparatedList<ExpressionTree> aliasedExpressions, InternalSyntaxToken closingCurlyBrace) {
 		super();
 		this.listKeyword = listKeyword;
 		this.openingCurlyBrace = openingCurlyBrace;
@@ -55,7 +56,7 @@ public class ListConstructorFunctionTreeImpl extends EsqlTree implements ListCon
 	}
 
 	@Override
-	public SeparatedList<Tree> expressions() {
+	public SeparatedList<ExpressionTree> expressions() {
 		return aliasedExpressions;
 	}
 
@@ -77,7 +78,7 @@ public class ListConstructorFunctionTreeImpl extends EsqlTree implements ListCon
 	@Override
 	public Iterator<Tree> childrenIterator() {
 		return Iterators.concat(Iterators.forArray(listKeyword, openingCurlyBrace),
-				aliasedExpressions.elementsAndSeparators(Functions.<Tree>identity()),
+				aliasedExpressions.elementsAndSeparators(Functions.<ExpressionTree>identity()),
 				Iterators.singletonIterator(closingCurlyBrace));
 	}
 
