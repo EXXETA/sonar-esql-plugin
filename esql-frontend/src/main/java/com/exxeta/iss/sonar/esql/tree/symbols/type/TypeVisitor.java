@@ -96,7 +96,7 @@ public class TypeVisitor extends DoubleDispatchVisitor {
 
 	private TypeSet getTypeForDataType(DataTypeTreeImpl dataType) {
 		TypeSet result = new TypeSet();
-		if (dataType.dataType() != null) {
+		if (dataType!=null && dataType.dataType() != null) {
 			if ("CHAR".equalsIgnoreCase(dataType.dataType().text())
 					|| "CHARACTER".equalsIgnoreCase(dataType.dataType().text())) {
 				result.add(PrimitiveType.CHARACTER);
