@@ -41,6 +41,7 @@ public interface Type {
 	    // OBJECT
 	    OBJECT,
 	    FUNCTION,
+	    PROCEDURE,
 	    ARRAY,
 	    DATE,
 	    CLASS,

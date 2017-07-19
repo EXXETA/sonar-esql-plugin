@@ -19,11 +19,11 @@ package com.exxeta.iss.sonar.esql.tree.symbols.type;
 
 import com.exxeta.iss.sonar.esql.api.symbols.Type;
 
-public class ObjectType implements Type {
+public class RoutineType implements Type {
 
   protected Callability callability;
 
-  protected ObjectType(Callability callability) {
+  protected RoutineType(Callability callability) {
     this.callability = callability;
   }
 
@@ -37,12 +37,12 @@ public class ObjectType implements Type {
     return callability;
   }
 
-  public static ObjectType create() {
+  public static RoutineType create() {
     return create(Callability.UNKNOWN);
   }
 
-  public static ObjectType create(Callability callability) {
-    return new ObjectType(callability);
+  public static RoutineType create(Callability callability) {
+    return new RoutineType(callability);
   }
 
   @Override

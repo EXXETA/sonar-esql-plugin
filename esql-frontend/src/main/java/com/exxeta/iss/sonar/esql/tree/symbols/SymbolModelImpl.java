@@ -33,6 +33,7 @@ import com.exxeta.iss.sonar.esql.api.symbols.SymbolModelBuilder;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.visitors.TreeVisitorContext;
 import com.exxeta.iss.sonar.esql.tree.symbols.SymbolVisitor;
+import com.exxeta.iss.sonar.esql.tree.symbols.type.TypeVisitor;
 
 public class SymbolModelImpl implements SymbolModel, SymbolModelBuilder {
 
@@ -45,7 +46,7 @@ public class SymbolModelImpl implements SymbolModel, SymbolModelBuilder {
 
 	    new HoistedSymbolVisitor(treeScopeMap).scanTree(context);
 	    new SymbolVisitor(treeScopeMap).scanTree(context);
-	    //new TypeVisitor(settings).scanTree(context);
+	    new TypeVisitor(settings).scanTree(context);
 	  }
 
 	  private static Map<Tree, Scope> getScopes(TreeVisitorContext context) {

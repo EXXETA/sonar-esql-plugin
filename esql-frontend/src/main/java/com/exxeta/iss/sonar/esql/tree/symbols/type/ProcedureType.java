@@ -17,28 +17,28 @@
  */
 package com.exxeta.iss.sonar.esql.tree.symbols.type;
 
-import com.exxeta.iss.sonar.esql.api.tree.statement.CreateFunctionStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree;
 
-public class FunctionType extends RoutineType {
+public class ProcedureType extends RoutineType {
 
-  private CreateFunctionStatementTree createFunctionStatementTree;
+  private CreateProcedureStatementTree createProcedureStatementTree;
 
-  protected FunctionType() {
+  protected ProcedureType() {
     super(Callability.CALLABLE);
   }
 
   @Override
   public Kind kind() {
-    return Kind.FUNCTION;
+    return Kind.PROCEDURE;
   }
 
-  public static FunctionType create(CreateFunctionStatementTree createFunctionStatementTree) {
-    FunctionType type = new FunctionType();
-    type.createFunctionStatementTree = createFunctionStatementTree;
+  public static ProcedureType create(CreateProcedureStatementTree createProcedureStatementTree) {
+    ProcedureType type = new ProcedureType();
+    type.createProcedureStatementTree = createProcedureStatementTree;
     return type;
   }
 
-  public CreateFunctionStatementTree createFunctionStatementTree() {
-    return createFunctionStatementTree;
+  public CreateProcedureStatementTree createProcedureStatementTree() {
+    return createProcedureStatementTree;
   }
 }

@@ -37,7 +37,7 @@ public class PrimitiveOperations {
 
   static {
     // +
-    put(Kind.NUMBER, Kind.NUMBER, Tree.Kind.PLUS, PrimitiveType.NUMBER);
+    put(Kind.NUMBER, Kind.NUMBER, Tree.Kind.PLUS, PrimitiveType.INTEGER);
 
     
     //||
@@ -77,7 +77,7 @@ public class PrimitiveOperations {
       return PrimitiveType.BOOLEAN;
 
     } else if (ARITHMETIC_OPERATORS.contains(operationKind)) {
-      return PrimitiveType.NUMBER;
+      return PrimitiveType.INTEGER;
 
     } else {
       return getType(leftOperand.types().getUniqueKnownType(), rightOperand.types().getUniqueKnownType(), operationKind);
@@ -96,7 +96,7 @@ public class PrimitiveOperations {
   static Type getType(UnaryExpressionTree expressionTree) {
     Tree.Kind kind = ((EsqlTree) expressionTree).getKind();
     if (NUMBER_UNARY_OPERATORS.contains(kind)) {
-      return PrimitiveType.NUMBER;
+      return PrimitiveType.INTEGER;
 
     }  else if (expressionTree.is(Tree.Kind.LOGICAL_COMPLEMENT)) {
       return PrimitiveType.BOOLEAN;
