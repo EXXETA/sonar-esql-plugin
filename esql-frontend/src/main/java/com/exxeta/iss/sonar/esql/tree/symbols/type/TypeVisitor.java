@@ -77,7 +77,7 @@ public class TypeVisitor extends DoubleDispatchVisitor {
 	}
 
 	private void setParameterTypes(List<ParameterTree> parameterList) {
-		for(ParameterTree parameter:parameterList){
+		for (ParameterTree parameter : parameterList) {
 			setParameterType(parameter);
 		}
 	}
@@ -91,17 +91,21 @@ public class TypeVisitor extends DoubleDispatchVisitor {
 				tree.firstToken().line());
 
 		addTypes(name.symbol().get(), getTypeForDataType(tree.dataType()));
-		
+
 	}
 
 	private TypeSet getTypeForDataType(DataTypeTreeImpl dataType) {
 		TypeSet result = new TypeSet();
-		if ("CHAR".equalsIgnoreCase(dataType.dataType().text()) || "CHARACTER".equalsIgnoreCase(dataType.dataType().text())){
-			result.add(PrimitiveType.CHARACTER);
-		} else if ("INTEGER".equalsIgnoreCase(dataType.dataType().text()) || "INT".equalsIgnoreCase(dataType.dataType().text())){
-			result.add(PrimitiveType.INTEGER);
-		} else if ("BOOLEAN".equalsIgnoreCase(dataType.dataType().text())){
-			result.add(PrimitiveType.BOOLEAN);
+		if (dataType.dataType() != null) {
+			if ("CHAR".equalsIgnoreCase(dataType.dataType().text())
+					|| "CHARACTER".equalsIgnoreCase(dataType.dataType().text())) {
+				result.add(PrimitiveType.CHARACTER);
+			} else if ("INTEGER".equalsIgnoreCase(dataType.dataType().text())
+					|| "INT".equalsIgnoreCase(dataType.dataType().text())) {
+				result.add(PrimitiveType.INTEGER);
+			} else if ("BOOLEAN".equalsIgnoreCase(dataType.dataType().text())) {
+				result.add(PrimitiveType.BOOLEAN);
+			}
 		}
 		return result;
 	}
