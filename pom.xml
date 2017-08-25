@@ -39,6 +39,7 @@
 		<module>esql-checks</module>
 		<module>esql-plugin</module>
 		<module>esql-checks-test</module>
+		<module>esql-code-coverage</module>
 	</modules>
 
 	<scm>
@@ -114,6 +115,11 @@
 			<dependency>
 				<groupId>${project.groupId}</groupId>
 				<artifactId>esql-checks</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>esql-code-coverage</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>

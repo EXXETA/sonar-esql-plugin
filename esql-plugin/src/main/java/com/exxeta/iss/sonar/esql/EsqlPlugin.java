@@ -22,12 +22,14 @@ import org.sonar.api.PropertyType;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
 
+import com.exxeta.iss.sonar.esql.codecoverage.CodeCoverageExtension;
 import com.exxeta.iss.sonar.esql.metrics.EsqlMetrics;
+import com.google.common.collect.ImmutableList;
 
 public class EsqlPlugin implements Plugin {
 
-	  private static final String GENERAL = "General";
-	  private static final String ESQL_CATEGORY = "Esql";
+	private static final String GENERAL = "General";
+	private static final String ESQL_CATEGORY = "Esql";
 
 	// Global ESQL constants
 	public static final String FALSE = "false";
@@ -39,14 +41,20 @@ public class EsqlPlugin implements Plugin {
 	public static final String TEST_FRAMEWORK_KEY = PROPERTY_PREFIX + ".testframework";
 	public static final String TEST_FRAMEWORK_DEFAULT = "";
 
-	  public static final String IGNORE_HEADER_COMMENTS = PROPERTY_PREFIX + ".ignoreHeaderComments";
-	  public static final Boolean IGNORE_HEADER_COMMENTS_DEFAULT_VALUE = true;
+	public static final String IGNORE_HEADER_COMMENTS = PROPERTY_PREFIX + ".ignoreHeaderComments";
+	public static final Boolean IGNORE_HEADER_COMMENTS_DEFAULT_VALUE = true;
+
+	
+	public static final String TRACE_PATHS_PROPERTY = "sonar.esql.trace.reportPaths";
+	public static final String TRACE_PATHS_DEFAULT_VALUE = "target/trace.txt";
+
 	@Override
 	public void define(Context context) {
 		context.addExtensions(EsqlLanguage.class, EsqlSquidSensor.class,
 				new EsqlRulesDefinition(context.getSonarQubeVersion()), EsqlProfile.class, EsqlMetrics.class);
-		
-		  context.addExtensions(PropertyDefinition.builder(FILE_SUFFIXES_KEY)
+
+		  context.addExtensions(
+			PropertyDefinition.builder(FILE_SUFFIXES_KEY)
 			        .defaultValue(FILE_SUFFIXES_DEFVALUE)
 			        .name("File Suffixes")
 			        .description("Comma-separated list of suffixes for files to analyze.")
@@ -63,9 +71,16 @@ public class EsqlPlugin implements Plugin {
 	        .subCategory(GENERAL)
 	        .category(ESQL_CATEGORY)
 	        .type(PropertyType.BOOLEAN)
-	        .build()
-        );
-
+	        .build(),
+	       PropertyDefinition.builder(TRACE_PATHS_PROPERTY)
+			      .defaultValue(TRACE_PATHS_DEFAULT_VALUE)
+			      .category("Esql")
+			      .subCategory("Trace")
+			      .name("IIB trace file")
+			      .description("Path to the IIB trace files containing coverage data. The path may be absolute or relative to the project base directory.")
+			      .onQualifiers(Qualifiers.PROJECT, Qualifiers.MODULE)
+			      .build()
+			);
 
 	}
 
