@@ -15,7 +15,6 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.InputFile.Type;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.FileMetadata;
-import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.config.MapSettings;
 import org.sonar.api.config.Settings;
@@ -55,15 +54,14 @@ public class TraceSensorTest {
 	  }
 
 	  private InputFile inputFile(String relativePath, Type type) {
-	    DefaultInputFile inputFile = new TestInputFileBuilder("moduleKey", relativePath)
+	    DefaultInputFile inputFile = new DefaultInputFile("moduleKey", relativePath)
 	      .setModuleBaseDir(moduleBaseDir.toPath())
 	      .setLanguage("esql")
 	      .setType(type)
-	      .setCharset(Charsets.UTF_8)
-	      .build();
+	      .setCharset(Charsets.UTF_8);
 
 	    try {
-			inputFile.setMetadata(new FileMetadata().readMetadata(new FileReader(   inputFile.file())));
+			inputFile.initMetadata(new FileMetadata().readMetadata(new FileReader(   inputFile.file())));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}

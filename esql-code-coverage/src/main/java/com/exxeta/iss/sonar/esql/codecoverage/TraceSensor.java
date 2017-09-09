@@ -20,10 +20,14 @@ public class TraceSensor {
 		for (String trace : traces) {
 			FileSystem fs = context.fileSystem();
 			File report = fs.resolvePath(trace);
-			if (!report.isFile()) {
-					LOG.info("Trace not found: '{}'", trace);
+			if (report.isFile()) {
+				new UnitTestsAnalyzer(report, executableLines).analyse(context);
+			}else if(report.isDirectory()){
+				for (File reportFile:report.listFiles()){
+					new UnitTestsAnalyzer(reportFile, executableLines).analyse(context);
+				}
 			} else {
-				new UnitTestsAnalyzer(report).analyse(context);
+				LOG.info("Trace not found: '{}'", trace);
 			}
 		} 
 	}
@@ -32,9 +36,10 @@ public class TraceSensor {
 
 	class UnitTestsAnalyzer extends AbstractAnalyzer {
 		private final File trace;
+		
 
-		public UnitTestsAnalyzer(File trace) {
-			super();
+		public UnitTestsAnalyzer(File trace, Map<InputFile, Set<Integer>> executableLines) {
+			super(executableLines);
 			this.trace = trace;
 		}
 

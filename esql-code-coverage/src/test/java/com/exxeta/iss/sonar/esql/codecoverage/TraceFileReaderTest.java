@@ -25,7 +25,7 @@ public class TraceFileReaderTest {
 			}
 		};
 		
-		TraceFileReader reader = new TraceFileReader(new File("C:\\projects\\sonar-esql-plugin\\esql-code-coverage\\src\\main\\resources\\MessageRoutingSampleTrace.txt")).readTrace(visitor);
+		TraceFileReader reader = new TraceFileReader(new File("esql-code-coverage/src/main/resources/MessageRoutingSampleTrace.txt")).readTrace(visitor);
 		assertEquals(3, reader.getModuleCount());
 		assertNotNull(reader.getModuleExecutionData(""));
 		assertEquals(2, reader.getModuleExecutionData("").size());

@@ -46,7 +46,7 @@ public class EsqlPlugin implements Plugin {
 
 	
 	public static final String TRACE_PATHS_PROPERTY = "sonar.esql.trace.reportPaths";
-	public static final String TRACE_PATHS_DEFAULT_VALUE = "target/trace.txt";
+	public static final String TRACE_PATHS_DEFAULT_VALUE = "target/iibTrace";
 
 	@Override
 	public void define(Context context) {
