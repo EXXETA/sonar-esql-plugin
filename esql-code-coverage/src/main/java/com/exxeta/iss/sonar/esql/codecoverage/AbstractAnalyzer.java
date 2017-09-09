@@ -58,14 +58,15 @@ public abstract class AbstractAnalyzer implements ExecutionDataVisitor {
 				for (int line : fileExecutableLines) {
 					coverage.lineHits(line, 0);
 				}
-				coverage.save();
+				//coverage.save();
 			} else if (fileExecutableLines == null) {
 				LOG.warn("File has not been parsed " + file.absolutePath());
 			} else {
 				LOG.info("Saving execution data found for " + file.absolutePath());
 				for (int line : fileExecutableLines) {
-					if (executedLines.containsKey(line)) {
+					if (fileExecutedLines.contains(line)) {
 						coverage.lineHits(line, 1);
+						coverage.conditions(line, 1, 1);
 					} else {
 						coverage.lineHits(line, 0);
 					}

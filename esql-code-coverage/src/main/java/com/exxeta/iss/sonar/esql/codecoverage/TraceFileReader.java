@@ -72,7 +72,7 @@ public class TraceFileReader {
 			UserTraceLog userTraceLog =(UserTraceLog) unmarshaller.unmarshal(traceFile);
 			
 			for (UserTraceType trace : userTraceLog.getUserTraceOrInformation()){
-				if (trace.getText().matches("'.* at \\(.*\\)'")){
+				if (trace.getFunction().endsWith("::execute")){
 					String function = trace.getInsert().get(0).getValue();
 					function =  function.substring(1, function.length()-1);
 					String relativeLine = trace.getInsert().get(1).getValue();
