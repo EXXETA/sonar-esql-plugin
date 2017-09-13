@@ -69,10 +69,10 @@ public class MetricsVisitorTest extends EsqlTreeModelTest {
     MetricsVisitor metricsVisitor = createMetricsVisitor(false);
     metricsVisitor.scanTree(treeVisitorContext);
     assertThat(context.measure(COMPONENT_KEY, CoreMetrics.FUNCTIONS).value()).isEqualTo(0);
-    assertThat(context.measure(COMPONENT_KEY, CoreMetrics.STATEMENTS).value()).isEqualTo(0);
+    assertThat(context.measure(COMPONENT_KEY, CoreMetrics.STATEMENTS).value()).isEqualTo(1);
     assertThat(context.measure(COMPONENT_KEY, EsqlMetrics.MODULES).value()).isEqualTo(1);
 
-    assertThat(metricsVisitor.executableLines().get(INPUT_FILE)).containsOnly(3);
+    assertThat(metricsVisitor.executableLines().get(INPUT_FILE)).containsOnly(5);
   }
 
   @Test

@@ -23,6 +23,8 @@ import java.util.Set;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.api.tree.statement.CreateModuleStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.DeclareStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitorCheck;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
 import com.google.common.collect.ImmutableList;
@@ -77,7 +79,15 @@ public class ExecutableLineVisitor extends SubscriptionVisitorCheck {
   
   @Override
   public void visitNode(Tree tree) {
-    executableLines.add(((EsqlTree) tree).getLine());
+	  if (tree instanceof DeclareStatementTree){
+		  if (tree.parent() instanceof CreateModuleStatementTree){
+			  //ignore since the trace log doesn't contain this command
+		  } else {
+			  executableLines.add(((EsqlTree) tree).getLine());
+		  }
+	  } else {
+		  executableLines.add(((EsqlTree) tree).getLine());
+	  }
   }
 
   public Set<Integer> getExecutableLines() {
