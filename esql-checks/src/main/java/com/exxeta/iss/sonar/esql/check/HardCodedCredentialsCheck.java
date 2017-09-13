@@ -51,7 +51,7 @@ public class HardCodedCredentialsCheck extends DoubleDispatchVisitorCheck {
 
 	@Override
 	public void visitSetStatement(SetStatementTree tree) {
-		if (isPasswordVariableName(tree.variableReference()) && isStringLiteral(tree.expression())){
+		if (isPasswordVariableName(tree.variableReference()) && isNonEmptyStringLiteral(tree.expression())){
 			reportIssue(tree.expression());
 		}
 		super.visitSetStatement(tree);
@@ -85,7 +85,7 @@ public class HardCodedCredentialsCheck extends DoubleDispatchVisitorCheck {
 	@Override
 	public void visitDeclareStatement(DeclareStatementTree tree) {
 		boolean isExternal = tree.sharedExt() != null && "EXTERNAL".equalsIgnoreCase(tree.sharedExt().text());
-		if (!isExternal && isStringLiteral(tree.initialValueExpression()) && isPasswordVaribleName(tree.nameList())) {
+		if (!isExternal && isNonEmptyStringLiteral(tree.initialValueExpression()) && isPasswordVaribleName(tree.nameList())) {
 			reportIssue(tree.initialValueExpression());
 		}
 	}
@@ -115,13 +115,18 @@ public class HardCodedCredentialsCheck extends DoubleDispatchVisitorCheck {
 
 	@Override
 	public void visitLiteral(LiteralTree tree) {
-		if (isStringLiteral(tree) && PASSWORD_LITERAL_PATTERN.matcher(tree.value()).find()){
+		if (isNonEmptyStringLiteral(tree) && PASSWORD_LITERAL_PATTERN.matcher(tree.value()).find()){
 			reportIssue(tree);
 		}
 	}
 
-	private static boolean isStringLiteral(@Nullable ExpressionTree initializer) {
-		return initializer != null && initializer.is(Tree.Kind.STRING_LITERAL);
+	private static boolean isNonEmptyStringLiteral(@Nullable ExpressionTree initializer) {
+		if ( initializer != null && initializer.is(Tree.Kind.STRING_LITERAL)){
+			LiteralTree literal = (LiteralTree) initializer;
+			return !"''".equals(literal.value());
+		} else {
+			return false;
+		}
 	}
 
 	private static boolean isPasswordVariableName(String token) {
