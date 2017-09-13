@@ -9,6 +9,7 @@ CREATE COMPUTE MODULE TestFlow_Compute
 		SET OutputRoot.a.test='a'; -- Noncompliant
 		DECLARE refColl REFERENCE TO InputRoot.Collection.[>]; --Compliant
 		SET OutputRoot.HTTPReplyHeader."Content-Type"=contentType; --Compliant
+		CREATE FIELD OutputRoot.MQPCF; --Compliant
 		RETURN TRUE;
 	END;
 END MODULE;
