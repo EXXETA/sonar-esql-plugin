@@ -11,7 +11,7 @@
 
 	<artifactId>esql-code-coverage</artifactId>
 
-	<name>ESQL :: Code covergae</name>
+	<name>ESQL :: Code coverage</name>
 
 	<dependencies>
 		<dependency>
