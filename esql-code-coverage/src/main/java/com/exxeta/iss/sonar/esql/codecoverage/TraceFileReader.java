@@ -66,10 +66,7 @@ public class TraceFileReader {
 
 	private void readXML() {
 		try {
-			JAXBContext jc = JAXBContext.newInstance(UserTraceLog.class);
-
-			Unmarshaller unmarshaller = jc.createUnmarshaller();
-			UserTraceLog userTraceLog =(UserTraceLog) unmarshaller.unmarshal(traceFile);
+			UserTraceLog userTraceLog = parseTraceXml();
 			
 			for (UserTraceType trace : userTraceLog.getUserTraceOrInformation()){
 				if (trace.getFunction().endsWith("::execute")){
@@ -91,6 +88,14 @@ public class TraceFileReader {
 		}
 
 		
+	}
+
+	protected UserTraceLog parseTraceXml() throws JAXBException {
+		JAXBContext jc = JAXBContext.newInstance(UserTraceLog.class);
+
+		Unmarshaller unmarshaller = jc.createUnmarshaller();
+		UserTraceLog userTraceLog =(UserTraceLog) unmarshaller.unmarshal(traceFile);
+		return userTraceLog;
 	}
 
 	private void readLine(String line) {

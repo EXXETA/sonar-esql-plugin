@@ -39,12 +39,10 @@ public class TraceSensorTest {
 	    context.setSettings(settings);
 
 	    InputFile inputFile1 = inputFile("file1.esql", Type.MAIN);
-	    InputFile inputFile2 = inputFile("file2.esql", Type.MAIN);
 	    //inputFile("tests/file1.esql", Type.TEST);
 
 	    linesOfCode = new HashMap<>();
 	    linesOfCode.put(inputFile1, ImmutableSet.of(1, 2, 3, 4));
-	    linesOfCode.put(inputFile2, ImmutableSet.of(1, 2, 3));
 	    
 	    
 	    sensor = new TraceSensor();
@@ -86,9 +84,9 @@ public class TraceSensorTest {
 	    Integer[] file2Expected = {5, 5, null, null};
 
 
-	    assertThat(context.conditions("moduleKey:file1.esql", 1)).isNull();
-	    assertThat(context.coveredConditions("moduleKey:file1.esql", 2)).isNull();
-	    assertThat(context.lineHits("moduleKey:file1.esql", 3)).isNull();
+	    assertThat(context.conditions("moduleKey:file1.esql", 1)).isEqualTo(1);
+	    assertThat(context.coveredConditions("moduleKey:file1.esql", 2)).isEqualTo(0);
+	    assertThat(context.lineHits("moduleKey:file1.esql", 3)).isEqualTo(0);
 	    assertThat(context.lineHits("moduleKey:file1.esql", 4)).isEqualTo(1);
 	  }
 

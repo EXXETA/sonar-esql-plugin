@@ -53,88 +53,44 @@ public class UserTraceType {
         return timestamp;
     }
 
-    public void setTimestamp(String value) {
-        this.timestamp = value;
-    }
-
     public String getThread() {
         return thread;
-    }
-
-    public void setThread(String value) {
-        this.thread = value;
     }
 
     public String getFunction() {
         return function;
     }
 
-    public void setFunction(String value) {
-        this.function = value;
-    }
-
     public String getType() {
         return type;
-    }
-
-    public void setType(String value) {
-        this.type = value;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String value) {
-        this.name = value;
-    }
-
     public String getLabel() {
         return label;
-    }
-
-    public void setLabel(String value) {
-        this.label = value;
     }
 
     public String getText() {
         return text;
     }
 
-    public void setText(String value) {
-        this.text = value;
-    }
-
     public String getCatalog() {
         return catalog;
-    }
-
-    public void setCatalog(String value) {
-        this.catalog = value;
     }
 
     public String getNumber() {
         return number;
     }
 
-    public void setNumber(String value) {
-        this.number = value;
-    }
-
     public String getFile() {
         return file;
     }
 
-    public void setFile(String value) {
-        this.file = value;
-    }
-
     public String getLine() {
         return line;
-    }
-
-    public void setLine(String value) {
-        this.line = value;
     }
 
 }

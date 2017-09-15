@@ -46,65 +46,28 @@ public class UserTraceLog {
 	public String getUuid() {
 		return uuid;
 	}
-
-	public void setUuid(String value) {
-		this.uuid = value;
-	}
-
-	public String getUserTraceLevel() {
-		return userTraceLevel;
-	}
-
-	public void setUserTraceLevel(String value) {
-		this.userTraceLevel = value;
-	}
-
 	public String getTraceLevel() {
 		return traceLevel;
-	}
-
-	public void setTraceLevel(String value) {
-		this.traceLevel = value;
 	}
 
 	public String getUserTraceFilter() {
 		return userTraceFilter;
 	}
 
-	public void setUserTraceFilter(String value) {
-		this.userTraceFilter = value;
-	}
-
 	public String getTraceFilter() {
 		return traceFilter;
-	}
-
-	public void setTraceFilter(String value) {
-		this.traceFilter = value;
 	}
 
 	public Integer getFileSize() {
 		return fileSize;
 	}
 
-	public void setFileSize(Integer value) {
-		this.fileSize = value;
-	}
-
 	public Integer getBufferSize() {
 		return bufferSize;
 	}
 
-	public void setBufferSize(Integer value) {
-		this.bufferSize = value;
-	}
-
 	public String getFileMode() {
 		return fileMode;
-	}
-
-	public void setFileMode(String value) {
-		this.fileMode = value;
 	}
 
 }
