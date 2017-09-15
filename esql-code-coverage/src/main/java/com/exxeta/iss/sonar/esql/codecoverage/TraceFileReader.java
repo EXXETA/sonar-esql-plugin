@@ -39,8 +39,9 @@ public class TraceFileReader {
 			return this;
 		}
 		CodeCoverageExtension.LOG.info("Analysing {}", traceFile);
-		try{
-			BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(traceFile)));
+		try(FileInputStream fis = new FileInputStream(traceFile)){
+			
+			BufferedReader reader = new BufferedReader(new InputStreamReader(fis));
 			String firstLine = reader.readLine();
 			if (firstLine.startsWith("<?xml")){
 				readXML();
@@ -114,7 +115,7 @@ public class TraceFileReader {
 	}
 
 	private void addExecution(String function, String relativeLine, String statement, String schemaAndModuleName) {
-		if (!function.equals(".statusACTIVE") && !function.equals(".statusINACTIVE")) {
+		if (!".statusACTIVE".equals(function) && !".statusINACTIVE".equals(function)) {
 			ModuleExecutionData moduleExecutionData;
 			if (moduleCache.containsKey(schemaAndModuleName)) {
 				moduleExecutionData = moduleCache.get(schemaAndModuleName);

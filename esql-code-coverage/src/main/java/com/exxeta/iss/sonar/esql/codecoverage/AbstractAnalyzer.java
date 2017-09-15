@@ -146,7 +146,7 @@ public abstract class AbstractAnalyzer implements ExecutionDataVisitor {
 			}
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			LOG.error("Cannot read file",e);
 		}
 	}
 
