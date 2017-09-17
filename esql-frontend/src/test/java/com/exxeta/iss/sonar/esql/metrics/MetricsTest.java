@@ -51,7 +51,7 @@ public class MetricsTest extends EsqlTreeModelTest<ProgramTree> {
     String path = "src/test/resources/metrics/lines.esql";
     ProgramTree tree = parse(new File(path));
     LineVisitor lineVisitor = new LineVisitor(tree);
-    assertThat(lineVisitor.getLinesOfCode()).containsOnly(2, 3, 4);
+    assertThat(lineVisitor.getLinesOfCode()).containsOnly(2, 3, 4, 5, 6, 7);
 
 //    lineVisitor = new LineVisitor(tree.items().items());
 //    assertThat(lineVisitor.getLinesOfCode()).containsOnly(2, 3, 4);
@@ -100,7 +100,7 @@ public class MetricsTest extends EsqlTreeModelTest<ProgramTree> {
   public void executable_lines() throws Exception {
     Tree tree = parse(new File("src/test/resources/metrics/executable_lines.esql"));
     Set<Integer> commentLines = new CommentLineVisitor(tree, false).getCommentLines();
-    Set<Integer> expectedExecutableLines = Sets.difference(commentLines, ImmutableSet.of(1));
+    Set<Integer> expectedExecutableLines = Sets.difference(commentLines, ImmutableSet.of(1, 3, 6));
     assertThat(new ExecutableLineVisitor(tree).getExecutableLines()).isEqualTo(expectedExecutableLines);
   }
 

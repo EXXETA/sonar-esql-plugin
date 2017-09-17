@@ -17,25 +17,26 @@
  */
 package com.exxeta.iss.sonar.esql.highlighter;
 
-import com.exxeta.iss.sonar.esql.api.tree.Tree;
-import com.exxeta.iss.sonar.esql.compat.CompatibleInputFile;
-import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
-import com.google.common.io.Files;
+import static com.exxeta.iss.sonar.esql.compat.CompatibilityHelper.wrap;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
+
 import org.junit.Test;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.DefaultTextPointer;
 import org.sonar.api.batch.fs.internal.DefaultTextRange;
 import org.sonar.api.batch.fs.internal.FileMetadata;
-import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.symbol.NewSymbolTable;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static com.exxeta.iss.sonar.esql.compat.CompatibilityHelper.wrap;
+import com.exxeta.iss.sonar.esql.api.tree.Tree;
+import com.exxeta.iss.sonar.esql.compat.CompatibleInputFile;
+import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
+import com.google.common.io.Files;
 
 public class HighlightSymbolTableBuilderTest extends EsqlTreeModelTest<Tree> {
 
@@ -45,12 +46,11 @@ public class HighlightSymbolTableBuilderTest extends EsqlTreeModelTest<Tree> {
   private NewSymbolTable newSymbolTable(String filename) {
     File moduleBaseDir = new File("src/test/resources/highlighter/");
     sensorContext = SensorContextTester.create(moduleBaseDir);
-    DefaultInputFile defaultInputFile = new TestInputFileBuilder("moduleKey", filename)
+    DefaultInputFile defaultInputFile = new DefaultInputFile("moduleKey", filename)
       .setModuleBaseDir(moduleBaseDir.toPath())
-      .setCharset(StandardCharsets.UTF_8)
-      .build();
+      .setCharset(StandardCharsets.UTF_8);
     inputFile = wrap(defaultInputFile);
-    defaultInputFile.setMetadata(new FileMetadata().readMetadata(inputFile.file(), defaultInputFile.charset()));
+    defaultInputFile.initMetadata(new FileMetadata().readMetadata(inputFile.file(), defaultInputFile.charset()));
 
     return sensorContext.newSymbolTable().onFile(defaultInputFile);
   }

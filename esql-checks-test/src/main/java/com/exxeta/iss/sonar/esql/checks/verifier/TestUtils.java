@@ -27,7 +27,6 @@ import java.nio.file.Paths;
 
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
-import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.config.MapSettings;
 import org.sonar.api.config.Settings;
 
@@ -66,8 +65,8 @@ public class TestUtils {
 	}
 
 	public static DefaultInputFile createTestInputFile(String baseDir, String relativePath) {
-		return new TestInputFileBuilder("module1", relativePath).setModuleBaseDir(Paths.get(baseDir))
-				.setLanguage("esql").setCharset(StandardCharsets.UTF_8).setType(InputFile.Type.MAIN).build();
+		return new DefaultInputFile("module1", relativePath).setModuleBaseDir(Paths.get(baseDir))
+				.setLanguage("esql").setCharset(StandardCharsets.UTF_8).setType(InputFile.Type.MAIN);
 	}
 
 	public static DefaultInputFile createTestInputFile(File baseDir, String relativePath) {
@@ -79,8 +78,8 @@ public class TestUtils {
 	}
 
 	public static DefaultInputFile createTestInputFile(File baseDir, String relativePath, Charset charset) {
-		return new TestInputFileBuilder(baseDir.getAbsolutePath(), relativePath)
-				.setModuleBaseDir(Paths.get(baseDir.getAbsolutePath())).setLanguage("esql").setCharset(charset).build();
+		return new DefaultInputFile(baseDir.getAbsolutePath(), relativePath)
+				.setModuleBaseDir(Paths.get(baseDir.getAbsolutePath())).setLanguage("esql").setCharset(charset);
 	}
 
 	private static Settings settings() {

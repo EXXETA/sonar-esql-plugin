@@ -26,6 +26,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -69,6 +71,7 @@ import com.exxeta.iss.sonar.esql.api.visitors.TreeVisitor;
 import com.exxeta.iss.sonar.esql.api.visitors.TreeVisitorContext;
 import com.exxeta.iss.sonar.esql.check.CheckList;
 import com.exxeta.iss.sonar.esql.check.ParsingErrorCheck;
+import com.exxeta.iss.sonar.esql.codecoverage.TraceSensor;
 import com.exxeta.iss.sonar.esql.compat.CompatibleInputFile;
 import com.exxeta.iss.sonar.esql.highlighter.HighlightSymbolTableBuilder;
 import com.exxeta.iss.sonar.esql.highlighter.HighlighterVisitor;
@@ -313,6 +316,7 @@ public class EsqlSquidSensor implements Sensor {
 
     analyseFiles(context, treeVisitors, inputFiles, executor, progressReport);
 
+    executor.executeCoverageSensors();
   }
 
   private ProductDependentExecutor createProductDependentExecutor(SensorContext context) {
@@ -326,8 +330,9 @@ public class EsqlSquidSensor implements Sensor {
   protected interface ProductDependentExecutor {
     List<TreeVisitor> getProductDependentTreeVisitors();
 
-    void highlightSymbols(InputFile inputFile, TreeVisitorContext treeVisitorContext);
+	void highlightSymbols(InputFile inputFile, TreeVisitorContext treeVisitorContext);
 
+	void executeCoverageSensors();
   }
 
   private static class SonarQubeProductExecutor implements ProductDependentExecutor {
@@ -362,7 +367,24 @@ public class EsqlSquidSensor implements Sensor {
       HighlightSymbolTableBuilder.build(newSymbolTable, treeVisitorContext);
     }
 
+    @Override
+    public void executeCoverageSensors() {
+      if (metricsVisitor == null) {
+        throw new IllegalStateException("Before starting coverage computation, metrics should have been calculated.");
+      }
+      executeCoverageSensors(context, metricsVisitor.executableLines(), isAtLeastSq62);
+    }
 
+    private static void executeCoverageSensors(SensorContext context, Map<InputFile, Set<Integer>> executableLines, boolean isAtLeastSq62) {
+      Settings settings = context.settings();
+	
+	    String traces = settings.getString(EsqlPlugin.TRACE_PATHS_PROPERTY);
+	
+	    if (traces != null && !traces.isEmpty()) {
+	      (new TraceSensor()).execute(context, executableLines, traces.split(","));
+	    }
+	
+    }
    
 
     private static void logDeprecationForReportProperty(Settings settings, String propertyKey) {
@@ -386,6 +408,11 @@ public class EsqlSquidSensor implements Sensor {
     public void highlightSymbols(InputFile inputFile, TreeVisitorContext treeVisitorContext) {
       // unnecessary in SonarLint context
     }
+
+	@Override
+	public void executeCoverageSensors() {
+		// unnecessary in SonarLint context
+	}
 
   }
 

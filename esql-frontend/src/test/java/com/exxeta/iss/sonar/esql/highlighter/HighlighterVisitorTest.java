@@ -36,7 +36,6 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.sonar.api.batch.fs.InputFile.Type;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
-import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.highlighting.TypeOfText;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 
@@ -68,12 +67,11 @@ public class HighlighterVisitorTest extends EsqlTreeModelTest<ProgramTree> {
 
 	private void initFile(String text) throws IOException {
 		File file = tempFolder.newFile();
-		inputFile = new TestInputFileBuilder("moduleKey", file.getName())
+		inputFile = new DefaultInputFile("moduleKey", file.getName())
 				.setLanguage("esql")
 				.setType(Type.MAIN)
 				.setCharset(CHARSET)
-				.initMetadata(text)
-				.build();
+				.initMetadata(text);
 
 		when(visitorContext.getEsqlFile()).thenReturn(wrap(inputFile));
 	}

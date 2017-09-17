@@ -25,7 +25,6 @@ import java.nio.file.Paths;
 
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
-import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.config.MapSettings;
 
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
@@ -46,11 +45,11 @@ public class TestUtils {
   }
   
   public static DefaultInputFile createTestInputFile(String baseDir, String relativePath) {
-	    final DefaultInputFile inputFile = new TestInputFileBuilder("module1", relativePath)
+	    final DefaultInputFile inputFile = new DefaultInputFile("module1", relativePath)
 	      .setModuleBaseDir(Paths.get(baseDir))
 	      .setLanguage("esql")
 	      .setCharset(StandardCharsets.UTF_8)
-	      .setType(InputFile.Type.MAIN).build();
+	      .setType(InputFile.Type.MAIN);
 	    return inputFile;
 	  }
 
