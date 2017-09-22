@@ -31,7 +31,7 @@ public class UnknownMessageDomainCheck extends DoubleDispatchVisitorCheck {
 
 	private static List<String> rootElements = Collections.unmodifiableList(Lists.newArrayList("InputRoot", "OutputRoot", "Root"));
 	private static List<String> domains = Collections.unmodifiableList(Lists.newArrayList("DFDL","MRM", "XML", "XMLNS", "XMLNSC", "JMS", "IDOC", "MIME", "BLOB", "JSON", "SOAP", 
-			"Properties", "HTTPRequestHeader", "HTTPResponseHeader", "HTTPInputHeader", "HTTPReplyHeader", "MQMD", "MQRFH2", "EmailOutputHeader", "EmailInputHeader", "Collection", "*", "MQPCF"));
+			"Properties", "HTTPRequestHeader", "HTTPResponseHeader", "HTTPInputHeader", "HTTPReplyHeader", "MQMD", "MQRFH2", "EmailOutputHeader", "EmailInputHeader", "Collection", "*", "MQPCF", "DataObject"));
 	
 	
 	@Override
