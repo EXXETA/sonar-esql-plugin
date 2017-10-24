@@ -1,0 +1,21 @@
+/****************************************************************************
+	* This module will CALL the procedures which will do the request
+	transformation for all operations in a given service.
+	*****************************************************************************/
+CREATE COMPUTE MODULE TestFlow_Compute
+	Create FUNCTION Badly_Named_Function() RETURNS BOOLEAN
+	BEGIN
+	END;
+	CREATE FUNCTION too_long_function_name_because_it_has_more_than_30_characters() RETURNS BOOLEAN
+	BEGIN
+--	begin	
+	END;
+	CREATE FUNCTION functionOk() RETURNS BOOLEAN
+	BEGIN
+		SET I = Badly_Named_Function();
+	END;
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		RETURN TRUE;
+	END;
+END MODULE;

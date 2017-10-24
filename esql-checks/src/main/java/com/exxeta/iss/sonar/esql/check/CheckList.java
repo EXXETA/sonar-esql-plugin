@@ -85,7 +85,15 @@ public final class CheckList {
         TooManyParametersCheck.class,
         VariablesSubtreeCheck.class,
         XmlnscDomainCheck.class,
-        RoutineWithExcessiveReturnsCheck.class
+        RoutineWithExcessiveReturnsCheck.class,
+        SpaceAroundEqualSignCheck.class,
+        KeyWordCaseCheck.class,
+        UnusedVariableCheck.class
+       
+        
+      
+       
+        
         
         /*
         

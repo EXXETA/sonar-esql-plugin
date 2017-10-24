@@ -48,7 +48,11 @@
   	"InitializeVariables",
   	"TooManyParameters",
   	"XmlnscDomain",
-  	"RoutineWithExcessiveReturns"
-  ]
+  	"RoutineWithExcessiveReturns",
+  	"SpaceAroundEqualSign",
+  	"KeyWordCaseCheck"
+  	
+  	
+ ]
 }
   
