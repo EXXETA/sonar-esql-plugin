@@ -1,7 +1,7 @@
 
 package com.exxeta.iss.sonar.esql.check;
 
-import java.util.regex.Pattern;
+
 
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
@@ -18,23 +18,12 @@ public class FunctionNameStartsWithUppercaseCheck extends DoubleDispatchVisitorC
 	
 	public static final String CHECK_KEY = "FunctionNameStartsWithUppercase";
 
-//	private static final String DEFAULT_FORMAT = "^[A-Z][a-zA-Z0-9]{1,30}$";
-
-//	@RuleProperty(key = "format", description = "regular expression", defaultValue = "" + DEFAULT_FORMAT)
-//	public String format = DEFAULT_FORMAT;
 	
 	@RuleProperty(key="ignoreMain", description = "ignore Main function", defaultValue="TRUE", type="BOOLEAN")
 	public boolean ignoreMain = true;
 
-//	private Pattern pattern;
-
 	public FunctionNameStartsWithUppercaseCheck() {
-//		pattern = Pattern.compile(getFormat());
 	}
-
-//	public String getFormat() {
-//		return format;
-//	}
 
 	@Override
 	public void visitCreateFunctionStatement(CreateFunctionStatementTree tree) {

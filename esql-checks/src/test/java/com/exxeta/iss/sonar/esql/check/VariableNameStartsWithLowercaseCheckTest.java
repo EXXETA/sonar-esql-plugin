@@ -1,7 +1,6 @@
 package com.exxeta.iss.sonar.esql.check;
 
 import java.io.File;
-import java.util.regex.Pattern;
 
 import org.junit.Test;
 
