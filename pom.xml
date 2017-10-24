@@ -307,6 +307,11 @@
 					<version>${version.enforcer.plugin}</version>
 				</plugin>
 				<plugin>
+					<groupId>org.apache.maven.enforcer</groupId>
+					<artifactId>enforcer-api</artifactId>
+					<version>${version.enforcer.plugin}</version>
+				</plugin>
+				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-failsafe-plugin</artifactId>
 					<version>${version.failsafe.plugin}</version>

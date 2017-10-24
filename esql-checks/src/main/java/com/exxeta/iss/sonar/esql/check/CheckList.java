@@ -85,7 +85,10 @@ public final class CheckList {
         TooManyParametersCheck.class,
         VariablesSubtreeCheck.class,
         XmlnscDomainCheck.class,
-        RoutineWithExcessiveReturnsCheck.class
+        RoutineWithExcessiveReturnsCheck.class,
+        ProcedureNameStartsWithUppercaseCheck.class,
+        FunctionNameStartsWithUppercaseCheck.class,
+        VariableNameStartsWithLowercaseCheck.class
         
         /*
         
