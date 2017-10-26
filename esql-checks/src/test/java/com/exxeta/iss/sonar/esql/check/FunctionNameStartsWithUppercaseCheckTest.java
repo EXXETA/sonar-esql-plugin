@@ -37,26 +37,5 @@ public class FunctionNameStartsWithUppercaseCheckTest {
 						+ ". Function name should start with Uppercase.")
 				.noMore();
 	}
-
-	@Test
-	public void test() throws Exception {
-		FunctionNameStartsWithUppercaseCheck check = new FunctionNameStartsWithUppercaseCheck();
-		check.ignoreMain=false;
-
-		EsqlCheckVerifier.issues(check, new File("src/test/resources/functionNameStartsWithUppercase.esql"))
-		.next().atLine(2)
-			.withMessage(
-						"Rename function \"Badly_Named_Function\" Because function name should start with Uppercase.")
-				.next().atLine(5)
-				.withMessage("Rename function \"too_long_function_name_because_it_has_more_than_30_characters\" "
-						+ "Function name should start with Uppercase.")
-				//.next().atLine(12)
-				//.withMessage("Rename function \"Main\" "
-						//+ "Function name should start with Uppercase.")
-				.noMore();
-	}
-	public static void  main(String [] args) throws Exception
-	{
-		new FunctionNameStartsWithUppercaseCheckTest().test();	
-    }
+		
 }

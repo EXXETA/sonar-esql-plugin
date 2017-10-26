@@ -1,3 +1,15 @@
 <p>
 This rule allows to check that all function names should start with uppercase.
 </p>
+<h2>Compliant Code Example</h2>
+<pre>
+	CREATE FUNCTION Hellofunction() RETURNS BOOLEAN
+	BEGIN
+	END;
+</pre> 
+<h2>Non-compliant Code Example</h2>
+<pre>
+	CREATE FUNCTION functionOk() RETURNS BOOLEAN
+	BEGIN
+	END;
+</pre>

@@ -49,7 +49,6 @@
   	"TooManyParameters",
   	"XmlnscDomain",
   	"RoutineWithExcessiveReturns",
-  	"ProcedureNameStartsWithUppercase",
   	"FunctionNameStartsWithUppercase",
   	"VariableNameStartsWithLowercaseCheck"
 ]
