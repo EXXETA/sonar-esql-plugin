@@ -87,8 +87,9 @@ public final class CheckList {
         XmlnscDomainCheck.class,
         RoutineWithExcessiveReturnsCheck.class,
         SpaceAroundEqualSignCheck.class,
-        KeyWordCaseCheck.class,
-        UnusedVariableCheck.class
+        KeyWordCaseCheck.class
+       // UnusedVariableCheck.class,
+       // CyclomaticComplexityCheck.class
        
         
       
