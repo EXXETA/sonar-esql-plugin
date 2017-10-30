@@ -42,7 +42,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import com.exxeta.iss.sonar.esql.lexer.EsqlLexer;
 import com.exxeta.iss.sonar.esql.api.visitors.FileIssue;
-
+/**
+ * This java class is created to implement the logic for checking that space should be given around equal sign.
+ * @author C50679 (sapna.singh@infosys.com)
+ *
+ */
 @Rule(key = "SpaceAroundEqualSign")
 public class SpaceAroundEqualSignCheck extends SubscriptionVisitorCheck {
 
@@ -66,24 +70,20 @@ public class SpaceAroundEqualSignCheck extends SubscriptionVisitorCheck {
 					 filePath = getContext().getFile().getPath();
 					 lines = null;
 					lines = Files.readAllLines(Paths.get(filePath));
-					//lines = Files.lines(Paths.get(this.getContext().getFile().getPath()))
-					//File sourceFile = this.getContext().getFile();
-					//BufferedReader bufferReader = new BufferedReader(new FileReader(sourceFile));
+					
 				} catch (IOException e) {
 					addIssue(new FileIssue(this, "Unable to read file."));					
-					//e.printStackTrace();
+					
 				}
 				}
 		  SetStatementTreeImpl equalTree = (SetStatementTreeImpl)tree;
 		  int lineNumber,column;
 		  String line = null;
-				//System.out.println(equalTree.equalSign());		
+				
 				lineNumber = equalTree.equalSign().line();	
-				//System.out.println(equalTree.equalSign().line());	
-				//System.out.println(equalTree.equalSign().column());	
 				column = equalTree.equalSign().column();
 				line = lines.get(lineNumber-1);
-				//System.out.println(line);
+				
 				if (!line.substring(column-1, column).matches(EsqlLexer.WHITESPACE) || !line.substring(column+1, column+2).matches(EsqlLexer.WHITESPACE)) {
 					addIssue(new LineIssue(this, lineNumber, MESSAGE));
 				}

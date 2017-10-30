@@ -22,7 +22,11 @@ import java.io.File;
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
-
+/**
+ * This java class is created to implement the logic for checking that space should be given around equal sign.
+ * @author C50679 (sapna.singh@infosys.com)
+ *
+ */
 public class SpaceAroundEqualSignCheckTest {
 	@Test
 	public void test() {

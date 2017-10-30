@@ -12,6 +12,11 @@ import com.exxeta.iss.sonar.esql.api.visitors.EsqlFile;
 import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
 import com.exxeta.iss.sonar.esql.lexer.EsqlReservedKeyword;
 import com.google.common.collect.ImmutableSet;
+/**
+ * This Java Class Is created to ensure that all the keywords in esql file should be in UPPER CASE
+ * @author C50679 (sapna.singh@infosys.com)
+ *
+ */
 
 @Rule(key = "KeyWordCaseCheck")
 public class KeyWordCaseCheck extends DoubleDispatchVisitorCheck {

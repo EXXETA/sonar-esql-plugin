@@ -50,7 +50,10 @@
   	"XmlnscDomain",
   	"RoutineWithExcessiveReturns",
   	"SpaceAroundEqualSign",
-  	"KeyWordCaseCheck"
+  	"KeyWordCaseCheck",
+  	"CyclomaticComplexity",
+  	"CaseStatementWithSingleWhen",
+  	"EXTERNALVariableInitialised"
   	
   	
   	
