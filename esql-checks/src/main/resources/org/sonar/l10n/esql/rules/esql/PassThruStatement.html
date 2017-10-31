@@ -1,0 +1,10 @@
+<p>This rule applies whenever the PASSTHRU statement is used in ESQL. </p>
+<p>It is good programming practice to Use parameter markers '?' when using the PASSTHRU statement in ESQL. </p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+	PASSTHRU 'SELECT COUNT(*) FROM Database.SHAREHOLDINGS AS S WHERE S.ACCOUNTNO = InputBody.AccountNumber' TO Database.DSN1 VALUES (); 
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+	PASSTHRU 'SELECT COUNT(*) FROM Database.SHAREHOLDINGS AS S WHERE S.ACCOUNTNO = ?' TO Database.DSN1 VALUES (InputBody.AccountNumber); 
+</pre>

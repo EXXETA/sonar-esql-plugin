@@ -73,13 +73,11 @@ public void visitProgram(ProgramTree tree) {
 			if(CalculateComplexity(module)>COMPLEXITY_THRESHOLD){
 				
 				addIssue(new LineIssue(this,  Integer.parseInt(module.get(0)), "Check function \"" + ExtractFunctionProcedureName(module.get(1))+ "\". " + MESSAGE));
-				//addIssue(new LineIssue(this,  Integer.parseInt(module.get(0)), "Check function \"" + extractProcedureName(module.get(1))+ "\". " + MESSAGE));
+				
 			}
 		}
-//		addIssue(new LineIssue(this, i, "Check keyword \"" + trimmed + "\". " + MESSAGE));
 
-	
-}
+  }
 
 public static boolean isEndStatement(String s)
 {
@@ -93,11 +91,6 @@ public static boolean isBeginStatement(String s)
     return withoutSpace.startsWith("CREATEPROCEDURE") || withoutSpace.startsWith("CREATEFUNCTION");
 }
 
-//public static boolean isModuleCreationStatement(String s)
-//{
-//    String withoutSpace = s.replace(" ", "").toUpperCase();
-//    return withoutSpace.startsWith("CREATECOMPUTEMODULE");
-//}
 public static int CalculateComplexity(ArrayList<String> lines) {
 	
 	
@@ -105,7 +98,7 @@ public static int CalculateComplexity(ArrayList<String> lines) {
 	for (String l : lines) {
 		
 		String upperCase = l.toUpperCase();
-		String quotedContentRemoved = removeQuotedContent(upperCase);
+		String quotedContentRemoved = CheckUtils.removeQuotedContent(upperCase);
 		
 		if (quotedContentRemoved.contains("ELSEIF")) {
 			int conditionComplexity = calculateConditionESQLComplexity(quotedContentRemoved);
@@ -134,30 +127,7 @@ public static int CalculateComplexity(ArrayList<String> lines) {
 	}
 	return complexity;
 }
-	public static String removeQuotedContent(String s) {
-		String res = removeQuotedContentByChar(s, '\'');
-		res = removeQuotedContentByChar(res, '"');
-		return res;
-	}
-
-	public static String removeQuotedContentByChar(String s, char c) {
-		StringBuilder removeQuotedComment = new StringBuilder();
-		boolean quote = false;
-		for (int i = 0; i < s.length(); i++) {
-			if (!quote) {
-				if (s.charAt(i) == c)
-					quote = true;
-				removeQuotedComment.append(s.charAt(i));
-				continue;
-			}
-			if (s.charAt(i) == c) {
-				quote = false;
-				removeQuotedComment.append(s.charAt(i));
-			}
-		}
-
-		return removeQuotedComment.toString();
-	}
+	
 	
 	 public static  String ExtractFunctionProcedureName(String declareStatement ){
 

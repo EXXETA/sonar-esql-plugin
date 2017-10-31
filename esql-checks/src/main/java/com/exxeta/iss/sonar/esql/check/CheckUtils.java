@@ -66,4 +66,54 @@ public class CheckUtils {
 	private static BufferedReader newBufferedReader(EsqlFile file) {
 		return new BufferedReader(new StringReader(file.contents()));
 	}
+	
+	/* changes Strats for ABN to  (sapna.singh@infosys.com) */
+	public static boolean isCreateFilterModuleLine(String line)
+    {
+        String upperCaseLine = line.toUpperCase().trim();
+        if(upperCaseLine.startsWith("CREATE "))
+        {
+            String withoutSpace = upperCaseLine.replace(" ", "");
+            if(withoutSpace.startsWith("CREATEFILTERMODULE"))
+                return true;
+        }
+        return false;
+    }
+	
+	public static String removeQuotedContent(String s) {
+		String res = removeQuotedContentByChar(s, '\'');
+		res = removeQuotedContentByChar(res, '"');
+		return res;
+	}
+	
+	public static String removeQuotedContentByChar(String s, char c) {
+		StringBuilder removeQuotedComment = new StringBuilder();
+		boolean quote = false;
+		for (int i = 0; i < s.length(); i++) {
+			if (!quote) {
+				if (s.charAt(i) == c)
+					quote = true;
+				removeQuotedComment.append(s.charAt(i));
+				continue;
+			}
+			if (s.charAt(i) == c) {
+				quote = false;
+				removeQuotedComment.append(s.charAt(i));
+			}
+		}
+
+		return removeQuotedComment.toString();
+	}
+	
+	public static int countCharacters(String s, String ch) {
+		int cnt = 0;
+		String lines[] = s.split(ch);
+		cnt = lines.length - 1;
+		return cnt;
+	}
+
+	
+	
+	
+	/* changes Ends for ABN  (sapna.singh@infosys.com) */
 }

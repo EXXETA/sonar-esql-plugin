@@ -91,9 +91,9 @@ public final class CheckList {
         KeyWordCaseCheck.class,
         CyclomaticComplexityCheck.class,
         CaseStatementWithSingleWhenCheck.class,
-        EXTERNALVariableInitialisedCheck.class
+        EXTERNALVariableInitialisedCheck.class,
         //FilterNodeModifyMessageCheck.class
-        //PassthrouStatementCheck.class
+        PassThruStatementCheck.class
         
        
         

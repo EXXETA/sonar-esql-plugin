@@ -53,7 +53,8 @@
   	"KeyWordCaseCheck",
   	"CyclomaticComplexity",
   	"CaseStatementWithSingleWhen",
-  	"EXTERNALVariableInitialised"
+  	"EXTERNALVariableInitialised",
+  	"PassThruStatement"
   	
   	
   	
