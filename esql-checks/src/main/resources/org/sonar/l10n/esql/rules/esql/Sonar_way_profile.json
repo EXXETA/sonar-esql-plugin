@@ -50,7 +50,8 @@
   	"XmlnscDomain",
   	"RoutineWithExcessiveReturns",
   	"FunctionNameStartsWithUppercase",
-  	"VariableNameStartsWithLowercaseCheck"
+  	"VariableNameStartsWithLowercaseCheck",
+    "UnreachableCode"
 ]
 }
   

@@ -87,7 +87,8 @@ public final class CheckList {
         XmlnscDomainCheck.class,
         RoutineWithExcessiveReturnsCheck.class,        
         FunctionNameStartsWithUppercaseCheck.class,
-        VariableNameStartsWithLowercaseCheck.class
+        VariableNameStartsWithLowercaseCheck.class,
+        UnreachableCodeCheck.class
         
         /*
         

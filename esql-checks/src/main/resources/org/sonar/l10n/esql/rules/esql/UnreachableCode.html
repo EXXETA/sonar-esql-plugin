@@ -1,0 +1,24 @@
+<p>
+unreachable code.
+</p>
+<h2>Compliant Code Example</h2>
+<pre>
+CREATE COMPUTE MODULE initialize
+CREATE FUNCTION main() RETURNS BOOLEAN
+	BEGIN
+	END;
+RETURN TRUE;	
+END;
+END MODULE;
+</pre> 
+<h2>Non-Compliant Code Example</h2>
+<pre>
+CREATE COMPUTE MODULE initialize
+CREATE FUNCTION main() RETURNS BOOLEAN
+	BEGIN
+	END;
+RETURN TRUE;
+DECLARE VersionRef REFERENCE TO InputRoot.SOAP.Context.SOAP_Version;	
+END;
+END MODULE;
+</pre>
