@@ -54,7 +54,9 @@
   	"CyclomaticComplexity",
   	"CaseStatementWithSingleWhen",
   	"EXTERNALVariableInitialised",
-  	"PassThruStatement"
+  	"PassThruStatement",
+  	"AvoidNestedIf"
+  	
   	
   	
   	

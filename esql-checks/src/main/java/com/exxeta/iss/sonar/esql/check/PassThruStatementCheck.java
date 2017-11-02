@@ -2,6 +2,12 @@ package com.exxeta.iss.sonar.esql.check;
 
 import org.sonar.check.Rule;
 
+/**
+ * This java class is created to check the PASSTHRU statement
+ * @author C50679 (sapna.singh@infosys.com)
+ *
+ */
+
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.PassthruStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;

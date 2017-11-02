@@ -67,7 +67,7 @@ public class CheckUtils {
 		return new BufferedReader(new StringReader(file.contents()));
 	}
 	
-	/* changes Strats for ABN to  (sapna.singh@infosys.com) */
+	/* changes Strats from here  (sapna.singh@infosys.com) */
 	public static boolean isCreateFilterModuleLine(String line)
     {
         String upperCaseLine = line.toUpperCase().trim();
@@ -115,5 +115,5 @@ public class CheckUtils {
 	
 	
 	
-	/* changes Ends for ABN  (sapna.singh@infosys.com) */
+	/* changes Ends here  (sapna.singh@infosys.com) */
 }

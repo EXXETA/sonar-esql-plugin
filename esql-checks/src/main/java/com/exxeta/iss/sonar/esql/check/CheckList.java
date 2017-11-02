@@ -86,14 +86,14 @@ public final class CheckList {
         VariablesSubtreeCheck.class,
         XmlnscDomainCheck.class,
         RoutineWithExcessiveReturnsCheck.class,
-        //classe added for ABN
         SpaceAroundEqualSignCheck.class,
         KeyWordCaseCheck.class,
         CyclomaticComplexityCheck.class,
         CaseStatementWithSingleWhenCheck.class,
         EXTERNALVariableInitialisedCheck.class,
-        //FilterNodeModifyMessageCheck.class
-        PassThruStatementCheck.class
+        PassThruStatementCheck.class,
+        AvoidNestedIfCheck.class
+     
         
        
         
