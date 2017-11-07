@@ -92,7 +92,9 @@ public final class CheckList {
         CaseStatementWithSingleWhenCheck.class,
         EXTERNALVariableInitialisedCheck.class,
         PassThruStatementCheck.class,
-        AvoidNestedIfCheck.class
+        AvoidNestedIfCheck.class,
+        MeaningfulVariableCheck.class
+        //SubElementNameCheck.class
      
         
        

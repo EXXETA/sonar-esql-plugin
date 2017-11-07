@@ -55,7 +55,8 @@
   	"CaseStatementWithSingleWhen",
   	"EXTERNALVariableInitialised",
   	"PassThruStatement",
-  	"AvoidNestedIf"
+  	"AvoidNestedIf",
+  	"MeaningfulVariable"
   	
   	
   	
