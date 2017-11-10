@@ -56,7 +56,8 @@
   	"EXTERNALVariableInitialised",
   	"PassThruStatement",
   	"AvoidNestedIf",
-  	"MeaningfulVariable"
+  	"MeaningfulVariable",
+  	"SubElementName"
   	
   	
   	

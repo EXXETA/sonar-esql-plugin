@@ -68,6 +68,7 @@ public class CheckUtils {
 	}
 	
 	/* changes Strats from here  (sapna.singh@infosys.com) */
+	
 	public static boolean isCreateFilterModuleLine(String line)
     {
         String upperCaseLine = line.toUpperCase().trim();
@@ -111,6 +112,48 @@ public class CheckUtils {
 		cnt = lines.length - 1;
 		return cnt;
 	}
+	
+	 public static boolean isReturnsTrueLine(String line)
+	    {
+	        String withoutSpace = line.toUpperCase().replace(" ", "");
+	        return withoutSpace.startsWith("RETURNTRUE;");
+	    }
+
+	    public static boolean isReturnsFalseLine(String line)
+	    {
+	        String withoutSpace = line.toUpperCase().replace(" ", "");
+	        return withoutSpace.startsWith("RETURNFALSE;");
+	    }
+
+	    public static boolean isThrowsError(String line)
+	    {
+	        String withoutSpace = line.toUpperCase().replace(" ", "");
+	        return withoutSpace.contains("THROWUSEREXCEPTION");
+	    }
+
+	    public static boolean isReturnsLine(String line)
+	    {
+	        String withoutSpace = line.toUpperCase().replace(" ", "");
+	        return withoutSpace.startsWith("RETURN;");
+	    }
+
+	    public static boolean isEndModuleLine(String line)
+	    {
+	        String withoutSpace = line.toUpperCase().replace(" ", "");
+	        return withoutSpace.startsWith("ENDMODULE;");
+	    }
+	    public static boolean isReturnsUsingEqualsLine(String line)
+	    {
+	        String upperLine = line.toUpperCase();
+	        if(upperLine.contains("RETURN"))
+	        {
+	            if(upperLine.contains("="))
+	                return true;
+	            if(upperLine.contains("<>"))
+	                return true;
+	        }
+	        return false;
+	    }
 
 	
 	

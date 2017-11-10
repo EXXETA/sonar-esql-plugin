@@ -93,8 +93,9 @@ public final class CheckList {
         EXTERNALVariableInitialisedCheck.class,
         PassThruStatementCheck.class,
         AvoidNestedIfCheck.class,
-        MeaningfulVariableCheck.class
-        //SubElementNameCheck.class
+        MeaningfulVariableCheck.class,
+        SubElementNameCheck.class
+        
      
         
        
