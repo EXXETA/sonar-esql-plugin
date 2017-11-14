@@ -94,7 +94,8 @@ public final class CheckList {
         PassThruStatementCheck.class,
         AvoidNestedIfCheck.class,
         MeaningfulVariableCheck.class,
-        SubElementNameCheck.class
+        SubElementNameCheck.class,
+        FunctionProcedureLengthCheck.class
         
      
         

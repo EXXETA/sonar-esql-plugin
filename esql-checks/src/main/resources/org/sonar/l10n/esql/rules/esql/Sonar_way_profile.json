@@ -57,7 +57,8 @@
   	"PassThruStatement",
   	"AvoidNestedIf",
   	"MeaningfulVariable",
-  	"SubElementName"
+  	"SubElementName",
+  	"FunctionProcedureLength"
   	
   	
   	

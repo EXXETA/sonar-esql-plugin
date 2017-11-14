@@ -1,0 +1,591 @@
+
+/****************************************************************************
+File Name:
+Purpose: This module performs request and response tranformation.
+Author: Ekta Patel
+Version:
+Date: 07-07-2017
+*****************************************************************************/
+/*
+* Change log goes here
+*/
+BROKER SCHEMA serviceOperations
+DECLARE soapenv NAMESPACE 'http://schemas.xmlsoap.org/soap/envelope/';
+--DECLARE nsconOper NAMESPACE 'http://api.topicus.finance/fbl/documentgenerationservice/2017/6/operations';
+--DECLARE nsconDat NAMESPACE 'http://api.topicus.finance/fbl/documentgeneration/2017/6/datatypes';
+--DECLARE nsProvider NAMESPACE 'http://com/abnamro/nl/DocumentFulfillment/v1/';
+DECLARE nsError NAMESPACE 'http://api.topicus.finance/fbl/common/2016/7/metadata';
+
+
+DECLARE ns15 NAMESPACE 'http://api.topicus.finance/fbl/documentgenerationservice/2017/8/operations';
+DECLARE ns19 NAMESPACE 'http://com/abnamro/nl/DocumentFulfillment/v1/';
+DECLARE ns31 NAMESPACE 'http://api.topicus.finance/fbl/documentgeneration/2017/8/datatypes';
+/****************************************************************************
+* A procedure that will build the request message for FR151
+* IN inRef : Reference to Soap Body
+* IN outRef : Reference to OutputRoot.
+* IN Environment: Reference to Enviroment.
+*****************************************************************************/
+CREATE PROCEDURE AdapterffCreateDocumentRequest(IN inRef REFERENCE, IN outRef REFERENCE, IN Environment REFERENCE)
+
+BEGIN
+	-- --DECLARE inRefReq REFERENCE TO inRef.SOAP.Body.nsconOper:CreateDocumentRequest;
+	-- CREATE FIELD outRef.SOAP.Body.ns19:createDocument.requestParameters;
+	-- DECLARE outRefReq REFERENCE TO outRef.SOAP.Body.ns19:createDocument.requestParameters;
+	-- DECLARE inRefReq REFERENCE TO inRef.SOAP.Body.ns15:CreateDocumentRequest.DocumentGenerationContainer;
+	-- DECLARE inRefDGC REFERENCE TO inRefReq.FTB;
+	-- DECLARE inRefFTB REFERENCE TO inRefDGC.ns31:PledgingCover;
+	-- -- CREATING REFERENCE FIELDS
+	-- CREATE LASTCHILD OF outRef DOMAIN 'SOAP';
+	-- SET outRef.SOAP.Context.Namespace.(SOAP.NamespaceDecl)xmlns:soapenv = soapenv;
+	--
+	-- CREATE FIELD outRef.SOAP.Header.ns19:Info;
+	-- DECLARE SOHeader REFERENCE TO outRef.SOAP.Header.ns19:Info;
+	--
+	-- IF EXISTS(inRef.SOAP.Header.ns15:Info.consumerId[]) THEN
+	-- IF FIELDVALUE(inRef.SOAP.Header.ns15:Info.consumerId) <> '' THEN
+	--
+	-- SET SOHeader.consumerId = inRef.SOAP.Header.ns15:Info.consumerId;
+	-- ELSE
+	-- SET SOHeader.consumerId = 'CID00004';
+	-- END IF;
+	-- ELSE
+	-- SET SOHeader.consumerId = 'CID00004';
+	-- END IF;
+	-- -- DECLARE outRef REFERENCE TO outRef.SOAP;
+	-- -- CREATE FIELD outRef.Body.nsProvider:createDocument;
+	-- -- CREATE LASTCHILD OF outReqPar.customer.party NAME 'partyTypeId';
+	-- -- CREATE LASTCHILD OF outReqPar.customer.party.partyTypeId NAME 'scheme';
+	-- -- CREATE LASTCHILD OF outReqPar.customer.party.partyTypeId NAME 'value';
+	-- -- CREATE LASTCHILD OF outReqPar.customer.party NAME 'hasName';
+	-- --
+	-- -- DECLARE outRefReq REFERENCE TO outRef.SOAP.Body.nsProvider:createDocument;
+	-- -- -- DECLARE inRefDoc REFERENCE TO inRefReq.DocumentGenerationContainer.DocumentMetadata;
+	-- -- CREATE LASTCHILD OF outRefReq NAME 'requestParameters';
+	-- -- DECLARE outReqPar REFERENCE TO outRefReq.requestParameters;
+	-- -- CREATE LASTCHILD OF outReqPar NAME 'document';
+	-- -- DECLARE docRef REFERENCE TO outReqPar.document;
+	-- -- DECLARE custRef REFERENCE TO outReqPar.customer;
+	-- -- BUILDING REQUEST MESSAGE
+	-- -- SET custRef.party.partyId.scheme = 'BusinessContactNumberNL';
+	-- -- SET custRef.party.partyId.value = inRefDoc.MainBorrowerId;
+	-- --
+	-- -- SET custRef.representativeParty.partyId.scheme = 'BusinessContactNumberNL';
+	-- -- SET custRef.representativeParty.partyId.value = inRefDoc.MainBorrowerId;
+	-- -- SET custRef.Party.PartyTypeId.Scheme = 'PartyTypeId';
+	-- -- SET custRef.Party.PartyTypeId.value = '0000';
+	-- -- SET custRef.representativePartyParty.PartyTypeId.Scheme = 'PartyTypeId';
+	-- -- SET custRef.representativePartyParty.PartyTypeId.value = '0000';
+	-- -- SET docRef.confidentialityRatingScaleId.scheme = 'ConfidentialityRatingScaleId';
+	-- -- SET docRef.confidentialityRatingScaleId.value = '1';
+	-- -- SET docRef.reference = inRefDoc.Subject;
+	-- -- SET docRef.title = inRefDoc.DocumentName;
+	-- -- SET docRef.documentTypeId.scheme = 'DocumentSubTypeId';
+	-- -- SET docRef.documentTypeId.value = '6';
+	-- -- SET docRef.documentGroupId.scheme = 'DocumentTypeId';
+	-- -- SET docRef.documentGroupId.value = '7';
+	-- -- SET outReqPar.organizationUnit.organizationUnitId.scheme = 'boNumber';
+	-- -- SET outReqPar.channelTypeId.scheme = 'OutputchannelId';
+	-- -- SET outReqPar.channelTypeId.value = 'DUM';
+	-- -- SET outReqPar.dossierId.scheme = 'DossierID';
+	-- -- SET outReqPar.dossierId.value = inRefDoc.DossierId;
+	-- -- SET outReqPar.documentPreview = 'false';
+	-- --
+	-- -- SET outReqPar.agreementId.scheme = 'AgreementIdNL';
+	-- -- SET outReqPar.agreementId.value = inRefDoc.AgreementId;
+	-- -- -- Retrieve Party
+	-- --
+	-- -- DECLARE outRefRet REFERENCE TO outRef.SOAP.Body.nsRetrieve:retrievePartyDetails;
+	-- -- DECLARE inRetResParam REFERENCE TO inRetRes.responseParameters;
+	-- -- CREATE LASTCHILD OF outRefRet NAME 'requestParameters';
+	-- -- DECLARE outRetParam REFERENCE TO outRefRet.requestParameters;
+	-- -- SET outRetParam.partyId.value = inRefDoc.MainBorrowerId;
+	-- -- SET outRetParam.selectCustomerFlag = 'true';
+	-- -- SET outReqPar.organizationUnit.organizationUnitId.value = inRetResParam.customer.managingOrganizationUnitId.value;
+	-- --
+	-- -- SET outRefReq.documentPreview = 'false';
+	-- --
+	-- --
+	-- -- SET outRetParam.partyId.value = inRefDGC.Borrower.ExternalRelationNumber;
+	-- -- SET outRetParam.selectPartyFlag = 'true';
+	-- --
+	-- -- SET outRetParam.partyId.value = inRefDGC.Borrower.ExternalRelationNumber;
+	-- -- SET outRetParam.selectResponsiblePartyFlag = 'true';
+	--
+	--
+	--
+	-- SET outRefReq.agreementId.scheme = 'AgreementIdNL';
+	-- SET outRefReq.agreementId.value = inRefReq.DocumentMetadata.AgreementId;
+	-- SET outRefReq.customer.party.partyId.scheme = 'BusinessContactNumberNL';
+	-- SET outRefReq.customer.party.partyId.value = inRefReq.DocumentMetadata.MainBorrowerId;
+	-- SET outRefReq.customer.representativeParty.partyId.scheme = 'BusinessContactNumberNL';
+	-- SET outRefReq.customer.representativeParty.partyId.value = inRefReq.DocumentMetadata.MainBorrowerId;
+	-- SET outRefReq.customer.party.partyTypeId.scheme = 'PartyTypeId';
+	-- SET outRefReq.customer.party.partyTypeId.value = '0000';
+	-- SET outRefReq.customer.representativeParty.partyTypeId.scheme = 'PartyTypeId';
+	-- SET outRefReq.customer.representativeParty.partyTypeId.value = '0000';
+	-- SET outRefReq.document.confidentialityRatingScaleId.scheme = 'ConfidentialityRatingScaleId';
+	-- SET outRefReq.document.confidentialityRatingScaleId.value = '1';
+	-- SET outRefReq.document.reference = inRefReq.DocumentMetadata.Subject;
+	-- SET outRefReq.document.title = inRefReq.DocumentMetadata.DocumentName;
+	-- SET outRefReq.document.documentTypeId.scheme = 'DocumentSubTypeId';
+	-- SET outRefReq.document.documentTypeId.value = '6';
+	-- SET outRefReq.document.documentGroupId.scheme = 'DocumentTypeId';
+	-- SET outRefReq.document.documentGroupId.value = '7';
+	-- SET outRefReq.document.documentContext.scheme = 'DocumentTypeSequenceNumber';
+	-- SET outRefReq.document.documentContext.value = 'DOCTYPE205';
+	--
+	-- SET outRefReq.document.documentContext.scheme = 'BuildingBlockID';
+	-- SET outRefReq.document.documentContext.value = '99';
+	-- SET outRefReq.document.documentContext.scheme = 'ConsumerSystem';
+	-- SET outRefReq.document.documentContext.value = 'DQO00001';
+	-- SET outRefReq.document.documentContext.scheme = 'VolgNummer';
+	-- SET outRefReq.document.documentContext.value = '205';
+	-- SET outRefReq.document.documentContext.scheme = 'DRMDocumentTitlle';
+	-- SET outRefReq.document.documentContext.value = 'Offerte_' || CURRENT_TIMESTAMP;
+	-- SET outRefReq.channelTypeId.scheme = 'OutputchannelId';
+	-- SET outRefReq.channelTypeId.value = 'DUM';
+	-- SET outRefReq.dossierId.scheme = 'DossierID';
+	-- SET outRefReq.dossierId.value = inRefReq.DocumentMetadata.DossierId;
+	-- SET outRefReq.organizationUnit.organizationUnitId.value = 'boNumber';
+	-- -- CALL GetElectronicDocument(inRef,outRef,Environment);
+	-- -- SET outReqPar.electronicDocument.content.bytes = '1';
+	-- -- DECLARE docRequest BLOB ;
+	-- --
+	-- -- SET docRequest = ASBITSTREAM(outRef.XMLNSC ENCODING inRef.Properties.Encoding CCSID inRef.Properties.CodedCharSetId);
+	-- --
+	-- -- DECLARE base64FieldType INTEGER XMLNSC.Field + XMLNSC.base64Binary;
+	-- --
+	-- -- CREATE LASTCHILD OF outReqPar.electronicDocument.content TYPE base64FieldType NAME 'base64binary' VALUE docRequest ;
+	-- --
+	-- -- SET outReqPar.electronicDocument.content.theBinLength = LENGTH(docRequest);
+	-- --
+	-- -- SET outReqPar.electronicDocument.content.theContentType.scheme = 'MIME media type';
+	-- -- SET outReqPar.electronicDocument.content.theContentType.value = 'Application/XML';
+	--
+	-- CALL GetElectronicDocument(inRef,outRef,Environment);
+	-- SET outRefReq.electronicDocument.content.bytes = '1';
+	-- DECLARE docRequest BLOB ;
+	--
+	-- SET docRequest = ASBITSTREAM(outRef.XMLNSC ENCODING inRef.Properties.Encoding CCSID inRef.Properties.CodedCharSetId);
+	--
+	-- DECLARE base64FieldType INTEGER XMLNSC.Field + XMLNSC.base64Binary;
+	--
+	-- CREATE LASTCHILD OF outRefReq.electronicDocument.content TYPE base64FieldType NAME 'base64binary' VALUE docRequest ;
+	--
+	-- SET outRefReq.electronicDocument.content.theBinLength = LENGTH(docRequest);
+	--
+	-- SET outRefReq.electronicDocument.content.theContentType.scheme = 'MIME media type';
+	-- SET outRefReq.electronicDocument.content.theContentType.value = 'Application/XML';
+	--
+	DELETE FIRSTCHILD OF outRef.SOAP;
+	CREATE FIELD outRef.SOAP.Header;
+	DECLARE hdrRef REFERENCE TO outRef.SOAP.Header;
+	SET hdrRef.ns19:Info.consumerId = 'CID00004';
+	CREATE FIELD outRef.SOAP.Body.ns19:createDocument.requestParameters;
+	DECLARE outRefReq REFERENCE TO outRef.SOAP.Body.ns19:createDocument.requestParameters;
+	DECLARE inRefReq REFERENCE TO inRef.SOAP.Body.ns15:CreateDocumentRequest.DocumentGenerationContainer;
+	DECLARE inRefDGC REFERENCE TO inRefReq.DocumentGenerationContainer.FTB;
+	DECLARE inRefFTB REFERENCE TO inRefDGC.ns31:PledgingCover;
+	CREATE FIELD outRefReq.customer;
+	DECLARE outRefCust REFERENCE TO outRefReq.customer;
+	CREATE FIELD outRefReq.agreementId;
+	DECLARE outRefAg REFERENCE TO outRefReq.agreementId;
+	CREATE FIELD outRefReq.document;
+	DECLARE outRefDoc REFERENCE TO outRefReq.document;
+	DECLARE var_date,var_date1,var_date2,i,j CHARACTER;
+
+
+	SET outRefCust.party.partyId.scheme = 'BusinessContactNumberNL';
+	SET outRefCust.party.partyId.value = inRefReq.DocumentMetadata.MainBorrowerId;
+	SET outRefCust.representativeParty.partyId.scheme = 'BusinessContactNumberNL';
+	SET outRefCust.representativeParty.partyId.value = inRefReq.DocumentMetadata.MainBorrowerId;
+	SET outRefCust.party.partyTypeId.scheme = 'PartyTypeId';
+	SET outRefCust.party.partyTypeId.value = '0000';
+	CREATE FIELD outRefCust.party.hasName;
+	DECLARE hasRef REFERENCE TO outRefCust.party.hasName;
+	CREATE LASTCHILD OF hasRef NAME 'fullName';
+	CREATE FIELD hasRef.partyNameTypeId;
+	DECLARE hasPartyRef REFERENCE TO hasRef.partyNameTypeId;
+	CREATE LASTCHILD OF hasPartyRef NAME 'scheme';
+	CREATE LASTCHILD OF hasPartyRef NAME 'value';
+
+
+	SET outRefCust.representativeParty.partyTypeId.scheme = 'PartyTypeId';
+	SET outRefCust.representativeParty.partyTypeId.value = '0000';
+	-- Has name added
+
+	SET outRefAg.scheme = 'AgreementIdNL';
+	SET outRefAg.value = inRefReq.DocumentMetadata.AgreementId;
+	SET outRefDoc.confidentialityRatingScaleId.scheme = 'ConfidentialityRatingScaleId';
+	SET outRefDoc.confidentialityRatingScaleId.value = '1';
+	SET outRefDoc.reference = inRefReq.DocumentMetadata.Subject;
+	SET outRefDoc.title = inRefReq.DocumentMetadata.DocumentName;
+
+
+	SET outRefDoc.documentTypeId.scheme = 'DocumentSubTypeId';
+	SET outRefDoc.documentTypeId.value = '6';
+	SET outRefDoc.documentGroupId.scheme = 'DocumentTypeId';
+	SET outRefDoc.documentGroupId.value = '7';
+
+
+	SET outRefDoc.documentContext[1].scheme = 'DocumentTypeSequenceNumber';
+	SET outRefDoc.documentContext[1].value = 'DOCTYPE205';
+
+	SET outRefDoc.documentContext[2].scheme = 'BuildingBlockID';
+	SET outRefDoc.documentContext[2].value = '99';
+
+	SET outRefDoc.documentContext[3].scheme = 'ConsumerSystem';
+	SET outRefDoc.documentContext[3].value = 'DQO00001';
+
+	SET outRefDoc.documentContext[4].scheme = 'VolgNummer';
+	SET outRefDoc.documentContext[4].value = '205';
+
+	SET outRefDoc.documentContext[5].scheme = 'DRMDocumentTitlle';
+	SET var_date = CAST(CURRENT_TIMESTAMP AS CHARACTER FORMAT 'YYYY-MM-DD hh:mm:ss.SSSS');
+	SET var_date1 = SUBSTRING(var_date BEFORE ' ');
+	SET var_date2 = SUBSTRING(var_date AFTER ' ');
+	SET outRefDoc.documentContext[5].value = 'Offerte_'||var_date1||'T'||var_date2;
+
+
+	SET outRefReq.channelTypeId.scheme = 'OutputchannelId';
+	SET outRefReq.channelTypeId.value = 'DUM';
+	SET outRefReq.dossierId.scheme = 'DossierID';
+	SET outRefReq.dossierId.value = inRefReq.DocumentMetadata.DossierId;
+	SET outRefReq.documentPreview = 'false';
+
+	SET outRefReq.organizationUnit.organizationUnitId.value = COALESCE(Environment.variable.retrieveParty.customer.managingOrganizationUnitId.value, '');
+	--SET outRefReq.organizationUnit.organizationUnitId.scheme = 'boNumber';
+	-- Binary to Base64
+
+	CALL GetElectronicDocument(inRef,outRef,Environment);
+	SET outRefReq.electronicDocument.content.bytes = '1';
+	DECLARE docRequest BLOB ;
+
+	SET docRequest = ASBITSTREAM(outRef.XMLNSC ENCODING inRef.Properties.Encoding CCSID inRef.Properties.CodedCharSetId);
+
+	DECLARE base64FieldType INTEGER XMLNSC.Field + XMLNSC.base64Binary;
+
+	CREATE LASTCHILD OF outRefReq.electronicDocument.content TYPE base64FieldType NAME 'base64binary' VALUE docRequest ;
+
+	SET outRefReq.electronicDocument.content.theBinLength = LENGTH(docRequest);
+
+	SET outRefReq.electronicDocument.content.theContentType.scheme = 'MIME media type';
+	SET outRefReq.electronicDocument.content.theContentType.value = 'Application/XML';
+
+END;
+/****************************************************************************
+* A procedure that will build the response message for retrieve operation
+* IN inRef : Reference to InputLocalEnvironment
+* IN outRef : Reference to Soap Body.
+* IN Environment: Reference to Enviroment.
+*****************************************************************************/
+CREATE PROCEDURE AdapterffCreateDocumentResponse(IN inRef REFERENCE, IN outRef REFERENCE, IN Environment REFERENCE)
+
+BEGIN
+	-------------------- VARIABLE DECLARATIONS -----------------------------------------------------------------
+	DECLARE inRefErr REFERENCE TO inRef.SOAP.Body;
+	-------------------- BUILDING RESPONSE MESSAGE ------------------------------------------------------
+	IF EXISTS(inRefErr.soapenv:Fault.detail.ns19:createDocumentException[]) THEN
+		SET Environment.flag = 'true';
+		DECLARE inRefErr1 REFERENCE TO inRefErr.soapenv:Fault.detail;
+		DECLARE inRefExc REFERENCE TO inRefErr1.ns19:createDocumentException;
+		CREATE FIELD Environment.LogData.providerError;
+		DECLARE envRefErr REFERENCE TO Environment.LogData.providerError;
+
+
+		SET envRefErr.code = inRefExc.code;
+		SET envRefErr.description = inRefExc.description;
+		CREATE FIELD outRef.SOAP.Body.soapenv:Fault;
+		DECLARE outFaultRef REFERENCE TO outRef.SOAP.Body.soapenv:Fault;
+		SET outFaultRef.faultcode = inRefErr.soapenv:Fault.faultcode;
+		SET outFaultRef.faultstring = 'Provider Error Occured.';
+
+		IF (inRefErr.soapenv:Fault.faultstring) IN ('SC441_DOCGEN_0700nullnull','SC441_SC441OBSERVER_ERROR_0100','100','101','201''200','202','SC441_STOREWORKFILESERVICEIMPL_ERROR_0101') THEN
+			CASE
+
+			WHEN inRefErr.soapenv:Fault.faultstring = 'SC441_DOCGEN_0700nullnull'
+				OR inRefErr.soapenv:Fault.faultstring = 'SC441_SC441OBSERVER_ERROR_0100'
+				OR inRefErr.soapenv:Fault.faultstring = 100 THEN
+				CREATE LASTCHILD OF outFaultRef NAME 'detail';
+				DECLARE detailRef REFERENCE TO outFaultRef.detail;
+				CREATE FIELD detailRef.nsError:CreateDocumentException.ExceptionElement;
+				DECLARE outRefExc REFERENCE TO detailRef.nsError:CreateDocumentException.ExceptionElement;
+				SET outRefExc.code = 102;
+				SET outRefExc.description = COALESCE(inRefExc.description,'');
+
+				SET outRefExc.status = inRefExc.status;
+
+			WHEN inRefErr.soapenv:Fault.faultstring = 101
+				OR inRefErr.soapenv:Fault.faultstring = 201
+				OR inRefErr.soapenv:Fault.faultstring = 200
+				OR inRefErr.soapenv:Fault.faultstring = 202
+				OR inRefErr.soapenv:Fault.faultstring = 'SC441_STOREWORKFILESERVICEIMPL_ERROR_0101' THEN
+
+				CREATE LASTCHILD OF outFaultRef NAME 'detail';
+				DECLARE detailRef REFERENCE TO outFaultRef.detail;
+				CREATE FIELD detailRef.nsError:CreateDocumentException.ExceptionElement;
+				DECLARE outRefExc REFERENCE TO detailRef.nsError:CreateDocumentException.ExceptionElement;
+				SET outRefExc.code = 101;
+				SET outRefExc.description = COALESCE(inRefExc.description,'');
+				SET outRefExc.status = inRefExc.status;
+			END CASE;
+		END IF;
+	ELSEIF EXISTS(inRefErr.soapenv:Fault[]) THEN
+		SET Environment.flag = 'true';
+		CREATE FIELD Environment.LogData.providerError;
+		DECLARE envRefErr REFERENCE TO Environment.LogData.providerError;
+
+		SET envRefErr.code = inRefErr.soapenv:Fault.faultcode;
+		SET envRefErr.description = inRefErr.soapenv:Fault.faultstring;
+		CREATE FIELD outRef.Body.soapenv:Fault;
+		DECLARE outFaultRef REFERENCE TO outRef.SOAP.Body.soapenv:Fault;
+		SET outFaultRef.faultcode = inRefErr.soapenv:Fault.faultcode;
+		SET outFaultRef.faultstring = 'Provider Error Occured.';
+
+	ELSE
+		DECLARE inRefReq REFERENCE TO inRefErr.ns19:createDocumentResponse.responseParameters;
+
+		CREATE FIELD outRef.SOAP.Body.ns15:CreateDocumentResponse;
+		DECLARE outRefReq REFERENCE TO outRef.SOAP.Body.ns15:CreateDocumentResponse;
+		SET outRefReq.DocumentId = inRefReq.documentResponseGroup.documentId.value;
+
+	END IF;
+
+END;
+/****************************************************************************
+* A procedure that will build the request message for FR151
+* IN inRef : Reference to Soap Body
+* IN outRef : Reference to OutputRoot.
+* IN Environment: Reference to Enviroment.
+*****************************************************************************/
+Create PROCEDURE GetElectronicDocument(IN inRef REFERENCE, IN outRef REFERENCE, IN Environment REFERENCE)
+
+BEGIN
+	CREATE LASTCHILD OF outRef DOMAIN 'XMLNSC';
+	CREATE FIELD outRef.XMLNSC.documentRequest;
+	DECLARE outDoc REFERENCE TO outRef.XMLNSC.documentRequest;
+	CREATE LASTCHILD OF outDoc NAME 'electronicDocument';
+
+	DECLARE outElecDoc REFERENCE TO outDoc.electronicDocument;
+	CREATE FIELD outElecDoc.generalAttrGroup;
+	DECLARE outGenAttr REFERENCE TO outElecDoc.generalAttrGroup;
+	DECLARE inRefReq REFERENCE TO inRef.SOAP.Body.ns15:CreateDocumentRequest.DocumentGenerationContainer;
+	DECLARE inRefDGC REFERENCE TO inRefReq.FTB;
+	DECLARE inRefFTB REFERENCE TO inRefDGC.ns31:PledgingCover;
+	DECLARE e_date, e_date1 CHARACTER;
+
+	SET outGenAttr.selectorLogo = '1';
+	--SET e_date1 = CAST(inRefDGC.ns31:Offergroup.ns31:ExpectedOfferDate AS CHARACTER FORMAT 'yyyy-MM-dd');
+	--SET outGenAttr.communicationCreationDate = e_date1; --CAST(inRefDGC.ns31:Offergroup.ns31:ExpectedOfferDate AS CHARACTER FORMAT 'yyyy-MM-dd');
+
+	SET outGenAttr.communicationCreationDate = '2017-09-27';
+	SET e_date = CAST(inRefDGC.ns31:EffectuationDate AS CHARACTER FORMAT 'yyyy-MM-dd');
+	SET outGenAttr.yearEffectiveDateDocument = SUBSTRING(e_date FROM 1 FOR 4);
+
+	SET outGenAttr.version = '1.0.0';
+	SET outGenAttr.businessLineClient = 'CMB';
+	SET outGenAttr.numberAanbiedingsbrief = '1';
+	SET outGenAttr.numberCreditAgreement = '2';
+	SET outGenAttr.numberBKR = '0';
+	SET outGenAttr.numberBegrippenlijsten = '1';
+
+
+	SET outGenAttr.numbAccountsOverview = '0';
+	SET outGenAttr.numbCreditTermsCommercial = '1';
+	SET outGenAttr.numbCreditTermsConsumer = '1';
+	--SET outGenAttr.numberPledgeLiveStock = '0';
+	-- SET outGenAttr.numberGuarantorAgreements = '2';
+	SET outGenAttr.numberGuarantorAgreements = '0';
+
+	SET outGenAttr.numbInfoBalancing = '0';
+
+	SET outGenAttr.numbClarification = '0';
+	----------------
+
+	SET outGenAttr.numbToelichting = '0';
+	SET outGenAttr.numberBorrowers = '0';
+
+	SET outGenAttr.numberPledgers = '0';
+	SET outGenAttr.numberPledgersAkte = '0';
+	SET outGenAttr.numberPledgersWithAuction = '0';
+	SET outGenAttr.numberPledgersWithLivestock = '0';
+	SET outGenAttr.numberSaldoCompensatie = '1';
+
+	SET outGenAttr.selectorChapFinanRatio = '0';
+	SET outGenAttr.numberFacilities = '0';
+	SET outGenAttr.numberLoans = '0';
+	SET outGenAttr.numberMortgageRegisterations = '0';
+	SET outGenAttr.numberOtherCollaterals = '0';
+	SET outGenAttr.selectorBorrowerIsPledger = '0';
+
+
+
+
+	DECLARE count1, i, j, k INTEGER;
+
+
+	IF inRefFTB.ns31:CoverDefinitionIdentification.ns31:DefinitionCode = '324' OR inRefFTB.ns31:CoverDefinitionIdentification.ns31:DefinitionCode = '175' OR inRefFTB.ns31:CoverDefinitionIdentification.ns31:DefinitionCode = '255' THEN
+		SET outGenAttr.numberPledgeAkte = '2';
+	ELSE
+		SET outGenAttr.numberPledgeAkte = '0';
+	END IF;
+
+
+
+
+
+	IF inRefFTB.ns31:CoverDefinitionIdentification.ns31:DefinitionCode = '314' THEN
+		SET outGenAttr.numberPledgeAuction = '2';
+	ELSE
+		SET outGenAttr.numberPledgeAuction = '0';
+	END IF;
+
+
+	IF inRefFTB.ns31:CoverDefinitionIdentification.ns31:DefinitionCode = '328' THEN
+		SET outGenAttr.numberPledgeLiveStock = '2';
+	ELSE
+		SET outGenAttr.numberPledgeLiveStock = '0';
+	END IF;
+	-- IF inRefFTB.ns31:CoverDefinitionIdentification.ns31:DefinitionCode = '324' THEN
+	-- SET outGenAttr.numberPledgeAkte[1] = '2';
+	-- ELSE
+	-- SET outGenAttr.numberPledgeAkte[1] = '0';
+	-- END IF;
+	--
+	-- IF inRefFTB.ns31:CoverDefinitionIdentification.ns31:DefinitionCode = '175' THEN
+	-- SET outGenAttr.numberPledgeAkte[2] = '2';
+	-- ELSE
+	-- SET outGenAttr.numberPledgeAkte[2] = '0';
+	-- END IF;
+	--
+	-- IF inRefFTB.ns31:CoverDefinitionIdentification.ns31:DefinitionCode = '255' THEN
+	-- SET outGenAttr.numberPledgeAkte[3] = '2';
+	-- ELSE
+	-- SET outGenAttr.numberPledgeAkte[3] = '0';
+	-- END IF;
+	--
+	SET k = 1;
+	SET count1 = CARDINALITY(inRefDGC.ns31:BusinessAgreement.ns31:Facilities[]);
+
+	WHILE (k<=count1) DO
+
+		IF inRefDGC.ns31:BusinessAgreement.ns31:Facilities[k].ns31:Limit.ns31:LimitDefinitionIdentification.ns31:DefinitionCode = 'CompensatingBalanceLimit' THEN
+			SET outGenAttr.numberTermsSRC = NULL;
+		END IF;
+		IF count1>1 AND inRefDGC.ns31:BusinessAgreement.ns31:Facilities[k].ns31:Limit.ns31:LimitDefinitionIdentification.ns31:DefinitionCode = 'CompensatingBalanceLimit' THEN
+			SET outGenAttr.numberTermsSRC = '1';
+		ELSE
+			SET outGenAttr.numberTermsSRC = '0';
+		END IF;
+		SET k = k+1;
+	END WHILE;
+
+
+	SET outGenAttr.numberTerugboekformulier = '2';
+	SET outGenAttr.numberWijzAlgemeen = '0';
+
+	SET k = 1;
+	--SET count1 = CARDINALITY(inRefDGC.ns31:BusinessAgreement.ns31:Facilities[]);
+	WHILE (k<=count1) DO
+		IF inRefDGC.ns31:BusinessAgreement.ns31:Facilities[k].ns31:ProductLineDefinitionIdentification.ns31:DefinitionCode = '2' THEN
+
+			SET outGenAttr.numbProductinfoCommLoans = '1';
+		ELSE
+			SET outGenAttr.numbProductinfoCommLoans = '0';
+		END IF;
+		IF inRefDGC.ns31:BusinessAgreement.ns31:Facilities[k].ns31:ProductLineDefinitionIdentification.ns31:DefinitionCode = '158' OR inRefDGC.ns31:BusinessAgreement.ns31:Facilities[k].ns31:ProductLineDefinitionIdentification.ns31:DefinitionCode = '19' THEN
+
+			SET outGenAttr.numbProductinfoRC = '1';
+		ELSE
+			SET outGenAttr.numbProductinfoRC = '0';
+		END IF;
+		SET k = k+1;
+	END WHILE;
+
+	IF outGenAttr.numberPledgersAkte <> '0' THEN
+		SET outGenAttr.numbTermPledge = '1';
+	ELSE
+		SET outGenAttr.numbTermPledge = '0';
+	END IF;
+	--SET InputRoot.SOAP.Body.ns15:CreateDocumentRequest.DocumentGenerationContainer.FTB.ns31:BusinessAgreement.ns31:Facilities.ns31:ProductLineDefinitionIdentification
+	--REsponse which came from Retrieve party details will be mapped back
+	SET i = 1;
+	SET j = CARDINALITY(inRefDGC.ns31:Borrower.ns31:SelectedCounterpartyRoles[]);
+	WHILE (i<=j) DO
+
+		IF inRefDGC.ns31:Borrower.ns31:SelectedCounterpartyRoles[i].ns31:DefinitionCode = 'Hoofdaanvrager' THEN
+			SET outGenAttr.Involved_Parties.naamAdmKlant = Environment.variable.retrieveParty.partyAddressDetails.preferredPostalAddressContactPreference.renderedContactPreference.renderedName;
+			SET outGenAttr.Involved_Parties.naamContactpersoon = Environment.variable.retrieveParty.partyDetails.party.partyClassification.partyClassificationRelationshipClassificationId.value;
+			SET outGenAttr.Involved_Parties.straatAdmKlant = Environment.variable.retrieveParty.partyAddressDetails.preferredPostalAddressContactPreference.postalAddress.streetFullName;
+			SET outGenAttr.Involved_Parties.huisnrAdmKlant = Environment.variable.retrieveParty.partyAddressDetails.preferredPostalAddressContactPreference.postalAddress.fullHouseNumber;
+			SET outGenAttr.Involved_Parties.postcodeAdmKlant = Environment.variable.retrieveParty.partyAddressDetails.preferredPostalAddressContactPreference.postalAddress.postcodeArea;
+			SET outGenAttr.Involved_Parties.plaatsAdmKlant = Environment.variable.retrieveParty.partyAddressDetails.preferredPostalAddressContactPreference.postalAddress.cityName;
+			--SET outGenAttr.Involved_Parties.accMan = COALESCE(Environment.variable.retrieveParty.responsibleParties.responsibleParty.partyName.fullName, '');
+			SET outGenAttr.Involved_Parties.accMan = 'George';
+			SET outGenAttr.Involved_Parties.afdeling = COALESCE(Environment.variable.retrieveParty.partyAddressDetails.managingOrganizationUnit.fullName, '');
+			--SET outGenAttr.Involved_Parties.phoneAccMan = COALESCE(Environment.variable.retrieveParty.responsibleParties.responsibleParty.telephonicAddress.fullTelephoneNumber, '');
+			SET outGenAttr.Involved_Parties.phoneAccMan = '3214564569';
+			SET outGenAttr.Involved_Parties.geachteJaNee = 'J';
+			SET outGenAttr.Involved_Parties.salutationName = 'Default Salutation';
+			SET outGenAttr.numbGenTerms = Environment.variable.retrieveParty.partyDetails.party.partyRegistrationLifeCycleStatusTypeId.value;
+		END IF;
+		SET i = i+1;
+	END WHILE;
+	-----
+	 IF inRefFTB.ns31:CoverDefinitionIdentification.ns31:DefinitionCode = '402' THEN
+	 SET outGenAttr.Involved_Parties.guarantors = inRefFTB;
+	 ELSE
+	 SET outGenAttr.Involved_Parties.guarantors = '';
+	 END IF;
+	-- Ram
+	--SET outGenAttr.Involved_Parties.guarantors.nameGuarantor = Environment.variable.retrieveParty.partyDetails.preferredPostalAddressContactPreference.renderedContactPreference.renderedName;
+
+	SET outElecDoc.selectorSaldoCompensation = '1';
+	IF inRefFTB.ns31:CoverDefinitionIdentification.ns31:DefinitionCode = '324' OR inRefFTB.ns31:CoverDefinitionIdentification.ns31:DefinitionCode = '255' OR inRefFTB.ns31:CoverDefinitionIdentification.ns31:DefinitionCode = '175' OR inRefFTB.ns31:CoverDefinitionIdentification.ns31:DefinitionCode = '314' OR inRefFTB.ns31:CoverDefinitionIdentification.ns31:DefinitionCode = '328' THEN
+		SET outElecDoc.selectReturnMoreDocs = '1';
+	ELSE
+		SET outElecDoc.selectReturnMoreDocs = '0';
+	END IF;
+	-- IF inRefFTB.ns31:Offergroup.ns31:DatePreviousSentOffer = NULL THEN
+	-- SET outElecDoc.datePreviousOffer = NULL;
+	-- ELSE
+	-- SET outElecDoc.datePreviousOffer = inRefFTB.ns31:Offergroup.ns31:DatePreviousSentOffer;
+	-- END IF;
+	SET outElecDoc.datePreviousOffer = '9999-12-31';
+	SET outElecDoc.selectorStatusCompensationAgreement = '0';
+
+	IF inRefFTB = 'Registry Property Cover Type' AND inRefDGC.ns31:ExecutionGroup.ns31:Notary <> NULL THEN
+		SET outElecDoc.selectorNewMortgageNotaryKnown = '0';
+	ELSE
+		SET outElecDoc.selectorNewMortgageNotaryKnown = '1';
+	END IF;
+
+	SET outElecDoc.numbLoanAgreementToReceive = '0';
+	SET outElecDoc.subordinations.selectSubordination = '0';
+	SET outElecDoc.subordinations.nameSubordinator = '0';
+	SET outElecDoc.subordinations.nameBorrowerSubordination = '0';
+	SET outGenAttr.numbSubordinations = '0';
+
+	IF inRefFTB.ns31:CoverDefinitionIdentification.ns31:DefinitionCode = '324'THEN
+		SET outElecDoc.selectorPledgeCombo = '1';
+	ELSEIF inRefFTB.ns31:CoverDefinitionIdentification.ns31:DefinitionCode = '175' THEN
+		SET outElecDoc.selectorPledgeCombo = '3';
+	ELSEIF inRefFTB.ns31:CoverDefinitionIdentification.ns31:DefinitionCode = '255' THEN
+		SET outElecDoc.selectorPledgeCombo = '2';
+	ELSEIF inRefFTB.ns31:CoverDefinitionIdentification.ns31:DefinitionCode = '324' AND inRefFTB.ns31:CoverDefinitionIdentification.ns31:DefinitionCode = '255' THEN
+		SET outElecDoc.selectorPledgeCombo = '4';
+	ELSEIF inRefFTB.ns31:CoverDefinitionIdentification.ns31:DefinitionCode = '324' AND inRefFTB.ns31:CoverDefinitionIdentification.ns31:DefinitionCode = '175' THEN
+		SET outElecDoc.selectorPledgeCombo = '5';
+	ELSEIF inRefFTB.ns31:CoverDefinitionIdentification.ns31:DefinitionCode = '255' AND inRefFTB.ns31:CoverDefinitionIdentification.ns31:DefinitionCode = '175' THEN
+		SET outElecDoc.selectorPledgeCombo = '6';
+	ELSEIF inRefFTB.ns31:CoverDefinitionIdentification.ns31:DefinitionCode = '324' AND inRefFTB.ns31:CoverDefinitionIdentification.ns31:DefinitionCode = '255' AND inRefFTB.ns31:CoverDefinitionIdentification.ns31:DefinitionCode = '175' THEN
+		SET outElecDoc.selectorPledgeCombo = '7';
+	ELSE
+		SET outElecDoc.selectorPledgeCombo = '0';
+	END IF;
+
+
+	SET outElecDoc.selectSRCOvk = '0';
+
+END;
