@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.sonar.check.Rule;
+import org.sonar.check.RuleProperty;
 
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
@@ -28,7 +29,16 @@ public class CyclomaticComplexityCheck extends DoubleDispatchVisitorCheck{
 	
 	private static final String MESSAGE = "Cyclomatic Complexity is higher then the threshold.";
 	
-	private static final int COMPLEXITY_THRESHOLD =10;
+	private static final int DEFAULT_COMPLEXITY_THRESHOLD =10;
+	
+	 @RuleProperty(
+			    key = "maximumCyclomaticComplexity",
+			    description = "The maximum authorized cyclomatic complexity.",
+			    defaultValue = "" + DEFAULT_COMPLEXITY_THRESHOLD)
+	 public int maximumCyclomaticComplexity = DEFAULT_COMPLEXITY_THRESHOLD;
+	
+	
+	
 	int totalComplexity = 0;
     int startingLine = 1;
     
@@ -70,7 +80,7 @@ public void visitProgram(ProgramTree tree) {
 	}
 		for(ArrayList<String> module : modules){
 			
-			if(CalculateComplexity(module)>COMPLEXITY_THRESHOLD){
+			if(CalculateComplexity(module)>maximumCyclomaticComplexity){
 				
 				addIssue(new LineIssue(this,  Integer.parseInt(module.get(0)), "Check function \"" + ExtractFunctionProcedureName(module.get(1))+ "\". " + MESSAGE));
 				
