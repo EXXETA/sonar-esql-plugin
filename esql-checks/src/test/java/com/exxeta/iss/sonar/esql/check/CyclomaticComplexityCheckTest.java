@@ -29,7 +29,7 @@ public class CyclomaticComplexityCheckTest {
 	public void test() {
 		EsqlCheck check = new CyclomaticComplexityCheck();
 		EsqlCheckVerifier.issues(check, new File("src/test/resources/CyclomaticComplexity.esql")).next().atLine(2)
-				.withMessage("Check function \"Main()\". Cyclomatic Complexity is higher then the threshold.").noMore();
+				.withMessage("Check Function \"Main\". Cyclomatic Complexity is higher then the threshold.").noMore();
 	}
 
 }

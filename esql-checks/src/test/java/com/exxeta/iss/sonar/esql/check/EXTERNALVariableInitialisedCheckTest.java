@@ -21,6 +21,6 @@ public class EXTERNALVariableInitialisedCheckTest {
 	public void test() {
 		EsqlCheck check = new EXTERNALVariableInitialisedCheck();
 		EsqlCheckVerifier.issues(check, new File("src/test/resources/EXTERNALVariableInitialised.esql")).next().atLine(1)
-				.withMessage("EXTERNAL variable Should be itialiszed").noMore();
+				.withMessage("EXTERNAL variable should be initialized").noMore();
 	}
 }

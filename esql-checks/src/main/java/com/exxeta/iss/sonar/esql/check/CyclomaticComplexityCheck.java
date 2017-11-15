@@ -82,7 +82,7 @@ public void visitProgram(ProgramTree tree) {
 			
 			if(CalculateComplexity(module)>maximumCyclomaticComplexity){
 				
-				addIssue(new LineIssue(this,  Integer.parseInt(module.get(0)), "Check function \"" + ExtractFunctionProcedureName(module.get(1))+ "\". " + MESSAGE));
+				addIssue(new LineIssue(this,  Integer.parseInt(module.get(0)), "Check " + ExtractFunctionProcedureName(module.get(1))+ "\". " + MESSAGE));
 				
 			}
 		}
@@ -139,30 +139,30 @@ public static int CalculateComplexity(ArrayList<String> lines) {
 }
 	
 	
-	 public static  String ExtractFunctionProcedureName(String declareStatement ){
+public static  String ExtractFunctionProcedureName(String declareStatement ){
 
-		 declareStatement = declareStatement.substring(0,declareStatement.indexOf("()")+2);
-		 String name = "";
-		 for(String tmp : declareStatement.split(" ")){
-			if(tmp.equalsIgnoreCase("create")||tmp.equalsIgnoreCase("function")||tmp.equalsIgnoreCase("procedure")){
-				name = name+tmp.toUpperCase(); 
-			}
-			else{
-				name +=tmp;
-			}
+	 declareStatement = declareStatement.substring(0,declareStatement.indexOf("("));
+	 String name = "";
+	 for(String tmp : declareStatement.split(" ")){
+		if(tmp.equalsIgnoreCase("create")||tmp.equalsIgnoreCase("function")||tmp.equalsIgnoreCase("procedure")){
+			name = name+tmp.toUpperCase(); 
 		}
-		 
-		 if(name.replace(" ", "").startsWith("CREATEFUNCTION")){
-			name = name.replace(" ", "").replace("CREATEFUNCTION", ""); 
-		 }
-		 else if(name.replace(" ", "").startsWith("CREATEPROCEDURE")){
-			 name =name.replace(" ", "").replace("CREATEPROCEDURE", "");
-			 
-		 }
-		   
-			return name;
-			
+		else{
+			name +=tmp;
+		}
 	}
+	 
+	 if(name.replace(" ", "").startsWith("CREATEFUNCTION")){
+		name = "Function \""+name.replace(" ", "").replace("CREATEFUNCTION", ""); 
+	 }
+	 else if(name.replace(" ", "").startsWith("CREATEPROCEDURE")){
+		 name = "Procedure \""+name.replace(" ", "").replace("CREATEPROCEDURE", "");
+		 
+	 }
+	   
+		return name;
+		
+}
 	 
 	
 	
