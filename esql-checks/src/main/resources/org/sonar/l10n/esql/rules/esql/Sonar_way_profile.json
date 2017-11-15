@@ -58,7 +58,9 @@
   	"AvoidNestedIf",
   	"MeaningfulVariable",
   	"SubElementName",
-  	"FunctionProcedureLength"
+  	"FunctionProcedureLength",
+  	"FunctionParameter",
+  	"ProcedureParameter"
   	
   	
   	
