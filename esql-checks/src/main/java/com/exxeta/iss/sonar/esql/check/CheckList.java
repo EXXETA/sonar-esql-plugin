@@ -95,10 +95,7 @@ public final class CheckList {
         AvoidNestedIfCheck.class,
         MeaningfulVariableCheck.class,
         SubElementNameCheck.class,
-        FunctionProcedureLengthCheck.class,
-        FunctionParameterCheck.class,
-        ProcedureParameterCheck.class
-        
+        FunctionProcedureLengthCheck.class
      
         
        
