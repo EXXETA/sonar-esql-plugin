@@ -44,7 +44,7 @@ import com.exxeta.iss.sonar.esql.lexer.EsqlLexer;
 import com.exxeta.iss.sonar.esql.api.visitors.FileIssue;
 /**
  * This java class is created to implement the logic for checking that space should be given around equal sign.
- * @author C50679 (sapna.singh@infosys.com)
+ * @author sapna singh
  *
  */
 @Rule(key = "SpaceAroundEqualSign")

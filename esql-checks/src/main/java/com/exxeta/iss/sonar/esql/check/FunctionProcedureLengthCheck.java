@@ -18,7 +18,7 @@ import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
  * This java class is created to implement the logic for checking the length of
  * the function or procedure
  * 
- * @author Arjav Shah
+ * @author Sapna Singh
  *
  */
 @Rule(key = "FunctionProcedureLength")

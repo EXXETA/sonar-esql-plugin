@@ -11,7 +11,7 @@ import com.exxeta.iss.sonar.esql.api.EsqlCheck;
 import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
 
 /**
- * @author C50679(sapna.singh@infosys.com)
+ * @author Sapna Singh
  *
  */
 public class SubElementNameCheckTest {

@@ -12,7 +12,7 @@ import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
 
 /**
  * This Test class is created to check the cyclomatic complexity of the code.
- * @author Arjav Shah
+ * @author Sapna Singh
  *
  */
 public class FunctionProcedureLengthCheckTest {

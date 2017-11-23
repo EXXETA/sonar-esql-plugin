@@ -18,7 +18,7 @@ import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
 
 /**
  * This java class is created to check the case statement, if CASE statement contains single when , then it should be replaced with If statement.
- * @author C50679 (sapna.singh@infosys.com)
+ * @author sapna singh
  *
  */
 @Rule(key = "CaseStatementWithSingleWhen")

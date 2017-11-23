@@ -19,8 +19,8 @@ import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
 
 
 /**
- * This java class is created to check 
- * @author C50679(sapna.singh@infosys.com)
+ * This java class is created to implement the logic to check sub-elements should be in UpperCamel-case and elements containing simple value should be in lowercase.
+ * @author sapna singh
  *
  */
 @Rule(key="SubElementName")
@@ -30,10 +30,6 @@ public class SubElementNameCheck extends DoubleDispatchVisitorCheck{
 
 	private static final String UPPERCASE_FORMAT = "^[A-Z][a-zA-Z0-9]*$";
 	private static final String LOWERCASE_FORMAT = "^[a-z][a-zA-Z0-9]*$";
-	
-	
-	
-
 
 
 
@@ -52,14 +48,14 @@ public class SubElementNameCheck extends DoubleDispatchVisitorCheck{
 
 				String envSubElement = strArr1[0];
 				if(! strArr1[1].isEmpty()){
-					
+
 					String envSubElement1 = envSubElement.substring(temp.indexOf("Environment")+12,temp.indexOf("="));
 					String[] strArray = envSubElement1.split(Pattern.quote("."));
-                     
-				    int strCount =0;
+
+					int strCount =0;
 					for(String str:strArray){
 						strCount++;
-						
+
 						if(!str.matches(UPPERCASE_FORMAT) && (strCount != strArray.length)){
 
 
@@ -67,10 +63,10 @@ public class SubElementNameCheck extends DoubleDispatchVisitorCheck{
 						}
 
 					}
-					
+
 					String lastElement =strArray[strArray.length - 1].trim();
 					if(!lastElement.matches(LOWERCASE_FORMAT)){
-                             addIssue(new LineIssue(this,  i,   MESSAGE ));
+						addIssue(new LineIssue(this,  i,   MESSAGE ));
 					}
 
 				}

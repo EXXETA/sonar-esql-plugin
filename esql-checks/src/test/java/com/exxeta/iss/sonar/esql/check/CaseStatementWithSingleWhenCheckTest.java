@@ -12,7 +12,7 @@ import com.exxeta.iss.sonar.esql.api.EsqlCheck;
 import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
 
 /**
- * @author C50679
+ * @author Sapna Singh
  *
  */
 

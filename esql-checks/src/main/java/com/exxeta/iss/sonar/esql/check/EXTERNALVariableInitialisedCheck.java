@@ -14,8 +14,8 @@ import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
 import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
 
 /**
- * This java class is created to check all the EXTERNAL variable should be initialized in esql file.
- * @author C50679 (sapna.singh@infosys.com)
+ * This java class is created to implement the logic to check all the  EXTERNAL variable should be initialized in esql file.
+ * @author sapna singh
  *
  */
 @Rule(key = "EXTERNALVariableInitialised")

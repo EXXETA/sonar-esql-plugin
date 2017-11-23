@@ -14,7 +14,9 @@ import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
 import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
 
 /**
- * @author C50679
+ * This java class is created to implement the logic to check that variable names should be meaningful. 
+ * Variable name should consist of atleast 3 charachters.
+ * @author Sapna Singh
  *
  */
 @Rule(key = MeaningfulVariableCheck.CHECK_KEY)

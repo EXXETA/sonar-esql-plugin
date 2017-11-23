@@ -21,7 +21,8 @@ import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
 /**
  * This java class is created to implement the logic for checking cyclomatic complexity of the code.
  * cyclomatic complexity should be less than the threshold value
- * @author C50679 (sapna.singh@infosys.com)
+ * 
+ * @author sapna singh
  *
  */
 @Rule(key="CyclomaticComplexity")

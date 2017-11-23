@@ -12,7 +12,7 @@ import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
 
 /**
  * This Test class is created to Test that all the EXTERNAL variable should be initialized in esql file.
- * @author C50679 (sapna.singh@infosys.com)
+ * @author Sapna Singh
  *
  */
 public class EXTERNALVariableInitialisedCheckTest {

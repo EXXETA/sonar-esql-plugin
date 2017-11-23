@@ -27,6 +27,10 @@ public class Tags {
 	public static final String CERT = "cert";
 	public static final String PITFALL = "pitfall";
 	public static final String CONFUSING = "confusing";
+	public static final String DATABASE = "database";
+	public static final String PERFORMANCE  = "performance ";
+	public static final String READABILITY  = "readability ";
+	
 
 	private Tags() {
 		// This class only defines constants

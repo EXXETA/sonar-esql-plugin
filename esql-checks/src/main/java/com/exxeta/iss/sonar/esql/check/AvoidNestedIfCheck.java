@@ -19,7 +19,8 @@ import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
 import com.exxeta.iss.sonar.esql.api.visitors.TreeVisitorContext;
 
 /**
- * @author C50679 (sapna.singh@infosys.com)
+ * This java class is created to check IF Statement.In Case of multiple IF Statement use ELSEIF or CASE WHEN clauses to get quicker drop-out.
+ * @author sapna singh
  *
  */
 @Rule(key="AvoidNestedIf")
@@ -31,8 +32,7 @@ public class AvoidNestedIfCheck extends  DoubleDispatchVisitorCheck {
 
 	private static final int MAXIMUM_NESTING_ALLOWED = 3;
 
-	//public int maxNestingLevel = MAXIMUM_NESTING_ALLOWED;
-
+	
 	@Override
 	public void visitIfStatement(IfStatementTree tree) {
 		SyntaxToken ifKeyword = tree.ifKeyword();

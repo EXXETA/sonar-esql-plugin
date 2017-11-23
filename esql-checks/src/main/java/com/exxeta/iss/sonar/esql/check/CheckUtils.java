@@ -67,7 +67,7 @@ public class CheckUtils {
 		return new BufferedReader(new StringReader(file.contents()));
 	}
 	
-	/* changes Strats from here  (sapna.singh@infosys.com) */
+	/* changes Strats from here  (Sapna Singh) */
 	
 	public static boolean isCreateFilterModuleLine(String line)
     {
@@ -158,5 +158,5 @@ public class CheckUtils {
 	
 	
 	
-	/* changes Ends here  (sapna.singh@infosys.com) */
+	/* changes Ends here  (sapna singh) */
 }
