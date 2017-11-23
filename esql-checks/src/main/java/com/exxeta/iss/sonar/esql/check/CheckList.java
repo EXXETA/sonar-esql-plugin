@@ -96,7 +96,6 @@ public final class CheckList {
         MeaningfulVariableCheck.class,
         SubElementNameCheck.class,
         FunctionProcedureLengthCheck.class
-        
      
         
        

@@ -55,7 +55,7 @@ public class KeyWordCaseCheck extends DoubleDispatchVisitorCheck {
 
 		if (reservedKeywords.contains(s)) {
 			return true;
-		} else if (nonReservedKeywords.contains(s)) {
+		} else if (nonReservedKeywords.contains(s) && !s.equals("ENVIRONMENT")) {
 			return true;
 		} else {
 			return false;

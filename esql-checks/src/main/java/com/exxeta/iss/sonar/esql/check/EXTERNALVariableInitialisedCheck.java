@@ -21,7 +21,7 @@ import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
 @Rule(key = "EXTERNALVariableInitialised")
 public class EXTERNALVariableInitialisedCheck extends DoubleDispatchVisitorCheck {
 	
-	private static final String MESSAGE = "EXTERNAL variable Should be itialiszed";
+	private static final String MESSAGE = "EXTERNAL variable should be initialized";
 	
 	
 	@Override

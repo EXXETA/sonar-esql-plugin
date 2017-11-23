@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.sonar.check.Rule;
+import org.sonar.check.RuleProperty;
 
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
@@ -25,8 +26,14 @@ public class FunctionProcedureLengthCheck extends DoubleDispatchVisitorCheck {
 
 	private static final String MESSAGE = " lines, which is higher than the allowed threshold.";
 
-	private static final int LENGTH_THRESHOLD = 150;
-
+	private static final int DEFAULT_LENGTH_THRESHOLD = 150;
+	 @RuleProperty(
+			    key = "maximumMethodProcedureLength",
+			    description = "The maximum authorized method/procedure length.",
+			    defaultValue = "" + DEFAULT_LENGTH_THRESHOLD)
+	 public int maximumMethodProcedureLength = DEFAULT_LENGTH_THRESHOLD;
+	 
+	 
 	@Override
 	public void visitProgram(ProgramTree tree) {
 		EsqlFile file = getContext().getEsqlFile();
@@ -63,8 +70,8 @@ public class FunctionProcedureLengthCheck extends DoubleDispatchVisitorCheck {
 		}
 		for (ArrayList<String> module : modules) {
 
-			if (module.size()-1 > LENGTH_THRESHOLD) {
-				addIssue(new LineIssue(this,  Integer.parseInt(module.get(0)), ExtractFunctionProcedureName(module.get(1))+ "\" is of length "+String.valueOf(module.size()-1) + MESSAGE+"(Threshold : "+LENGTH_THRESHOLD+")"));
+			if (module.size()-1 > maximumMethodProcedureLength) {
+				addIssue(new LineIssue(this,  Integer.parseInt(module.get(0)), ExtractFunctionProcedureName(module.get(1))+ "\" is of length "+String.valueOf(module.size()-1) + MESSAGE+"(Threshold : "+maximumMethodProcedureLength+")"));
 			}
 		}
 
