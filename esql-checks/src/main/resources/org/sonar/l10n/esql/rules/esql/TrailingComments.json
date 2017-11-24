@@ -1,0 +1,13 @@
+{
+  "title": "The line contains both code and comments. Trailing comments are discouraged.",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "1min"
+  },
+  "tags": [
+    "standards"
+  ],
+  "defaultSeverity": "Minor"
+}

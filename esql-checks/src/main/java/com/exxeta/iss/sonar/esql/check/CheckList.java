@@ -1,5 +1,6 @@
 /*
- * Sonar ESQL Plugin
+ *
+ Sonar ESQL Plugin
  * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
@@ -83,12 +84,13 @@ public final class CheckList {
         UndocumentedModuleCheck.class,
         UndocumentedRoutineCheck.class,
         TooManyParametersCheck.class,
-        VariablesSubtreeCheck.class,
         XmlnscDomainCheck.class,
         RoutineWithExcessiveReturnsCheck.class,        
-        FunctionNameStartsWithUppercaseCheck.class,
-        VariableNameStartsWithLowercaseCheck.class,
-        UnreachableCodeCheck.class
+        UnreachableCodeCheck.class,
+        ConditionBracesCheck.class,
+        TrailingCommentsCheck.class
+      
+        
         
         /*
         

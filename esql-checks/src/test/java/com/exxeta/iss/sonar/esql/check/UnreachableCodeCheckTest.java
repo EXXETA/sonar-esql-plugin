@@ -1,3 +1,12 @@
+/**
+ * This java class is created to implement the logic for checking if the code is present after return or throw statement, 
+ * if it is present then that code is unreachable.
+ * 
+ * 
+ * @author Prerana Agarkar
+ *
+ */
+
 package com.exxeta.iss.sonar.esql.check;
 
 import java.io.File;

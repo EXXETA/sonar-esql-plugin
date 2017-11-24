@@ -49,9 +49,10 @@
   	"TooManyParameters",
   	"XmlnscDomain",
   	"RoutineWithExcessiveReturns",
-  	"FunctionNameStartsWithUppercase",
-  	"VariableNameStartsWithLowercaseCheck",
-    "UnreachableCode"
+    "UnreachableCode",
+    "ConditionBraces",
+    "TrailingComments"
+   
 ]
 }
   

@@ -1,0 +1,13 @@
+{
+  "title": "Use braces for conditions as it gives more readability to code.",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "25min"
+  },
+  "tags": [
+    "readability"
+  ],
+  "defaultSeverity": "Major"
+}

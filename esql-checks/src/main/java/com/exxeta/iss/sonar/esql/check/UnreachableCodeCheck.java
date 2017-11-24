@@ -1,4 +1,11 @@
-
+/**
+ * This java class is created to implement the logic for checking if the code is present after return or throw statement, 
+ * if it is present then that code is unreachable.
+ * 
+ * 
+ * @author Prerana Agarkar
+ *
+ */
 package com.exxeta.iss.sonar.esql.check;
 
 import java.util.List;
@@ -16,8 +23,7 @@ import org.sonar.check.Priority;
 public class UnreachableCodeCheck extends DoubleDispatchVisitorCheck {
 	
 	public static final String MESSAGE = "Code is unreachable following RETURN or THROW statement.";
-	//public static final String CHECK_KEY = "UnreachableCodeCheck";
-	
+
 	@Override
 	public void visitProgram(ProgramTree tree) {
 		
@@ -25,8 +31,7 @@ public class UnreachableCodeCheck extends DoubleDispatchVisitorCheck {
 		 List<String> lines = CheckUtils.readLines(file);
 		
         int startingLineNumber=1;
-       // int lineNumber=0;
-        
+       
 		int lineNumber = startingLineNumber;
         
 		if(lines.size() < 2)

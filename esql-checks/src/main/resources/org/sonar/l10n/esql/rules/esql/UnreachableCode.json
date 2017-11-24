@@ -1,0 +1,14 @@
+{
+  "title": "Code is unreachable following RETURN or THROW statement.",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "20min"
+  },
+  "tags": [
+    "correctness",
+    "readability"
+  ],
+  "defaultSeverity": "Major"
+}
