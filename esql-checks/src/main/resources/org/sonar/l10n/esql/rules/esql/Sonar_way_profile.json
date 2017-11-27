@@ -51,7 +51,9 @@
   	"RoutineWithExcessiveReturns",
     "UnreachableCode",
     "ConditionBraces",
-    "TrailingComments"
+    "TrailingComments",
+    "CommentedOutEsqlCode",
+    "MultipleStatements"
    
 ]
 }

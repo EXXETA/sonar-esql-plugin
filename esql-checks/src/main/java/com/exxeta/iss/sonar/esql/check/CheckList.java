@@ -88,7 +88,9 @@ public final class CheckList {
         RoutineWithExcessiveReturnsCheck.class,        
         UnreachableCodeCheck.class,
         ConditionBracesCheck.class,
-        TrailingCommentsCheck.class
+        TrailingCommentsCheck.class,
+        CommentedOutEsqlCodeCheck.class,
+        MultipleStatementsCheck.class
       
         
         
