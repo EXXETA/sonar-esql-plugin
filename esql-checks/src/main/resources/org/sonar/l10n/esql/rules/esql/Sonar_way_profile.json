@@ -58,7 +58,8 @@
   	"AvoidNestedIf",
   	"MeaningfulVariable",
   	"SubElementName",
-  	"FunctionProcedureLength"
+  	"FunctionProcedureLength",
+  	"FilterNodeModifyMessage"
   	
   	
   	

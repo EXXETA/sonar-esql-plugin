@@ -1,4 +1,13 @@
 /*
+
+
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
  * Sonar ESQL Plugin
  * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
@@ -95,7 +104,9 @@ public final class CheckList {
         AvoidNestedIfCheck.class,
         MeaningfulVariableCheck.class,
         SubElementNameCheck.class,
-        FunctionProcedureLengthCheck.class
+        FunctionProcedureLengthCheck.class,
+        FilterNodeModifyMessageCheck.class
+        
      
         
        

@@ -4,11 +4,11 @@
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",
-    "constantCost": "5min"
+    "constantCost": "10min"
   },
   "tags": [
-    "misra",
-    "cert"
+    "readability",
+    "standards"
   ],
-  "defaultSeverity": "Major"
+  "defaultSeverity": "Minor"
 }

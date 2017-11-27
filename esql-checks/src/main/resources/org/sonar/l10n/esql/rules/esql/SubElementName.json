@@ -1,0 +1,14 @@
+{
+  "title": "Name elements containing sub-elements using UpperCamel-case and elements containing simple value using lower-case to make the naming convention in the Environment tree.",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    
+    "standards"
+  ],
+  "defaultSeverity": "Major"
+}
