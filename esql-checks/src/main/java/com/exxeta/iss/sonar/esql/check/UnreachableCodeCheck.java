@@ -10,14 +10,10 @@ package com.exxeta.iss.sonar.esql.check;
 
 import java.util.List;
 import org.sonar.check.Rule;
-import org.sonar.check.RuleProperty;
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
-import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
 import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
-import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
 import com.exxeta.iss.sonar.esql.api.visitors.EsqlFile;
-import org.sonar.check.Priority;
 
 @Rule(key ="UnreachableCode")
 public class UnreachableCodeCheck extends DoubleDispatchVisitorCheck {

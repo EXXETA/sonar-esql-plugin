@@ -10,25 +10,9 @@
 package com.exxeta.iss.sonar.esql.check;
 
 import java.util.List;
-//import javax.annotation.Nullable;
-
 import org.sonar.check.Rule;
-import org.sonar.check.RuleProperty;
-
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
-import com.exxeta.iss.sonar.esql.api.tree.Tree;
-import com.exxeta.iss.sonar.esql.tree.SyntacticEquivalence;
-import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
-import com.exxeta.iss.sonar.esql.api.tree.expression.ParenthesisedExpressionTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.ElseClauseTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.ElseifClauseTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.IfStatementTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.WhileStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
-import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
-import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
-import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
-import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
 import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
 import com.exxeta.iss.sonar.esql.api.visitors.EsqlFile;
 
@@ -59,7 +43,7 @@ public class ConditionBracesCheck extends DoubleDispatchVisitorCheck  {
 						&& !(originalLine.replaceAll("\\s+","").contains("ELSEIF(")))
 					  conditionFound = true;
 				else if((originalLine.replaceAll("\\s+","").contains("WHILE")) 
-						&& !(originalLine.replaceAll("\\s+","").contains("WHILE(")) 
+						&& !(originalLine.replaceAll("\\s+","").contains("WHILE("))
 						&& !(originalLine.replaceAll("\\s+","").contains("ENDWHILE")))
 						conditionFound = true;
 				else   
