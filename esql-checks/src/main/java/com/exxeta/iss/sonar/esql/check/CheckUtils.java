@@ -19,7 +19,10 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.exxeta.iss.sonar.esql.api.visitors.EsqlFile;
@@ -154,8 +157,83 @@ public class CheckUtils {
 	        }
 	        return false;
 	    }
+	    
+	    public static Set buildKeys(String line)
+	    {
+	       
+	        Set keys = new HashSet();
+	        int startId = line.lastIndexOf("(");
+	        if(startId > -1)
+	            line = line.substring(startId + 1);
+	        int endId = line.lastIndexOf(")");
+	        if(endId > -1)
+	            line = line.substring(0, endId);
+	        String lines[] = line.split("\\|\\|");
+	        String as[] = lines;
+	        int j = as.length;
+	        for(int k = 0; k < j; k++)
+	        {
+	            String singleLine = as[k];
+	            String lineParts[] = singleLine.split(",");
+	            String as1[] = lineParts;
+	            int l = as1.length;
+	            for(int i1 = 0; i1 < l; i1++)
+	            {
+	                String thisLine = as1[i1];
+	                int fromPos = thisLine.indexOf(" FROM ");
+	                if(fromPos > -1)
+	                    thisLine = thisLine.substring(0, fromPos);
+	                int asPos = thisLine.indexOf(" AS ");
+	                if(asPos > -1)
+	                    thisLine = thisLine.substring(0, asPos);
+	                String lineParts2[] = thisLine.split(" AND ");
+	                String as2[] = lineParts2;
+	                int j1 = as2.length;
+	label0:
+	                for(int k1 = 0; k1 < j1; k1++)
+	                {
+	                    String thisLineAfterAnd = as2[k1];
+	                    int cnt = 0;
+	                    int i = 0;
+	                    do
+	                    {
+	                        if(i >= thisLineAfterAnd.length())
+	                            continue label0;
+	                        if(thisLineAfterAnd.charAt(i) == '.')
+	                        {
+	                            if(cnt >= 1)
+	                            {
+	                                String newKey = thisLineAfterAnd.substring(0, i);
+	                                keys.add(newKey);
+	                            }
+	                            cnt++;
+	                        }
+	                        if(thisLineAfterAnd.charAt(i) == ' ' || thisLineAfterAnd.charAt(i) == '=')
+	                            continue label0;
+	                        i++;
+	                    } while(true);
+	                }
 
-	
+	            }
+
+	        }
+
+	        return keys;
+	    }
+
+	    public static Integer findLineInText(List textLines, String line)
+	    {
+	        int i = 0;
+	        for(Iterator iterator = textLines.iterator(); iterator.hasNext();)
+	        {
+	            String s = (String)iterator.next();
+	            i++;
+	            if(s.contains(line))
+	                return new Integer(i);
+	        }
+
+	        return null;
+	    }
 	
 	
 	/* changes Ends here  (sapna singh) */

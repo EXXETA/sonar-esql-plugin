@@ -59,7 +59,9 @@
   	"MeaningfulVariable",
   	"SubElementName",
   	"FunctionProcedureLength",
-  	"FilterNodeModifyMessage"
+  	"FilterNodeModifyMessage",
+  	"FilterNodeHaveOnlyOneReturn",
+  	"MessageDomainNotvalid"
   	
   	
   	

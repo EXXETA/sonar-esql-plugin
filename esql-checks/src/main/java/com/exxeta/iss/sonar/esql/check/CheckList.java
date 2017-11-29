@@ -105,7 +105,10 @@ public final class CheckList {
         MeaningfulVariableCheck.class,
         SubElementNameCheck.class,
         FunctionProcedureLengthCheck.class,
-        FilterNodeModifyMessageCheck.class
+        FilterNodeModifyMessageCheck.class,
+        FilterNodeHaveOnlyOneReturnCheck.class,
+        MessageDomainNotvalidCheck.class
+        
         
      
         

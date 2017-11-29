@@ -17,13 +17,6 @@ import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
  */
 public class CyclomaticComplexityCheckTest {
 	
-//	@Test
-//	public void test1() {
-//		CyclomaticComplexityCheck check = new CyclomaticComplexityCheck();
-//		check.totalComplexity = 5;
-//		EsqlCheckVerifier.verify(check, new File("src/test/resources/CyclomaticComplexity.esql"));
-//	}
-	
 	
 	@Test
 	public void test() {
