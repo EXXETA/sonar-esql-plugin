@@ -1,5 +1,5 @@
 {
-  "title": "The message domain may not be valid..",
+  "title": "Navigating message tree could be replaced by a reference.",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

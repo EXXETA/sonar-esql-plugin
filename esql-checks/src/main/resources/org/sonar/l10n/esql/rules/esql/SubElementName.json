@@ -1,5 +1,5 @@
 {
-  "title": "Name elements containing sub-elements using UpperCamel-case and elements containing simple value using lower-case to make the naming convention in the Environment tree.",
+  "title": "sub-elements should be in UpperCamel-case and elements containing simple value should be in lowercase.",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

@@ -107,7 +107,8 @@ public final class CheckList {
         FunctionProcedureLengthCheck.class,
         FilterNodeModifyMessageCheck.class,
         FilterNodeHaveOnlyOneReturnCheck.class,
-        MessageDomainNotvalidCheck.class
+        MessageDomainNotvalidCheck.class,
+        NavigatingTreeCouldBeReferenceCheck.class
         
         
      

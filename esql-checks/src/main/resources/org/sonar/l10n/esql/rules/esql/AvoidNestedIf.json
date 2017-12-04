@@ -1,5 +1,5 @@
 {
-  "title": "Multiple If Statement Should be avoided.",
+  "title": "Avoid nested IF statements: use ELSEIF or CASE WHEN clauses to get quicker drop-out..",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

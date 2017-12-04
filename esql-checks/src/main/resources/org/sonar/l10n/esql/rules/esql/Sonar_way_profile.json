@@ -61,7 +61,8 @@
   	"FunctionProcedureLength",
   	"FilterNodeModifyMessage",
   	"FilterNodeHaveOnlyOneReturn",
-  	"MessageDomainNotvalid"
+  	"MessageDomainNotvalid",
+  	"NavigatingTreeCouldBeReference"
   	
   	
   	

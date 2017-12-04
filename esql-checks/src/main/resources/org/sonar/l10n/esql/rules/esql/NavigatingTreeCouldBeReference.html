@@ -1,0 +1,17 @@
+<p>Navigating message tree could be replaced by a reference.</p>
+
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+	
+      SET OutputRoot.XMLNSC.Response.details.person.age = '20';
+      SET OutputRoot.XMLNSC.Response.details.person.name = 'xyz';
+      SET OutputRoot.XMLNSC.Response.details.person.lname = 'abc';
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+	 DECLARE reqRef REFERENCE TO OutputRoot.XMLNSC.Response.details.person;
+	 SET reqRef.age = '20';
+      SET reqRef.name = 'xyz';
+      SET reqRef = 'abc';
+</pre>
