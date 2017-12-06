@@ -62,7 +62,8 @@
   	"FilterNodeModifyMessage",
   	"FilterNodeHaveOnlyOneReturn",
   	"MessageDomainNotvalid",
-  	"NavigatingTreeCouldBeReference"
+  	"NavigatingTreeCouldBeReference",
+  	"UnusedVariable"
   	
   	
   	

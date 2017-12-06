@@ -43,7 +43,7 @@ public final class CheckList {
 
   public static List<Class> getChecks() {
     return ImmutableList.<Class> of(
-        CommentRegularExpressionCheck.class,
+    	CommentRegularExpressionCheck.class,
         ElseIfWithoutElseCheck.class,
         FileNameCheck.class,
         FunctionNameCheck.class,
@@ -108,7 +108,8 @@ public final class CheckList {
         FilterNodeModifyMessageCheck.class,
         FilterNodeHaveOnlyOneReturnCheck.class,
         MessageDomainNotvalidCheck.class,
-        NavigatingTreeCouldBeReferenceCheck.class
+        NavigatingTreeCouldBeReferenceCheck.class,
+        UnusedVariableCheck.class
         
         
      

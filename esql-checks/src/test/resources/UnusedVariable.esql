@@ -1,0 +1,19 @@
+BROKER SCHEMA generic
+PATH serviceOperations;
+CrEATE COMPUTE MODULE responseTransformation
+	CReATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+	    DECLARE inRef REFERENCE TO InputRoot.SOAP.Body;
+		DECLARE outRef REFERENCE TO OutputRoot.SOAP.Body;
+		DECLARE envRef REFERENCE TO Environment.LogData.serviceOperationName;
+   CASE
+		WHEN abf = 'createAccessFacilityAgreement' THEN
+		DECLARE inRef REFERENCE TO InputLocalEnvironment.DFDL.BROKERMESSAGEFROMBB;
+		CALL createAccessFacilityAgreement_response(inRef,outRef,Environment);
+          WHEN abf = 'updateAccessFacilityAgreement' THEN
+			DECLARE inRef REFERENCE TO InputLocalEnvironment.DFDL.BROKERMESSAGEFROMBB;
+			CALL updateAccessFacilityAgreement_response(inRef,outRef,Environment);
+		END CASE;
+RETURN TRUE;
+END;
+END MOdULE;

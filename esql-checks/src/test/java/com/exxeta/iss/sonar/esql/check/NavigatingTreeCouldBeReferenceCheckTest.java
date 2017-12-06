@@ -22,7 +22,11 @@ import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.EsqlCheck;
 import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
-
+/**
+ * This java  class is  the test class for NavigatingTreeCouldBeReferenceCheck.java. 
+ * @author Sapna. singh
+ *
+ */
 public class NavigatingTreeCouldBeReferenceCheckTest {
 
 	

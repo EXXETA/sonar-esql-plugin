@@ -20,7 +20,8 @@ import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
 import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
 
 /**
- * @author C50679
+ * This java class is created to implement the logic for reference check, Navigating message tree could be replaced by a reference. 
+ * @author Sapna. singh
  *
  */
 @Rule(key = "NavigatingTreeCouldBeReference")
