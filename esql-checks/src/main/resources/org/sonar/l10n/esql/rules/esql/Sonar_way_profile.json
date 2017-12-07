@@ -63,7 +63,8 @@
   	"FilterNodeHaveOnlyOneReturn",
   	"MessageDomainNotvalid",
   	"NavigatingTreeCouldBeReference",
-  	"UnusedVariable"
+  	"UnusedVariable",
+  	"DepricatedMethod"
   	
   	
   	

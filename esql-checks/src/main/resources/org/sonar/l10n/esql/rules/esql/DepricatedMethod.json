@@ -1,13 +1,15 @@
 {
-  "title": "The message domain may not be valid.",
+  "title": "The filter node cannot modify the message",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",
-    "constantCost": "10min"
+    "constantCost": "240min"
   },
   "tags": [
-    "correctness"
-    ],
+  
+   "depricated"
+    
+  ],
   "defaultSeverity": "Major"
 }

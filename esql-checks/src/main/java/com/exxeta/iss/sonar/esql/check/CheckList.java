@@ -109,7 +109,9 @@ public final class CheckList {
         FilterNodeHaveOnlyOneReturnCheck.class,
         MessageDomainNotvalidCheck.class,
         NavigatingTreeCouldBeReferenceCheck.class,
-        UnusedVariableCheck.class
+        UnusedVariableCheck.class,
+        DepricatedMethodCheck.class
+       
         
         
      

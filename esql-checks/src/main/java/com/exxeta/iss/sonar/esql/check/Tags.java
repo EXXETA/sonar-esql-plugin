@@ -34,6 +34,7 @@ public class Tags {
 	public static final String COMPLEXITY  = "complexity";
 	public static final String COMPLETNESS  = "completness";
 	public static final String CORRECTNESS  = "correctness";
+	public static final String DEPRICATED  = "depricated";
 	
 	
 	private Tags() {
