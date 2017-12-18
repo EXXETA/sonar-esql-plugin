@@ -254,6 +254,11 @@
 				<version>${slf4j.version}</version>
 				<scope>provided</scope>
 			</dependency>
+			<dependency>
+				<groupId>com.exxeta.iss</groupId>
+				<artifactId>sonar-msgflow-plugin</artifactId>
+				<version>1.0</version>
+			</dependency>
 
 		</dependencies>
 	</dependencyManagement>
@@ -306,7 +311,7 @@
 					<artifactId>maven-enforcer-plugin</artifactId>
 					<version>${version.enforcer.plugin}</version>
 				</plugin>
-				
+
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-failsafe-plugin</artifactId>

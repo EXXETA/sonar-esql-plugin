@@ -118,8 +118,8 @@ public final class CheckList {
         BlankSpaceAfterCommaCheck.class,
         FunctionCommentsCheck.class,
         ProcedureCommentsCheck.class,        
-        FileHeaderCommentsCheck.class
-        
+        FileHeaderCommentsCheck.class,
+        PropagateConsistencyCheck.class
        
         
         

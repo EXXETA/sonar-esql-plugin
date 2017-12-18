@@ -35,6 +35,10 @@
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
+      <artifactId>sonar-msgflow-plugin</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
       <artifactId>esql-checks-test</artifactId>
       <scope>test</scope>
     </dependency>

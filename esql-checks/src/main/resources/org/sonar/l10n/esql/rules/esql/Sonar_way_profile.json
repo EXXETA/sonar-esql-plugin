@@ -72,7 +72,8 @@
   	"ProcessInvokingItself",
   	"FileHeaderComments",
   	"FunctionComments",
-  	"ProcedureComments"
+  	"ProcedureComments",
+  	"PropagateConsistency"
   	
   	
   	

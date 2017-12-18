@@ -1,0 +1,14 @@
+{
+  "title": "Compute node Consistency",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "15min"
+  },
+  "tags": [
+    "correctness","completeness"
+    
+ ],
+  "defaultSeverity": "Major"
+}
