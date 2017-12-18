@@ -1,0 +1,33 @@
+<p>There should be one blank line between procedure and functions to increase readability  </p>
+
+<p>It is good programming practice to give space between procedures and functions. </p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+	CREATE FUNCTION Main() RETURNS BOOLEAN --Noncompliant
+	BEGIN
+		DECLARE myInt INTEGER 1;
+		DECLARE myInt2 INTEGER;
+		END;
+CREATE Procedure Main2() RETURNS BOOLEAN --Noncompliant
+	BEGIN
+		DECLARE myInt INTEGER 1;
+		DECLARE myInt2 INTEGER;
+		END;
+		END MODULE;
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+	CREATE FUNCTION Main() RETURNS BOOLEAN --Noncompliant
+	BEGIN
+		DECLARE myInt INTEGER 1;
+		DECLARE myInt2 INTEGER;
+		END;
+
+CREATE Procedure Main2() RETURNS BOOLEAN --Noncompliant
+	BEGIN
+		DECLARE myInt INTEGER 1;
+		DECLARE myInt2 INTEGER;
+		END;
+		
+		END MODULE;
+</pre>

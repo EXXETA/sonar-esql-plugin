@@ -64,7 +64,12 @@
   	"MessageDomainNotvalid",
   	"NavigatingTreeCouldBeReference",
   	"UnusedVariable",
-  	"DepricatedMethod"
+  	"DepricatedMethod",
+  	"BinaryOperatorSepratedBySpace",
+  	"InsertBlankLineBetweenFuncProc",
+  	"BlankLineBeforeComments",
+  	"BlankSpaceAfterComma",
+  	"ProcessInvokingItself"
   	
   	
   	

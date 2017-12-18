@@ -1,0 +1,14 @@
+{
+  "title": "All binary operators should be separated from their operands by spaces.",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "15min"
+  },
+  "tags": [
+    "readability"
+    
+ ],
+  "defaultSeverity": "Major"
+}

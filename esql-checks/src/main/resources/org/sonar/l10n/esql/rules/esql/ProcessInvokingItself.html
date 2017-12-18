@@ -1,0 +1,17 @@
+<p>Process invoking itself.</p>
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+	CREATE FUNCTION Main() RETURNS BOOLEAN --Noncompliant
+	BEGIN
+		DECLARE myInt INTEGER 1;
+		SET xyz = Main();
+		END;
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+	CREATE FUNCTION Main() RETURNS BOOLEAN --Noncompliant
+	BEGIN
+		DECLARE myInt INTEGER 1;
+		END;
+</pre>

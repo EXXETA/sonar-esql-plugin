@@ -110,7 +110,14 @@ public final class CheckList {
         MessageDomainNotvalidCheck.class,
         NavigatingTreeCouldBeReferenceCheck.class,
         UnusedVariableCheck.class,
-        DepricatedMethodCheck.class
+        DepricatedMethodCheck.class,
+        ProcessInvokingItselfCheck.class,
+        BinaryOperatorSepratedBySpaceCheck.class,
+        InsertBlankLineBetweenFuncProcCheck.class,
+        BlankLineBeforeCommentsCheck.class,
+        BlankSpaceAfterCommaCheck.class
+        
+        
        
         
         
@@ -123,7 +130,7 @@ public final class CheckList {
         
         
         /*
-        
+        The process is invoking itself. This may be a circular reference(SI)
  Backlog       
         
 - Use the SOAP domain not soap in the xmlnsc domain
