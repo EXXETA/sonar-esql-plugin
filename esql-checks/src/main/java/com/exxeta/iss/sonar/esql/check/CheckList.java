@@ -115,8 +115,10 @@ public final class CheckList {
         BinaryOperatorSepratedBySpaceCheck.class,
         InsertBlankLineBetweenFuncProcCheck.class,
         BlankLineBeforeCommentsCheck.class,
-        BlankSpaceAfterCommaCheck.class
-        
+        BlankSpaceAfterCommaCheck.class,
+        FunctionCommentsCheck.class,
+        ProcedureCommentsCheck.class,        
+        FileHeaderCommentsCheck.class
         
        
         

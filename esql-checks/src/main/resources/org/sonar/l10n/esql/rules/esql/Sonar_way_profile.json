@@ -69,11 +69,14 @@
   	"InsertBlankLineBetweenFuncProc",
   	"BlankLineBeforeComments",
   	"BlankSpaceAfterComma",
-  	"ProcessInvokingItself"
+  	"ProcessInvokingItself",
+  	"FileHeaderComments",
+  	"FunctionComments",
+  	"ProcedureComments"
   	
   	
   	
   	
- ]
+]
 }
   

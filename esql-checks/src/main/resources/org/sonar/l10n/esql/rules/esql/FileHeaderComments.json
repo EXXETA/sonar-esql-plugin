@@ -1,0 +1,13 @@
+{
+  "title": "Each ESQL file should contains header information",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "10min"
+  },
+  "tags": [
+    "convention"
+  ],
+  "defaultSeverity": "Major"
+}

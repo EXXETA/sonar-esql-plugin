@@ -1,0 +1,6 @@
+/* Change Log
+No. Incident Number  Jira Number  Description  Date Fixed  Updated ESQL/Node
+1       INC0182018              DI-999       Test defect  09/01/2017  test.esql
+*/
+CREATE COMPUTE MODULE ABC
+END MODULE;
