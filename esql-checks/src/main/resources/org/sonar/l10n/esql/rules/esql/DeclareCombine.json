@@ -1,5 +1,5 @@
 {
-  "title": "Use braces for conditions as it gives more readability to code.",
+  "title": "If  more than one variable of same datatype is found uninitialised then declare could be combined.",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

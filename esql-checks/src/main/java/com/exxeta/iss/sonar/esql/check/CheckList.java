@@ -90,7 +90,11 @@ public final class CheckList {
         ConditionBracesCheck.class,
         TrailingCommentsCheck.class,
         CommentedOutEsqlCodeCheck.class,
-        MultipleStatementsCheck.class
+        MultipleStatementsCheck.class,
+        CommentsCheck.class,
+        DeclareCombineCheck.class
+        
+     
       
         
         

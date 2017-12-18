@@ -1,0 +1,69 @@
+<p>Include comment after every 20 lines of code.</p>
+
+<h2>Compliant Code Example</h2>
+
+<pre>
+BROKER SCHEMA generic
+DECLARE soapenv NAMESPACE '';
+DECLARE ns NAMESPACE 'http://com/abnamro/Services/AccessFacilityAgreement/v2/' ;
+DECLARE createAccessFacilityAgreement EXTERNAL CHAR;
+DECLARE updateAccessFacilityAgreement EXTERNAL CHAR '';
+CREATE COMPUTE MODULE initialize
+CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+        DECLARE bc CHARACTER;
+        DECLARE modid CHARACTER;
+		DECLARE versionRef REFERENCE TO InputRoot.SOAP.Context.SOAP_Version; SET faultRef.ExceptionElement.description = messageTextDetail;
+		DECLARE bc,verid CHARACTER;
+		THROW USER EXCEPTION CATALOG 'BIPmsgs' MESSAGE 2951 VALUES('The SQL State: ', SQLSTATE, 'The SQL Code: ', SQLCODE, 'The SQLNATIVEERROR: ', SQLNATIVEERROR, 'The SQL Error Text: ', SQLERRORTEXT ) ;	
+		
+		--Comment line.
+		
+		CASE
+		WHEN versionRef = '1.1' THEN
+			SET Environment.Fault.faultcode = 'soapenv:Client'; 
+		WHEN versionRef = '1.2' THEN
+			SET Environment.Fault.faultcode = 'soapenv:Sender';
+			/* Block Comment. */
+	IF exceptionNumber >= 5000 AND exceptionNumber <= 5999 THEN
+	     CREATE FIELD OutputRoot.SOAP.Body.soapenv:Fault.detail.ns:createAccessFacilityAgreementException;   
+	ELSEIF exceptionNumber >= 5000 AND exceptionNumber <= 5999 THEN
+	      CREATE FIELD OutputRoot.SOAP.Body.soapenv:Fault.detail.ns:createAccessFacilityAgreementException;
+	ENDIF;		
+		END CASE;
+	END;
+	END MODULE;		
+</pre> 
+
+<h2>Non-Compliant Code Example</h2>
+
+<pre>
+BROKER SCHEMA generic
+DECLARE soapenv NAMESPACE '';
+DECLARE ns NAMESPACE 'http://com/abnamro/Services/AccessFacilityAgreement/v2/' ;
+DECLARE createAccessFacilityAgreement EXTERNAL CHAR;
+DECLARE updateAccessFacilityAgreement EXTERNAL CHAR '';
+CREATE COMPUTE MODULE initialize
+CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+        DECLARE bc CHARACTER;
+        DECLARE modid CHARACTER;
+		DECLARE versionRef REFERENCE TO InputRoot.SOAP.Context.SOAP_Version; SET faultRef.ExceptionElement.description = messageTextDetail;
+		DECLARE bc,verid CHARACTER;
+		THROW USER EXCEPTION CATALOG 'BIPmsgs' MESSAGE 2951 VALUES('The SQL State: ', SQLSTATE, 'The SQL Code: ', SQLCODE, 'The SQLNATIVEERROR: ', SQLNATIVEERROR, 'The SQL Error Text: ', SQLERRORTEXT ) ;	
+		CASE
+		WHEN versionRef = '1.1' THEN
+			SET Environment.Fault.faultcode = 'soapenv:Client'; 
+		WHEN versionRef = '1.2' THEN
+			SET Environment.Fault.faultcode = 'soapenv:Sender';
+	IF exceptionNumber >= 5000 AND exceptionNumber <= 5999 THEN
+	     CREATE FIELD OutputRoot.SOAP.Body.soapenv:Fault.detail.ns:createAccessFacilityAgreementException;
+	     
+	      -- Include comment after every 20 lines of code. 
+	      
+	ELSEIF exceptionNumber >= 5000 AND exceptionNumber <= 5999 THEN
+	      CREATE FIELD OutputRoot.SOAP.Body.soapenv:Fault.detail.ns:createAccessFacilityAgreementException;
+	ENDIF;		
+		END CASE;
+	END;
+	END MODULE:
