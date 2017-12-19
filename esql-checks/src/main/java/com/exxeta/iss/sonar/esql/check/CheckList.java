@@ -92,7 +92,8 @@ public final class CheckList {
         CommentedOutEsqlCodeCheck.class,
         MultipleStatementsCheck.class,
         CommentsCheck.class,
-        DeclareCombineCheck.class
+        DeclareCombineCheck.class,
+        VariablesSubtreeCheck.class
         
      
       
