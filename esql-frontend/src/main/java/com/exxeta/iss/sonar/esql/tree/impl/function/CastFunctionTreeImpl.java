@@ -34,7 +34,7 @@ import com.google.common.base.Functions;
 public class CastFunctionTreeImpl extends EsqlTree implements CastFunctionTree {
 	private InternalSyntaxToken castKeyword;
 	private InternalSyntaxToken openingParenthesis;
-	private SeparatedList<Tree> sourceExpressions;
+	private SeparatedList<ExpressionTree> sourceExpressions;
 	private InternalSyntaxToken asKeyword;
 	private DataTypeTreeImpl dataType;
 	private InternalSyntaxToken ccsidKeyword;
@@ -48,7 +48,7 @@ public class CastFunctionTreeImpl extends EsqlTree implements CastFunctionTree {
 	private InternalSyntaxToken closingParenthesis;
 
 	public CastFunctionTreeImpl(InternalSyntaxToken castKeyword, InternalSyntaxToken openingParenthesis,
-			SeparatedList<Tree> sourceExpressions, InternalSyntaxToken asKeyword, DataTypeTreeImpl dataType,
+			SeparatedList<ExpressionTree> sourceExpressions, InternalSyntaxToken asKeyword, DataTypeTreeImpl dataType,
 			InternalSyntaxToken ccsidKeyword, ExpressionTree ccsidExpression, InternalSyntaxToken encodingKeyword,
 			ExpressionTree encodingExpression, InternalSyntaxToken formatKeyword, ExpressionTree formatExpression,
 			InternalSyntaxToken defaultKeyword, ExpressionTree defaultExpression,
@@ -81,7 +81,7 @@ public class CastFunctionTreeImpl extends EsqlTree implements CastFunctionTree {
 	}
 
 	@Override
-	public SeparatedList<Tree> sourceExpressions() {
+	public SeparatedList<ExpressionTree> sourceExpressions() {
 		return sourceExpressions;
 	}
 
@@ -153,7 +153,7 @@ public class CastFunctionTreeImpl extends EsqlTree implements CastFunctionTree {
 	@Override
 	public Iterator<Tree> childrenIterator() {
 		return Iterators.concat(Iterators.forArray(castKeyword, openingParenthesis),
-				sourceExpressions.elementsAndSeparators(Functions.<Tree>identity()),
+				sourceExpressions.elementsAndSeparators(Functions.<ExpressionTree>identity()),
 				Iterators.forArray(asKeyword, dataType, ccsidKeyword, ccsidExpression, encodingKeyword,
 						encodingExpression, formatKeyword, formatExpression, defaultKeyword, defaultExpression,
 						closingParenthesis));

@@ -17,18 +17,26 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.List;
+
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 
+import com.exxeta.iss.sonar.esql.api.tree.Tree;
+import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.api.tree.statement.IfStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
+import com.exxeta.iss.sonar.esql.api.visitors.Issue;
 import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
 import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
+import com.exxeta.iss.sonar.esql.api.visitors.TreeVisitorContext;
 
 @Rule(key = "NestedIfDepth")
 public class NestedIfDepthCheck extends DoubleDispatchVisitorCheck {
 
-	private int nestingLevel = 0;
+	private Deque<SyntaxToken> nestingLevel;
 
 	private static final int DEFAULT_MAXIMUM_NESTING_LEVEL = 5;
 
@@ -36,19 +44,34 @@ public class NestedIfDepthCheck extends DoubleDispatchVisitorCheck {
 			+ DEFAULT_MAXIMUM_NESTING_LEVEL)
 	public int maximumNestingLevel = DEFAULT_MAXIMUM_NESTING_LEVEL;
 
-	public int getMaximumNestingLevel() {
-		return maximumNestingLevel;
-	}
-
 	@Override
 	public void visitIfStatement(IfStatementTree tree) {
-		nestingLevel++;
-		if (nestingLevel == getMaximumNestingLevel() + 1) {
-			addIssue(new PreciseIssue(this, new IssueLocation(tree, tree, "This if has a nesting level of "
-					+ nestingLevel + ", which is higher than the maximum allowed " + maximumNestingLevel + ".")));
-		}
+		SyntaxToken ifKeyword = tree.ifKeyword();
+		checkNesting(ifKeyword);
+		nestingLevel.push(ifKeyword);
 		super.visitIfStatement(tree);
-		nestingLevel--;
+		nestingLevel.pop();
+	}
+	
+	
+	private void checkNesting(Tree tree) {
+	    int size = nestingLevel.size();
+	    if (size == maximumNestingLevel) {
+    	PreciseIssue issue = new PreciseIssue(this, new IssueLocation(tree, tree, "This if has a nesting level of "
+				+ (nestingLevel.size()+1) + ", which is higher than the maximum allowed " + maximumNestingLevel + "."));
+    	
+	      
+	      for (SyntaxToken element : nestingLevel) {
+	    	  issue.secondary(element , "Nesting + 1");
+	      }
+	      addIssue(issue);
+	    }
+	  }
+
+	@Override
+	public List<Issue> scanFile(TreeVisitorContext context) {
+		this.nestingLevel = new ArrayDeque<>();
+		return super.scanFile(context);
 	}
 
 }

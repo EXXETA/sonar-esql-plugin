@@ -1,5 +1,5 @@
 {
-  "title": "Modues should be documented",
+  "title": "Modules should be documented",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

@@ -23,10 +23,13 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
+
 import com.exxeta.iss.sonar.esql.api.symbols.Type;
 import com.exxeta.iss.sonar.esql.api.symbols.Type.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.UnaryExpressionTree;
+import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
 
 public class PrimitiveOperations {
 
@@ -34,7 +37,7 @@ public class PrimitiveOperations {
 
   static {
     // +
-    put(Kind.NUMBER, Kind.NUMBER, Tree.Kind.PLUS, PrimitiveType.NUMBER);
+    put(Kind.NUMBER, Kind.NUMBER, Tree.Kind.PLUS, PrimitiveType.INTEGER);
 
     
     //||
@@ -57,7 +60,10 @@ public class PrimitiveOperations {
     Tree.Kind.MULTIPLY,
     Tree.Kind.DIVIDE
   );
-
+  private static final EnumSet<Tree.Kind> NUMBER_UNARY_OPERATORS = EnumSet.of(
+  	Tree.Kind.UNARY_MINUS,
+	Tree.Kind.UNARY_PLUS
+  );
   private PrimitiveOperations() {
   }
 
@@ -71,7 +77,7 @@ public class PrimitiveOperations {
       return PrimitiveType.BOOLEAN;
 
     } else if (ARITHMETIC_OPERATORS.contains(operationKind)) {
-      return PrimitiveType.NUMBER;
+      return PrimitiveType.INTEGER;
 
     } else {
       return getType(leftOperand.types().getUniqueKnownType(), rightOperand.types().getUniqueKnownType(), operationKind);
@@ -85,7 +91,19 @@ public class PrimitiveOperations {
     }
     return null;
   }
+  
+  @Nullable
+  static Type getType(UnaryExpressionTree expressionTree) {
+    Tree.Kind kind = ((EsqlTree) expressionTree).getKind();
+    if (NUMBER_UNARY_OPERATORS.contains(kind)) {
+      return PrimitiveType.INTEGER;
 
+    }  else if (expressionTree.is(Tree.Kind.LOGICAL_COMPLEMENT)) {
+      return PrimitiveType.BOOLEAN;
+    }
+
+    return null;
+  }
 
   private static class OperationKey {
     Type.Kind leftOperandType;

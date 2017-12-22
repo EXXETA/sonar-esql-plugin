@@ -317,8 +317,11 @@ public class EsqlSquidSensorTest {
 
 	
 	private CompatibleInputFile inputFile(String relativePath) {
-		DefaultInputFile inputFile = new DefaultInputFile("moduleKey", relativePath).setModuleBaseDir(baseDir.toPath())
-				.setType(Type.MAIN).setLanguage(EsqlLanguage.KEY).setCharset(StandardCharsets.UTF_8);
+		DefaultInputFile inputFile =  new DefaultInputFile("moduleKey", relativePath)
+				.setModuleBaseDir(baseDir.toPath())
+				.setType(Type.MAIN)
+				.setLanguage(EsqlLanguage.KEY)
+				.setCharset(StandardCharsets.UTF_8);
 
 		context.fileSystem().add(inputFile);
 

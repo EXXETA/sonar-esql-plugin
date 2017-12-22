@@ -752,8 +752,8 @@ public class EsqlGrammar {
 						b.token(EsqlPunctuator.RPARENTHESIS)));
 	}
 
-	public SeparatedList<Tree> ARGUMENT_LIST() {
-		return b.<SeparatedList<Tree>>nonterminal()
+	public SeparatedList<ExpressionTree> ARGUMENT_LIST() {
+		return b.<SeparatedList<ExpressionTree>>nonterminal()
 				.is(f.argumentList(ARGUMENT(), b.zeroOrMore(f.newTuple17(b.token(EsqlPunctuator.COMMA), ARGUMENT()))));
 	}
 

@@ -119,7 +119,7 @@ public class EsqlCheckVerifier {
 	 * </pre>
 	 */
 	public static void verify(EsqlCheck check, File file) {
-		verify(check, new TestInputFile(file.getAbsolutePath()));
+		verify(check, TestUtils.createTestInputFile(file.getAbsolutePath()));
 	}
 
 	static void verify(EsqlCheck check, InputFile file) {

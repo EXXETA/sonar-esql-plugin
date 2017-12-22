@@ -17,14 +17,17 @@
  */
 package com.exxeta.iss.sonar.esql.metrics;
 
-import com.exxeta.iss.sonar.esql.api.tree.Tree;
-import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
-import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitorCheck;
-import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
-import com.google.common.collect.ImmutableList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import com.exxeta.iss.sonar.esql.api.tree.Tree;
+import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.api.tree.statement.CreateModuleStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.DeclareStatementTree;
+import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitorCheck;
+import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
+import com.google.common.collect.ImmutableList;
 
 public class ExecutableLineVisitor extends SubscriptionVisitorCheck {
 
@@ -36,27 +39,55 @@ public class ExecutableLineVisitor extends SubscriptionVisitorCheck {
 
   @Override
   public List<Kind> nodesToVisit() {
-    return ImmutableList.of(
-    		Kind.BEGIN_END_STATEMENT,
-    		Kind.CALL_STATEMENT,
-    		Kind.CASE_STATEMENT,
-    		Kind.DECLARE_STATEMENT,
-    		Kind.IF_STATEMENT,
-    		Kind.ITERATE_STATEMENT,
-    		Kind.LEAVE_STATEMENT,
-    		Kind.LOOP_STATEMENT,
-    		Kind.PROPAGATE_STATEMENT,
-    		Kind.REPEAT_STATEMENT,
-    		Kind.RETURN_STATEMENT,
-    		Kind.SET_STATEMENT,
-    		Kind.CREATE_FUNCTION_STATEMENT,
-    		Kind.CREATE_MODULE_STATEMENT,
-    		Kind.CREATE_PROCEDURE_STATEMENT);
-  }
 
+	  return ImmutableList.of(
+				Kind.IF_STATEMENT, 
+				Kind.DECLARE_STATEMENT, 
+				Kind.THE_FUNCTION, 
+//				Kind.CREATE_FUNCTION_STATEMENT, 
+//				Kind.CREATE_MODULE_STATEMENT, 
+//				Kind.CREATE_PROCEDURE_STATEMENT, 
+				Kind.PROPAGATE_STATEMENT, 
+				Kind.BEGIN_END_STATEMENT, 
+				Kind.SET_STATEMENT,
+				Kind.ITERATE_STATEMENT, 
+				Kind.CALL_STATEMENT, 
+				Kind.CASE_STATEMENT, 
+				Kind.LEAVE_STATEMENT, 
+				Kind.LOOP_STATEMENT, 
+				Kind.REPEAT_STATEMENT, 
+				Kind.RETURN_STATEMENT,
+				Kind.THROW_STATEMENT, 
+				Kind.WHILE_STATEMENT, 
+				Kind.ATTACH_STATEMENT, 
+				Kind.CREATE_STATEMENT, 
+				Kind.DELETE_STATEMENT, 
+				Kind.DETACH_STATEMENT, 
+				Kind.RESIGNAL_STATEMENT, 
+				Kind.FOR_STATEMENT, 
+				Kind.MOVE_STATEMENT, 
+				Kind.DELETE_FROM_STATEMENT, 
+				Kind.INSERT_STATEMENT, 
+				Kind.PASSTHRU_STATEMENT, 
+				Kind.UPDATE_STATEMENT, 
+				Kind.DECLARE_HANDLER_STATEMENT, 
+				Kind.EVAL_STATEMENT, 
+				Kind.LOG_STATEMENT
+			  );
+  }
+  
+  
   @Override
   public void visitNode(Tree tree) {
-    executableLines.add(((EsqlTree) tree).getLine());
+	  if (tree instanceof DeclareStatementTree){
+		  if (tree.parent() instanceof CreateModuleStatementTree){
+			  //ignore since the trace log doesn't contain this command
+		  } else {
+			  executableLines.add(((EsqlTree) tree).getLine());
+		  }
+	  } else {
+		  executableLines.add(((EsqlTree) tree).getLine());
+	  }
   }
 
   public Set<Integer> getExecutableLines() {

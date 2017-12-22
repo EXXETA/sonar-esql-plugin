@@ -19,7 +19,7 @@ package com.exxeta.iss.sonar.esql.tree.symbols.type;
 
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateFunctionStatementTree;
 
-public class FunctionType extends ObjectType {
+public class FunctionType extends RoutineType {
 
   private CreateFunctionStatementTree createFunctionStatementTree;
 

@@ -23,7 +23,7 @@ import org.junit.Test;
 import com.exxeta.iss.sonar.esql.api.symbols.Type;
 import com.exxeta.iss.sonar.esql.api.symbols.TypeSet;
 import com.exxeta.iss.sonar.esql.tree.symbols.type.FunctionType;
-import com.exxeta.iss.sonar.esql.tree.symbols.type.ObjectType;
+import com.exxeta.iss.sonar.esql.tree.symbols.type.RoutineType;
 import com.exxeta.iss.sonar.esql.tree.symbols.type.PrimitiveType;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -37,10 +37,10 @@ public class TypeSetTest {
   @Before
   public void setUp() {
     typeSet1 = TypeSet.emptyTypeSet();
-    typeSet1.add(PrimitiveType.NUMBER);
+    typeSet1.add(PrimitiveType.INTEGER);
 
     typeSet2 = TypeSet.emptyTypeSet();
-    typeSet2.add(PrimitiveType.NUMBER);
+    typeSet2.add(PrimitiveType.INTEGER);
     typeSet2.add(PrimitiveType.UNKNOWN);
 
     typeSet3 = TypeSet.emptyTypeSet();
@@ -63,8 +63,8 @@ public class TypeSetTest {
 
   @Test
   public void contains_object() {
-    assertThat(typeSet1.contains(PrimitiveType.NUMBER)).isTrue();
-    assertThat(typeSet2.contains(ObjectType.create())).isFalse();
+    assertThat(typeSet1.contains(PrimitiveType.INTEGER)).isTrue();
+    assertThat(typeSet2.contains(RoutineType.create())).isFalse();
   }
 
   @Test
@@ -77,20 +77,20 @@ public class TypeSetTest {
   public void to_array() {
     Object[] array = typeSet3.toArray();
     assertThat(array.length).isEqualTo(2);
-    assertThat(array[0]).isInstanceOf(ObjectType.class);
+    assertThat(array[0]).isInstanceOf(RoutineType.class);
   }
 
   @Test
   public void to_array_t() {
     Type[] array = typeSet3.toArray(new Type[2]);
     assertThat(array.length).isEqualTo(2);
-    assertThat(array[0]).isInstanceOf(ObjectType.class);
+    assertThat(array[0]).isInstanceOf(RoutineType.class);
   }
 
   @Test
   public void add_type() {
     TypeSet typeSet = TypeSet.emptyTypeSet();
-    ObjectType type = ObjectType.create();
+    RoutineType type = RoutineType.create();
     typeSet.add(type);
     assertThat(typeSet.size()).isEqualTo(1);
     assertThat(typeSet.element()).isEqualTo(type);
@@ -99,7 +99,7 @@ public class TypeSetTest {
   @Test
   public void remove_object() {
     TypeSet typeSet = TypeSet.emptyTypeSet();
-    ObjectType type = ObjectType.create();
+    RoutineType type = RoutineType.create();
 
     typeSet.add(type);
     assertThat(typeSet.size()).isEqualTo(1);
@@ -128,7 +128,7 @@ public class TypeSetTest {
     typeSet.retainAll(typeSet1);
 
     assertThat(typeSet.size()).isEqualTo(1);
-    assertThat(typeSet.element()).isEqualTo(PrimitiveType.NUMBER);
+    assertThat(typeSet.element()).isEqualTo(PrimitiveType.INTEGER);
   }
 
   @Test
@@ -179,7 +179,7 @@ public class TypeSetTest {
   @Test
   public void equals() {
     TypeSet typeSet = TypeSet.emptyTypeSet();
-    typeSet.add(PrimitiveType.NUMBER);
+    typeSet.add(PrimitiveType.INTEGER);
 
     assertThat(typeSet1.equals(typeSet2)).isFalse();
     assertThat(typeSet1.equals(typeSet)).isTrue();
@@ -188,7 +188,7 @@ public class TypeSetTest {
   @Test
   public void hash_code() {
     TypeSet typeSet = TypeSet.emptyTypeSet();
-    typeSet.add(PrimitiveType.NUMBER);
+    typeSet.add(PrimitiveType.INTEGER);
 
     assertThat(typeSet1.hashCode()).isEqualTo(typeSet.hashCode());
     assertThat(typeSet1.hashCode()).isNotEqualTo(typeSet2.hashCode());
@@ -207,10 +207,10 @@ public class TypeSetTest {
     TypeSet copy = typeSet1.immutableCopy();
 
     assertThat(copy.size()).isEqualTo(1);
-    assertThat(copy.element()).isEqualTo(PrimitiveType.NUMBER);
+    assertThat(copy.element()).isEqualTo(PrimitiveType.INTEGER);
 
     try {
-      copy.add(PrimitiveType.NUMBER);
+      copy.add(PrimitiveType.INTEGER);
     } catch (Exception e) {
       assertThat(e).isInstanceOf(UnsupportedOperationException.class);
     }
@@ -218,7 +218,7 @@ public class TypeSetTest {
 
   @Test
   public void get_unique_type() {
-    assertThat(typeSet1.getUniqueType(Type.Kind.NUMBER)).isEqualTo(PrimitiveType.NUMBER);
+    assertThat(typeSet1.getUniqueType(Type.Kind.NUMBER)).isEqualTo(PrimitiveType.INTEGER);
     assertThat(typeSet3.getUniqueType(Type.Kind.OBJECT)).isNull();
     assertThat(typeSet3.getUniqueType(Type.Kind.UNKNOWN)).isNull();
   }

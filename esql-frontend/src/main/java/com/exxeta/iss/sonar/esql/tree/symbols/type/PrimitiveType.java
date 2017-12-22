@@ -31,7 +31,7 @@ public enum PrimitiveType implements Type {
       return Callability.UNKNOWN;
     }
   },
-  NUMBER {
+  INTEGER {
     @Override
     public Kind kind() {
       return Kind.NUMBER;

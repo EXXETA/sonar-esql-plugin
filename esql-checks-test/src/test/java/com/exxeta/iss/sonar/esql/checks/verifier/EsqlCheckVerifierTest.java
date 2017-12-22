@@ -17,6 +17,25 @@
  */
 package com.exxeta.iss.sonar.esql.checks.verifier;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.annotation.Nullable;
+
+import org.apache.commons.lang.NotImplementedException;
+import org.apache.commons.lang.StringUtils;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.junit.rules.TemporaryFolder;
+import org.sonar.api.batch.fs.internal.DefaultInputFile;
+
 import com.exxeta.iss.sonar.esql.api.EsqlCheck;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxTrivia;
@@ -29,22 +48,6 @@ import com.exxeta.iss.sonar.esql.checks.verifier.TestIssue.Location;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.google.common.collect.ImmutableList;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import javax.annotation.Nullable;
-import org.apache.commons.lang.NotImplementedException;
-import org.apache.commons.lang.StringUtils;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.rules.TemporaryFolder;
-import org.sonar.api.batch.fs.internal.DefaultInputFile;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class EsqlCheckVerifierTest {
 
@@ -385,7 +388,7 @@ public class EsqlCheckVerifierTest {
 
   private void check(String sourceCode, TestIssue... actualIssues) throws Exception {
     EsqlCheck check = new CheckStub(Arrays.asList(actualIssues));
-    DefaultInputFile fakeFile = new TestInputFile(folder.getRoot(), "fakeFile.txt");
+    DefaultInputFile fakeFile = TestUtils.createTestInputFile(folder.getRoot(), "fakeFile.txt");
     fakeFile.setCharset(StandardCharsets.UTF_8);
     Files.write(fakeFile.path(), sourceCode.getBytes(fakeFile.charset()));
     EsqlCheckVerifier.verify(check, fakeFile);

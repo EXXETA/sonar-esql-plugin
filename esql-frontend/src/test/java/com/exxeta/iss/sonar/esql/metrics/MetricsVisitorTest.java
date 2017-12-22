@@ -17,13 +17,13 @@
  */
 package com.exxeta.iss.sonar.esql.metrics;
 
+import static com.exxeta.iss.sonar.esql.compat.CompatibilityHelper.wrap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static com.exxeta.iss.sonar.esql.compat.CompatibilityHelper.wrap;
 
 import java.io.File;
 
@@ -46,7 +46,7 @@ public class MetricsVisitorTest extends EsqlTreeModelTest {
 
   private static final DefaultInputFile INPUT_FILE = new DefaultInputFile("moduleKey", "lines.esql")
     .setModuleBaseDir(MODULE_BASE_DIR.toPath())
-    .setLanguage("js")
+    .setLanguage("esql")
     .setType(InputFile.Type.MAIN);
 
   private static final String COMPONENT_KEY = "moduleKey:lines.esql";
@@ -69,10 +69,10 @@ public class MetricsVisitorTest extends EsqlTreeModelTest {
     MetricsVisitor metricsVisitor = createMetricsVisitor(false);
     metricsVisitor.scanTree(treeVisitorContext);
     assertThat(context.measure(COMPONENT_KEY, CoreMetrics.FUNCTIONS).value()).isEqualTo(0);
-    assertThat(context.measure(COMPONENT_KEY, CoreMetrics.STATEMENTS).value()).isEqualTo(0);
+    assertThat(context.measure(COMPONENT_KEY, CoreMetrics.STATEMENTS).value()).isEqualTo(1);
     assertThat(context.measure(COMPONENT_KEY, EsqlMetrics.MODULES).value()).isEqualTo(1);
 
-    assertThat(metricsVisitor.executableLines().get(INPUT_FILE)).containsOnly(3);
+    assertThat(metricsVisitor.executableLines().get(INPUT_FILE)).containsOnly(5);
   }
 
   @Test
