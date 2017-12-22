@@ -1,0 +1,10 @@
+CREATE COMPUTE MODULE testModule
+
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		SET OutputRoot=InputRoot; --Non-Compliant
+		SET OutputRoot = InputRoot;	--Compliant
+		SET a = SELECT A FROM Database.SHAREHOLDINGS;
+	END;
+
+END MODULE;

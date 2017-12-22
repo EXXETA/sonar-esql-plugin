@@ -1,0 +1,15 @@
+{
+  "title": "The filter node may only have one return value",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "60min"
+  },
+  "tags": [
+  
+   "correctness"
+    
+  ],
+  "defaultSeverity": "Critical"
+}

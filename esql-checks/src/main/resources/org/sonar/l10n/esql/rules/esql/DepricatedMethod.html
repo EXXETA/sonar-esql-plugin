@@ -1,0 +1,11 @@
+<p>This rule applies whenever the depricated methods are used in the ESQL file. . </p>
+
+<p>Depricated methods should not be used. </p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+	SET refEnv.operationId = BITSTREAM(Environment.LogData.serviceOperationName);
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+	SET refEnv.operationId = EVAL(Environment.LogData.serviceOperationName);
+</pre>

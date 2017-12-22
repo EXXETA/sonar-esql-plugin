@@ -1,0 +1,14 @@
+{
+  "title": "A blank space should follow each comma in any ESQL statement that makes use of commas outside of a string literal.",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "15min"
+  },
+  "tags": [
+    "readability"
+    
+ ],
+  "defaultSeverity": "Major"
+}

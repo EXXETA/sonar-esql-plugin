@@ -1,0 +1,35 @@
+<p>Insert one blank line before a block or single-line comment. </p>
+
+<p>It is good programming practice to give blank line before block or single-line comment to increase readability . </p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+BEGIN
+ /**
+ block comment */
+		DECLARE versionRef REFERENCE TO InputRoot.SOAP.Context.SOAP_Version;
+		CASE
+		WHEN versionRef = '1.1' THEN
+			SET Environment.Fault.faultcode = 'soapenv:Client';
+			--single line comment
+		WHEN versionRef = '1.2' THEN
+			SET Environment.Fault.faultcode = 'soapenv:Sender';
+		END CASE;
+END;
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+	BEGIN
+ 
+ /**
+ block comment */
+		DECLARE versionRef REFERENCE TO InputRoot.SOAP.Context.SOAP_Version;
+		CASE
+		WHEN versionRef = '1.1' THEN
+			SET Environment.Fault.faultcode = 'soapenv:Client';
+			
+			--single line comment
+		WHEN versionRef = '1.2' THEN
+			SET Environment.Fault.faultcode = 'soapenv:Sender';
+		END CASE;
+END;
+</pre>

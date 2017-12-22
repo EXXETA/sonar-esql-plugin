@@ -1,0 +1,10 @@
+CREATE COMPUTE MODULE testModule
+   CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+      SET OutputRoot.MQMD.(MQMD.Fields).versions = 2;
+      SET OutputRoot.MQMD.(MQMD.Fields).Format = 'MQSTR';
+      SET OutputRoot.MQMD.(MQMD.Fields).NameValue = 1208;
+      SET OutputRoot.MQMD_2.(MQMD_2.Fields).versions = 2;
+      
+   END;
+END MODULE;

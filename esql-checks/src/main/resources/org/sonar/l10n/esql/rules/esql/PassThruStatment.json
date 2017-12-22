@@ -1,0 +1,13 @@
+{
+  "title": "Use parameter markers '?' when using the PASSTHRU statement in ESQL.",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "database"
+  ],
+  "defaultSeverity": "Major"
+}

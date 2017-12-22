@@ -48,7 +48,36 @@
   	"InitializeVariables",
   	"TooManyParameters",
   	"XmlnscDomain",
-  	"RoutineWithExcessiveReturns"
-  ]
+  	"RoutineWithExcessiveReturns",
+  	"SpaceAroundEqualSign",
+  	"KeyWordCaseCheck",
+  	"CyclomaticComplexity",
+  	"CaseStatementWithSingleWhen",
+  	"EXTERNALVariableInitialised",
+  	"PassThruStatement",
+  	"AvoidNestedIf",
+  	"MeaningfulVariable",
+  	"SubElementName",
+  	"FunctionProcedureLength",
+  	"FilterNodeModifyMessage",
+  	"FilterNodeHaveOnlyOneReturn",
+  	"MessageDomainNotvalid",
+  	"NavigatingTreeCouldBeReference",
+  	"UnusedVariable",
+  	"DepricatedMethod",
+  	"BinaryOperatorSepratedBySpace",
+  	"InsertBlankLineBetweenFuncProc",
+  	"BlankLineBeforeComments",
+  	"BlankSpaceAfterComma",
+  	"ProcessInvokingItself",
+  	"FileHeaderComments",
+  	"FunctionComments",
+  	"ProcedureComments",
+  	"PropagateConsistency"
+  	
+  	
+  	
+  	
+]
 }
   

@@ -1,0 +1,18 @@
+<p>This rule applies whenever unused variables are used . </p>
+
+<p>Unused Variable should be removed, for better performance</p>
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+
+		DECLARE inRef REFERENCE TO InputRoot.SOAP.Body;
+		CALL createAccessFacilityAgreement_response(outRef,Environment);
+	
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+        DECLARE inRef REFERENCE TO InputRoot.SOAP.Body;
+		CALL createAccessFacilityAgreement_response(inRef,outRef,Environment);
+	
+	
+</pre>

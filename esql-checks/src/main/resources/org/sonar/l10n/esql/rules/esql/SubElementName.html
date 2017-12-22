@@ -1,0 +1,18 @@
+<p>This rule applies whenever elements containing sub elements . </p>
+
+<p>It is good programming practice to Name elements containing sub-elements using UpperCamel-case 
+  and elements containing simple value using lower-case to make the naming convention in the Environment tree  </p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+
+		SET Environment.Variables.startVar.xyz='ABC';
+		SET Environment.Variables.Abc='ABC';
+	
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+        SET Environment.Variables.StartVar.xyz='ABC';
+		SET Environment.Variables.abc='ABC';
+	
+	
+</pre>

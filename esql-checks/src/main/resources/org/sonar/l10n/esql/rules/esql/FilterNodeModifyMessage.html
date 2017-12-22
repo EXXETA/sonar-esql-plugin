@@ -1,0 +1,20 @@
+<p>The filter node cannot modify the message. </p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+	CREATE FILTER MODULE Flow2_Filter
+      CREATE FUNCTION Main() RETURNS BOOLEAN
+      BEGIN
+        SET OutputRoot.XMLNSC.Response.details.person.age = '20';
+       RETURN FALSE;
+      END;
+     END MODULE;
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+	CREATE FILTER MODULE Flow2_Filter
+      CREATE FUNCTION Main() RETURNS BOOLEAN
+      BEGIN
+         RETURN FALSE;
+      END;
+     END MODULE;
+</pre>

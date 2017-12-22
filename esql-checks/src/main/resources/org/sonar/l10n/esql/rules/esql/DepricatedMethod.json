@@ -1,0 +1,15 @@
+{
+  "title": "Depricated methods should not be used.",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "240min"
+  },
+  "tags": [
+  
+   "depricated"
+    
+  ],
+  "defaultSeverity": "Major"
+}

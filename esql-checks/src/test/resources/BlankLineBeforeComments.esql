@@ -1,0 +1,21 @@
+BROKER SCHEMA generic
+DECLARE soapenv NAMESPACE 'http://schemas.xmlsoap.org/soap/envelope/';
+CREATE COMPUTE MODULE initialize
+/****************************************************************************
+* This module will initialize the service/operation related variables
+which are used to trace the message.
+*****************************************************************************/
+
+CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+	DECLARE versionRef REFERENCE TO InputRoot.SOAP.Context.SOAP_Version;
+		CASE
+		WHEN versionRef = '1.1' THEN
+			SET Environment.Fault.faultcode = 'soapenv:Client';
+		END CASE;
+ --this is comment line
+		CREATE FIELD Environment.LogData;
+		DECLARE refEnv REFERENCE TO Environment.LogData;		
+		RETURN TRUE;
+	END;
+END MODULE;

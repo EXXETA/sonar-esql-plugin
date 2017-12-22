@@ -1,0 +1,12 @@
+<p>The message domain may not be valid</p>
+
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+	
+      SET OutputRoot.MQMD_2.(MQMD_2.Fields).versions = 2;
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+	 SET OutputRoot.MQMD.(MQMD.Fields).NameValue = 1208;
+</pre>

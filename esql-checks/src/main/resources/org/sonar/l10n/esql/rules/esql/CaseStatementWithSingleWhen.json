@@ -1,0 +1,14 @@
+{
+  "title": "CASE statements with single WHEN Clause is replaced by If ",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "15min"
+  },
+  "tags": [
+    "completness",
+    "readability"
+  ],
+  "defaultSeverity": "Minor"
+}
