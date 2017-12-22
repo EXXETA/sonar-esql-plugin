@@ -41,7 +41,7 @@ public class UnreachableCodeCheck extends DoubleDispatchVisitorCheck {
             {
                 boolean returnFound = false;
                 boolean returnTheFound = false;
-                if(line.toUpperCase().contains("THROW "))
+                if(line.toUpperCase().contains("THROW ") && !(line.toUpperCase().replaceAll("\\s+","").contains("--")))
                     returnFound = true;
                 if(line.trim().toUpperCase().startsWith("RETURN "))
                     returnFound = true;

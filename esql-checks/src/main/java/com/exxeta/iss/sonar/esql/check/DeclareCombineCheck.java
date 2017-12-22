@@ -8,164 +8,121 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import org.sonar.check.Rule;
-import com.exxeta.iss.sonar.esql.api.tree.statement.DeclareStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
+import com.exxeta.iss.sonar.esql.api.visitors.EsqlFile;
 import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
 
-@Rule(key = "DeclareCombine")
-public class DeclareCombineCheck extends DoubleDispatchVisitorCheck {
 
+
+@Rule(key ="DeclareCombine")
+public class DeclareCombineCheck extends DoubleDispatchVisitorCheck  {
 	public static final String MESSAGE = "If  more than one variable of same datatype is found uninitialised then declare could be combined.";
-	private static Set<String> Uninitialised_Datatype = new HashSet<String>();
-	private static Set<String> Uninitialised_Constant = new HashSet<String>();
-	private static Set<String> Uninitialised_Shared = new HashSet<String>();
-	private static Set<String> Uninitialised_External = new HashSet<String>();
-	private static Set<String> Uninitialised_Namespace = new HashSet<String>();
-	private static Set<String> Uninitialised_Decimal = new HashSet<String>();
-	private static Set<String> Uninitialised_Interval = new HashSet<String>();
 
+	private static final Set<String> DECLARE_TYPES_ARRAY_LAST_ELEMENT = Collections.unmodifiableSet(new HashSet(Arrays.asList(new String[] {"BOOLEAN;","INT;","INTEGER;","FLOAT;",
+			"DECIMAL;","DATE;","TIME;","TIMESTAMP;","GMTTIMESTAMP;","GMTTIME;","CHAR;","CHARACTER;","BLOB;","BIT;","ROW;","SHARED;","NAMESPACE;","NAME;"})));
+	
+	private static final Set<String> DECLARE_TYPES_ARRAY_COMBINE_ELEMENT = Collections.unmodifiableSet(new HashSet(Arrays.asList(new String[] { "REFERENCETO;","CONSTANTINTEGER;","CONSTANTINT;",
+			"EXTERNALINTEGER;","EXTERNALINT;","CONSTANTCHAR;","CONSTANTCHARACTER;","EXTERNALCHAR;","EXTERNALCHARACTER;","SHAREDROW;"})));
+	
+	public static ArrayList<String> declareDatatypeList_Last_Element = new ArrayList<String>(DECLARE_TYPES_ARRAY_LAST_ELEMENT);
+	public static ArrayList<String> declareDatatypeList_Combine_Element = new ArrayList<String>(DECLARE_TYPES_ARRAY_COMBINE_ELEMENT);
+	public static Set<String> hset=new HashSet<String>();
+	
+	public static String originalLine=null;
+	int j=0;
+	
 	@Override
-	public void visitDeclareStatement(DeclareStatementTree tree) {
+	public void visitProgram(ProgramTree tree) {
+		boolean found=false;
+		String arrayLastElement=null;
+		String arraySecondLastElement=null;
+		String arrayCombineElement=null;
 		
-		for (int i = 0; i < tree.nameList().size(); i++) {
-			if (tree.dataType() != null) {
-				if (tree.isExternal()) {
-					if (tree.initialValueExpression() != null) {
-						continue;
-					} else {
-						if (Uninitialised_External.contains(tree.dataType().dataType().text()))
-						{
-							addIssue(new LineIssue(this, tree, MESSAGE));
-						}
-						else
-						{
-							Uninitialised_External.add(tree.dataType().dataType().text().replaceAll("\\s+", ""));
-						}
-					}
+		EsqlFile file = getContext().getEsqlFile();
+		List<String> lines = CheckUtils.readLines(file);
+		
+		for(j = 0; j < lines.size() ; j++)
+		 {   
+			 String originalLine = (String)lines.get(j);
+			 
+			 if((originalLine.replaceAll("\\s+","").contains("DECLARE")) && (!(originalLine.replaceAll("\\s+","").contains(","))))
+			 {   
+				 String lineArray[]=originalLine.split(" ");
+		
+				 arrayLastElement= lineArray[lineArray.length-1];
+				 
+				 arraySecondLastElement=lineArray[lineArray.length-2];
+				 
+				 if(((arraySecondLastElement.replaceAll("\\s+","").equalsIgnoreCase("EXTERNAL"))) || ((arraySecondLastElement.replaceAll("\\s+","").equalsIgnoreCase("CONSTANT")))
+						 || ((arraySecondLastElement.replaceAll("\\s+","").equalsIgnoreCase("SHARED")) || ((arraySecondLastElement.replaceAll("\\s+","").equalsIgnoreCase("REFERENCE")))))
+				 {
+				
+					 arrayCombineElement=arraySecondLastElement.concat(arrayLastElement);
+					 
+					 for(int i=0;i<declareDatatypeList_Combine_Element.size();i++)  
+					 {   	
+						 if(!(arrayCombineElement.replaceAll("\\s+","").equalsIgnoreCase(declareDatatypeList_Combine_Element.get(i))))
+						    {
+							 continue;
+						    }
+						 else
+						 {  
+							 if(hset.contains(declareDatatypeList_Combine_Element.get(i)))
+				                  {
+							    	  addIssue(new LineIssue(this,j+1,MESSAGE)); 
+				                  }
+							   else
+							      {
+								   hset.add(declareDatatypeList_Combine_Element.get(i));
+							      } 
+						  }
+						 break;
+					 }
+						
 				}
-
-				else if (tree.isConstant())
-				{
-					
-					if (tree.initialValueExpression() != null) {
-						continue;
-					} 
-					else {
-						if (Uninitialised_Constant.contains(tree.dataType().dataType().text()))
-
-						{
-							addIssue(new LineIssue(this, tree, MESSAGE));
-						}
-
-						else 
-						{
-							Uninitialised_Constant.add(tree.dataType().dataType().text().replaceAll("\\s+", ""));
-						}
-					}
-				}
-				
-				else if (tree.sharedExt() != null) {
-					if (tree.initialValueExpression() != null) {
-						continue;
-					} else {
-						if (Uninitialised_Shared.contains(tree.dataType().dataType().text()))
-
-						{
-							addIssue(new LineIssue(this, tree, MESSAGE));
-						}
-
-						else 
-						{
-							Uninitialised_Shared.add(tree.dataType().dataType().text().replaceAll("\\s+", ""));
-						}
-					}
-				}
-				
-				else if (tree.dataType().decimalDataType() != null) {
-					if (tree.initialValueExpression() != null) {
-						continue;
-					} else {
-						if (Uninitialised_Decimal.contains(tree.dataType().decimalDataType().decimalKeyword().text()))
-
-						{
-							addIssue(new LineIssue(this, tree, MESSAGE));
-						}
-
-						else if (tree.dataType().decimalDataType().decimalKeyword().text() != null) {
-							Uninitialised_Decimal.add(tree.dataType().decimalDataType().decimalKeyword().text().replaceAll("\\s+", ""));
-						}
-					}
-				}
-
-				else if (tree.dataType().intervalDataType() != null) {
-					if (tree.initialValueExpression() != null)
-					{
-						continue;
-					} 
-					else 
-					{
-						if (Uninitialised_Interval.contains(tree.dataType().intervalDataType().intervalKeyword().text()))
-						{
-							addIssue(new LineIssue(this, tree, MESSAGE));
-						}
-
-						else if (tree.dataType().intervalDataType().intervalKeyword().text() != null) {
-							Uninitialised_Interval.add(tree.dataType().intervalDataType().intervalKeyword().text().replaceAll("\\s+", ""));
-						}
-					}
-				} 
-				
-				
-				else if (tree.dataType().dataType()!= null)
-				   {
-					if (tree.initialValueExpression()!= null) 
-					{
-						  continue;
-					}
-
-					else {
-						    if (Uninitialised_Datatype.contains(tree.dataType().dataType().text()))
-						   {
-							addIssue(new LineIssue(this, tree, MESSAGE));
-						   } 
-						    else 
-						   {
-							Uninitialised_Datatype.add(tree.dataType().dataType().text().replaceAll("\\s+", ""));
-						   }
-
-					    }	
-				   } 
-			
-				}
-
-			if (tree.namesapce()!=null)	
-			{
-			if (tree.initialValueExpression()!= null) 
-			{
-				continue;
-			} 
-			else {
-				
-				   if (Uninitialised_Namespace.contains(tree.namesapce().text()))
-
-				    {
-					    addIssue(new LineIssue(this, tree, MESSAGE));
-				   }
-
-				else 
-					if (tree.namesapce().text()!= null)
-					{
-					      Uninitialised_Namespace.add(tree.namesapce().text().replaceAll("\\s+", ""));
-				    }
-			
-			
-			     }
-		 
-				
-			}
-		}
-	}
+						 
+				 
+				 else
+				 {
+					 for(int i=0;i<declareDatatypeList_Last_Element.size();i++)  
+					 {   	
+					   if(!(arrayLastElement.replaceAll("\\s+","").equalsIgnoreCase(declareDatatypeList_Last_Element.get(i))))
+						   
+					   {  
+						   continue;
+					   }
+					   else
+					   {
+						 if(hset.contains(declareDatatypeList_Last_Element.get(i)))
+		                  {
+					    	  addIssue(new LineIssue(this,j+1,MESSAGE)); 
+		                  }
+					   else
+					      {
+						    hset.add(declareDatatypeList_Last_Element.get(i));
+					      } 
+					   }
+					 break;
+					 }
+				 }
+				 				
+continue;			
+ }
+	
 }
+
+}			 
+			
+}
+
+

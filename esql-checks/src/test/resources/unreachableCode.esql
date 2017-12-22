@@ -12,6 +12,13 @@ CREATE FUNCTION main() RETURNS BOOLEAN
 			SET Environment.Fault.faultcode = 'soapenv:Sender';
 		
 END CASE;
+IF envRefVar.inputNoOfAccounts > maxNoOfAccountsCons THEN
+				--throw function error
+				SET envRefVar.firstFlag = 'Y';				
+				SET envRefVar.flag='Y';
+				THROW USER EXCEPTION MESSAGE 5001 VALUES('Maximum account number limit of 300 exceeded');
+                DECLARE fa1 CONSTANT CHARACTER;	
+			END IF;
 
 		
 CREATE FIELD Environment.LogData;
@@ -27,12 +34,11 @@ SET refEnv.serviceName = InputRoot.SOAP.Context.service;
 SET refEnv.interfaceId = InputRoot.SOAP.Header.ns:Info.consumerId;
 		
 SET refEnv.serviceVersion = SUBSTRING(SUBSTRING(SUBSTRING(InputRoot.SOAP.Context.portTypeNamespace AFTER InputRoot.SOAP.Context.service) AFTER '/')BEFORE '/');
-	
-	
+DECLARE VersionRef REFERENCE TO InputRoot.SOAP.Context.SOAP_Version;
 SET OutputRoot=InputRoot;
 		
 RETURN TRUE;
-DECLARE VersionRef REFERENCE TO InputRoot.SOAP.Context.SOAP_Version;
+
 	
 END;
 

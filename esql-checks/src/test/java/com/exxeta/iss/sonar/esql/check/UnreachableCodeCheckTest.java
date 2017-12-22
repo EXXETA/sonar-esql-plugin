@@ -21,7 +21,7 @@ public class UnreachableCodeCheckTest {
   @Test
   public void test() {
 		 EsqlCheckVerifier.issues(new UnreachableCodeCheck(), new File("src/test/resources/unreachableCode.esql"))
-	        .next().atLine(34).withMessage("Code is unreachable following RETURN or THROW statement.")
+	        .next().atLine(19).withMessage("Code is unreachable following RETURN or THROW statement.")
 	        .noMore();
 	  }
    
