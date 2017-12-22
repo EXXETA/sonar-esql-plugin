@@ -6,6 +6,7 @@
  * @author Prerana Agarkar
  *
  */
+
 package com.exxeta.iss.sonar.esql.check;
 
 import java.util.List;
@@ -41,7 +42,7 @@ public class UnreachableCodeCheck extends DoubleDispatchVisitorCheck {
             {
                 boolean returnFound = false;
                 boolean returnTheFound = false;
-                if(line.toUpperCase().contains("THROW ") && !(line.toUpperCase().replaceAll("\\s+","").contains("--")))
+                if((line.toUpperCase().contains("THROW ")) && (!(line.toUpperCase().replaceAll("\\s+","").contains("--"))))
                     returnFound = true;
                 if(line.trim().toUpperCase().startsWith("RETURN "))
                     returnFound = true;
@@ -74,10 +75,7 @@ public class UnreachableCodeCheck extends DoubleDispatchVisitorCheck {
                     }	
             	}
                  lineNumber++;
-			}
-		
-	       
-			
+			}		
 	}        
 
 
