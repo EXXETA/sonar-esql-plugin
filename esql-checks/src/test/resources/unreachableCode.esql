@@ -13,7 +13,7 @@ CREATE FUNCTION main() RETURNS BOOLEAN
 		
 END CASE;
 IF envRefVar.inputNoOfAccounts > maxNoOfAccountsCons THEN
-				--throw function error
+				-- throw function error
 				SET envRefVar.firstFlag = 'Y';				
 				SET envRefVar.flag='Y';
 				THROW USER EXCEPTION MESSAGE 5001 VALUES('Maximum account number limit of 300 exceeded');

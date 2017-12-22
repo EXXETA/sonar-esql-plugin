@@ -6,6 +6,7 @@
  * @author Prerana Agarkar
  *
  */
+
 package com.exxeta.iss.sonar.esql.check;
 
 import java.io.File;
