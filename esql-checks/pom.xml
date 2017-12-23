@@ -41,7 +41,7 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>sonar-msgflow-plugin</artifactId>
-			<systemPath>${basedir}/lib/sonar-msgflow-plugin-1.1.jar</systemPath>
+			<systemPath>${basedir}/lib/sonar-msgflow-plugin-1.1.1.jar</systemPath>
 			<scope>system</scope>
 		</dependency>
 		<dependency>
