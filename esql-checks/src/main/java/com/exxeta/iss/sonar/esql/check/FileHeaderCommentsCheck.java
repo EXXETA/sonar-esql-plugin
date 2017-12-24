@@ -41,19 +41,16 @@ public class FileHeaderCommentsCheck extends DoubleDispatchVisitorCheck {
 			      String expectedLine1 ="Change Log";
 			      String expectedLine2 ="S.No. Incident Number  Jira Number  Description  Date Fixed  Updated ESQL/Node";
 			      String expectedEndLine ="*/";
-			      boolean headerPresent = false;
 			      			      
 			     for(int lineCounter=0; lineCounter < lines.size(); lineCounter++){
 			    	 				     			    	 
 			    	 if(lines.get(0).startsWith(expectedLine)){
 				    	  
-				    	 if(!headerPresent && lines.get(lineCounter).trim().contains(expectedLine1)){
+				    	 if( lines.get(lineCounter).trim().contains(expectedLine1)){
 				    		 if((lines.get(lineCounter + 1).replaceAll(" ", "").equalsIgnoreCase( expectedLine2.replaceAll(" ", "")))
 				    				 && lines.get(lineCounter + 2).replaceAll(" ", "").length() > 0 && !lines.get(lineCounter + 2).replaceAll(" ", "").equalsIgnoreCase(expectedEndLine)){
-				    			 headerPresent = true;
 				    			 break;
 				    		 }else{
-				    			 headerPresent = false;
 				    			 result = false;
 					    		  break; 
 				    		 }
@@ -62,7 +59,6 @@ public class FileHeaderCommentsCheck extends DoubleDispatchVisitorCheck {
 				    	 }				    		 
 				    		  
 				    	}else{
-				    		headerPresent = false;
 				    		result = false;
 				    		break;
 				    	}

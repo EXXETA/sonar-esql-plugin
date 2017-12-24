@@ -44,8 +44,7 @@ public class DepricatedMethodCheck extends DoubleDispatchVisitorCheck {
 		int i = 0;
 		for (String line : lines) {
 			i = i + 1;	
-			String  thelines = line.toString();
-			String upperCaseTheLine = thelines.toUpperCase();
+			String upperCaseTheLine = line.toUpperCase();
 
 			for (String depricatedMethod : Methods) {
 

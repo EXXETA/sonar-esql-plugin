@@ -34,7 +34,7 @@ public class NavigatingTreeCouldBeReferenceCheck extends DoubleDispatchVisitorCh
 			    key = "NavigatingTreeCouldBeReference",
 			    description = "The maximum authorized method/procedure length.",
 			    defaultValue = "" + DEFAULT_THRESHOLD)
-	 public static int threshold = DEFAULT_THRESHOLD;
+	 public int threshold = DEFAULT_THRESHOLD;
 	
 	
 	
@@ -69,7 +69,7 @@ public class NavigatingTreeCouldBeReferenceCheck extends DoubleDispatchVisitorCh
     
 	}    
         
-        private static void processSingleModuleForReferences(  int startingLine, List moduleLines, HashSet violatingLinesWithPossibleReference)
+        private void processSingleModuleForReferences(  int startingLine, List moduleLines, HashSet violatingLinesWithPossibleReference)
         {
             HashMap allKeys = new HashMap();
             Iterator iterator = moduleLines.iterator();

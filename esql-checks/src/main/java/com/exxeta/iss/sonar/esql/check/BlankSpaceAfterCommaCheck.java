@@ -34,9 +34,7 @@ public class BlankSpaceAfterCommaCheck extends DoubleDispatchVisitorCheck{
 		for (String line : lines) {
 			linecounter = linecounter + 1;	
 	       
-			String  thelines = line.toString();
-		
-			String upperCaseTheLine = thelines.toUpperCase().trim();
+			String upperCaseTheLine = line.toUpperCase().trim();
 			if(upperCaseTheLine.contains(",") ){
 				int pos= upperCaseTheLine.indexOf(",");
 				

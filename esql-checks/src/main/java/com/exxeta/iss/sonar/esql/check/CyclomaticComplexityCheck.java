@@ -40,11 +40,6 @@ public class CyclomaticComplexityCheck extends DoubleDispatchVisitorCheck{
 	
 	
 	
-	int totalComplexity = 0;
-    int startingLine = 1;
-    
-
-
 @Override
 public void visitProgram(ProgramTree tree) {
 	EsqlFile file = getContext().getEsqlFile();
