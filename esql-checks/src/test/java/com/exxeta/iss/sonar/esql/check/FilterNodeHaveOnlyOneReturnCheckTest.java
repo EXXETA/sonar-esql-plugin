@@ -19,7 +19,7 @@ public class FilterNodeHaveOnlyOneReturnCheckTest {
 	public void test() {
 		EsqlCheck check = new FilterNodeHaveOnlyOneReturnCheck();
 		EsqlCheckVerifier.issues(check, new File("src/test/resources/FilterNodeHaveOnlyOneReturn.esql")).next().atLine(1)
-				.withMessage("The filter node may only have one return value").noMore();
+				.withMessage("This filter module always returns the same value").noMore();
 	}
 
 }
