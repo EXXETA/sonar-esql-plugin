@@ -3,17 +3,11 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
-import java.util.List;
-
 import org.sonar.check.Rule;
 
-import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
-import com.exxeta.iss.sonar.esql.api.tree.function.CaseFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CaseStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
-import com.exxeta.iss.sonar.esql.api.visitors.EsqlFile;
 import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
-import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
 import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
 
 /**

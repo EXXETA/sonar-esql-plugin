@@ -26,12 +26,18 @@ import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
 public class EmptyBlockCheckTest {
 	 @Test
 	  public void test() {
-		 EsqlCheckVerifier.issues(new EmptyBlockCheck(), new File("src/test/resources/ifTest.esql"))
+		 EsqlCheckVerifier.issues(new EmptyBlockCheck(), new File("src/test/resources/emptyBlock.esql"))
 	        .next().atLine(16).withMessage("Either remove or fill this block of code.")
 	        .next().atLine(17).withMessage("Either remove or fill this block of code.")
 	        .next().atLine(18).withMessage("Either remove or fill this block of code.")
 	        .next().atLine(21).withMessage("Either remove or fill this block of code.")
-	        .next().atLine(26).withMessage("Either remove or fill this block of code.")
+	        .next().atLine(23).withMessage("Either remove or fill this block of code.")
+	        .next().atLine(24).withMessage("Either remove or fill this block of code.")
+	        .next().atLine(25).withMessage("Either remove or fill this block of code.")
+	        .next().atLine(27).withMessage("Either remove or fill this block of code.")
+	        .next().atLine(31).withMessage("Either remove or fill this block of code.")
+	        .next().atLine(34).withMessage("Either remove or fill this block of code.")
+	        .next().atLine(55).withMessage("Either remove or fill this block of code.")
 	        .noMore();
 	  }
 }

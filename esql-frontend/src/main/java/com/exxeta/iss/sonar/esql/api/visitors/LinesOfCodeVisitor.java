@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Set;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
-import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
