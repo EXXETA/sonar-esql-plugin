@@ -46,21 +46,21 @@ public class NavigatingTreeCouldBeReferenceCheck extends DoubleDispatchVisitorCh
 		
 		
 		
-		HashSet violatingLinesWithPossibleReference = new HashSet();
+		HashSet<Integer> violatingLinesWithPossibleReference = new HashSet<>();
         int startingLine = 0;
         
         
          processSingleModuleForReferences( startingLine, lines, violatingLinesWithPossibleReference);
         
        
-        Set linesNumbers = new HashSet();
-        Iterator iterator1 = violatingLinesWithPossibleReference.iterator();
+        Set<Integer> linesNumbers = new HashSet<>();
+        Iterator<Integer> iterator1 = violatingLinesWithPossibleReference.iterator();
         do
         {
             if(!iterator1.hasNext())
                 break;
            
-            Integer lineNumber = (Integer)iterator1.next();
+            Integer lineNumber = iterator1.next();
             if(linesNumbers.add(lineNumber))
             {
             	addIssue(new PreciseIssue(this, new IssueLocation(tree,   MESSAGE )));
@@ -69,16 +69,16 @@ public class NavigatingTreeCouldBeReferenceCheck extends DoubleDispatchVisitorCh
     
 	}    
         
-        private void processSingleModuleForReferences(  int startingLine, List moduleLines, HashSet violatingLinesWithPossibleReference)
+        private void processSingleModuleForReferences(  int startingLine, List<String> moduleLines, HashSet<Integer> violatingLinesWithPossibleReference)
         {
-            HashMap allKeys = new HashMap();
-            Iterator iterator = moduleLines.iterator();
+            HashMap<String, Integer> allKeys = new HashMap<>();
+            Iterator<String> iterator = moduleLines.iterator();
             
             do
             {
                 if(!iterator.hasNext())
                     break;
-                String line = (String)iterator.next();
+                String line = iterator.next();
               
                 line = line.trim();
                 String removeQuotedComment = CheckUtils.removeQuotedContentByChar(line, '\'');
@@ -87,41 +87,32 @@ public class NavigatingTreeCouldBeReferenceCheck extends DoubleDispatchVisitorCh
                     removeQuotedComment = removeQuotedComment.substring(4);
                     if(removeQuotedComment.trim().endsWith(";"))
                         removeQuotedComment = removeQuotedComment.substring(0, removeQuotedComment.length() - 1);
-                    int equalsPos = removeQuotedComment.indexOf("=");
-                    if(equalsPos > 0)
-                    
-                    {
+                    int equalsPos = removeQuotedComment.indexOf('=');
+                    if(equalsPos > 0) {
                         String startLine = removeQuotedComment.substring(0, equalsPos).trim();
                         String endLine = removeQuotedComment.substring(equalsPos + 1).trim();
-                        Set keyValuesAll = new HashSet();
-                        Set keyValuesStart = new HashSet();
-                        Set keyValuesEnd = new HashSet();
-                        keyValuesStart = CheckUtils.buildKeys(startLine);
-                        keyValuesEnd = CheckUtils.buildKeys(endLine);
+                        Set<String> keyValuesAll = new HashSet<>();
+                        Set<String> keyValuesStart = CheckUtils.buildKeys(startLine);
+                        Set<String> keyValuesEnd = CheckUtils.buildKeys(endLine);
                         keyValuesStart.addAll(keyValuesEnd);
-                        for(Iterator iterator1 = keyValuesStart.iterator(); iterator1.hasNext();)
-                        {
-                            String key = (String)iterator1.next();
-                            if(!key.contains("OutputLocalEnvironment"))
-                            {
-                                if(!key.contains("InputLocalEnvironment"))
-                                {
-                                    keyValuesAll.add(key);
-                                } 
-                            }
-                        }
+						for (Iterator<String> iterator1 = keyValuesStart.iterator(); iterator1.hasNext();) {
+							String key = iterator1.next();
+							if (!key.contains("OutputLocalEnvironment") && !key.contains("InputLocalEnvironment")) {
+								keyValuesAll.add(key);
+							}
+						}
 
-                        Iterator iterator2 = keyValuesAll.iterator();
+                        Iterator<String> iterator2 = keyValuesAll.iterator();
                         while(iterator2.hasNext()) 
                         {
-                            String key = (String)iterator2.next();
+                            String key = iterator2.next();
                             if(key == null || key.length() == 0)
                                 throw new RuntimeException((new StringBuilder()).append("Key is empty: ").append(key).append(" for line:").append(line).toString());
-                            Integer count = (Integer)allKeys.get(key);
+                            Integer count = allKeys.get(key);
                             if(count == null)
-                                allKeys.put(key, new Integer(1));
+                                allKeys.put(key, 1);
                             else
-                                allKeys.put(key, new Integer(count.intValue() + 1));
+                                allKeys.put(key, count.intValue() + 1);
                         }
                     }
                 }
@@ -132,8 +123,8 @@ public class NavigatingTreeCouldBeReferenceCheck extends DoubleDispatchVisitorCh
             {
                 if(!iterator.hasNext())
                     break;
-                String key = (String)iterator.next();
-                Integer count = (Integer)allKeys.get(key);
+                String key = iterator.next();
+                Integer count = allKeys.get(key);
                 if(count.intValue() > threshold )
                 {
                     Integer lineNumber = CheckUtils.findLineInText(moduleLines, key);

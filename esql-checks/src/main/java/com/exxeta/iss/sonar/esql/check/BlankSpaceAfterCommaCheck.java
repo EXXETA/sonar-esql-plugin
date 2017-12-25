@@ -36,7 +36,7 @@ public class BlankSpaceAfterCommaCheck extends DoubleDispatchVisitorCheck{
 	       
 			String upperCaseTheLine = line.toUpperCase().trim();
 			if(upperCaseTheLine.contains(",") ){
-				int pos= upperCaseTheLine.indexOf(",");
+				int pos= upperCaseTheLine.indexOf(',');
 				
 						if (!upperCaseTheLine.substring(pos+1,pos+2).matches(EsqlLexer.WHITESPACE) ) {
 							addIssue(new LineIssue(this, linecounter, MESSAGE));

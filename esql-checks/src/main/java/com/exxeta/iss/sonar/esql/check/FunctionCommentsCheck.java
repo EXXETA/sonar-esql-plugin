@@ -6,7 +6,6 @@ import org.sonar.check.Rule;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxTrivia;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateFunctionStatementTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
 
 /**
@@ -24,7 +23,7 @@ public class FunctionCommentsCheck extends DoubleDispatchVisitorCheck{
 		
 		// check comments
 		
-		if( tree.routineType().toString().equals("FUNCTION")){
+		if( "FUNCTION".equals(tree.routineType().toString())){
 			
 			if (comment == null || isEmptyComment(comment)){
 				addIssue(tree, "Document this function with all parameters and return types.");

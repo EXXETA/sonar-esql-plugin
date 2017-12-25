@@ -20,7 +20,7 @@ package com.exxeta.iss.sonar.esql.check;
 		public void visitCreateProcedureStatement(CreateProcedureStatementTree tree) {
 			String comment = getComment(tree);
 			
-			if( tree.routineType().toString().equals("PROCEDURE")){
+			if( "PROCEDURE".equals(tree.routineType().toString())){
 				if (comment == null || isEmptyComment(comment)){
 					addIssue(tree, "Document this procedure with all parameters.");
 				}else{				

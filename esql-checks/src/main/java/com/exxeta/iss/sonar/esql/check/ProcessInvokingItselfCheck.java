@@ -83,7 +83,7 @@ public class ProcessInvokingItselfCheck extends DoubleDispatchVisitorCheck{
 			StatementTree stmt = statements.statements().get(j);
             Stream<Tree> tokens = stmt.childrenStream();
 			List<Tree> tokenList = tokens.collect(Collectors.toList());
-			System.out.println(stmt);
+			//System.out.println(stmt);
 			for(Tree token : tokenList){
 			
 				if(token!=null && token.is(Kind.CALL_STATEMENT)){

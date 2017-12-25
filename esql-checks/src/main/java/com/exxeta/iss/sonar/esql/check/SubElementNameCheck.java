@@ -40,16 +40,15 @@ public class SubElementNameCheck extends DoubleDispatchVisitorCheck{
 		int i = 0;
 		for (String line : lines) {
 			i =i+1;
-			String  temp = line.toString();
 
-			if(temp.trim().startsWith("SET Environment")){
+			if(line.trim().startsWith("SET Environment")){
 
-				String[] strArr1 = temp.split(Pattern.quote("="));
+				String[] strArr1 = line.split(Pattern.quote("="));
 
 				String envSubElement = strArr1[0];
 				if(! strArr1[1].isEmpty()){
 
-					String envSubElement1 = envSubElement.substring(temp.indexOf("Environment")+12,temp.indexOf("="));
+					String envSubElement1 = envSubElement.substring(line.indexOf("Environment")+12,line.indexOf('='));
 					String[] strArray = envSubElement1.split(Pattern.quote("."));
 
 					int strCount =0;

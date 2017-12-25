@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
-import org.sonar.api.internal.apachecommons.codec.digest.MessageDigestAlgorithms;
 import org.sonar.check.Rule;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
@@ -36,8 +35,6 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.StatementsTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
 import com.exxeta.iss.sonar.esql.api.visitors.EsqlFile;
-import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
-import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
 import com.exxeta.iss.sonar.msgflow.model.MessageFlow;
 import com.exxeta.iss.sonar.msgflow.model.MessageFlowNode;
 import com.exxeta.iss.sonar.msgflow.model.MessageFlowParser;
@@ -52,7 +49,6 @@ public class PropagateConsistencyCheck extends DoubleDispatchVisitorCheck {
 		super.visitCreateModuleStatement(tree);
 		String moduleName = tree.moduleName().name();
 		EsqlFile esqlFile = getContext().getEsqlFile();
-		File file = new File(esqlFile.relativePath());
 		boolean parentFound = false;
 		File parentFile = new File(esqlFile.relativePath());
 		while(!parentFound) {
@@ -98,10 +94,9 @@ public class PropagateConsistencyCheck extends DoubleDispatchVisitorCheck {
 						}
 					} else if (funcStat.is(Kind.RETURN_STATEMENT)) {
 						ReturnStatementTree retStatement = (ReturnStatementTree) funcStat;
-						if(retStatement.expression().toString().equalsIgnoreCase("true")){
-							if(!msgFlownode.getOutputTerminals().contains("OutTerminal.out")) {
-								addIssue(retStatement, MESSAGE);
-							}
+						if ("true".equalsIgnoreCase(retStatement.expression().toString())
+								&& !msgFlownode.getOutputTerminals().contains("OutTerminal.out")) {
+							addIssue(retStatement, MESSAGE);
 						}
 					}
 				}
@@ -120,10 +115,9 @@ public class PropagateConsistencyCheck extends DoubleDispatchVisitorCheck {
 						}
 					} else if (funcStat.is(Kind.RETURN_STATEMENT)) {
 						ReturnStatementTree retStatement = (ReturnStatementTree) funcStat;
-						if(retStatement.expression().toString().equalsIgnoreCase("true")){
-							if(!msgFlownode.getOutputTerminals().contains("OutTerminal.out")) {
-								addIssue(retStatement, MESSAGE);
-							}
+						if ("true".equalsIgnoreCase(retStatement.expression().toString())
+								&& !msgFlownode.getOutputTerminals().contains("OutTerminal.out")) {
+							addIssue(retStatement, MESSAGE);
 						}
 					}
 				}
@@ -133,8 +127,8 @@ public class PropagateConsistencyCheck extends DoubleDispatchVisitorCheck {
 		
 	}
 
-	public static ArrayList<File> getMsgFlowFiles(File[] files) {
-		ArrayList<File> fileList = new ArrayList<File>();
+	public static List<File> getMsgFlowFiles(File[] files) {
+		ArrayList<File> fileList = new ArrayList<>();
 		for (File tmpFile : files) {
 			if (tmpFile.isDirectory()) {
 				fileList.addAll(getMsgFlowFiles(tmpFile.listFiles()));

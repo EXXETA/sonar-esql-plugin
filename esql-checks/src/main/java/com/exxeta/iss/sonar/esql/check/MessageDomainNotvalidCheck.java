@@ -33,27 +33,26 @@ public class MessageDomainNotvalidCheck extends DoubleDispatchVisitorCheck{
 		
 		for (String line : lines) {
 			i = i + 1;	
-        String  thelines = line.toString();
 	
-		String upperCaseTheLine = thelines.toUpperCase().trim();
+		String upperCaseTheLine = line.toUpperCase().trim();
 	
 	boolean outputRootAssigned = false;
     if(upperCaseTheLine.startsWith("SET OUTPUTROOT.") && !upperCaseTheLine.startsWith("SET OUTPUTROOT.*"))
         outputRootAssigned = true;
     if(outputRootAssigned)
     {
-        int pos1 = upperCaseTheLine.indexOf(".");
+        int pos1 = upperCaseTheLine.indexOf('.');
         String value = upperCaseTheLine.substring(pos1 + 1);
-        int pos2 = value.indexOf(".");
+        int pos2 = value.indexOf('.');
         if(pos2 > 0)
         {
-            int posEquals = value.indexOf("=");
+            int posEquals = value.indexOf('=');
             if(posEquals > -1)
             {
                 value = value.substring(0, posEquals);
                 value = value.trim();
             }
-            String parts[] = value.split("\\.");
+            String[] parts = value.split("\\.");
             String thisDomain = parts[0];
             if(!DOMAINS.contains(thisDomain) && !thisDomain.startsWith("{"))
             {

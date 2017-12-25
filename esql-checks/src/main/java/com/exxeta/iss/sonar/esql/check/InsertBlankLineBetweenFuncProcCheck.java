@@ -33,11 +33,8 @@ public class InsertBlankLineBetweenFuncProcCheck extends DoubleDispatchVisitorCh
 		for (String line : lines) {
 			linecounter = linecounter + 1;
 
-			if(isEndStatement(line)){
-
-				if(! line.startsWith("\\n")){
-					addIssue(new LineIssue(this, linecounter+1, MESSAGE));
-				}
+			if(isEndStatement(line)&& !line.startsWith("\\n")){
+				addIssue(new LineIssue(this, linecounter+1, MESSAGE));
 			}
 		} 
 	}

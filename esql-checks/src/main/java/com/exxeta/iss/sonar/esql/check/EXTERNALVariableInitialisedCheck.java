@@ -32,9 +32,8 @@ public class EXTERNALVariableInitialisedCheck extends DoubleDispatchVisitorCheck
 		
 		for (String line : lines) {
 			
-        String  thelines = line.toString();
 	
-		String upperCaseTheLine = thelines.toUpperCase();
+		String upperCaseTheLine = line.toUpperCase();
 		
 	
 	if(isDelcareStatement(upperCaseTheLine) && upperCaseTheLine.contains("EXTERNAL "))
@@ -43,10 +42,10 @@ public class EXTERNALVariableInitialisedCheck extends DoubleDispatchVisitorCheck
         boolean externalVariableEmpty = false;
         if(upperCaseTheLine.contains("CHAR"))
         {
-            int iPos = thelines.indexOf("'");
+            int iPos = line.indexOf('\'');
             
             
-            int iLastPos = thelines.lastIndexOf("'");
+            int iLastPos = line.lastIndexOf('\'');
             
             if(iPos > 0 && iLastPos > 0)
             {

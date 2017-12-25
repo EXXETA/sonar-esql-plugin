@@ -35,12 +35,9 @@ public class BlankLineBeforeCommentsCheck extends DoubleDispatchVisitorCheck{
 				linecounter = linecounter + 1;
 		    String currentline = lines.get(i);
 			
-			if ((currentline.trim().startsWith("--")) ||( currentline.trim().startsWith("/*") ) ){
-				
-				if (! lines.get(i-1).matches("\\s*") ){
+			if ((currentline.trim().startsWith("--") || currentline.trim().startsWith("/*") ) && ! lines.get(i-1).matches("\\s*") ){
 				
                  addIssue(new LineIssue(this, i+1, MESSAGE));
-				}
 				
 			}
 		} 

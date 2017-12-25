@@ -7,14 +7,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.sonar.check.Rule;
 
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.DeclareStatementTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.SetStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
 import com.exxeta.iss.sonar.esql.api.visitors.EsqlFile;
 import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
@@ -31,7 +30,7 @@ public class UnusedVariableCheck extends DoubleDispatchVisitorCheck {
 	private static final String MESSAGE = "Remove the unused Variable.";
 
 	private Set<String> calledRoutines = new HashSet<>();
-	private List<String> variables = new ArrayList<String>();
+	private List<String> variables = new ArrayList<>();
 	private HashMap<String, DeclareStatementTree> declaredVariable = new HashMap<>();
 	
 	@Override
@@ -58,12 +57,11 @@ public class UnusedVariableCheck extends DoubleDispatchVisitorCheck {
 		List<String> lines = CheckUtils.readLines(file);
 		for (String line : lines) {
 			
-	        String  thelines = line.toString();
-		    String upperCaseTheLine = thelines.toUpperCase();
+		    String upperCaseTheLine = line.toUpperCase();
 		    
 			for (String Vars : variables) {
 				
-				if(thelines.contains(Vars) && !upperCaseTheLine.contains("DECLARE")){
+				if(line.contains(Vars) && !upperCaseTheLine.contains("DECLARE")){
 					calledRoutines.add(Vars);	
 				}
 				

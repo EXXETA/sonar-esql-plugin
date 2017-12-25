@@ -46,8 +46,8 @@ public void visitProgram(ProgramTree tree) {
 	List<String> lines = CheckUtils.readLines(file);
 	int i = 0;
 	boolean commentSection = false;
-	ArrayList <ArrayList<String>> modules = new ArrayList<ArrayList<String>>();
-	ArrayList<String> moduleLines = new ArrayList<String>();
+	ArrayList <ArrayList<String>> modules = new ArrayList<>();
+	ArrayList<String> moduleLines = new ArrayList<>();
 	boolean isInsideModule = false;
 	for (String line : lines) {
 		i = i + 1;
@@ -58,7 +58,7 @@ public void visitProgram(ProgramTree tree) {
 				}
 				if(isBeginStatement(line.trim())){
 					isInsideModule = true;
-					moduleLines = new ArrayList<String>();
+					moduleLines = new ArrayList<>();
 					moduleLines.add(String.valueOf(i));
 					moduleLines.add(line);
 				}
@@ -97,7 +97,7 @@ public static boolean isBeginStatement(String s)
     return withoutSpace.startsWith("CREATEPROCEDURE") || withoutSpace.startsWith("CREATEFUNCTION");
 }
 
-public static int CalculateComplexity(ArrayList<String> lines) {
+public static int CalculateComplexity(List<String> lines) {
 	
 	
 	int complexity = 1;
@@ -137,26 +137,26 @@ public static int CalculateComplexity(ArrayList<String> lines) {
 	
 public static  String ExtractFunctionProcedureName(String declareStatement ){
 
-	 declareStatement = declareStatement.substring(0,declareStatement.indexOf("("));
-	 String name = "";
-	 for(String tmp : declareStatement.split(" ")){
-		if(tmp.equalsIgnoreCase("create")||tmp.equalsIgnoreCase("function")||tmp.equalsIgnoreCase("procedure")){
-			name = name+tmp.toUpperCase(); 
+	 String declareStatementSub = declareStatement.substring(0,declareStatement.indexOf('('));
+	 StringBuilder name = new StringBuilder();
+	 for(String tmp : declareStatementSub.split(" ")){
+		if("create".equalsIgnoreCase(tmp)||"function".equalsIgnoreCase(tmp)||"procedure".equalsIgnoreCase(tmp)){
+			name.append(tmp.toUpperCase()); 
 		}
 		else{
-			name +=tmp;
+			name.append(tmp);
 		}
 	}
 	 
-	 if(name.replace(" ", "").startsWith("CREATEFUNCTION")){
-		name = "Function \""+name.replace(" ", "").replace("CREATEFUNCTION", ""); 
+	 if(name.toString().replace(" ", "").startsWith("CREATEFUNCTION")){
+		return "Function \""+name.toString().replace(" ", "").replace("CREATEFUNCTION", ""); 
 	 }
-	 else if(name.replace(" ", "").startsWith("CREATEPROCEDURE")){
-		 name = "Procedure \""+name.replace(" ", "").replace("CREATEPROCEDURE", "");
+	 else if(name.toString().replace(" ", "").startsWith("CREATEPROCEDURE")){
+		 return "Procedure \""+name.toString().replace(" ", "").replace("CREATEPROCEDURE", "");
 		 
 	 }
 	   
-		return name;
+		return name.toString();
 		
 }
 	 
@@ -165,7 +165,7 @@ public static  String ExtractFunctionProcedureName(String declareStatement ){
 
 	public static int countCharacters(String s, String ch) {
 		int cnt = 0;
-		String lines[] = s.split(ch);
+		String[] lines = s.split(ch);
 		cnt = lines.length - 1;
 		return cnt;
 	}

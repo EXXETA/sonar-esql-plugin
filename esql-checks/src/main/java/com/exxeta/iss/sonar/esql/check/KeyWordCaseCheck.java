@@ -35,10 +35,8 @@ public class KeyWordCaseCheck extends DoubleDispatchVisitorCheck {
 			if (!line.trim().startsWith("--") && !line.trim().startsWith("/*") && !commentSection) {
 				for (String word : line.split(" ")) {
 					String trimmed = word.trim();
-					if (CheckForKeywords(trimmed.toUpperCase())) {
-						if (!trimmed.toUpperCase().equals(trimmed)) {
-							addIssue(new LineIssue(this, i, "Check keyword \"" + trimmed + "\". " + MESSAGE));
-						}
+					if (CheckForKeywords(trimmed.toUpperCase())&&!trimmed.toUpperCase().equals(trimmed)) {
+						addIssue(new LineIssue(this, i, "Check keyword \"" + trimmed + "\". " + MESSAGE));
 					}
 				}
 			} else if (line.trim().startsWith("/*") && !commentSection && !line.trim().endsWith("*/")) {
@@ -53,12 +51,6 @@ public class KeyWordCaseCheck extends DoubleDispatchVisitorCheck {
 
 	private static boolean CheckForKeywords(String s) {
 
-		if (reservedKeywords.contains(s)) {
-			return true;
-		} else if (nonReservedKeywords.contains(s) && !s.equals("ENVIRONMENT")) {
-			return true;
-		} else {
-			return false;
-		}
+		return (reservedKeywords.contains(s) || nonReservedKeywords.contains(s) && !"ENVIRONMENT".equals(s));
 	}
 }

@@ -25,7 +25,7 @@ import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
 public class DepricatedMethodCheck extends DoubleDispatchVisitorCheck {
 	private static final String MESSAGE = "Depricated methods should not be used.";
 
-	private List<String> Methods = new ArrayList<String>();
+	private List<String> Methods = new ArrayList<>();
 
 
 	private static final String DEFAULT_DEPRICATED_METHODS = "BITSTREAM";
@@ -66,10 +66,8 @@ public class DepricatedMethodCheck extends DoubleDispatchVisitorCheck {
 		super.visitCallExpression(tree);
 	}
 
-	public static List splitByComma(String v){
-		String[] functions = v.split("\\,");
-		List<String> values = new ArrayList<String>(Arrays.asList(functions));
-		return values;
+	public static List<String> splitByComma(String v){
+		return Arrays.asList(v.split("\\,"));
 	}
 
 
