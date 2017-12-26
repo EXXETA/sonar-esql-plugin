@@ -37,9 +37,9 @@ public class BlankLineBeforeCommentsCheck extends DoubleDispatchVisitorCheck{
 			
 			if ((currentline.trim().startsWith("--")) ||( currentline.trim().startsWith("/*") ) ){
 				
-				if (! lines.get(i-1).matches("\\s*") ){
+				if (! lines.get(linecounter-1).matches("\\s*") ){
 				
-                 addIssue(new LineIssue(this, i+1, MESSAGE));
+                 addIssue(new LineIssue(this, linecounter, MESSAGE));
 				}
 				
 			}

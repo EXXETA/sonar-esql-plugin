@@ -32,86 +32,85 @@ import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
 
 /**
- * This Java class is created to implement the logic to check whether process is invoking itself.
+ * This Java class is created to implement the logic to check whether process is
+ * invoking itself.
+ * 
  * @author C50679
  *
  */
 @Rule(key = "ProcessInvokingItself")
-public class ProcessInvokingItselfCheck extends DoubleDispatchVisitorCheck{
-	
+public class ProcessInvokingItselfCheck extends DoubleDispatchVisitorCheck {
+
 	private static final String MESSAGE = "process invoking itself.";
 
 	@Override
 	public void visitCreateFunctionStatement(CreateFunctionStatementTree tree) {
 
 		String functionName = tree.identifier().name();
-		
+
 		BeginEndStatementTree beginEnd = (BeginEndStatementTree) tree.routineBody().statement();
 		StatementsTree statements = beginEnd.statements();
 		int i = statements.statements().size();
-		
-		for(int j=0; j<i; j++ ){
-			
+
+		for (int j = 0; j < i; j++) {
+
 			StatementTree stmt = statements.statements().get(j);
-  		    Stream<Tree> tokens = stmt.childrenStream();
+			Stream<Tree> tokens = stmt.childrenStream();
 			List<Tree> tokenList = tokens.collect(Collectors.toList());
-			
-			for(Tree token : tokenList){
-			
-				   if(token!=null && token.is(Kind.CALL_EXPRESSION)){
-				   CallExpressionTree callexp = (CallExpressionTree) token;
-				   String calledFunction =((IdentifierTree)callexp.functionName()).name();
-				
-					if(functionName.equalsIgnoreCase(calledFunction)){
-						  addIssue(new LineIssue(this, stmt,  MESSAGE ));
-						}
-					 }
-				}
-		}
-	}
-	@Override
-	public void visitCreateProcedureStatement(CreateProcedureStatementTree tree) {
-		
-		String ProcedureName = tree.identifier().name();
-		
-        BeginEndStatementTree beginEnd = (BeginEndStatementTree) tree.routineBody().statement();
-		StatementsTree statements = beginEnd.statements();
-		int i = statements.statements().size();
-		
-		for(int j=0; j<i; j++ ){
-			
-			StatementTree stmt = statements.statements().get(j);
-            Stream<Tree> tokens = stmt.childrenStream();
-			List<Tree> tokenList = tokens.collect(Collectors.toList());
-			System.out.println(stmt);
-			for(Tree token : tokenList){
-			
-				if(token!=null && token.is(Kind.CALL_STATEMENT)){
-					CallStatementTree callstmt = (CallStatementTree) token;
-					 String calledProcedure =callstmt.routineName().text();
-					 
-					if(ProcedureName.equalsIgnoreCase(calledProcedure)){
-						 addIssue(new LineIssue(this, stmt,  MESSAGE ));
+
+			for (Tree token : tokenList) {
+
+				if (token != null && token.is(Kind.CALL_EXPRESSION)) {
+					CallExpressionTree callexp = (CallExpressionTree) token;
+					IdentifierTree identifier = (IdentifierTree) callexp.functionName();
+					if (identifier != null) {
+						String calledFunction = identifier.name();
+
+						if (functionName.equalsIgnoreCase(calledFunction)) {
+							addIssue(new LineIssue(this, stmt, MESSAGE));
 						}
 					}
-				else if(token!=null && token.is(Kind.CALL_EXPRESSION)){
-					CallExpressionTree callstmt = (CallExpressionTree) token;
-					 String calledProcedure =((IdentifierTree)callstmt.functionName()).name();
-					
-					 if(ProcedureName.equalsIgnoreCase(calledProcedure)){
-						 addIssue(new LineIssue(this, stmt,  MESSAGE ));
-						}
-					 
 				}
-				
 			}
 		}
-		
+	}
+
+	@Override
+	public void visitCreateProcedureStatement(CreateProcedureStatementTree tree) {
+
+		String ProcedureName = tree.identifier().name();
+
+		BeginEndStatementTree beginEnd = (BeginEndStatementTree) tree.routineBody().statement();
+		StatementsTree statements = beginEnd.statements();
+		int i = statements.statements().size();
+
+		for (int j = 0; j < i; j++) {
+
+			StatementTree stmt = statements.statements().get(j);
+			Stream<Tree> tokens = stmt.childrenStream();
+			List<Tree> tokenList = tokens.collect(Collectors.toList());
+			
+			for (Tree token : tokenList) {
+
+				if (token != null && token.is(Kind.CALL_STATEMENT)) {
+					CallStatementTree callstmt = (CallStatementTree) token;
+					String calledProcedure = callstmt.routineName().text();
+
+					if (ProcedureName.equalsIgnoreCase(calledProcedure)) {
+						addIssue(new LineIssue(this, stmt, MESSAGE));
+					}
+				} else if (token != null && token.is(Kind.CALL_EXPRESSION)) {
+					CallExpressionTree callstmt = (CallExpressionTree) token;
+					String calledProcedure = ((IdentifierTree) callstmt.functionName()).name();
+
+					if (ProcedureName.equalsIgnoreCase(calledProcedure)) {
+						addIssue(new LineIssue(this, stmt, MESSAGE));
+					}
+
+				}
+
+			}
+		}
+
 	}
 }
-			
-
-	
-	
-
-
