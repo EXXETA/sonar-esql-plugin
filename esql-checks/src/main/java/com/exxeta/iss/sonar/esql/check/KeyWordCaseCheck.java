@@ -6,51 +6,48 @@ import java.util.Set;
 import org.sonar.check.Rule;
 
 import com.exxeta.iss.sonar.esql.api.EsqlNonReservedKeyword;
+import com.exxeta.iss.sonar.esql.api.tree.PathElementNameTree;
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
+import com.exxeta.iss.sonar.esql.api.tree.Tree;
+import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
 import com.exxeta.iss.sonar.esql.api.visitors.EsqlFile;
 import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
+import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitorCheck;
 import com.exxeta.iss.sonar.esql.lexer.EsqlReservedKeyword;
+import com.exxeta.iss.sonar.esql.parser.EsqlLegacyGrammar;
+import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
+
 /**
- * This Java Class Is created to ensure that all the keywords in esql file should be in UPPER CASE
+ * This Java Class Is created to ensure that all the keywords in esql file
+ * should be in UPPER CASE
+ * 
  * @author sapna singh
  *
  */
 
 @Rule(key = "KeyWordCaseCheck")
-public class KeyWordCaseCheck extends DoubleDispatchVisitorCheck {
+public class KeyWordCaseCheck extends SubscriptionVisitorCheck {
 	private static final Set<String> nonReservedKeywords = ImmutableSet.copyOf(EsqlNonReservedKeyword.keywordValues());
 	private static final Set<String> reservedKeywords = ImmutableSet.copyOf(EsqlReservedKeyword.keywordValues());
-	private static final String MESSAGE = "All keywords should be in Uppercase.";
+	private static final String MESSAGE = "This keyword should be in uppercase.";
 
 	@Override
-	public void visitProgram(ProgramTree tree) {
-		EsqlFile file = getContext().getEsqlFile();
-		List<String> lines = CheckUtils.readLines(file);
-		int i = 0;
-		boolean commentSection = false;
-		for (String line : lines) {
-			i = i + 1;
-			if (!line.trim().startsWith("--") && !line.trim().startsWith("/*") && !commentSection) {
-				for (String word : line.split(" ")) {
-					String trimmed = word.trim();
-					if (CheckForKeywords(trimmed.toUpperCase())&&!trimmed.toUpperCase().equals(trimmed)) {
-						addIssue(new LineIssue(this, i, "Check keyword \"" + trimmed + "\". " + MESSAGE));
-					}
-				}
-			} else if (line.trim().startsWith("/*") && !commentSection && !line.trim().endsWith("*/")) {
-				commentSection = true;
-			} else if (commentSection && line.trim().endsWith("*/")) {
-				commentSection = false;
-			}
-
-		}
-
+	public List<Kind> nodesToVisit() {
+		return ImmutableList.of(Tree.Kind.TOKEN);
 	}
 
-	private static boolean CheckForKeywords(String s) {
-
-		return (reservedKeywords.contains(s) || nonReservedKeywords.contains(s) && !"ENVIRONMENT".equals(s));
+	@Override
+	public void visitNode(Tree tree) {
+		String value = ((InternalSyntaxToken) tree).text();
+		String upperCase = value.toUpperCase();
+		if (!value.equals(upperCase)
+				&& (reservedKeywords.contains(upperCase) || nonReservedKeywords.contains(upperCase))
+				&& !(tree.parent() instanceof PathElementNameTree)) {
+			addIssue(tree, MESSAGE);
+		}
+		super.visitNode(tree);
 	}
 }
