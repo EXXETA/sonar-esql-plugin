@@ -21,6 +21,8 @@ public class ProcessInvokingItselfCheckTest {
 		EsqlCheck check = new ProcessInvokingItselfCheck();
 		EsqlCheckVerifier.issues(check, new File("src/test/resources/ProcessInvokingItself.esql"))
 		.next().atLine(7).withMessage("process invoking itself.")
-		.next().atLine(15).withMessage("process invoking itself.").noMore();
+		.next().atLine(15).withMessage("process invoking itself.")
+		.next().atLine(23).withMessage("process invoking itself.")
+		.noMore();
 	}
 }

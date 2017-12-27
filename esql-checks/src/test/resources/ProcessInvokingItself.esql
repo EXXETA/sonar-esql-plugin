@@ -15,6 +15,14 @@ CREATE FUNCTION Main() RETURNS BOOLEAN --Noncompliant
 		SET abc = Main2();
 		
 	END;
+	CREATE PROCEDURE Main3() RETURNS BOOLEAN --Noncompliant
+	BEGIN
+		DECLARE myInt INTEGER 1;
+		DECLARE myInt2 INTEGER;
+		DECLARE abc Boolean;
+		CALL Main3();
+		
+	END;
 END MODULE;	
 
 	
