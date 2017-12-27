@@ -16,7 +16,7 @@ public class CommentsCheckTest{
   public void test() {
 		
 		 EsqlCheckVerifier.issues(new CommentsCheck(), new File("src/test/resources/comments.esql"))
-		 .next().atLine(34).withMessage("Include comment after every 20 lines of code.")
+		 .next().atLine(34).withMessage("Include comment within the range of every 20 lines of code.")
 		 .noMore();
   }
   

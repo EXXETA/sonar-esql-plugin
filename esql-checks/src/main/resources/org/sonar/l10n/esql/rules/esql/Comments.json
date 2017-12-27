@@ -1,5 +1,5 @@
 {
-  "title": "Include comment after every 20 lines of code.",
+  "title": "Include comment within the range of every 20 lines of code.",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {

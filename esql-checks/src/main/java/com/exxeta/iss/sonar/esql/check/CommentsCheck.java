@@ -19,11 +19,11 @@ import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
 @Rule(key = "Comments")
 public class CommentsCheck extends DoubleDispatchVisitorCheck {
 
-	private static final String MESSAGE = "Include comment after every 20 lines of code.";
+	private static final String MESSAGE = "Include comment within the range of every 20 lines of code.";
 	private static final int DEFAULT_THRESHOLD = 20;
 	 @RuleProperty(
 			    key = "Comments",
-			    description = "Include comment after every 20 lines of code.",
+			    description = "Include comment within the range of every 20 lines of code.",
 			    defaultValue = "" + DEFAULT_THRESHOLD)
 	 public int maximumThreshold = DEFAULT_THRESHOLD;
 	 
@@ -39,11 +39,13 @@ public class CommentsCheck extends DoubleDispatchVisitorCheck {
 		for (String line :lines)
 		{
 		   String  originalLine = line.toString();
-		   i = i+1;
+		   i = i+1; 
+		   
+		   
 		
 			  if(originalLine.replaceAll("\\s+","").startsWith("--"))
 			  {
-				  linesCounter=linesCounter+1;
+				  linesCounter=0;
 				  commentsCount=commentsCount+1;
 				 
 				  if(linesCounter<=DEFAULT_THRESHOLD)
@@ -60,7 +62,7 @@ public class CommentsCheck extends DoubleDispatchVisitorCheck {
  	 
 			if(originalLine.replaceAll("\\s+","").startsWith("/*"))
 				     {
-				        linesCounter=linesCounter+1;
+				        linesCounter=0;
 				        commentsCount=commentsCount+1;
 			
 				        if(linesCounter<=DEFAULT_THRESHOLD)
@@ -78,30 +80,28 @@ public class CommentsCheck extends DoubleDispatchVisitorCheck {
 			         	       {  
 				    	          linesCounter=0;
             			       } 
-				  }      
-				        	  
-			  
-			  
-				  if(!(originalLine.replaceAll("\\s+","").isEmpty()))
-				  { 
-					 
-					 
-					  linesCounter=linesCounter+1;
-					  
-					  if(linesCounter<=DEFAULT_THRESHOLD)
-					  {
-						  continue;
-					  }
-					  
-					  
-					  if(linesCounter>DEFAULT_THRESHOLD)
-					  {
-						  addIssue(new LineIssue(this,i+1,MESSAGE)); 
-						  linesCounter=0;
-						  continue; 
-					  }
-					  
+				  }   
+			if(!(originalLine.replaceAll("\\s+","").isEmpty()))
+			  { 
+				 
+				 
+				  linesCounter=linesCounter+1;
+				  
+				  if(linesCounter<=DEFAULT_THRESHOLD)
+				  {
+					  continue;
 				  }
+				  
+				  
+				  if(linesCounter>DEFAULT_THRESHOLD)
+						  
+				  {
+					  addIssue(new LineIssue(this,i+1,MESSAGE)); 
+					  linesCounter=0;
+					  continue; 
+				  }
+				        	 
+				 }
 			  }
         }  
    } 
