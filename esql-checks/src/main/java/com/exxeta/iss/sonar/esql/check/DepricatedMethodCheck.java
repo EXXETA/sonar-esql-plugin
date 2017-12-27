@@ -61,7 +61,7 @@ public class DepricatedMethodCheck extends DoubleDispatchVisitorCheck {
 	@Override
 	public void visitCallExpression(CallExpressionTree tree) {
 		if (tree.functionName() instanceof IdentifierTree) {
-			Methods.add((((IdentifierTree)tree.functionName()).name()));
+			Methods.add(((IdentifierTree)tree.functionName()).name());
 		}
 		super.visitCallExpression(tree);
 	}

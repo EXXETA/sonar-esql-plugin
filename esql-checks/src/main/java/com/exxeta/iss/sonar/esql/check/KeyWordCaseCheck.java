@@ -7,15 +7,10 @@ import org.sonar.check.Rule;
 
 import com.exxeta.iss.sonar.esql.api.EsqlNonReservedKeyword;
 import com.exxeta.iss.sonar.esql.api.tree.PathElementNameTree;
-import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
-import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
-import com.exxeta.iss.sonar.esql.api.visitors.EsqlFile;
-import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
 import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitorCheck;
 import com.exxeta.iss.sonar.esql.lexer.EsqlReservedKeyword;
-import com.exxeta.iss.sonar.esql.parser.EsqlLegacyGrammar;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;

@@ -23,7 +23,6 @@ import java.util.List;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.expression.BinaryExpressionTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.CaseStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateFunctionStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateModuleStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree;

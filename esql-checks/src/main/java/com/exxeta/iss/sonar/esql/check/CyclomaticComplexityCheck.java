@@ -53,7 +53,7 @@ public class CyclomaticComplexityCheck extends DoubleDispatchVisitorCheck {
 
 	private void raiseIssue(int complexity, Tree routine) {
 		String message = String.format(MESSAGE,
-				(routine instanceof CreateFunctionStatementTree ? "function" : "procedure"), complexity,
+				routine instanceof CreateFunctionStatementTree ? "function" : "procedure", complexity,
 				maximumCyclomaticComplexity);
 
 		SyntaxToken primaryLocation = routine.firstToken();
