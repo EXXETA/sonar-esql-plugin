@@ -30,7 +30,24 @@ CREATE COMPUTE MODULE a
 	BEGIN
 		RETURN A<2;
 	END;
-
+	CREATE Procedure Main2() RETURNS BOOLEAN
+	BEGIN
+		DECLARE myInt INTEGER 1;
+		DECLARE myInt2,myInt4 INTEGER;
+		IF x='ANS' OR y = 'AND'  AND z = 'XYZ' OR a='space' AND z = 'XYZ' OR a='space' AND z = 'XYZ' OR a='space' THEN
+		 RETURN TRUE;
+		END IF; 
+		IF x='ANS' OR y = 'AND'  AND z = 'XYZ' OR a='space' AND z = 'XYZ' OR a='space' AND z = 'XYZ' OR a='space' THEN
+		 RETURN TRUE;
+		END IF; 
+		IF x='ANS' OR y = 'AND'  AND z = 'XYZ' OR a='space' AND z = 'XYZ' OR a='space' AND z = 'XYZ' OR a='space' THEN
+		 RETURN TRUE;
+		END IF; 
+		IF x='ANS' OR y = 'AND'  AND z = 'XYZ' OR a='space' AND z = 'XYZ' OR a='space' AND z = 'XYZ' OR a='space' THEN
+		 RETURN TRUE;
+		END IF; 
+	END;
+	
 END MODULE;
 
 

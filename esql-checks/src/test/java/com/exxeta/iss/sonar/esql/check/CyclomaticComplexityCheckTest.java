@@ -21,8 +21,10 @@ public class CyclomaticComplexityCheckTest {
 	@Test
 	public void test() {
 		EsqlCheck check = new CyclomaticComplexityCheck();
-		EsqlCheckVerifier.issues(check, new File("src/test/resources/CyclomaticComplexity.esql")).next().atLine(2)
-				.withMessage("Check Function \"Main\". Cyclomatic Complexity is higher then the threshold.").noMore();
+		EsqlCheckVerifier.issues(check, new File("src/test/resources/CyclomaticComplexity.esql"))
+		.next().atLine(2).withMessage("Refactor this function to reduce its Cognitive Complexity from 12 to the 10 allowed.")
+		.next().atLine(33).withMessage("Refactor this procedure to reduce its Cognitive Complexity from 33 to the 10 allowed.")
+		.noMore();
 	}
 
 }
