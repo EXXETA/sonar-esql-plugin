@@ -1,0 +1,22 @@
+CREATE COMPUTE MODULE TestFlow_Compute
+	CREATE FUNCTION message_domain() RETURNS BOOLEAN
+	BEGIN
+		SET OutputRoot.XMLNSC.test='a'; 
+		SET OutputRoot.MRM.test='a'; 
+		RETURN TRUE; --Compliant
+	END;
+	CREATE FUNCTION unreachable() RETURNS BOOLEAN
+	BEGIN
+		SET OutputRoot.XMLNSC.test='a'; 
+		RETURN TRUE; --Noncompliant
+		RETURN TRUE;
+		SET OutputRoot.MRM.test='a'; 
+	END;
+	CREATE FUNCTION unreachable2() RETURNS BOOLEAN
+	BEGIN
+		SET OutputRoot.XMLNSC.test='a'; 
+	    THROW USER EXCEPTION; --Noncompliant
+		SET OutputRoot.MRM.test='a'; 
+	END;
+	
+END MODULE;
