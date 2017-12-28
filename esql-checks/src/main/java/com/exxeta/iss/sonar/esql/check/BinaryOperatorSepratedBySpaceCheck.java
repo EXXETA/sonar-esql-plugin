@@ -10,6 +10,7 @@ import org.sonar.check.Rule;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitorCheck;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.google.common.collect.ImmutableList;
@@ -33,7 +34,7 @@ public class BinaryOperatorSepratedBySpaceCheck extends SubscriptionVisitorCheck
 			Iterator<Tree> childIterator = tree.parent().childrenStream().iterator();
 			Tree prevChild = null;
 			while (childIterator.hasNext()) {
-				
+
 				Tree child = childIterator.next();
 				if (child == tree) {
 					break;
@@ -44,23 +45,25 @@ public class BinaryOperatorSepratedBySpaceCheck extends SubscriptionVisitorCheck
 			if (childIterator.hasNext()) {
 				nextChild = childIterator.next();
 			}
-			boolean noSpaceBefore = false;
-			boolean noSpaceAfter = false;
-			if (prevChild!=null && prevChild.lastToken().endLine() == ((InternalSyntaxToken) tree).endLine()) {
-				if (prevChild.lastToken().endColumn() == ((InternalSyntaxToken) tree).column()){
-					noSpaceBefore=true;
-				}
-			}
-			if (nextChild!=null && ((InternalSyntaxToken) tree).endLine() == nextChild.firstToken().line()) {
-				if (((InternalSyntaxToken) tree).endColumn()==nextChild.firstToken().column()){
-					noSpaceAfter = true;
-				}
-			}
-			if (noSpaceAfter || noSpaceBefore){
+			boolean noSpaceBefore = prevChild != null
+					&& !isSpaceBetween(prevChild.lastToken(), (InternalSyntaxToken) tree);
+			boolean noSpaceAfter = nextChild != null
+					&& !isSpaceBetween((InternalSyntaxToken) tree, nextChild.firstToken());
+			if (noSpaceAfter || noSpaceBefore) {
 				addIssue(tree, MESSAGE);
 			}
 		}
 		super.visitNode(tree);
+	}
+
+	private boolean isSpaceBetween(SyntaxToken firstTree, SyntaxToken secondTree) {
+
+		if (firstTree.endLine() != secondTree.line()) {
+			return true;
+		}
+
+		return firstTree.endColumn() != secondTree.column();
+
 	}
 
 	@Override
