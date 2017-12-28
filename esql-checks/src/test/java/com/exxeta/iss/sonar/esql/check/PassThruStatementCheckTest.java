@@ -17,8 +17,7 @@ public class PassThruStatementCheckTest  {
 	@Test
 	public void test() {
 		EsqlCheck check = new PassThruStatementCheck();
-		EsqlCheckVerifier.issues(check, new File("src/test/resources/PassthruStatementCheck.esql")).next().atLine(9)
-				.withMessage("Use parameter markers '?' when using the PASSTHRU statement in ESQL").noMore();
+		EsqlCheckVerifier.verify(check, new File("src/test/resources/PassthruStatementCheck.esql"));
 	}
 	
 	
