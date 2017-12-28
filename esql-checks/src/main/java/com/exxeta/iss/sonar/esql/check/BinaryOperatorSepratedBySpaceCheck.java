@@ -32,7 +32,9 @@ public class BinaryOperatorSepratedBySpaceCheck extends SubscriptionVisitorCheck
 		if (BINARY_OPERATOR.contains(((InternalSyntaxToken) tree).text())) {
 			Iterator<Tree> childIterator = tree.parent().childrenStream().iterator();
 			Tree prevChild = null;
-			for (Tree child = childIterator.next(); childIterator.hasNext(); child = childIterator.next()) {
+			while (childIterator.hasNext()) {
+				
+				Tree child = childIterator.next();
 				if (child == tree) {
 					break;
 				}
