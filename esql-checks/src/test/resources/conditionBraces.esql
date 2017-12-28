@@ -13,5 +13,13 @@ END IF;
 WHILE count <= providerCount DO
                 SET faultRef.ExceptionElement.description = messageTextDetail;
 END WHILE;
+CASE
+		WHEN envRef = 'checkCustomerRingFencingStatus' THEN	
+			SET OutputRoot = InputRoot;		
+			PROPAGATE TO TERMINAL 'out1';
+		WHEN envRef = 'retrieveRelatedParty' THEN	
+			SET OutputRoot = InputRoot;		
+			PROPAGATE TO TERMINAL 'out1';
+END CASE;
 END;
 END MODULE;

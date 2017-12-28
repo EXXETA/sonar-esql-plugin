@@ -24,17 +24,15 @@ public class ConditionBracesCheck extends DoubleDispatchVisitorCheck  {
 	
 				 EsqlFile file = getContext().getEsqlFile();
 				 List<String> lines = CheckUtils.readLines(file);
-			
+			     String originalLine=null;
 			        
 					if(lines.size() < 2)
 			            return;
 		for(int i = 0; i < lines.size() ; i++)
 		 {
-			 boolean conditionFound = false;
-			    
-			String originalLine = (String)lines.get(i);
-			        
-							   
+			boolean conditionFound = false;   
+			originalLine = (String)lines.get(i);
+			
 			if((originalLine.replaceAll("\\s+","").contains("IF"))
 				&& !(originalLine.replaceAll("\\s+","").contains("IF(")) 
 				&& !(originalLine.replaceAll("\\s+","").contains("ENDIF")))
@@ -45,6 +43,9 @@ public class ConditionBracesCheck extends DoubleDispatchVisitorCheck  {
 				else if((originalLine.replaceAll("\\s+","").contains("WHILE")) 
 						&& !(originalLine.replaceAll("\\s+","").contains("WHILE("))
 						&& !(originalLine.replaceAll("\\s+","").contains("ENDWHILE")))
+						conditionFound = true;
+				else if((originalLine.replaceAll("\\s+","").contains("WHEN")) 
+						&& !(originalLine.replaceAll("\\s+","").contains("WHEN(")))
 						conditionFound = true;
 				else   
 				       continue;

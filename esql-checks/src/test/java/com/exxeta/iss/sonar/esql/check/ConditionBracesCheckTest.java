@@ -23,6 +23,8 @@ public class ConditionBracesCheckTest {
 		    .next().atLine(4).withMessage("Use braces for conditions as it gives more readability to code.")
 		    .next().atLine(8).withMessage("Use braces for conditions as it gives more readability to code.")
 	        .next().atLine(13).withMessage("Use braces for conditions as it gives more readability to code.")
+	        .next().atLine(17).withMessage("Use braces for conditions as it gives more readability to code.")
+	        .next().atLine(20).withMessage("Use braces for conditions as it gives more readability to code.")
 		 .noMore();
 	  }
    
