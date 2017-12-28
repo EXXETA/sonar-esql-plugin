@@ -22,7 +22,7 @@ import com.exxeta.iss.sonar.esql.tree.expression.LiteralTree;
 public class FilterNodeHaveOnlyOneReturnCheck extends DoubleDispatchVisitorCheck {
 	
 	
-	private static final String MESSAGE = "The filter module always returns the same value";
+	private static final String MESSAGE = "This filter module always returns the same value";
 	private boolean insideFilterModule;
 	private int trueCount = 0;
     private int falseCount = 0;
