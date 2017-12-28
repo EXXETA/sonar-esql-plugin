@@ -41,8 +41,6 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>sonar-msgflow-plugin</artifactId>
-			<systemPath>${basedir}/lib/sonar-msgflow-plugin-1.1.1.jar</systemPath>
-			<scope>system</scope>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
@@ -55,5 +53,13 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	
+    <repositories>
+      <repository>
+        <id>local-dependency-repo</id>
+        <url>file://${project.basedir}/../dependency-repo</url>
+      </repository>
+    </repositories>
+
 
 </project>
