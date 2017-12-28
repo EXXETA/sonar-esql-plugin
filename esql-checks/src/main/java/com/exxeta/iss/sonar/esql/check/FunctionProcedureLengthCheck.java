@@ -12,8 +12,8 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.CreateFunctionStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
 import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
-import com.exxeta.iss.sonar.esql.api.visitors.LinesOfCodeVisitor;
 import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
+import com.exxeta.iss.sonar.esql.metrics.LineVisitor;
 
 /**
  * This java class is created to implement the logic for checking the length of
@@ -55,7 +55,7 @@ public class FunctionProcedureLengthCheck extends DoubleDispatchVisitorCheck {
 			
 		 BeginEndStatementTree body = (BeginEndStatementTree) routineDeclarationTree.routineBody().statement();
 		 
-		 int nbLines = new LinesOfCodeVisitor().linesOfCode(body);
+		 int nbLines = new LineVisitor(body).getLinesOfCodeNumber();
 		    if (nbLines > maximumMethodProcedureLength) {
 		      String message = String.format(MESSAGE, nbLines, maximumMethodProcedureLength);
 		      IssueLocation primaryLocation = new IssueLocation(routineDeclarationTree, message);
