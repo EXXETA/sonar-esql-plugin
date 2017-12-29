@@ -31,14 +31,13 @@ import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitorCheck;
 import com.exxeta.iss.sonar.esql.parser.EsqlParserBuilder;
 import com.exxeta.iss.sonar.esql.tree.EsqlCommentAnalyser;
 import com.google.common.collect.ImmutableList;
-import com.sonar.sslr.api.RecognitionException;
 import com.sonar.sslr.api.typed.ActionParser;
 
 public class CommentedCodeCheck extends SubscriptionVisitorCheck {
 
 	private static final String MESSAGE = "Remove this commented out code.";
-	  private static final EsqlCommentAnalyser COMMENT_ANALYSER = new EsqlCommentAnalyser();
-	  private static final ActionParser<Tree> PARSER = EsqlParserBuilder.createParser(Kind.STATEMENTS);
+	private static final EsqlCommentAnalyser COMMENT_ANALYSER = new EsqlCommentAnalyser();
+	private static final ActionParser<Tree> PARSER = EsqlParserBuilder.createParser(Kind.STATEMENTS);
 
 	@Override
 	public List<Kind> nodesToVisit() {
@@ -50,44 +49,39 @@ public class CommentedCodeCheck extends SubscriptionVisitorCheck {
 		List<List<SyntaxTrivia>> commentGroups = groupComments((SyntaxToken) tree);
 		commentGroups.forEach(this::checkCommentGroup);
 	}
-	
-	  private void checkCommentGroup(List<SyntaxTrivia> commentGroup) {
-		    String uncommentedText = uncomment(commentGroup);
 
-		    try {
-		      StatementsTree parsedTree = (StatementsTree) PARSER.parse(uncommentedText);
-		      if (!parsedTree.statements().isEmpty()){
-			      IssueLocation primaryLocation = new IssueLocation(commentGroup.get(0), commentGroup.get(commentGroup.size() - 1), MESSAGE);
-			      addIssue(new PreciseIssue(this, primaryLocation));
-			  } else {
-				  //Try commented elseif
-				  parsedTree = (StatementsTree) PARSER.parse("IF TRUE THEN "+uncommentedText);
-			      if (!parsedTree.statements().isEmpty()){
-				      IssueLocation primaryLocation = new IssueLocation(commentGroup.get(0), commentGroup.get(commentGroup.size() - 1), MESSAGE);
-				      addIssue(new PreciseIssue(this, primaryLocation));
-				  } else {
-					  parsedTree = (StatementsTree) PARSER.parse("IF TRUE THEN "+uncommentedText+" END IF;");
-				      if (!parsedTree.statements().isEmpty()){
-					      IssueLocation primaryLocation = new IssueLocation(commentGroup.get(0), commentGroup.get(commentGroup.size() - 1), MESSAGE);
-					      addIssue(new PreciseIssue(this, primaryLocation));
-					  }
-				  }
-			  }
-		    } catch (RecognitionException e) {
-		      // do nothing, it's just a comment
-		    }
-		  }
+	private void checkCommentGroup(List<SyntaxTrivia> commentGroup) {
+		String uncommentedText = uncomment(commentGroup);
 
-	  private static String uncomment(List<SyntaxTrivia> triviaGroup) {
-		    StringBuilder uncommentedText = new StringBuilder();
-		    for (SyntaxTrivia trivia : triviaGroup) {
-		      String value = COMMENT_ANALYSER.getContents(trivia.text());
-		      uncommentedText.append("\n");
-		      uncommentedText.append(value);
-		    }
-		    return uncommentedText.toString().trim();
-		  }
-	  
+		if (isParseable(uncommentedText)
+				// Try commented ELSEIF
+				|| isParseable("IF TRUE THEN " + uncommentedText)
+				|| isParseable("IF TRUE THEN " + uncommentedText + " END IF;")
+				//try commented WHEN
+				|| isParseable("CASE A " + uncommentedText + " END CASE;")
+				) {
+			IssueLocation primaryLocation = new IssueLocation(commentGroup.get(0),
+					commentGroup.get(commentGroup.size() - 1), MESSAGE);
+			addIssue(new PreciseIssue(this, primaryLocation));
+		}
+	}
+
+	private boolean isParseable(String string) {
+		StatementsTree parsedTree = (StatementsTree) PARSER.parse(string);
+		return !parsedTree.statements().isEmpty();
+
+	}
+
+	private static String uncomment(List<SyntaxTrivia> triviaGroup) {
+		StringBuilder uncommentedText = new StringBuilder();
+		for (SyntaxTrivia trivia : triviaGroup) {
+			String value = COMMENT_ANALYSER.getContents(trivia.text());
+			uncommentedText.append("\n");
+			uncommentedText.append(value);
+		}
+		return uncommentedText.toString().trim();
+	}
+
 	/**
 	 * Returns comments by groups which come sequentially, without empty lines
 	 * between.
