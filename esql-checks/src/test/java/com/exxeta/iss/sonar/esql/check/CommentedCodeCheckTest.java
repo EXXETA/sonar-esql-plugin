@@ -15,23 +15,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.esql.parser;
+package com.exxeta.iss.sonar.esql.check;
 
-import org.sonar.sslr.grammar.GrammarRuleKey;
+import java.io.File;
 
-import com.exxeta.iss.sonar.esql.api.tree.Tree;
-import com.sonar.sslr.api.typed.ActionParser;
+import org.junit.Test;
 
-public class EsqlParserBuilder {
-	 private EsqlParserBuilder() {
-	  }
-	
-	  public static ActionParser<Tree> createParser() {
-	    return new EsqlParser();
-	  }
-	  
-	  public static ActionParser<Tree> createParser(GrammarRuleKey rootRule){
-		  return new EsqlParser(rootRule);
-	  }
+import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
+
+public class CommentedCodeCheckTest {
+	@Test
+	public void test() throws Exception {
+		CommentedCodeCheck check = new CommentedCodeCheck();
+		 EsqlCheckVerifier.issues(check, new File("src/test/resources/commentedCode.esql"))
+		 .next().atLine(5).withMessage("Remove this commented out code.")
+		 .next().atLine(9).withMessage("Remove this commented out code.")
+		 .noMore();
+	}
 }
-

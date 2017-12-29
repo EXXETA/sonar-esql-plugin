@@ -17,7 +17,7 @@ CREATE COMPUTE MODULE ProcessCardAccount
 		    ITERATE X;
 		  END IF;
 		
-		  -- Einige Anweisungen 2
+		  -- Some statements 2
 		
 		UNTIL
 		  i >= 4
@@ -35,7 +35,7 @@ CREATE COMPUTE MODULE ProcessCardAccount
 		    LEAVE X;
 		  END IF;
 		
-		  -- Einige Anweisungen 2
+		  -- Some statements 2
 		
 		UNTIL
 		  i >= 4
