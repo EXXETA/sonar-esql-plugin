@@ -19,4 +19,41 @@ CREATE COMPUTE MODULE TestFlow_Compute
 		SET OutputRoot.MRM.test='a'; 
 	END;
 	
+
+	CREATE FUNCTION unreachableLeaveContinue () RETURNS BOOLEAN
+	BEGIN
+		DECLARE i INTEGER;
+		SET i = 0;
+		X : REPEAT
+		  SET i = i + 1;
+		
+  	      ITERATE X; --Noncompliant
+		  
+
+		  IF i IN(2, 3) THEN
+		    ITERATE X;
+		  END IF;
+		
+		  -- Some statements 2
+		
+		UNTIL
+		  i >= 4
+		END REPEAT X;
+		X : REPEAT
+		  SET i = i + 1;
+		
+		  LEAVE X; --Noncompliant
+		  
+		  IF i IN(2, 3) THEN
+		    LEAVE X;
+		  END IF;
+		
+		  -- Some statements 2
+		
+		UNTIL
+		  i >= 4
+		END REPEAT X;
+	END;
+
+	
 END MODULE;
