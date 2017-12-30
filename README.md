@@ -1,5 +1,5 @@
-sonar-esql-plugin
-=================
+# sonar-esql-plugin [![Build Status](https://travis-ci.org/EXXETA/sonar-esql-plugin.svg)](https://travis-ci.org/EXXETA/sonar-esql-plugin)
+
 
 This open source plugin can be used to analyze the ESQL-sourcecode of IBM Websphere Message Broker / IBM Integration Bus projects. 
 
