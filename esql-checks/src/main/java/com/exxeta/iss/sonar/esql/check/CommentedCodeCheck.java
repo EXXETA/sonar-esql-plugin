@@ -20,6 +20,8 @@ package com.exxeta.iss.sonar.esql.check;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.sonar.check.Rule;
+
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
@@ -33,6 +35,7 @@ import com.exxeta.iss.sonar.esql.tree.EsqlCommentAnalyser;
 import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.typed.ActionParser;
 
+@Rule(key = "CommentedCode")
 public class CommentedCodeCheck extends SubscriptionVisitorCheck {
 
 	private static final String MESSAGE = "Remove this commented out code.";
