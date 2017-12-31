@@ -8,9 +8,7 @@ git:
   submodules: false
 
 install: true
-script: ./travis.sh
-env:
-  - TEST=ci
+script: "mvn clean install -P coverage-per-test"
 matrix:
   fast_finish: true
 
