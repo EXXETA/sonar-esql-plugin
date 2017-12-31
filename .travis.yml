@@ -26,4 +26,4 @@ notifications:
   email: false
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - bash <(curl -s https://codecov.io/bash) -t b5356ca9-9cef-4be3-a67e-013d18ebd73a
