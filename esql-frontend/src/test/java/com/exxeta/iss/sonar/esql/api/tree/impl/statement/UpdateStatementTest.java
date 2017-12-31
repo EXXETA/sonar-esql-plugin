@@ -18,12 +18,22 @@
 package com.exxeta.iss.sonar.esql.api.tree.impl.statement;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
+import com.exxeta.iss.sonar.esql.api.tree.FieldReferenceTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
+import com.exxeta.iss.sonar.esql.api.tree.statement.InsertStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.SetColumnTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.UpdateStatementTree;
+import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
+import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class UpdateStatementTest {
+public class UpdateStatementTest extends EsqlTreeModelTest<UpdateStatementTree>{
 
 
 	@Test
@@ -34,4 +44,27 @@ public class UpdateStatementTest {
 
 	}
 	
+	@Test
+	public void modelTest() throws Exception{
+		UpdateStatementTree tree = parse("UPDATE Database.StockPrices AS SP SET PRICE = InputBody.Message.StockPrice, B = 1;", Kind.UPDATE_STATEMENT);
+		
+		assertNotNull(tree.updateKeyword());
+
+		assertNotNull(tree.tableReference());
+
+		assertNotNull(tree.asKeyword());
+
+		assertNotNull(tree.alias());
+
+		assertNotNull(tree.setKeyword());
+
+		assertNotNull(tree.setColumns());
+
+		assertNull(tree.whereKeyword());
+
+		assertNull(tree.whereExpression());
+
+		assertNotNull(tree.semi());
+		
+	}
 }

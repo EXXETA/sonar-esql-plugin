@@ -18,18 +18,45 @@
 package com.exxeta.iss.sonar.esql.api.tree.impl.statement;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.api.tree.statement.InsertStatementTree;
+import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class InsertStatementTest {
+public class InsertStatementTest  extends EsqlTreeModelTest<InsertStatementTree> {
 
 
 	@Test
 	public void insertStatement(){
 		assertThat(Kind.INSERT_STATEMENT)
 		.matches("INSERT INTO Database.{Source}.{Schema}.{Table} (Name, Value) values ('Joe', 12.34);");
+
+	}
+	
+	@Test
+	public void modelTest() throws Exception {
+		InsertStatementTree tree = parse("INSERT INTO Database.{Source}.{Schema}.{Table} (Name, Value) values ('Joe', 12.34);", Kind.INSERT_STATEMENT);
+		assertNotNull(tree.insertKeyword());
+
+		assertNotNull(tree.intoKeyword());
+
+		assertNotNull(tree.tableReference());
+
+		assertNotNull(tree.columns());
+
+		assertNotNull(tree.valuesKeyword());
+
+		assertNotNull(tree.openParenthesis());
+
+		assertNotNull(tree.expressions());
+		assertNotNull(tree.expressions().get(0));
+
+		assertNotNull(tree.closeParenthesis());
+
+		assertNotNull(tree.semi());
 
 	}
 	

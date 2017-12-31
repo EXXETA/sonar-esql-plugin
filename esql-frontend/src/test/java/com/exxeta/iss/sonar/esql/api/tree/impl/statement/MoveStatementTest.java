@@ -25,7 +25,6 @@ import static org.junit.Assert.assertNull;
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
-import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.MoveStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.NameClausesTreeImpl;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
@@ -40,6 +39,7 @@ public class MoveStatementTest extends EsqlTreeModelTest<MoveStatementTreeImpl>{
 		.matches("MOVE cursor FIRSTCHILD REPEAT TYPE;")
 		.matches("MOVE cursor FIRSTCHILD IDENTITY a;")
 		.matches("MOVE cursor FIRSTCHILD NAMESPACE a;")
+		.matches("MOVE cursor PARENT;")
 		.matches("MOVE cursor TO OutputRoot;");
 
 	}
