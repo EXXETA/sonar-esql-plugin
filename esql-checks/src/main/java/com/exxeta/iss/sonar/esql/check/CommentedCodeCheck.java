@@ -42,6 +42,14 @@ public class CommentedCodeCheck extends SubscriptionVisitorCheck {
 	private static final EsqlCommentAnalyser COMMENT_ANALYSER = new EsqlCommentAnalyser();
 	private static final ActionParser<Tree> PARSER = EsqlParserBuilder.createParser(Kind.STATEMENTS);
 
+	private static final List<String> PARSING_TRY = ImmutableList.of(
+			"%s",
+			"IF TRUE THEN %s", 
+			"IF TRUE THEN %s END IF;",
+			"CASE A %s END CASE;", 
+			"BEGIN %s", 
+			"%s END;");
+	
 	@Override
 	public List<Kind> nodesToVisit() {
 		return ImmutableList.of(Kind.TOKEN);
@@ -56,13 +64,15 @@ public class CommentedCodeCheck extends SubscriptionVisitorCheck {
 	private void checkCommentGroup(List<SyntaxTrivia> commentGroup) {
 		String uncommentedText = uncomment(commentGroup);
 
-		if (isParseable(uncommentedText)
-				// Try commented ELSEIF
-				|| isParseable("IF TRUE THEN " + uncommentedText)
-				|| isParseable("IF TRUE THEN " + uncommentedText + " END IF;")
-				//try commented WHEN
-				|| isParseable("CASE A " + uncommentedText + " END CASE;")
-				) {
+		boolean parseable=false;
+		for (String format : PARSING_TRY){
+			if (isParseable(String.format(format, uncommentedText))){
+				parseable=true;
+				break;
+			}
+		}
+		
+		if (parseable) {
 			IssueLocation primaryLocation = new IssueLocation(commentGroup.get(0),
 					commentGroup.get(commentGroup.size() - 1), MESSAGE);
 			addIssue(new PreciseIssue(this, primaryLocation));
