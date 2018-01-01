@@ -11,8 +11,7 @@ public class CodeCoverageExtension {
 
 	  public static final Logger LOG = Loggers.get(CodeCoverageExtension.class.getName());
 
-	  private CodeCoverageExtension(){
-	  }
+	  private CodeCoverageExtension(){}
 
 	  public static List<Object> getExtensions() {
 		    ImmutableList.Builder<Object> extensions = ImmutableList.builder();

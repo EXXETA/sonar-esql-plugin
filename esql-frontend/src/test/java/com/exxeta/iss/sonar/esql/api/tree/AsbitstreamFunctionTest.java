@@ -18,18 +18,48 @@
 package com.exxeta.iss.sonar.esql.api.tree;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
+import com.exxeta.iss.sonar.esql.tree.impl.declaration.FieldReferenceTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
+import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class AsbitstreamFunctionTest {
+public class AsbitstreamFunctionTest extends EsqlTreeModelTest<AsbitstreamFunctionTree>{
 
 	@Test
 	public void asbitstreamFunction() {
 		assertThat(Kind.ASBITSTREAM_FUNCTION)
 			.matches("ASBITSTREAM(cursor OPTIONS options CCSID 1208)")
 			.matches("ASBITSTREAM(Environment.Variables.MQRFH2.Data,,1208,,,,options)");
+	}
+	
+	@Test
+	public void modelTest() throws Exception {
+		AsbitstreamFunctionTree tree = parse("ASBITSTREAM(cursor OPTIONS options CCSID 1208)", Kind.ASBITSTREAM_FUNCTION);
+		assertNotNull(tree.asbitstreamKeyword());
+		
+		assertNotNull(tree.openingParenthesis());
+		assertNotNull(tree.fieldReference());
+		
+		assertNotNull(tree.optionsSeparator());
+		assertNotNull(tree.optionsExpression());
+		assertNull(tree.encodingSeparator());
+		assertNull(tree.encodingExpression());
+		assertNotNull(tree.ccsidSeparator());
+		assertNotNull(tree.ccsidExpression());
+		assertNull(tree.setSeparator());
+		assertNull(tree.setExpression());
+		assertNull(tree.typeSeparator());
+		assertNull(tree.typeExpression());
+		assertNull(tree.formatSeparator());
+		assertNull(tree.formatExpression());
+		
+		assertNotNull(tree.closingParenthesis());
 	}
 
 }

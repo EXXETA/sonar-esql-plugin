@@ -1,5 +1,7 @@
 package com.exxeta.iss.sonar.esql.codecoverage;
 
+import static com.exxeta.iss.sonar.esql.codecoverage.CodeCoverageExtension.LOG;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -18,11 +20,10 @@ import org.sonar.api.batch.sensor.coverage.CoverageType;
 import org.sonar.api.batch.sensor.coverage.NewCoverage;
 
 import com.google.common.io.Files;
-import static com.exxeta.iss.sonar.esql.codecoverage.CodeCoverageExtension.LOG;
 
 public abstract class AbstractAnalyzer implements ExecutionDataVisitor {
 
-	private Pattern pathPattern = Pattern.compile("(?i)\\s*CREATE\\s+SCHEMA\\s+([\\w\\.]+)\\s+PATH");
+	private Pattern pathPattern = Pattern.compile("(?i)\\s*BROKER\\s+SCHEMA\\s+([\\w\\.]+)\\s+PATH.*");
 	private Pattern modulePattern = Pattern.compile("(?i)\\s*CREATE\\s+(COMPUTE|FILTER|DATABASE)\\s+MODULE\\s+(.+)");
 	private Pattern routinePattern = Pattern.compile("(?i)\\s*CREATE\\s+(FUNCTION|PROCEDURE)\\s+([\\w]+)\\W+.*");
 	private Pattern endModulePattern = Pattern.compile("(?i)\\s*END\\s+MODULE;.*");

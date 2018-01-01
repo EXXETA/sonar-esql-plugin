@@ -18,17 +18,30 @@
 package com.exxeta.iss.sonar.esql.api.tree.impl.statement;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.api.tree.statement.EvalStatementTree;
+import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class EvalStatementTest {
+public class EvalStatementTest extends EsqlTreeModelTest<EvalStatementTree> {
 	@Test
 	public void evalStatement(){
 		assertThat(Kind.EVAL_STATEMENT)
 		.matches("EVAL('SET ' || scalarVar1 || ' = 2;');");
 
+	}
+	
+	@Test
+	public void modelTest() throws Exception{
+		EvalStatementTree tree = parse("EVAL('SET ' || scalarVar1 || ' = 2;');", Kind.EVAL_STATEMENT);
+		assertNotNull(tree.evalKeyword());
+		assertNotNull(tree.openingParenthesis());
+		assertNotNull(tree.expression());
+		assertNotNull(tree.closingParenthesis());
+		assertNotNull(tree.semi());
 	}
 	
 }
