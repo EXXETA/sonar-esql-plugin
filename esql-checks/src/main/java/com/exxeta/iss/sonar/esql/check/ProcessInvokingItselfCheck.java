@@ -3,33 +3,29 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
-import java.sql.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.sonar.check.Rule;
 
-import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
+
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.expression.CallExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
-import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
-import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxTrivia;
+
 import com.exxeta.iss.sonar.esql.api.tree.statement.BeginEndStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CallStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateFunctionStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.ReturnStatementTree;
+
 import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.StatementsTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
-import com.exxeta.iss.sonar.esql.api.visitors.EsqlFile;
+
 import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
-import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
+
 
 /**
  * This Java class is created to implement the logic to check whether process is
@@ -101,10 +97,14 @@ public class ProcessInvokingItselfCheck extends DoubleDispatchVisitorCheck {
 					}
 				} else if (token != null && token.is(Kind.CALL_EXPRESSION)) {
 					CallExpressionTree callstmt = (CallExpressionTree) token;
-					String calledProcedure = ((IdentifierTree) callstmt.functionName()).name();
+					
+					IdentifierTree identifier = (IdentifierTree) callstmt.functionName();
+					if (identifier != null) {
+						String calledProcedure = identifier.name();
 
 					if (ProcedureName.equalsIgnoreCase(calledProcedure)) {
 						addIssue(new LineIssue(this, stmt, MESSAGE));
+					}
 					}
 
 				}

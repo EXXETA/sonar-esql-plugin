@@ -18,6 +18,7 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.SetStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
 import com.exxeta.iss.sonar.esql.api.visitors.EsqlFile;
 import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
+import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
 import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
 
 /**
@@ -73,9 +74,12 @@ public class UnusedVariableCheck extends DoubleDispatchVisitorCheck {
 		for (String variable : calledRoutines) {
 			declaredVariable.remove(variable);
 		}
+		int i = 0;
 		for (Entry<String, DeclareStatementTree> variable : declaredVariable.entrySet()) {
-			addIssue(new PreciseIssue(this, new IssueLocation(variable.getValue(),
-					variable.getValue(), String.format(MESSAGE, variable.getKey()))));
+			i = i + 1;
+			String Variabl =variable.getKey();
+			
+			addIssue(new LineIssue(this, i, "Check Variable \"" + Variabl + "\". " + MESSAGE));
 		}
 		
 		

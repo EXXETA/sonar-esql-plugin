@@ -32,22 +32,24 @@ public class BinaryOperatorSepratedBySpaceCheck extends DoubleDispatchVisitorChe
 		int i = 0;
 		
 		for (String line : lines) {
-			i = i + 1;	
+			i = i + 1;
+			if (!line.trim().startsWith("--") && !line.trim().startsWith("/*") ){
         String  thelines = line.toString();
 	
 		String upperCaseTheLine = thelines.toUpperCase().trim();
+		
 		for (String operator : BINARY_OPERATOR) {
 			
 			int size = operator.length();
-			int pos1 = upperCaseTheLine.indexOf(operator);
-			if(upperCaseTheLine.contains(operator) && ( pos1!= -1) && (size==1)){
+			
+			if(upperCaseTheLine.contains(operator) && (size==1)){
 				
 				 int pos = upperCaseTheLine.indexOf(operator);
 				 
-				if (!upperCaseTheLine.substring(pos-1, pos+1).matches(EsqlLexer.WHITESPACE)  && !upperCaseTheLine.substring(pos+1, pos+2).matches(EsqlLexer.WHITESPACE)) {
+				if (!(pos+2  > upperCaseTheLine.length()) && !upperCaseTheLine.substring(pos-1, pos+1).matches(EsqlLexer.WHITESPACE)  && !upperCaseTheLine.substring(pos+1, pos+2).matches(EsqlLexer.WHITESPACE)) {
 					addIssue(new LineIssue(this, i, MESSAGE));
 			} 
-				else if (!upperCaseTheLine.substring(pos-1, pos).matches(EsqlLexer.WHITESPACE) && !upperCaseTheLine.substring(pos+2, pos+3).matches(EsqlLexer.WHITESPACE)){
+				else if (!(pos+3  > upperCaseTheLine.length()) && !upperCaseTheLine.substring(pos-1, pos).matches(EsqlLexer.WHITESPACE) && !upperCaseTheLine.substring(pos+2, pos+3).matches(EsqlLexer.WHITESPACE)){
 				addIssue(new LineIssue(this, i, MESSAGE));
 			}
 		  }
@@ -57,6 +59,7 @@ public class BinaryOperatorSepratedBySpaceCheck extends DoubleDispatchVisitorChe
 		}
 	}
   }
+	}
 
 	
 	
