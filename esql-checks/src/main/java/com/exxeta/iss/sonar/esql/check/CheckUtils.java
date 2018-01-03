@@ -26,36 +26,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.exxeta.iss.sonar.esql.api.visitors.EsqlFile;
-import com.sonar.sslr.api.AstNode;
-import com.sonar.sslr.api.Token;
 
 public class CheckUtils {
 	private CheckUtils() {
 	}
 
-	public static boolean equalNodes(AstNode node1, AstNode node2) {
-		if (!node1.getType().equals(node2.getType()) || node1.getNumberOfChildren() != node2.getNumberOfChildren()) {
-			return false;
-		}
+	
 
-		List<AstNode> children1 = node1.getChildren();
-		List<AstNode> children2 = node2.getChildren();
-		for (int i = 0; i < children1.size(); i++) {
-			if (!equalNodes(children1.get(i), children2.get(i))) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	public static boolean containsValue(List<Token> list, String value) {
-		for (Token currentToken : list) {
-			if (currentToken.getValue().equals(value)) {
-				return true;
-			}
-		}
-		return false;
-	}
 
 	public static List<String> readLines(EsqlFile file) {
 		try (BufferedReader reader = newBufferedReader(file)) {
@@ -72,17 +49,7 @@ public class CheckUtils {
 	
 	/* changes Strats from here  (Sapna Singh) */
 	
-	public static boolean isCreateFilterModuleLine(String line)
-    {
-        String upperCaseLine = line.toUpperCase().trim();
-        if(upperCaseLine.startsWith("CREATE "))
-        {
-            String withoutSpace = upperCaseLine.replace(" ", "");
-            if(withoutSpace.startsWith("CREATEFILTERMODULE"))
-                return true;
-        }
-        return false;
-    }
+	
 	
 	public static String removeQuotedContent(String s) {
 		String res = removeQuotedContentByChar(s, '\'');
@@ -116,48 +83,7 @@ public class CheckUtils {
 		return cnt;
 	}
 	
-	 public static boolean isReturnsTrueLine(String line)
-	    {
-	        String withoutSpace = line.toUpperCase().replace(" ", "");
-	        return withoutSpace.startsWith("RETURNTRUE;");
-	    }
 
-	    public static boolean isReturnsFalseLine(String line)
-	    {
-	        String withoutSpace = line.toUpperCase().replace(" ", "");
-	        return withoutSpace.startsWith("RETURNFALSE;");
-	    }
-
-	    public static boolean isThrowsError(String line)
-	    {
-	        String withoutSpace = line.toUpperCase().replace(" ", "");
-	        return withoutSpace.contains("THROWUSEREXCEPTION");
-	    }
-
-	    public static boolean isReturnsLine(String line)
-	    {
-	        String withoutSpace = line.toUpperCase().replace(" ", "");
-	        return withoutSpace.startsWith("RETURN;");
-	    }
-
-	    public static boolean isEndModuleLine(String line)
-	    {
-	        String withoutSpace = line.toUpperCase().replace(" ", "");
-	        return withoutSpace.startsWith("ENDMODULE;");
-	    }
-	    public static boolean isReturnsUsingEqualsLine(String line)
-	    {
-	        String upperLine = line.toUpperCase();
-	        if(upperLine.contains("RETURN"))
-	        {
-	            if(upperLine.contains("="))
-	                return true;
-	            if(upperLine.contains("<>"))
-	                return true;
-	        }
-	        return false;
-	    }
-	    
 	    public static Set<String> buildKeys(String lineParam)
 	    {
 	       String line = lineParam;
