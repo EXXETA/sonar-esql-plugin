@@ -22,9 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.sonar.check.Rule;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateFunctionStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateModuleStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree;
@@ -32,6 +34,7 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.PropagateStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ReturnStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
 import com.exxeta.iss.sonar.esql.api.visitors.EsqlFile;
+import com.exxeta.iss.sonar.esql.tree.impl.expression.PrefixExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateRoutineTreeImpl;
 import com.exxeta.iss.sonar.msgflow.model.MessageFlow;
 import com.exxeta.iss.sonar.msgflow.model.MessageFlowNode;
@@ -117,11 +120,11 @@ public class PropagateConsistencyCheck extends DoubleDispatchVisitorCheck {
 
 	@Override
 	public void visitPropagateStatement(PropagateStatementTree propagateStatement) {
-		if ("TERMINAL".equalsIgnoreCase(propagateStatement.targetType().text())) {
-			checkTerminal("OutTerminal."+getTerminalName(propagateStatement.target().toString()), propagateStatement);
-		} else if (propagateStatement.targetType() == null) {
+		if (propagateStatement.targetType() == null){
 			checkTerminal("OutTerminal.out", propagateStatement);
-		}
+		}else if ( "TERMINAL".equalsIgnoreCase(propagateStatement.targetType().text())) {
+			checkTerminal("OutTerminal." + getTerminalName(propagateStatement.target()), propagateStatement);
+		} 
 
 		super.visitPropagateStatement(propagateStatement);
 	}
@@ -140,9 +143,17 @@ public class PropagateConsistencyCheck extends DoubleDispatchVisitorCheck {
 		return fileList;
 	}
 
-	private static String getTerminalName(String target) {
+	private static String getTerminalName(ExpressionTree expression) {
+		String target = expression.toString();
+		if (expression instanceof PrefixExpressionTreeImpl){
+			PrefixExpressionTreeImpl prefixEx = (PrefixExpressionTreeImpl) expression;
+			target = prefixEx.operator().text() + prefixEx.expression().toString();
+		}
+		
 		String terminal = "";
-		if (StringUtils.isNumeric(target)) {
+		
+		
+		if (NumberUtils.isNumber(target)) {
 			int terminalNo = Integer.parseInt(target);
 			switch (terminalNo) {
 			case -2:
