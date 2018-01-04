@@ -21,16 +21,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import org.sonar.check.Rule;
 
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.DeclareStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.SetStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
 import com.exxeta.iss.sonar.esql.api.visitors.EsqlFile;
 import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
+import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
 import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
 
 /**
@@ -44,7 +46,7 @@ public class UnusedVariableCheck extends DoubleDispatchVisitorCheck {
 	private static final String MESSAGE = "Remove the unused Variable.";
 
 	private Set<String> calledRoutines = new HashSet<>();
-	private List<String> variables = new ArrayList<>();
+	private List<String> variables = new ArrayList<String>();
 	private HashMap<String, DeclareStatementTree> declaredVariable = new HashMap<>();
 	
 	@Override
@@ -71,11 +73,12 @@ public class UnusedVariableCheck extends DoubleDispatchVisitorCheck {
 		List<String> lines = CheckUtils.readLines(file);
 		for (String line : lines) {
 			
-		    String upperCaseTheLine = line.toUpperCase();
+	        String  thelines = line.toString();
+		    String upperCaseTheLine = thelines.toUpperCase();
 		    
 			for (String Vars : variables) {
 				
-				if(line.contains(Vars) && !upperCaseTheLine.contains("DECLARE")){
+				if(thelines.contains(Vars) && !upperCaseTheLine.contains("DECLARE")){
 					calledRoutines.add(Vars);	
 				}
 				
@@ -85,9 +88,12 @@ public class UnusedVariableCheck extends DoubleDispatchVisitorCheck {
 		for (String variable : calledRoutines) {
 			declaredVariable.remove(variable);
 		}
+		int i = 0;
 		for (Entry<String, DeclareStatementTree> variable : declaredVariable.entrySet()) {
-			addIssue(new PreciseIssue(this, new IssueLocation(variable.getValue(),
-					variable.getValue(), String.format(MESSAGE, variable.getKey()))));
+			i = i + 1;
+			String Variabl =variable.getKey();
+			
+			addIssue(new LineIssue(this, i, "Check Variable \"" + Variabl + "\". " + MESSAGE));
 		}
 		
 		
@@ -99,5 +105,4 @@ public class UnusedVariableCheck extends DoubleDispatchVisitorCheck {
 	
 	
 }
-
 

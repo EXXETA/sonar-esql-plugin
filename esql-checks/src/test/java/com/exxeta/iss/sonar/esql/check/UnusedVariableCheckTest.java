@@ -15,14 +15,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.exxeta.iss.sonar.esql.check;
+
+import static org.junit.Assert.*;
 
 import java.io.File;
 
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.EsqlCheck;
+
 import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
 
 
@@ -36,7 +38,8 @@ public class UnusedVariableCheckTest  {
 	public void test() {
 		EsqlCheck check = new UnusedVariableCheck();
 		EsqlCheckVerifier.issues(check, new File("src/test/resources/UnusedVariable.esql"))
-		.next().atLine(8).withMessage("Remove the unused Variable.");
+		
+		.next().atLine(1).withMessage("Check Variable \"envRef\". Remove the unused Variable.").noMore();;
 	
 	}	
 

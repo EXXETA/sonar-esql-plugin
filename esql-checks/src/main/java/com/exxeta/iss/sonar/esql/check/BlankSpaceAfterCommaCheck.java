@@ -29,7 +29,7 @@ import com.exxeta.iss.sonar.esql.lexer.EsqlLexer;
 
 /**
  * This java class is created to check that blank space should follow each comma in any ESQL statement
- * @author C50679
+ * @author   Sapna singh
  *
  */
 @Rule(key = "BlankSpaceAfterComma")
@@ -48,9 +48,11 @@ public class BlankSpaceAfterCommaCheck extends DoubleDispatchVisitorCheck{
 		for (String line : lines) {
 			linecounter = linecounter + 1;	
 	       
-			String upperCaseTheLine = line.toUpperCase().trim();
+			String  thelines = line.toString();
+		
+			String upperCaseTheLine = thelines.toUpperCase().trim();
 			if(upperCaseTheLine.contains(",") ){
-				int pos= upperCaseTheLine.indexOf(',');
+				int pos= upperCaseTheLine.indexOf(",");
 				
 						if (!upperCaseTheLine.substring(pos+1,pos+2).matches(EsqlLexer.WHITESPACE) ) {
 							addIssue(new LineIssue(this, linecounter, MESSAGE));
@@ -59,4 +61,3 @@ public class BlankSpaceAfterCommaCheck extends DoubleDispatchVisitorCheck{
 		} 
 	}
 }
-

@@ -28,7 +28,7 @@ import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
 
 /**
  * this java class is created to implement the logic for checking the blan lines before the block or single line comment.
- * @author C50679
+ * @author   Sapna Singh
  *
  */
 @Rule(key = "BlankLineBeforeComments")
@@ -49,15 +49,14 @@ public class BlankLineBeforeCommentsCheck extends DoubleDispatchVisitorCheck{
 				linecounter = linecounter + 1;
 		    String currentline = lines.get(i);
 			
-			if ((currentline.trim().startsWith("--") || currentline.trim().startsWith("/*") ) && ! lines.get(i-1).matches("\\s*") ){
+			if ((currentline.trim().startsWith("--")) ||( currentline.trim().startsWith("/*") ) ){
 				
-                 addIssue(new LineIssue(this, i+1, MESSAGE));
+				if (! lines.get(linecounter-1).matches("\\s*") ){
+				
+                 addIssue(new LineIssue(this, linecounter, MESSAGE));
+				}
 				
 			}
 		} 
 	}
 }
-
-
-	
-
