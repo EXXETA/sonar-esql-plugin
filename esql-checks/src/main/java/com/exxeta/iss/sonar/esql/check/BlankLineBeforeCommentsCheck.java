@@ -14,7 +14,7 @@ import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
 
 /**
  * this java class is created to implement the logic for checking the blan lines before the block or single line comment.
- * @author C50679
+ * @author   Sapna Singh
  *
  */
 @Rule(key = "BlankLineBeforeComments")
