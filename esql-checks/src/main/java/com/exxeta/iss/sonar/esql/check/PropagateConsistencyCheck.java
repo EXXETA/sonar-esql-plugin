@@ -93,14 +93,14 @@ public class PropagateConsistencyCheck extends DoubleDispatchVisitorCheck {
 						if ("TERMINAL".equalsIgnoreCase(propagateStatement.targetType().text())) {
 							String terminal = getTerminalName(propagateStatement.target().toString());
 							if(!msgFlownode.getOutputTerminals().contains("OutTerminal."+terminal)) {
-								addIssue(tree, MESSAGE);
+								addIssue(propagateStatement, MESSAGE);
 							}
 						}
 					} else if (funcStat.is(Kind.RETURN_STATEMENT)) {
 						ReturnStatementTree retStatement = (ReturnStatementTree) funcStat;
 						if(retStatement.expression().toString().equalsIgnoreCase("true")){
 							if(!msgFlownode.getOutputTerminals().contains("OutTerminal.out")) {
-								addIssue(tree, MESSAGE);
+								addIssue(retStatement, MESSAGE);
 							}
 						}
 					}
@@ -115,14 +115,14 @@ public class PropagateConsistencyCheck extends DoubleDispatchVisitorCheck {
 						if ("TERMINAL".equalsIgnoreCase(propagateStatement.targetType().text())) {
 							String terminal = getTerminalName(propagateStatement.target().toString());
 							if(!msgFlownode.getOutputTerminals().contains("OutTerminal."+terminal)) {
-								addIssue(tree, MESSAGE);
+								addIssue(propagateStatement, MESSAGE);
 							}
 						}
 					} else if (funcStat.is(Kind.RETURN_STATEMENT)) {
 						ReturnStatementTree retStatement = (ReturnStatementTree) funcStat;
 						if(retStatement.expression().toString().equalsIgnoreCase("true")){
 							if(!msgFlownode.getOutputTerminals().contains("OutTerminal.out")) {
-								addIssue(tree, MESSAGE);
+								addIssue(retStatement, MESSAGE);
 							}
 						}
 					}
