@@ -15,7 +15,7 @@ import com.exxeta.iss.sonar.esql.lexer.EsqlLexer;
 
 /**
  * This java class is created to check that blank space should follow each comma in any ESQL statement
- * @author C50679
+ * @author   Sapna singh
  *
  */
 @Rule(key = "BlankSpaceAfterComma")

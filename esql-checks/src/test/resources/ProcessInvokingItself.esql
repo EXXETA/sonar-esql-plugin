@@ -16,5 +16,3 @@ CREATE FUNCTION Main() RETURNS BOOLEAN --Noncompliant
 		
 	END;
 END MODULE;	
-
-	

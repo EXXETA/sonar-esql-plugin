@@ -17,7 +17,7 @@ import com.exxeta.iss.sonar.esql.lexer.EsqlLexer;
 
 /**
  * This Java class is created to implement the logic for all binary operators should be separated from their operands by spaces.
- * @author C50679
+ * @author   Sapna Singh
  *
  */
 @Rule(key = "BinaryOperatorSepratedBySpace")
