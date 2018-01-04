@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,32 +16,23 @@
  * limitations under the License.
  */package com.exxeta.iss.sonar.esql.check;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.check.Rule;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
-import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
-import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
-import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
-import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
-import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitorCheck;
-import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
-import com.exxeta.iss.sonar.esql.tree.impl.statement.SetStatementTreeImpl;
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ListMultimap;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import com.exxeta.iss.sonar.esql.lexer.EsqlLexer;
 import com.exxeta.iss.sonar.esql.api.visitors.FileIssue;
+import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
+import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitorCheck;
+import com.exxeta.iss.sonar.esql.lexer.EsqlLexer;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.SetStatementTreeImpl;
+import com.google.common.collect.ImmutableList;
 /**
  * This java class is created to implement the logic for checking that space should be given around equal sign.
  * @author sapna singh
@@ -50,6 +41,7 @@ import com.exxeta.iss.sonar.esql.api.visitors.FileIssue;
 @Rule(key = "SpaceAroundEqualSign")
 public class SpaceAroundEqualSignCheck extends SubscriptionVisitorCheck {
 
+	public static final Logger LOG = Loggers.get(SpaceAroundEqualSignCheck.class.getName());
 	
 	
 	private static final String MESSAGE = "Add space around \"=\" sign.";
@@ -73,11 +65,12 @@ public class SpaceAroundEqualSignCheck extends SubscriptionVisitorCheck {
 					
 				} catch (IOException e) {
 					addIssue(new FileIssue(this, "Unable to read file."));					
-					
+					LOG.error("Unable to read file.",e);
 				}
 				}
 		  SetStatementTreeImpl equalTree = (SetStatementTreeImpl)tree;
-		  int lineNumber,column;
+		  int lineNumber;
+		  int column;
 		  String line = null;
 				
 				lineNumber = equalTree.equalSign().line();	

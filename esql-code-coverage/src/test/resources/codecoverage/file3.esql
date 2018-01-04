@@ -1,0 +1,210 @@
+BROKER SCHEMA a PATH x.y.z, r.t.z
+declare CacheQueueTable SHARED ROW; -- a shared variable that can be used by instances of a flow
+CREATE FUNCTION Main() RETURNS BOOLEAN
+BEGIN
+END;
+CREATE COMPUTE MODULE Routing_using_memory_cache_Compute2
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		/****************************************************************************
+		*   Compute node ESQL to find a queue destination based on the
+		*   content of the message.
+		*
+		*   A non-cached database table is used to store the routing information
+		*
+		*   Any compute node using this ESQL most have the following set:
+		*
+		*   - The database source set to the database containing the routing table
+		*   - The compute mode set to environment.
+		*****************************************************************************/
+		 
+		/*
+			Neither the whole message nor the message headers are copied across.
+			This is because the compute node is ran in "LocalEnvironment" mode.
+			By setting the compute node to this value the OutputRoot is automatically
+			set to the InputRoot without any copying of the message content being done.
+			This mode should always be used when the message body does not need to be 
+			modified. 
+		*/
+		-- CALL CopyMessageHeaders();
+		-- CALL CopyEntireMessage(); 
+		
+		/*
+		    As the compute mode is set to LocalEnvironment, the Input LocalEnvironment
+		    must be copied to the OutputLocalEnvironment. Otherwise the current content 
+		    of the environment will be lost. 
+		*/
+		SET OutputLocalEnvironment = InputLocalEnvironment;
+		
+		/*
+			The first real action is to get the queue manager name and the queue name from 
+			the database table. This is done using two fields from the message and one hard 
+			coded value.
+			
+			This is the only part of the ESQL that needs to be customised to reuse this ESQL 
+			in another scenario.
+			
+			Declare and calculate the three variables used:
+		*/
+		-- Section 1
+		DECLARE Variable1 CHAR 'SAMPLE_QUEUES'; -- Hard coded value
+		DECLARE Variable2 CHAR;            -- Customer initials
+		DECLARE Variable3 CHAR;	        -- Customer surname
+		
+		-- Section 2
+		DECLARE refToInvoice REFERENCE TO "InputRoot"."XMLNSC"."SaleEnvelope"."SaleList"."Invoice";
+		IF lastmove(refToInvoice) THEN
+			SET Variable2 = refToInvoice."Initial"[1] ||refToInvoice."Initial"[2]; -- append the two initials together
+			SET Variable3 = refToInvoice."Surname";
+		ELSE
+			/*
+			   	if fields can not be found in message then set to a default value.
+			   	An alternative to this would be throw an exception.
+			   	
+			   	This could be done using the ESQL:
+			   	   THROW EXCEPTION MESSAGE 3000 ;
+			*/
+			-- Section 3
+			SET Variable2 = 'default';
+		    SET Variable3 = 'default';
+		END IF;
+		
+		/*
+			Use these Variables to select the queue manager name and the queue name from the database.
+			It is important to note that this sample only ever returns 
+			one destination queue but this would still work if the database
+			select returned multiple destination queues.
+			The message would then be sent to multiple output queues.
+		*/
+		/*
+			There are two parts to finding the queue destination.
+			The first is to get a table of all possible queues from the database and
+			the second is to search this in memory table for the queue required
+			for this message.
+			
+			To speed the processing, the first action will only be done when the first message enters the
+			message flow. The retrieved database table will be stored in memory for any other messages
+			to use. The cache can also be refreshed by putting a message onto the CACHE.MEMORY.REFRESH queue.
+			
+			It is important to note that all this processing is surrounded by a begin atomic block.
+			This makes sure that only one message accesses the cache at a time. This is very important
+			because the cache could be refreshed at any point. If two messages are using the cache at the
+			same time then one could refresh the cache while the other one is using it.
+			If refreshing is not going to be used or only used when the message flow has been stopped then the 
+			BEGIN ATOMIC statement END; can be moved to just before the start of part 2. This is to make sure
+			that the initialization of the cache is single threaded. The ATOMIC block is given a label called 
+			"ROUTING". It is important to label ATOMIC blocks because all ATOMIC blocks with in a message flow, 
+			with the same label, share the same lock even if they are in different compute nodes.
+		*/
+		
+		/*
+			Part 1: Getting the database table into memory.
+			The database is only read if the CacheQueues.vaild field is set to null.
+			This happens either at initialization time when the flow is
+			ran for the first time or when the refresh part of the flow resets
+			the cache.
+			
+			The actual select statement has several important constructs:
+			1, CacheQueues.DestinationData[]
+			   This is the shared variable that will store the contents of the 
+			   routing database.
+			
+			2, select S.queue_manager as queueManager, S.queue_name as queueName
+			   This part maps the column names in the table to the names that are required for routing.
+			   
+			3, from Database.routing_table as S 
+			   This chooses the table to do the select from and sets up the variable S.
+			   If the variable S is not defined then all column names have to be prefixed 
+			   with Database.routing_table rather than S.
+			   
+			4, Where
+				This is where the selection criteria are given. Again all column names must either
+				be prefixed with S or Database.routing_table.
+			   
+		*/
+		-- Section 4
+		ROUTING : BEGIN ATOMIC -- beginning of atomic block. Processing is single threaded until the END; is reached
+			IF CacheQueueTable.valid IS NULL THEN
+		 		SET  CacheQueueTable.DestinationData[] =  
+		       	(
+		       		SELECT S.QUEUE_MANAGER, S.QUEUE_NAME ,S.VARIABLE2, S.VARIABLE3
+		       		FROM Database.ROUTING_TABLE as S 
+		       		WHERE 
+		       			S.VARIABLE1 = Variable1		         			
+		       	 ); 
+		         	 
+			SET CacheQueueTable.valid = true;
+			END IF;
+			-- Section 5
+			/* 
+				NOTE: the END; to the BEGIN ATOMIC can be move to this position if refreshing
+					  is not going to be used. This is because only initialization of the cache
+					  needs to be atomic and not the using of the cache as well.
+			*/
+		/*
+			At this point the CacheQueues should be full of the data with possible destinations
+			
+			Part2, Using the in memory cache.
+			Now, A esql select will be used to find the actual destination from the list of database rows          
+		*/
+		
+			SET  OutputLocalEnvironment.Destination.MQDestinationList.DestinationData[] = 
+		          (
+		        	SELECT S.QUEUE_MANAGER as queueManagerName, S.QUEUE_NAME as queueName 
+		        	FROM CacheQueueTable.DestinationData[] as S 
+		        	WHERE 
+		        		S.VARIABLE2 = Variable2 and 
+		        		S.VARIABLE3 = Variable3		        			
+		          );
+		-- Section 6
+		END ROUTING ; -- end of the ROUTING atomic block
+		/*
+		
+			At this point the local environment has been successfully set up with the required
+			destination queue manager and queue name.
+			For the message to successfully get put to the queue the following must happen after this node:
+			1, Any compute node processing the message must use mode "message" or copy across the
+			   LocalEnvironment. If this is not done then the destination queue will be lost.
+			2, The MQOuput node used to put the message to the queues in the list must have the 
+			   Destination Mode set to Destination List.
+		*/
+		
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;
+END MODULE;
+
+CREATE COMPUTE MODULE Refresh_memory_cache_Compute2
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- CALL CopyMessageHeaders();
+		-- CALL CopyEntireMessage();
+		set CacheQueueTable.valid value = null;
+		RETURN TRUE;
+	END;
+
+	CREATE PROCEDURE CopyMessageHeaders() BEGIN
+		DECLARE I INTEGER 1;
+		DECLARE J INTEGER CARDINALITY(InputRoot.*[]);
+		WHILE I < J DO
+			SET OutputRoot.*[I] = InputRoot.*[I];
+			SET I = I + 1;
+		END WHILE;
+	END;
+
+	CREATE PROCEDURE CopyEntireMessage() BEGIN
+		SET OutputRoot = InputRoot;
+	END;
+END MODULE;

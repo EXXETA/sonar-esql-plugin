@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,12 +18,16 @@
 package com.exxeta.iss.sonar.esql.api.tree.impl.statement;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.api.tree.statement.CaseStatementTree;
+import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class CaseStatementTest {
+public class CaseStatementTest extends EsqlTreeModelTest<CaseStatementTree>{
 
 	@Test
 	public void whenClause() {
@@ -42,5 +46,21 @@ public class CaseStatementTest {
 				.matches("CASE\n" + "	WHEN i <> 0 THEN\n" + "    CALL handleI(i);\n" + "  WHEN j> 1 THEN\n"
 						+ "    CALL handleIZeroAndPositiveJ(j);\n" + "  ELSE\n" + "    CALL handleAllOtherCases(j);\n"
 						+ "END CASE;");
+	}
+	
+	@Test
+	public void modelTest() throws Exception{
+		CaseStatementTree tree = parse("CASE" + " WHEN i <> 0 THEN\n" + "    CALL handleI(i);\n" + "  WHEN j> 1 THEN\n"
+						+ "    CALL handleIZeroAndPositiveJ(j);\n" + "  ELSE\n" + "    CALL handleAllOtherCases(j);\n"
+						+ "END CASE;", Kind.CASE_STATEMENT);
+		
+		assertNotNull(tree.caseKeyword());
+		assertNull(tree.mainExpression());
+		assertNotNull(tree.whenClauses());
+		assertNotNull(tree.elseKeyword());
+		assertNotNull(tree.elseSatements());
+		assertNotNull(tree.endKeyword());
+		assertNotNull(tree.caseKeyword2());
+		assertNotNull(tree.semi());
 	}
 }

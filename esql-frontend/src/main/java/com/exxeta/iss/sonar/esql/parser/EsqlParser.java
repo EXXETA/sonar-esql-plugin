@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,19 +21,25 @@ import java.io.File;
 import java.nio.charset.Charset;
 import java.util.Iterator;
 
+import org.sonar.sslr.grammar.GrammarRuleKey;
+
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
 import com.sonar.sslr.api.typed.ActionParser;
 
 public final class EsqlParser extends ActionParser<Tree>{
 	  public EsqlParser() {
+		  this(EsqlLegacyGrammar.PROGRAM);
+	  }
+	  
+	  public EsqlParser(GrammarRuleKey rootRule) {
 		    super(
 		      Charset.defaultCharset(),
 		      EsqlLegacyGrammar.createGrammarBuilder(),
 		      EsqlGrammar.class,
 		      new TreeFactory(),
 		      new EsqlNodeBuilder(),
-		      EsqlLegacyGrammar.PROGRAM);
+		      rootRule);
 		  }
 
 		  @Override
