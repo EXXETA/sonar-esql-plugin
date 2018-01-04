@@ -56,7 +56,7 @@ public class ProcessInvokingItselfCheck extends DoubleDispatchVisitorCheck {
 	@Override
 	public void visitCallExpression(CallExpressionTree tree) {
 		//TODO Check if firstToken can be replaced
-		if (routineName!=null && routineName.equals(tree.functionName().firstToken().text())){
+		if (routineName!=null && tree.functionName()!=null && tree.functionName().firstToken()!=null &&  routineName.equals(tree.functionName().firstToken().text())){
 			addIssue(new LineIssue(this, tree, MESSAGE));
 		}
 		super.visitCallExpression(tree);
