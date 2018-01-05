@@ -30,10 +30,8 @@ import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.google.common.collect.ImmutableList;
 
 /**
- * This Java class is created to implement the logic for all binary operators
- * should be separated from their operands by spaces.
- * 
- * @author C50679
+ * This Java class is created to implement the logic for all binary operators should be separated from their operands by spaces.
+ * @author   Sapna Singh
  *
  */
 @Rule(key = "BinaryOperatorSepratedBySpace")
@@ -86,3 +84,4 @@ public class BinaryOperatorSepratedBySpaceCheck extends SubscriptionVisitorCheck
 	}
 
 }
+ 

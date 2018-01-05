@@ -35,7 +35,7 @@ import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
 
 /**
  * This java class is created to implement the logic for reference check, Navigating message tree could be replaced by a reference. 
- * @author Sapna. singh
+ * @author Sapna  singh
  *
  */
 @Rule(key = "NavigatingTreeCouldBeReference")
@@ -109,12 +109,12 @@ public class NavigatingTreeCouldBeReferenceCheck extends DoubleDispatchVisitorCh
                         Set<String> keyValuesStart = CheckUtils.buildKeys(startLine);
                         Set<String> keyValuesEnd = CheckUtils.buildKeys(endLine);
                         keyValuesStart.addAll(keyValuesEnd);
-						for (Iterator<String> iterator1 = keyValuesStart.iterator(); iterator1.hasNext();) {
-							String key = iterator1.next();
-							if (!key.contains("OutputLocalEnvironment") && !key.contains("InputLocalEnvironment")) {
-								keyValuesAll.add(key);
-							}
-						}
+                        for(Iterator<String> iterator1 = keyValuesStart.iterator(); iterator1.hasNext();) {
+                            String key = iterator1.next();
+                            if (!key.contains("OutputLocalEnvironment") && !key.contains("InputLocalEnvironment")) {
+                                    keyValuesAll.add(key);
+                            }
+                        }
 
                         Iterator<String> iterator2 = keyValuesAll.iterator();
                         while(iterator2.hasNext()) 
@@ -150,26 +150,3 @@ public class NavigatingTreeCouldBeReferenceCheck extends DoubleDispatchVisitorCh
             } while(true);
         }
 	}
-	
-        	
-        	
-  	
-        	
-      	
-        	
-        	
-        	
-        	
-        	
-        	
-        	
-        	
-        	
-        	
-        	
-        	
-        	
-        	
-       
-
-	

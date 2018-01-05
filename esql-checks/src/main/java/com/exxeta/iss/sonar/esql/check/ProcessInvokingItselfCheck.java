@@ -29,8 +29,8 @@ import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
 /**
  * This Java class is created to implement the logic to check whether process is
  * invoking itself.
-	 * 
- * @author C50679
+ * 
+ * @author Sapna Singh
  *
  */
 @Rule(key = "ProcessInvokingItself")

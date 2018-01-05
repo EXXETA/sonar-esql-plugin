@@ -30,8 +30,7 @@ import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.DeclareStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
 import com.exxeta.iss.sonar.esql.api.visitors.EsqlFile;
-import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
-import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
+import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
 
 /**
  * This Java class is created to implement the logic to find all the unused variables.
@@ -86,8 +85,9 @@ public class UnusedVariableCheck extends DoubleDispatchVisitorCheck {
 			declaredVariable.remove(variable);
 		}
 		for (Entry<String, DeclareStatementTree> variable : declaredVariable.entrySet()) {
-			addIssue(new PreciseIssue(this, new IssueLocation(variable.getValue(),
-					variable.getValue(), String.format(MESSAGE, variable.getKey()))));
+			String Variabl =variable.getKey();
+			
+			addIssue(variable.getValue(), "Check Variable \"" + Variabl + "\". " + MESSAGE);
 		}
 		
 		
@@ -99,5 +99,3 @@ public class UnusedVariableCheck extends DoubleDispatchVisitorCheck {
 	
 	
 }
-
-
