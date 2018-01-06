@@ -17,9 +17,6 @@
  */
 package com.exxeta.iss.sonar.esql.api.visitors;
 
-import java.io.File;
-
-
 import com.exxeta.iss.sonar.esql.api.symbols.SymbolModel;
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 
@@ -32,6 +29,4 @@ public interface TreeVisitorContext {
 
 	  SymbolModel getSymbolModel();
 	  
-	  File getFile();
-
 }

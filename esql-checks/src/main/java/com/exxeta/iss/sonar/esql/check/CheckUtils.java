@@ -43,7 +43,7 @@ public class CheckUtils {
 		}
 	}
 
-	private static BufferedReader newBufferedReader(EsqlFile file) {
+	private static BufferedReader newBufferedReader(EsqlFile file) throws IOException {
 		return new BufferedReader(new StringReader(file.contents()));
 	}
 	

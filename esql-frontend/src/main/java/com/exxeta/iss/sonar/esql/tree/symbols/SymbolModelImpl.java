@@ -24,6 +24,7 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
+import org.sonar.api.config.Configuration;
 import org.sonar.api.config.Settings;
 
 import com.exxeta.iss.sonar.esql.api.symbols.Symbol;
@@ -41,12 +42,12 @@ public class SymbolModelImpl implements SymbolModel, SymbolModelBuilder {
 	  private Set<Scope> scopes = new HashSet<>();
 	  private Scope globalScope;
 
-	  public static void build(TreeVisitorContext context, @Nullable Settings settings) {
+	  public static void build(TreeVisitorContext context,  @Nullable Configuration configuration) {
 	    Map<Tree, Scope> treeScopeMap = getScopes(context);
 
 	    new HoistedSymbolVisitor(treeScopeMap).scanTree(context);
 	    new SymbolVisitor(treeScopeMap).scanTree(context);
-	    new TypeVisitor(settings).scanTree(context);
+	    new TypeVisitor(configuration).scanTree(context);
 	  }
 
 	  private static Map<Tree, Scope> getScopes(TreeVisitorContext context) {

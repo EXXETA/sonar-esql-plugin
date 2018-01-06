@@ -24,14 +24,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Iterator;
 
-import org.sonar.api.config.Settings;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.config.Configuration;
 import org.sonar.sslr.grammar.GrammarRuleKey;
 
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.visitors.EsqlVisitorContext;
-import com.exxeta.iss.sonar.esql.compat.CompatibleInputFile;
 import com.exxeta.iss.sonar.esql.parser.EsqlGrammar;
 import com.exxeta.iss.sonar.esql.parser.EsqlLegacyGrammar;
 import com.exxeta.iss.sonar.esql.parser.EsqlNodeBuilder;
@@ -67,7 +67,7 @@ public abstract class EsqlTreeModelTest<T extends Tree> {
 		return (T) getFirstDescendant((EsqlTree) node, descendantToReturn);
 	}
 
-	protected SymbolModelImpl symbolModel(CompatibleInputFile file) {
+	protected SymbolModelImpl symbolModel(InputFile file) {
 		try {
 			return symbolModel(file, null);
 		} catch (IOException e) {
@@ -88,12 +88,12 @@ public abstract class EsqlTreeModelTest<T extends Tree> {
 		return (ProgramTree) getParser(EsqlLegacyGrammar.PROGRAM).parse(content);
 	}
 
-	protected SymbolModelImpl symbolModel(CompatibleInputFile file, Settings settings) throws IOException {
+	protected SymbolModelImpl symbolModel(InputFile file,  Configuration configuration) throws IOException {
 		ProgramTree root = (ProgramTree) getParser(EsqlLegacyGrammar.PROGRAM).parse(file.contents());
-		return (SymbolModelImpl) new EsqlVisitorContext(root, file, settings).getSymbolModel();
+		return (SymbolModelImpl) new EsqlVisitorContext(root, file, configuration).getSymbolModel();
 	}
 
-	protected EsqlVisitorContext context(CompatibleInputFile file) throws IOException {
+	protected EsqlVisitorContext context(InputFile file) throws IOException {
 		ProgramTree root = (ProgramTree) getParser(EsqlLegacyGrammar.PROGRAM).parse(file.contents());
 		return new EsqlVisitorContext(root, file, null);
 	}

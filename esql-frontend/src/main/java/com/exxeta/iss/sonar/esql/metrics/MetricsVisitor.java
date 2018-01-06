@@ -34,9 +34,9 @@ import org.sonar.api.measures.Metric;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.api.visitors.EsqlFileImpl;
 import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitor;
 import com.exxeta.iss.sonar.esql.api.visitors.TreeVisitorContext;
-import com.exxeta.iss.sonar.esql.compat.CompatibleInputFile;
 
 public class MetricsVisitor extends SubscriptionVisitor {
 
@@ -99,7 +99,7 @@ public class MetricsVisitor extends SubscriptionVisitor {
 
   @Override
   public void visitFile(Tree scriptTree) {
-    this.inputFile = ((CompatibleInputFile) getContext().getEsqlFile()).wrapped();
+	  this.inputFile = ((EsqlFileImpl) getContext().getEsqlFile()).inputFile();
     init();
   }
 

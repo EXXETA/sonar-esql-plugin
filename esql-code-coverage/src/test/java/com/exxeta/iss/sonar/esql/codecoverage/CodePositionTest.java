@@ -27,6 +27,7 @@ import org.junit.Test;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.InputFile.Type;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 
 import com.google.common.base.Charsets;
 
@@ -59,11 +60,12 @@ public class CodePositionTest {
 	
 	private InputFile inputFile(String relativePath){
 		File moduleBaseDir = new File("");
-		DefaultInputFile inputFile = new DefaultInputFile("moduleKey", relativePath)
+		DefaultInputFile inputFile = new TestInputFileBuilder("moduleKey", relativePath)
 			      .setModuleBaseDir(moduleBaseDir.toPath())
 			      .setLanguage("esql")
 			      .setType(Type.MAIN)
-			      .setCharset(Charsets.UTF_8);
+			      .setCharset(Charsets.UTF_8)
+			      .build();
 		return inputFile;
 	}
 }

@@ -17,8 +17,6 @@
  */
 package com.exxeta.iss.sonar.esql;
 
-import static com.exxeta.iss.sonar.esql.compat.CompatibilityHelper.wrap;
-
 import java.io.File;
 import java.io.InterruptedIOException;
 import java.util.ArrayList;
@@ -72,7 +70,6 @@ import com.exxeta.iss.sonar.esql.api.visitors.TreeVisitorContext;
 import com.exxeta.iss.sonar.esql.check.CheckList;
 import com.exxeta.iss.sonar.esql.check.ParsingErrorCheck;
 import com.exxeta.iss.sonar.esql.codecoverage.TraceSensor;
-import com.exxeta.iss.sonar.esql.compat.CompatibleInputFile;
 import com.exxeta.iss.sonar.esql.highlighter.HighlightSymbolTableBuilder;
 import com.exxeta.iss.sonar.esql.highlighter.HighlighterVisitor;
 import com.exxeta.iss.sonar.esql.metrics.MetricsVisitor;
@@ -124,12 +121,12 @@ public class EsqlSquidSensor implements Sensor {
 
   @VisibleForTesting
   protected void analyseFiles(
-    SensorContext context, List<TreeVisitor> treeVisitors, Iterable<CompatibleInputFile> inputFiles,
+    SensorContext context, List<TreeVisitor> treeVisitors, Iterable<InputFile> inputFiles,
     ProductDependentExecutor executor, ProgressReport progressReport
   ) {
     boolean success = false;
     try {
-      for (CompatibleInputFile inputFile : inputFiles) {
+      for (InputFile inputFile : inputFiles) {
         // check for cancellation of the analysis (by SonarQube or SonarLint). See SONARJS-761.
         if (context.getSonarQubeVersion().isGreaterThanOrEqual(V6_0) && context.isCancelled()) {
           throw new CancellationException("Analysis interrupted because the SensorContext is in cancelled state");
@@ -154,7 +151,7 @@ public class EsqlSquidSensor implements Sensor {
     }
   }
 
-  private void analyse(SensorContext sensorContext, CompatibleInputFile inputFile, ProductDependentExecutor executor, List<TreeVisitor> visitors) {
+  private void analyse(SensorContext sensorContext, InputFile inputFile, ProductDependentExecutor executor, List<TreeVisitor> visitors) {
     ProgramTree programTree;
 
     try {
@@ -179,13 +176,13 @@ public class EsqlSquidSensor implements Sensor {
     }
   }
 
-  private void processRecognitionException(RecognitionException e, SensorContext sensorContext, CompatibleInputFile inputFile) {
+  private void processRecognitionException(RecognitionException e, SensorContext sensorContext, InputFile inputFile) {
     if (parsingErrorRuleKey != null) {
       NewIssue newIssue = sensorContext.newIssue();
 
       NewIssueLocation primaryLocation = newIssue.newLocation()
         .message(ParsingErrorCheck.MESSAGE)
-        .on(inputFile.wrapped())
+        .on(inputFile)
         .at(inputFile.selectLine(e.getLine()));
 
       newIssue
@@ -196,24 +193,24 @@ public class EsqlSquidSensor implements Sensor {
 
     if (sensorContext.getSonarQubeVersion().isGreaterThanOrEqual(V6_0)) {
       sensorContext.newAnalysisError()
-        .onFile(inputFile.wrapped())
+        .onFile(inputFile)
         .at(inputFile.newPointer(e.getLine(), 0))
         .message(e.getMessage())
         .save();
     }
   }
 
-  private static void processException(Exception e, SensorContext sensorContext, CompatibleInputFile inputFile) {
+  private static void processException(Exception e, SensorContext sensorContext, InputFile inputFile) {
     if (sensorContext.getSonarQubeVersion().isGreaterThanOrEqual(V6_0)) {
       sensorContext.newAnalysisError()
-        .onFile(inputFile.wrapped())
+        .onFile(inputFile)
         .message(e.getMessage())
         .save();
     }
   }
 
-  private void scanFile(SensorContext sensorContext, CompatibleInputFile inputFile, ProductDependentExecutor executor, List<TreeVisitor> visitors, ProgramTree programTree) {
-    EsqlVisitorContext context = new EsqlVisitorContext(programTree, inputFile, sensorContext.settings());
+  private void scanFile(SensorContext sensorContext, InputFile inputFile, ProductDependentExecutor executor, List<TreeVisitor> visitors, ProgramTree programTree) {
+    EsqlVisitorContext context = new EsqlVisitorContext(programTree, inputFile, sensorContext.config());
 
     List<Issue> fileIssues = new ArrayList<>();
 
@@ -225,8 +222,8 @@ public class EsqlSquidSensor implements Sensor {
       }
     }
 
-    saveFileIssues(sensorContext, fileIssues, inputFile.wrapped());
-    executor.highlightSymbols(inputFile.wrapped(), context);
+    saveFileIssues(sensorContext, fileIssues, inputFile);
+    executor.highlightSymbols(inputFile, context);
   }
 
   private void saveFileIssues(SensorContext sensorContext, List<Issue> fileIssues, InputFile inputFile) {
@@ -306,9 +303,9 @@ public class EsqlSquidSensor implements Sensor {
       }
     }
 
-    Iterable<CompatibleInputFile> inputFiles = wrap(fileSystem.inputFiles(mainFilePredicate), context);
+    Iterable<InputFile> inputFiles = fileSystem.inputFiles(mainFilePredicate);
     Collection<File> files = StreamSupport.stream(inputFiles.spliterator(), false)
-      .map(CompatibleInputFile::file)
+      .map(InputFile::file)
       .collect(Collectors.toList());
 
     ProgressReport progressReport = new ProgressReport("Report about progress of ESQL analyzer", TimeUnit.SECONDS.toMillis(10));
