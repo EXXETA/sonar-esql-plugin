@@ -17,7 +17,6 @@
  */
 package com.exxeta.iss.sonar.esql.metrics;
 
-import static com.exxeta.iss.sonar.esql.compat.CompatibilityHelper.wrap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
@@ -32,11 +31,13 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.api.measures.FileLinesContextFactory;
 
+import com.exxeta.iss.sonar.esql.api.visitors.EsqlFileImpl;
 import com.exxeta.iss.sonar.esql.api.visitors.TreeVisitorContext;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
@@ -44,10 +45,11 @@ public class MetricsVisitorTest extends EsqlTreeModelTest {
 
   private static final File MODULE_BASE_DIR = new File("src/test/resources/metrics/");
 
-  private static final DefaultInputFile INPUT_FILE = new DefaultInputFile("moduleKey", "lines.esql")
+  private static final DefaultInputFile INPUT_FILE = new TestInputFileBuilder("moduleKey", "lines.esql")
     .setModuleBaseDir(MODULE_BASE_DIR.toPath())
     .setLanguage("esql")
-    .setType(InputFile.Type.MAIN);
+    .setType(InputFile.Type.MAIN)
+    .build();
 
   private static final String COMPONENT_KEY = "moduleKey:lines.esql";
   private FileLinesContext linesContext;
@@ -60,7 +62,7 @@ public class MetricsVisitorTest extends EsqlTreeModelTest {
     context.fileSystem().add(INPUT_FILE);
     linesContext = mock(FileLinesContext.class);
     treeVisitorContext = mock(TreeVisitorContext.class);
-    when(treeVisitorContext.getEsqlFile()).thenReturn(wrap(INPUT_FILE));
+    when(treeVisitorContext.getEsqlFile()).thenReturn(new EsqlFileImpl(INPUT_FILE));
     when(treeVisitorContext.getTopTree()).thenReturn(parse(INPUT_FILE.file()));
   }
 

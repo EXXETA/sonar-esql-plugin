@@ -17,8 +17,7 @@
  */package com.exxeta.iss.sonar.esql.check;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 
 import org.sonar.api.utils.log.Logger;
@@ -57,11 +56,11 @@ public class SpaceAroundEqualSignCheck extends SubscriptionVisitorCheck {
 	  @Override
 	  public void visitNode(Tree tree) {
 		 
-		  if(lines == null || !filePath.equals(getContext().getFile().getPath())){
+		  if(lines == null){
 				try {
-					 filePath = getContext().getFile().getPath();
-					 lines = null;
-					lines = Files.readAllLines(Paths.get(filePath));
+					 //filePath = getContext().getFile().getPath();
+					 //lines = null;
+					lines = Arrays.asList(getContext().getEsqlFile().contents().split("\\r?\\n"));
 					
 				} catch (IOException e) {
 					addIssue(new FileIssue(this, "Unable to read file."));					

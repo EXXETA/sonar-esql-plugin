@@ -17,6 +17,7 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -74,7 +75,12 @@ public class FileHeaderCheck extends DoubleDispatchVisitorCheck  {
 		        throw new IllegalArgumentException("[" + getClass().getSimpleName() + "] Unable to compile the regular expression: " + headerFormat, e);
 		      }
 		    }
-		    String fileContent = getContext().getEsqlFile().contents();
+		    String fileContent = null;
+		    try {
+				fileContent = getContext().getEsqlFile().contents();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 
 		    Matcher matcher = searchPattern.matcher(fileContent);
 		    if (!matcher.find() || matcher.start() != 0) {

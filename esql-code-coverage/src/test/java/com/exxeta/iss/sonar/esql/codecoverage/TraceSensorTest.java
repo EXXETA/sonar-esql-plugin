@@ -15,9 +15,9 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.InputFile.Type;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.FileMetadata;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
-import org.sonar.api.config.MapSettings;
-import org.sonar.api.config.Settings;
+import org.sonar.api.config.internal.MapSettings;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableSet;
@@ -40,7 +40,7 @@ import com.google.common.collect.ImmutableSet;
  */
 public class TraceSensorTest {
 	  private SensorContextTester context;
-	 private Settings settings;
+	 private MapSettings settings;
 	 
 	 private File moduleBaseDir = new File("src/test/resources/codecoverage/");
 	 
@@ -50,7 +50,7 @@ public class TraceSensorTest {
 	 
 	@Before
 	  public void init() throws FileNotFoundException {
-	    settings = new MapSettings();
+		settings = new MapSettings();
 	    settings.setProperty("sonar.esql.trace.reportPaths", "TraceSensorTest/trace.txt");
 	    context = SensorContextTester.create(moduleBaseDir);
 	    context.setSettings(settings);
@@ -73,13 +73,14 @@ public class TraceSensorTest {
 	  }
 
 	  private InputFile inputFile(String relativePath, Type type) throws FileNotFoundException {
-	    DefaultInputFile inputFile = new DefaultInputFile("moduleKey", relativePath)
+	    DefaultInputFile inputFile = new TestInputFileBuilder("moduleKey", relativePath)
 	      .setModuleBaseDir(moduleBaseDir.toPath())
 	      .setLanguage("esql")
 	      .setType(type)
-	      .setCharset(Charsets.UTF_8);
+	      .setCharset(Charsets.UTF_8)
+	      .build();
 
-	    inputFile.initMetadata(new FileMetadata().readMetadata(new FileReader(   inputFile.file())));
+	    inputFile.setMetadata(new FileMetadata().readMetadata(new FileReader(   inputFile.file())));
 	    context.fileSystem().add(inputFile);
 
 	    return inputFile;

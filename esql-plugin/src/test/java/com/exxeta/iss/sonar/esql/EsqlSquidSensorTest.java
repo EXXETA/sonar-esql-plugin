@@ -17,7 +17,6 @@
  */
 package com.exxeta.iss.sonar.esql;
 
-import static com.exxeta.iss.sonar.esql.compat.CompatibilityHelper.wrap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -25,6 +24,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InterruptedIOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
@@ -41,6 +42,7 @@ import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.DefaultTextPointer;
 import org.sonar.api.batch.fs.internal.DefaultTextRange;
 import org.sonar.api.batch.fs.internal.FileMetadata;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.rule.CheckFactory;
 import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
@@ -71,7 +73,6 @@ import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
 import com.exxeta.iss.sonar.esql.api.visitors.TreeVisitor;
 import com.exxeta.iss.sonar.esql.api.visitors.TreeVisitorContext;
 import com.exxeta.iss.sonar.esql.check.CheckList;
-import com.exxeta.iss.sonar.esql.compat.CompatibleInputFile;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.RecognitionException;
@@ -253,7 +254,7 @@ public class EsqlSquidSensorTest {
 
 	@Test
 	public void progress_report_should_be_stopped() throws Exception {
-		CompatibleInputFile inputFile = inputFile("cpd/Person.esql");
+		InputFile inputFile = inputFile("cpd/Person.esql");
 		createSensor().analyseFiles(context, ImmutableList.of(), ImmutableList.of(inputFile), executor, progressReport);
 		verify(progressReport).stop();
 	}
@@ -298,7 +299,7 @@ public class EsqlSquidSensorTest {
 		verify(progressReport).cancel();
 	}
 
-	private void analyseFileWithException(EsqlCheck check, CompatibleInputFile inputFile,
+	private void analyseFileWithException(EsqlCheck check,InputFile inputFile,
 			String expectedMessageSubstring) {
 		EsqlSquidSensor sensor = createSensor();
 		thrown.expect(AnalysisException.class);
@@ -316,17 +317,23 @@ public class EsqlSquidSensorTest {
 	
 
 	
-	private CompatibleInputFile inputFile(String relativePath) {
-		DefaultInputFile inputFile =  new DefaultInputFile("moduleKey", relativePath)
+	private InputFile inputFile(String relativePath) {
+		DefaultInputFile inputFile =  new TestInputFileBuilder("moduleKey", relativePath)
 				.setModuleBaseDir(baseDir.toPath())
 				.setType(Type.MAIN)
 				.setLanguage(EsqlLanguage.KEY)
-				.setCharset(StandardCharsets.UTF_8);
+				.setCharset(StandardCharsets.UTF_8)
+				.build();
 
 		context.fileSystem().add(inputFile);
 
-		inputFile.initMetadata(new FileMetadata().readMetadata(inputFile.file(), Charsets.UTF_8));
-		return wrap(inputFile);
+		try {
+			inputFile.setMetadata(new FileMetadata().readMetadata(new FileInputStream(inputFile.file()), Charsets.UTF_8, inputFile.absolutePath()));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return inputFile;
 	}
 
 	private final class ExceptionRaisingCheck extends DoubleDispatchVisitorCheck {

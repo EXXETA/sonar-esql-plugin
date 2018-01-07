@@ -17,15 +17,14 @@
  */
 package com.exxeta.iss.sonar.esql.utils;
 
-import static com.exxeta.iss.sonar.esql.compat.CompatibilityHelper.wrap;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
-import org.sonar.api.config.MapSettings;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
+import org.sonar.api.config.internal.MapSettings;
 
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.visitors.EsqlVisitorContext;
@@ -38,18 +37,19 @@ public class TestUtils {
   public static EsqlVisitorContext createContext(InputFile file) {
     try {
       EsqlTree programTree = (EsqlTree) EsqlParserBuilder.createParser().parse(file.contents());
-      return new EsqlVisitorContext((ProgramTree)programTree, wrap(file), new MapSettings());
+      return new EsqlVisitorContext((ProgramTree)programTree, file, new MapSettings().asConfig());
     } catch (IOException e) {
       throw Throwables.propagate(e);
     }
   }
   
   public static DefaultInputFile createTestInputFile(String baseDir, String relativePath) {
-	    final DefaultInputFile inputFile = new DefaultInputFile("module1", relativePath)
+	    final DefaultInputFile inputFile = new TestInputFileBuilder("module1", relativePath)
 	      .setModuleBaseDir(Paths.get(baseDir))
 	      .setLanguage("esql")
 	      .setCharset(StandardCharsets.UTF_8)
-	      .setType(InputFile.Type.MAIN);
+	      .setType(InputFile.Type.MAIN)
+	      .build();
 	    return inputFile;
 	  }
 
