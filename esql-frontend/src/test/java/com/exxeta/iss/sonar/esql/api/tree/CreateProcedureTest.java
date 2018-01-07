@@ -53,6 +53,12 @@ public class CreateProcedureTest extends EsqlTreeModelTest<CreateProcedureStatem
 		assertEquals(tree.createKeyword().text(),"CREATE");
 		assertNotNull(tree.routineType());
 		assertNotNull(tree.identifier());
+		assertNotNull(tree.identifier().name());
+		assertNotNull(tree.identifier().toString());
+		assertNotNull(tree.identifier().symbol());
+		assertNull(tree.identifier().scope());
+		
+		
 		assertNotNull(tree.openingParenthesis());
 		assertNotNull(tree.parameterList());
 		assertNotNull(tree.closingParenthesis());
