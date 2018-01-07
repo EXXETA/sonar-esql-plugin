@@ -47,7 +47,7 @@ public class HighlightSymbolTableBuilderTest extends EsqlTreeModelTest<Tree> {
   private NewSymbolTable newSymbolTable(String filename) throws FileNotFoundException  {
     File moduleBaseDir = new File("src/test/resources/highlighter/");
     sensorContext = SensorContextTester.create(moduleBaseDir);
-    DefaultInputFile inputFile = new TestInputFileBuilder("moduleKey", filename)
+    inputFile = new TestInputFileBuilder("moduleKey", filename)
       .setModuleBaseDir(moduleBaseDir.toPath())
       .setCharset(StandardCharsets.UTF_8)
       .build();
