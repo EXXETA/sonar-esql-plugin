@@ -68,7 +68,7 @@ public class MetricsVisitorTest extends EsqlTreeModelTest {
 
   @Test
   public void test() {
-    MetricsVisitor metricsVisitor = createMetricsVisitor(false);
+    MetricsVisitor metricsVisitor = createMetricsVisitor();
     metricsVisitor.scanTree(treeVisitorContext);
     assertThat(context.measure(COMPONENT_KEY, CoreMetrics.FUNCTIONS).value()).isEqualTo(0);
     assertThat(context.measure(COMPONENT_KEY, CoreMetrics.STATEMENTS).value()).isEqualTo(1);
@@ -79,15 +79,15 @@ public class MetricsVisitorTest extends EsqlTreeModelTest {
 
   @Test
   public void save_executable_lines() {
-    final MetricsVisitor metricsVisitorWithSave = createMetricsVisitor(true);
+    final MetricsVisitor metricsVisitorWithSave = createMetricsVisitor();
     metricsVisitorWithSave.scanTree(treeVisitorContext);
     Mockito.verify(linesContext, atLeastOnce()).setIntValue(eq(CoreMetrics.EXECUTABLE_LINES_DATA_KEY), any(Integer.class), any(Integer.class));
   }
 
-  private MetricsVisitor createMetricsVisitor(boolean saveExecutableLines) {
+  private MetricsVisitor createMetricsVisitor() {
     FileLinesContextFactory linesContextFactory = mock(FileLinesContextFactory.class);
     when(linesContextFactory.createFor(INPUT_FILE)).thenReturn(linesContext);
-    return new MetricsVisitor(context, false, linesContextFactory, saveExecutableLines);
+    return new MetricsVisitor(context, false, linesContextFactory);
   }
 
 }

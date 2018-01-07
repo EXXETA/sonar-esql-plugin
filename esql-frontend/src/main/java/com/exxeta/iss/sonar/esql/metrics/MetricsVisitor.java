@@ -49,7 +49,6 @@ public class MetricsVisitor extends SubscriptionVisitor {
   };*/
 
   private final SensorContext sensorContext;
-  private final boolean saveExecutableLines;
   private InputFile inputFile;
   private final Boolean ignoreHeaderComments;
   private FileLinesContextFactory fileLinesContextFactory;
@@ -60,12 +59,11 @@ public class MetricsVisitor extends SubscriptionVisitor {
   private RangeDistributionBuilder functionComplexityDistribution;
   private RangeDistributionBuilder fileComplexityDistribution;
 
-  public MetricsVisitor(SensorContext context, Boolean ignoreHeaderComments, FileLinesContextFactory fileLinesContextFactory, boolean saveExecutableLines) {
+  public MetricsVisitor(SensorContext context, Boolean ignoreHeaderComments, FileLinesContextFactory fileLinesContextFactory) {
 	    this.sensorContext = context;
 	    this.ignoreHeaderComments = ignoreHeaderComments;
 	    this.fileLinesContextFactory = fileLinesContextFactory;
 	    this.projectExecutableLines = new HashMap<>();
-	    this.saveExecutableLines = saveExecutableLines;
 	  }
 
   /**
@@ -157,9 +155,7 @@ public class MetricsVisitor extends SubscriptionVisitor {
 	    Set<Integer> executableLines = new ExecutableLineVisitor(context.getTopTree()).getExecutableLines();
 	    projectExecutableLines.put(inputFile, executableLines);
 
-	    if (saveExecutableLines) {
-	      executableLines.stream().forEach(line -> fileLinesContext.setIntValue(CoreMetrics.EXECUTABLE_LINES_DATA_KEY, line, 1));
-	    }
+        executableLines.stream().forEach(line -> fileLinesContext.setIntValue(CoreMetrics.EXECUTABLE_LINES_DATA_KEY, line, 1));
 	    fileLinesContext.save();
 	  }
 

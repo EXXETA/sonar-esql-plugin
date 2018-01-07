@@ -49,7 +49,6 @@ import org.sonar.api.config.Settings;
 import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.rule.RuleKey;
-import org.sonar.api.utils.Version;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.squidbridge.ProgressReport;
@@ -84,9 +83,6 @@ import com.sonar.sslr.api.typed.ActionParser;
 public class EsqlSquidSensor implements Sensor {
 
   private static final Logger LOG = Loggers.get(EsqlSquidSensor.class);
-
-  private static final Version V6_0 = Version.create(6, 0);
-  private static final Version V6_2 = Version.create(6, 2);
 
   private final EsqlChecks checks;
   private final FileLinesContextFactory fileLinesContextFactory;
@@ -128,7 +124,7 @@ public class EsqlSquidSensor implements Sensor {
     try {
       for (InputFile inputFile : inputFiles) {
         // check for cancellation of the analysis (by SonarQube or SonarLint). See SONARJS-761.
-        if (context.getSonarQubeVersion().isGreaterThanOrEqual(V6_0) && context.isCancelled()) {
+        if (context.isCancelled()) {
           throw new CancellationException("Analysis interrupted because the SensorContext is in cancelled state");
         }
 				analyse(context, inputFile, executor, treeVisitors);
@@ -191,22 +187,18 @@ public class EsqlSquidSensor implements Sensor {
         .save();
     }
 
-    if (sensorContext.getSonarQubeVersion().isGreaterThanOrEqual(V6_0)) {
-      sensorContext.newAnalysisError()
-        .onFile(inputFile)
-        .at(inputFile.newPointer(e.getLine(), 0))
-        .message(e.getMessage())
-        .save();
-    }
+    sensorContext.newAnalysisError()
+      .onFile(inputFile)
+      .at(inputFile.newPointer(e.getLine(), 0))
+      .message(e.getMessage())
+      .save();
   }
 
   private static void processException(Exception e, SensorContext sensorContext, InputFile inputFile) {
-    if (sensorContext.getSonarQubeVersion().isGreaterThanOrEqual(V6_0)) {
       sensorContext.newAnalysisError()
         .onFile(inputFile)
         .message(e.getMessage())
         .save();
-    }
   }
 
   private void scanFile(SensorContext sensorContext, InputFile inputFile, ProductDependentExecutor executor, List<TreeVisitor> visitors, ProgramTree programTree) {
@@ -336,14 +328,12 @@ public class EsqlSquidSensor implements Sensor {
     private final SensorContext context;
     private final NoSonarFilter noSonarFilter;
     private final FileLinesContextFactory fileLinesContextFactory;
-    private final boolean isAtLeastSq62;
     private MetricsVisitor metricsVisitor;
 
     SonarQubeProductExecutor(SensorContext context, NoSonarFilter noSonarFilter, FileLinesContextFactory fileLinesContextFactory) {
       this.context = context;
       this.noSonarFilter = noSonarFilter;
       this.fileLinesContextFactory = fileLinesContextFactory;
-      this.isAtLeastSq62 = context.getSonarQubeVersion().isGreaterThanOrEqual(V6_2);
     }
 
     @Override
@@ -353,8 +343,7 @@ public class EsqlSquidSensor implements Sensor {
         metricsVisitor = new MetricsVisitor(
         context,
         ignoreHeaderComments,
-        fileLinesContextFactory,
-        isAtLeastSq62);
+        fileLinesContextFactory);
       return Arrays.asList(metricsVisitor, new HighlighterVisitor(context));
     }
 
@@ -369,10 +358,10 @@ public class EsqlSquidSensor implements Sensor {
       if (metricsVisitor == null) {
         throw new IllegalStateException("Before starting coverage computation, metrics should have been calculated.");
       }
-      executeCoverageSensors(context, metricsVisitor.executableLines(), isAtLeastSq62);
+      executeCoverageSensors(context, metricsVisitor.executableLines());
     }
 
-    private static void executeCoverageSensors(SensorContext context, Map<InputFile, Set<Integer>> executableLines, boolean isAtLeastSq62) {
+    private static void executeCoverageSensors(SensorContext context, Map<InputFile, Set<Integer>> executableLines) {
       Settings settings = context.settings();
 	
 	    String traces = settings.getString(EsqlPlugin.TRACE_PATHS_PROPERTY);
@@ -383,15 +372,6 @@ public class EsqlSquidSensor implements Sensor {
 	
     }
    
-
-    private static void logDeprecationForReportProperty(Settings settings, String propertyKey) {
-      String value = settings.getString(propertyKey);
-      if (value != null && !value.isEmpty()) {
-        LOG.warn("Since SonarQube 6.2 property '" + propertyKey + "' is deprecated. Use 'sonar.esql.lcov.reportPaths' instead.");
-      }
-    }
-
-    
   }
 
   @VisibleForTesting
@@ -418,7 +398,7 @@ public class EsqlSquidSensor implements Sensor {
   }
 
   private static boolean isSonarLint(SensorContext context) {
-    return context.getSonarQubeVersion().isGreaterThanOrEqual(V6_0) && context.runtime().getProduct() == SonarProduct.SONARLINT;
+    return context.runtime().getProduct() == SonarProduct.SONARLINT;
   }
 
   private static void saveLineIssue(SensorContext sensorContext, InputFile inputFile, RuleKey ruleKey, LineIssue issue) {

@@ -78,10 +78,6 @@ import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.RecognitionException;
 
 public class EsqlSquidSensorTest {
-	private static final SonarRuntime SONAR_RUNTIME_6_1 = SonarRuntimeImpl.forSonarQube(Version.create(6, 1),
-			SonarQubeSide.SERVER);
-	private static final SonarRuntime SONAR_RUNTIME_6_2 = SonarRuntimeImpl.forSonarQube(Version.create(6, 2),
-			SonarQubeSide.SERVER);
 
 	private static final Version SONARLINT_DETECTABLE_VERSION = Version.create(6, 0);
 	private static final SonarRuntime SONARLINT_RUNTIME = SonarRuntimeImpl.forSonarLint(SONARLINT_DETECTABLE_VERSION);
@@ -228,12 +224,16 @@ public class EsqlSquidSensorTest {
 		inputFile("file.esql");
 
 		ActiveRules activeRules = (new ActiveRulesBuilder())
-				.create(RuleKey.of(CheckList.REPOSITORY_KEY, "MissingNewlineAtEndOfFile")).activate().build();
+				.create(RuleKey.of(CheckList.REPOSITORY_KEY, "MissingNewlineAtEndOfFile"))
+				.activate()
+				.create(RuleKey.of(CheckList.REPOSITORY_KEY, "InitializeVariables"))
+				.activate()
+				.build();
 
 		checkFactory = new CheckFactory(activeRules);
 		createSensor().execute(context);
 		Collection<Issue> issues = context.allIssues();
-		assertThat(issues).hasSize(1);
+		assertThat(issues).hasSize(2);
 	}
 
 	@Test
@@ -249,7 +249,7 @@ public class EsqlSquidSensorTest {
 		assertThat(issue.gap()).isEqualTo(42);
 		assertThat(issue.primaryLocation().message()).isEqualTo("Message of custom rule");
 		assertThat(issue.primaryLocation().textRange())
-				.isEqualTo(new DefaultTextRange(new DefaultTextPointer(1, 0), new DefaultTextPointer(1, 28)));
+				.isEqualTo(new DefaultTextRange(new DefaultTextPointer(1, 0), new DefaultTextPointer(1, 24)));
 	}
 
 	@Test
@@ -312,9 +312,6 @@ public class EsqlSquidSensorTest {
 		}
 	}
 
-	
-
-	
 
 	
 	private InputFile inputFile(String relativePath) {
