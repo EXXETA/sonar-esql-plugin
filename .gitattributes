@@ -1,1 +1,1 @@
-*.esql text eol=lf
+esql-checks/src/test/resources/FileHeaderCheck/*.esql text eol=lf
