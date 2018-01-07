@@ -71,6 +71,7 @@ public class SelectFunctionTest extends EsqlTreeModelTest<SelectFunctionTree>{
 	public void modelTest() throws Exception{
 		SelectFunctionTree tree = parse("SELECT * FROM Database.Datasource.SchemaName.Table As A Where A.A>10", Kind.SELECT_FUNCTION);
 		assertNotNull(tree);
+		assertNotNull(tree.selectKeyword());
 		assertNotNull(tree.selectClause());
 		assertNotNull(tree.fromClause());
 		assertNotNull(tree.whereClause());

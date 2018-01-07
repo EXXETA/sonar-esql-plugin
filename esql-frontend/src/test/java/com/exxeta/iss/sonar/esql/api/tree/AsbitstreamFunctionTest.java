@@ -24,9 +24,6 @@ import static org.junit.Assert.assertNull;
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
-import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
-import com.exxeta.iss.sonar.esql.tree.impl.declaration.FieldReferenceTreeImpl;
-import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
 public class AsbitstreamFunctionTest extends EsqlTreeModelTest<AsbitstreamFunctionTree>{
@@ -34,8 +31,12 @@ public class AsbitstreamFunctionTest extends EsqlTreeModelTest<AsbitstreamFuncti
 	@Test
 	public void asbitstreamFunction() {
 		assertThat(Kind.ASBITSTREAM_FUNCTION)
-			.matches("ASBITSTREAM(cursor OPTIONS options CCSID 1208)")
-			.matches("ASBITSTREAM(Environment.Variables.MQRFH2.Data,,1208,,,,options)");
+		.matches("ASBITSTREAM(cursor OPTIONS options ENCODING enc CCSID 1208 SET set TYPE type FORMAT format)")
+		.matches("ASBITSTREAM(cursor OPTIONS options CCSID 1208)")
+		.matches("ASBITSTREAM(Environment.Variables.MQRFH2.Data,,,,,,)")
+		.matches("ASBITSTREAM(Environment.Variables.MQRFH2.Data,,1208)")
+		.matches("ASBITSTREAM(Environment.Variables.MQRFH2.Data,enc,1208, set, type, format, options)")
+		.matches("ASBITSTREAM(Environment.Variables.MQRFH2.Data,enc)");
 	}
 	
 	@Test

@@ -18,17 +18,35 @@
 package com.exxeta.iss.sonar.esql.api.tree;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.api.tree.function.OverlayFunctionTree;
+import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class OverlayFunctionTest {
+public class OverlayFunctionTest extends EsqlTreeModelTest<OverlayFunctionTree>{
 
 	@Test
 	public void overlayFunction() {
 		assertThat(Kind.OVERLAY_FUNCTION)
 			.matches("OVERLAY ('ABCDEFGHIJ' PLACING '1234' FROM 4 FOR 3)");
+	}
+	
+	@Test
+	public void modelTest() throws Exception{
+		OverlayFunctionTree tree = parse("OVERLAY ('ABCDEFGHIJ' PLACING '1234' FROM 4 FOR 3)", Kind.OVERLAY_FUNCTION);
+		assertNotNull(tree.overlayKeyword());
+		assertNotNull(tree.openingParenthesis());
+		assertNotNull(tree.sourceString());
+		assertNotNull(tree.placingKeyword());
+		assertNotNull(tree.sourceString2());
+		assertNotNull(tree.fromKeyword());
+		assertNotNull(tree.startPosition());
+		assertNotNull(tree.forKeyword());
+		assertNotNull(tree.stringLength());
+		assertNotNull(tree.closingParenthesis());
 	}
 
 }

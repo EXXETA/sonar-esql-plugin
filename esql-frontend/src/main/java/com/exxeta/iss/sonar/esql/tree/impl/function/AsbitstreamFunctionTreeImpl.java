@@ -69,10 +69,8 @@ public class AsbitstreamFunctionTreeImpl extends EsqlTree implements Asbitstream
 		if (parameters != null) {
 			commaSeparated = parameters.get(0).first().is(EsqlPunctuator.COMMA);
 			if (commaSeparated) {
-				if (parameters.size()>0){
-					optionsSeparator = parameters.get(0).first();
-					optionsExpression = parameters.get(0).second().isPresent()?parameters.get(0).second().get():null;
-				}
+				optionsSeparator = parameters.get(0).first();
+				optionsExpression = parameters.get(0).second().isPresent()?parameters.get(0).second().get():null;
 				if (parameters.size()>1){
 					encodingSeparator = parameters.get(1).first();
 					encodingExpression = parameters.get(1).second().isPresent()?parameters.get(1).second().get():null;
