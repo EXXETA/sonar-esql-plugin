@@ -1,7 +1,7 @@
 CREATE COMPUTE MODULE responseTransformation
 CREATE FUNCTION main() RETURNS BOOLEAN
 BEGIN		
-IF oprName = 'createAccessFacilityAgreement' OR refIpSrvcOpName = '"http://com/abnamro/Services/AccessFacilityAgreement/v2/AccessFacilityAgreement/IAccessFacilityAgreementPort"' THEN
+If oprName = 'createAccessFacilityAgreement' OR refIpSrvcOpName = '"http://com/abnamro/Services/AccessFacilityAgreement/v2/AccessFacilityAgreement/IAccessFacilityAgreementPort"' THEN
 				CREATE FIELD OutputRoot.SOAP.Body.soapenv:Fault.detail.ns:createAccessFacilityAgreementException;
 				DECLARE faultRef REFERENCE TO OutputRoot.SOAP.Body.soapenv:Fault.detail.ns:createAccessFacilityAgreementException;				
 				SET faultRef.ExceptionElement.description = messageTextDetail;
@@ -13,13 +13,19 @@ END IF;
 WHILE count <= providerCount DO
                 SET faultRef.ExceptionElement.description = messageTextDetail;
 END WHILE;
-CASE
-		WHEN envRef = 'checkCustomerRingFencingStatus' THEN	
-			SET OutputRoot = InputRoot;		
-			PROPAGATE TO TERMINAL 'out1';
-		WHEN envRef = 'retrieveRelatedParty' THEN	
-			SET OutputRoot = InputRoot;		
-			PROPAGATE TO TERMINAL 'out1';
-END CASE;
+/*If oprName = 'createAccessFacilityAgreement' OR refIpSrvcOpName = '"http://com/abnamro/Services/AccessFacilityAgreement/v2/AccessFacilityAgreement/IAccessFacilityAgreementPort"' THEN
+				CREATE FIELD OutputRoot.SOAP.Body.soapenv:Fault.detail.ns:createAccessFacilityAgreementException;
+				DECLARE faultRef REFERENCE TO OutputRoot.SOAP.Body.soapenv:Fault.detail.ns:createAccessFacilityAgreementException;				
+ELSEIF oprName = 'updateAccessFacilityAgreement' OR refIpSrvcOpName = '"http://com/abnamro/Services/AccessFacilityAgreement/v2/AccessFacilityAgreement/IAccessFacilityAgreementPort"' THEN
+				CREATE FIELD OutputRoot.SOAP.Body.soapenv:Fault.detail.ns:updateAccessFacilityAgreementException;
+				DECLARE faultRef REFERENCE TO OutputRoot.SOAP.Body.soapenv:Fault.detail.ns:updateAccessFacilityAgreementException;				
+				SET faultRef.ExceptionElement.description = messageTextDetail;
+END IF;*/
+If oprName = 'createAccessFacilityAgreement' OR refIpSrvcOpName = '"http://com/abnamro/Services/AccessFacilityAgreement/v2/AccessFacilityAgreement/IAccessFacilityAgreementPort"' THEN
+				CREATE FIELD OutputRoot.SOAP.Body.soapenv:Fault.detail.ns:createAccessFacilityAgreementException;			
+--ELSEIF oprName = 'updateAccessFacilityAgreement' OR refIpSrvcOpName = '"http://com/abnamro/Services/AccessFacilityAgreement/v2/AccessFacilityAgreement/IAccessFacilityAgreementPort"' THEN
+				CREATE FIELD OutputRoot.SOAP.Body.soapenv:Fault.detail.ns:updateAccessFacilityAgreementException;
+				DECLARE faultRef REFERENCE TO OutputRoot.SOAP.Body.soapenv:Fault.detail.ns:updateAccessFacilityAgreementException;				
+END IF;
 END;
 END MODULE;

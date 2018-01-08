@@ -20,9 +20,10 @@ public class TrailingCommentsCheckTest {
   public void test() {
 		
 		 EsqlCheckVerifier.issues(new TrailingCommentsCheck(), new File("src/test/resources/trailingComments.esql"))
-		    .next().atLine(5).withMessage("The line contains both code and comments. Trailing comments are discouraged.")
-		    .next().atLine(10).withMessage("The line contains both code and comments. Trailing comments are discouraged.")
-		    .next().atLine(14).withMessage("The line contains both code and comments. Trailing comments are discouraged.")
+		    .next().atLine(7).withMessage("The line contains both code and comments. Trailing comments are discouraged.")
+		    .next().atLine(12).withMessage("The line contains both code and comments. Trailing comments are discouraged.")
+		    .next().atLine(15).withMessage("The line contains both code and comments. Trailing comments are discouraged.")
+		    .next().atLine(16).withMessage("The line contains both code and comments. Trailing comments are discouraged.")
 		 .noMore();
 	        
 	  }

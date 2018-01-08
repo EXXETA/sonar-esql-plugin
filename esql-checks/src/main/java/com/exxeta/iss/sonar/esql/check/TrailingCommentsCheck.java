@@ -10,9 +10,7 @@
 package com.exxeta.iss.sonar.esql.check;
 
 import java.util.List;
-
 import org.sonar.check.Rule;
-
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
 import com.exxeta.iss.sonar.esql.api.visitors.EsqlFile;
@@ -25,19 +23,36 @@ public class TrailingCommentsCheck extends DoubleDispatchVisitorCheck  {
 	@Override
 	public void visitProgram(ProgramTree tree) {
 		 
-		
 		 EsqlFile file = getContext().getEsqlFile();
 		 List<String> lines = CheckUtils.readLines(file);
 		 
 		 for(int i = 0; i < lines.size() ; i++)
 		 {
-			 boolean trailingCommentFound = false;
+			 
 			 String originalLine = (String)lines.get(i);
 			 
 			 if((originalLine.replaceAll("\\s+","").contains(";--")))
 					 {
-				        trailingCommentFound=true;
+				       
 				        addIssue(new LineIssue(this,i + 1,MESSAGE));
+					 }
+			 else if(!(originalLine.replaceAll("\\s+","").isEmpty()) && !(originalLine.replaceAll("\\s+","").startsWith("--")) && !(originalLine.replaceAll("\\s+","").startsWith("/*")))
+					 {
+				          String lineArray[]=originalLine.split(" ");
+				          String trailingComment="--";
+				          
+				          
+				          
+				         for(int j=0;j<lineArray.length-1;j++)
+				         {
+				        	 
+				        	 if(lineArray[j].contains(trailingComment))
+				        	 {
+				        		 addIssue(new LineIssue(this,i + 1,MESSAGE));
+							     break;
+				        	 }
+				         }
+				 
 					 }
 			 else
 			 {
@@ -45,6 +60,4 @@ public class TrailingCommentsCheck extends DoubleDispatchVisitorCheck  {
 			 }
 		 }
 	}
-	
-
 }
