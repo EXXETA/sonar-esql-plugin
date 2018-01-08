@@ -179,3 +179,4 @@ public class PropagateConsistencyCheck extends DoubleDispatchVisitorCheck {
 			return target;
 		}
 	}
+}

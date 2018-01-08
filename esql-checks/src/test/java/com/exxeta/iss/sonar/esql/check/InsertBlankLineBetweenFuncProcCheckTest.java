@@ -33,8 +33,8 @@ public class InsertBlankLineBetweenFuncProcCheckTest {
 	public void test() {
 		EsqlCheck check = new InsertBlankLineBetweenFuncProcCheck();
 		EsqlCheckVerifier.issues(check, new File("src/test/resources/InsertBlankLineBetweenFuncProc.esql"))
-		.next().atLine(7).withMessage("Insert one blank line between functions and procedures.")
-		.next().atLine(12).withMessage("Insert one blank line between functions and procedures.").noMore();
+		.next().atLine(6).withMessage("Insert one blank line between functions and procedures.")
+		.next().atLine(11).withMessage("Insert one blank line between functions and procedures.").noMore();
 	}
 
 }

@@ -37,25 +37,31 @@ public class InsertBlankLineBetweenFuncProcCheck extends DoubleDispatchVisitorCh
 	private static final String MESSAGE = "Insert one blank line between functions and procedures.";
 
 
-
-	@Override
+  @Override
 	public void visitProgram(ProgramTree tree) {
 		EsqlFile file = getContext().getEsqlFile();
 		List<String>  lines = CheckUtils.readLines(file);
 		
 		int linecounter = 0;
 		for (String line : lines) {
+			
 			linecounter = linecounter + 1;
-
+			
+			
 			if(isEndStatement(line)){
-
-				if(! line.startsWith("\\n")){
-					addIssue(new LineIssue(this, linecounter, MESSAGE));
+				
+			
+				if(linecounter<lines.size()){
+					String nextLine = lines.get(linecounter);
+				
+					if(!nextLine.trim().isEmpty()){
+						addIssue(new LineIssue(this, linecounter, MESSAGE));
+					}
 				}
 			}
 		} 
-	}
-
+  }
+	
 	public static boolean isEndStatement(String s) {
 		String withoutSpace = s.replace(" ", "").toUpperCase();
 		return withoutSpace.contains("END;");
