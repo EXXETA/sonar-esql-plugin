@@ -18,23 +18,23 @@
 package com.exxeta.iss.sonar.esql;
 
 import org.apache.commons.lang.StringUtils;
-import org.sonar.api.config.Settings;
+import org.sonar.api.config.Configuration;
 import org.sonar.api.resources.AbstractLanguage;
 
 public class EsqlLanguage extends AbstractLanguage {
 
 	public static final String KEY = "esql";
 
-	private Settings settings;
+	private  Configuration configuration;
 
-	public EsqlLanguage(Settings configuration) {
+	public EsqlLanguage(Configuration configuration) {
 		super(KEY, "Esql");
-		this.settings = configuration;
+		this.configuration = configuration;
 	}
 
 	@Override
 	public String[] getFileSuffixes() {
-		String[] suffixes = settings.getStringArray(EsqlPlugin.FILE_SUFFIXES_KEY);
+		String[] suffixes = configuration.getStringArray(EsqlPlugin.FILE_SUFFIXES_KEY);
 		if (suffixes == null || suffixes.length == 0) {
 			suffixes = StringUtils.split(EsqlPlugin.FILE_SUFFIXES_DEFVALUE, ",");
 		}

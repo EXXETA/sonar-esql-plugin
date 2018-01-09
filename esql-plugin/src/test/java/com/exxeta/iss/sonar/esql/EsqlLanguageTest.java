@@ -21,17 +21,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.sonar.api.config.Settings;
 import org.sonar.api.config.internal.MapSettings;
 
 public class EsqlLanguageTest {
-	  private Settings settings;
+	  private MapSettings settings;
 	  private EsqlLanguage esqlLanguage;
 
 	  @Before
 	  public void setUp() {
 	    settings = new MapSettings();
-	    esqlLanguage = new EsqlLanguage(settings);
+	    esqlLanguage = new EsqlLanguage(settings.asConfig());
 	  }
 
 	  @Test

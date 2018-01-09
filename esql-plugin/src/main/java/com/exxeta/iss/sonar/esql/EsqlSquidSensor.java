@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -45,7 +46,7 @@ import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.batch.sensor.symbol.NewSymbolTable;
-import org.sonar.api.config.Settings;
+import org.sonar.api.config.Configuration;
 import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.rule.RuleKey;
@@ -362,12 +363,12 @@ public class EsqlSquidSensor implements Sensor {
     }
 
     private static void executeCoverageSensors(SensorContext context, Map<InputFile, Set<Integer>> executableLines) {
-      Settings settings = context.settings();
+      Configuration configuration = context.config();
 	
-	    String traces = settings.getString(EsqlPlugin.TRACE_PATHS_PROPERTY);
+	    Optional<String> traces = configuration.get(EsqlPlugin.TRACE_PATHS_PROPERTY);
 	
-	    if (traces != null && !traces.isEmpty()) {
-	      (new TraceSensor()).execute(context, executableLines, traces.split(","));
+	    if (traces.isPresent() && !traces.get().isEmpty()) {
+	      (new TraceSensor()).execute(context, executableLines, traces.get().split(","));
 	    }
 	
     }
