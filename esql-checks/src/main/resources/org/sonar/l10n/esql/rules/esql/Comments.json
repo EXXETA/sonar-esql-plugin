@@ -1,0 +1,14 @@
+{
+  "title": "Include comment within the range of every 20 lines of code.",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "15min"
+  },
+  "tags": [
+    "readability"
+    
+ ],
+  "defaultSeverity": "Major"
+}

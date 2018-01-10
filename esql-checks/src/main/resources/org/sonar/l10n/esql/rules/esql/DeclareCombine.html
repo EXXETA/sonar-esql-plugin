@@ -1,0 +1,34 @@
+<p>If more than one variable of same datatype is found uninitialised then declare could be combined.</p>
+
+<h2>Compliant Code Example</h2>
+
+<pre>
+BROKER SCHEMA generic
+CREATE COMPUTE MODULE initialize
+CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+	DECLARE soapenviron,soapenvir GMTTIMESTAMP;
+	DECLARE soapenviro,soapenvi GMTTIME;
+	DECLARE faultReferen TIME;
+	RETURN TRUE;
+	END;
+END MODULE;	 
+</pre>
+
+<h2>Non-Compliant Code Example</h2>
+
+<pre>
+BROKER SCHEMA generic
+CREATE COMPUTE MODULE initialize
+CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+	DECLARE soapenviro GMTTIMESTAMP;
+	DECLARE soapenvi GMTTIMESTAMP;
+	DECLARE faultRefere TIMESTAMP;
+	DECLARE soapenviron GMTTIME;
+	DECLARE faultReferen TIME;
+	DECLARE soapenvir GMTTIME;
+	RETURN TRUE;
+	END;
+END MODULE;	 
+</pre>

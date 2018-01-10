@@ -1,13 +1,4 @@
 /*
-
-
- * 
- * 
- * 
- * 
- * 
- * 
- * 
  * Sonar ESQL Plugin
  * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com

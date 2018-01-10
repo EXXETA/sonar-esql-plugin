@@ -1,0 +1,14 @@
+{
+  "title": "Esql code has been commented out.It should be removed before code checkin.",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "cert",
+    "misra"
+  ],
+  "defaultSeverity": "Major"
+}

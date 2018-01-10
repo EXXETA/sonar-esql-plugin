@@ -1,0 +1,13 @@
+{
+  "title": "If  more than one variable of same datatype is found uninitialised then declare could be combined.",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "15min"
+  },
+  "tags": [
+    "readability"
+  ],
+  "defaultSeverity": "Major"
+}
