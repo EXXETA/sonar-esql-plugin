@@ -7,7 +7,6 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
-
 import java.util.List;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
@@ -20,7 +19,7 @@ import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
 public class CommentsCheck extends DoubleDispatchVisitorCheck {
 
 	private static final String MESSAGE = "Include comment within the range of every 20 lines of code.";
-	private static final int DEFAULT_THRESHOLD = 20;
+	private static final int DEFAULT_THRESHOLD = 21;
 	 @RuleProperty(
 			    key = "Comments",
 			    description = "Include comment within the range of every 20 lines of code.",
@@ -35,82 +34,46 @@ public class CommentsCheck extends DoubleDispatchVisitorCheck {
 		
 		int linesCounter=0;
 		int commentsCount=0;
-		int i =0;
-		for (String line :lines)
-		{
-		   String  originalLine = line.toString();
-		   i = i+1; 
-		   
-		   
 		
-			  if(originalLine.replaceAll("\\s+","").startsWith("--"))
-			  {
-				  linesCounter=0;
-				  commentsCount=commentsCount+1;
-				 
-				  if(linesCounter<=DEFAULT_THRESHOLD)
-				  {
-				     if(commentsCount>=1)
-				     {
-				       linesCounter=0; 
-					   continue;
-				     } 
-				  }
-			  }
+		
+		for(int i=0; i< lines.size();i++){
+			   
+			String  originalLine = lines.get(i);		   
+				
+			  if(originalLine.replaceAll("\\s+","").isEmpty()){
+				   continue;
+			   }
 			  
-
- 	 
-			if(originalLine.replaceAll("\\s+","").startsWith("/*"))
-				     {
-				        linesCounter=0;
-				        commentsCount=commentsCount+1;
-			
-				        if(linesCounter<=DEFAULT_THRESHOLD)
-						  {
-						     if(commentsCount>=1)
-						     {
-						    	 continue;
-						     }
-						  }
-				     }
-			  
-			  else
+			   if( originalLine.replaceAll("\\s+","").startsWith("--"))
 				  {
-				       if(originalLine.replaceAll("\\s+","").endsWith("*/"))
-			         	       {  
-				    	          linesCounter=0;
-            			       } 
-				  }   
-			if(!(originalLine.replaceAll("\\s+","").isEmpty()))
-			  { 
-				 
-				 
-				  linesCounter=linesCounter+1;
-				  
-				  if(linesCounter<=DEFAULT_THRESHOLD)
-				  {
-					  continue;
+				   	linesCounter=0;
 				  }
+			   
+			   if(originalLine.replaceAll("\\s+","").startsWith("/*")){
 				  
-				  
-				  if(linesCounter>DEFAULT_THRESHOLD)
-						  
+				   commentsCount=commentsCount+1;
+				   continue;
+			   }
+			   
+			   if(commentsCount >= 1 && !(originalLine.replaceAll("\\s+","").endsWith("*/"))){				  
+				   continue;
+			   }else if(commentsCount >= 1 && (originalLine.replaceAll("\\s+","").endsWith("*/"))){
+				   linesCounter=0;	
+				   commentsCount =0;
+			   }
+			   
+			   linesCounter = linesCounter + 1;
+			   
+			   if(linesCounter>DEFAULT_THRESHOLD)
+					  
 				  {
 					  addIssue(new LineIssue(this,i+1,MESSAGE)); 
 					  linesCounter=0;
 					  continue; 
 				  }
-				        	 
-				 }
-			  }
+			   
+			}			
+				
         }  
    } 
 		
-		
-
-			
-							
-		
-		
-	
-	
