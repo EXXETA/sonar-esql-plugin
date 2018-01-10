@@ -76,8 +76,8 @@ IF envRefVar.inputNoOfAccounts > maxNoOfAccountsCons THEN
 				-- throw function error
 				SET envRefVar.firstFlag = 'Y';				
 				SET envRefVar.flag='Y';
-				THROW USER EXCEPTION MESSAGE 5001 VALUES('Maximum account number limit of 300 exceeded');
-                DECLARE fa1 CONSTANT CHARACTER;	 --Noncompliant
+				THROW USER EXCEPTION MESSAGE 5001 VALUES('Maximum account number limit of 300 exceeded'); --Noncompliant
+                DECLARE fa1 CONSTANT CHARACTER;	
 			END IF;
 
 		

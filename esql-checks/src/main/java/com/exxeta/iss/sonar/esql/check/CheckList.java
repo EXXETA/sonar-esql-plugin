@@ -89,34 +89,30 @@ public final class CheckList {
         SpaceAroundEqualSignCheck.class,
         KeyWordCaseCheck.class,
         CyclomaticComplexityCheck.class,
-        CaseStatementWithSingleWhenCheck.class,
-        EXTERNALVariableInitialisedCheck.class,
         PassThruStatementCheck.class,
-        AvoidNestedIfCheck.class,
-        MeaningfulVariableCheck.class,
         SubElementNameCheck.class,
         FunctionProcedureLengthCheck.class,
         FilterNodeModifyMessageCheck.class,
         FilterNodeHaveOnlyOneReturnCheck.class,
-        MessageDomainNotvalidCheck.class,
         NavigatingTreeCouldBeReferenceCheck.class,
         UnusedVariableCheck.class,
         DepricatedMethodCheck.class,
         ProcessInvokingItselfCheck.class,
-        BinaryOperatorSepratedBySpaceCheck.class,
         InsertBlankLineBetweenFuncProcCheck.class,
         BlankLineBeforeCommentsCheck.class,
         BlankSpaceAfterCommaCheck.class,
         FunctionCommentsCheck.class,
         ProcedureCommentsCheck.class,        
         FileHeaderCommentsCheck.class,
-        PropagateConsistencyCheck.class
-       
-        
-        
-        ,UnreachableCodeCheck.class
-        ,CommentedCodeCheck.class
-        ,SelfAssignmentCheck.class
+		PropagateConsistencyCheck.class, 
+		UnreachableCodeCheck.class, 
+		CommentedCodeCheck.class,
+		SelfAssignmentCheck.class,
+        ConditionBracesCheck.class,
+        TrailingCommentsCheck.class,
+        MultipleStatementsCheck.class,
+        CommentsCheck.class,
+        DeclareCombineCheck.class
         
        
         
