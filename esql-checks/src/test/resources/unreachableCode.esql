@@ -57,3 +57,49 @@ CREATE COMPUTE MODULE TestFlow_Compute
 
 	
 END MODULE;
+
+CREATE COMPUTE MODULE initialize
+CREATE FUNCTION main() RETURNS BOOLEAN
+	BEGIN
+
+		DECLARE VersionRef REFERENCE TO InputRoot.SOAP.Context.SOAP_Version;
+
+		CASE
+		WHEN versionRef = '1.1' THEN
+			SET Environment.soapenv:Client = 'soapenv:Client';
+
+		WHEN versionRef = '1.2' THEN
+			SET Environment.Fault.faultcode = 'soapenv:Sender';
+		
+END CASE;
+IF envRefVar.inputNoOfAccounts > maxNoOfAccountsCons THEN
+				-- throw function error
+				SET envRefVar.firstFlag = 'Y';				
+				SET envRefVar.flag='Y';
+				THROW USER EXCEPTION MESSAGE 5001 VALUES('Maximum account number limit of 300 exceeded');
+                DECLARE fa1 CONSTANT CHARACTER;	 --Noncompliant
+			END IF;
+
+		
+CREATE FIELD Environment.LogData;
+		
+DECLARE refEnv REFERENCE TO Environment.LogData;
+		
+SET refEnv.serviceOperationName = InputRoot.SOAP.Context.operation;
+		
+SET refEnv.operationId = EVAL(Environment.LogData.serviceOperationName);
+		
+SET refEnv.serviceName = InputRoot.SOAP.Context.service;
+		
+SET refEnv.interfaceId = InputRoot.SOAP.Header.ns:Info.consumerId;
+		
+SET refEnv.serviceVersion = SUBSTRING(SUBSTRING(SUBSTRING(InputRoot.SOAP.Context.portTypeNamespace AFTER InputRoot.SOAP.Context.service) AFTER '/')BEFORE '/');
+DECLARE VersionRef REFERENCE TO InputRoot.SOAP.Context.SOAP_Version;
+SET OutputRoot=InputRoot;
+		
+RETURN TRUE;
+
+	
+END;
+
+END MODULE;

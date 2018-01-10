@@ -1,0 +1,37 @@
+<p>Condition Braces Check</p>
+
+<h2>Compliant Code Example</h2>
+
+<pre>
+CREATE COMPUTE MODULE initialize
+CREATE FUNCTION main() RETURNS BOOLEAN
+BEGIN
+	IF (exceptionNumber >= 5000) AND (exceptionNumber <= 5999) THEN
+	     CREATE FIELD OutputRoot.SOAP.Body.soapenv:Fault.detail.ns:createAccessFacilityAgreementException;
+	ELSEIF (exceptionNumber >= 5000) AND (exceptionNumber <= 5999) THEN
+	      CREATE FIELD OutputRoot.SOAP.Body.soapenv:Fault.detail.ns:createAccessFacilityAgreementException;
+	ENDIF;
+	WHILE (count <= providerCount) DO
+             SET faultRef.ExceptionElement.description = messageTextDetail;
+    END WHILE;	
+END;
+END MODULE;
+</pre> 
+
+<h2>Non-Compliant Code Example</h2>
+
+<pre>
+CREATE COMPUTE MODULE initialize
+CREATE FUNCTION main() RETURNS BOOLEAN
+BEGIN
+	IF exceptionNumber >= 5000 AND exceptionNumber <= 5999 THEN
+	     CREATE FIELD OutputRoot.SOAP.Body.soapenv:Fault.detail.ns:createAccessFacilityAgreementException;
+	ELSEIF exceptionNumber >= 5000 AND exceptionNumber <= 5999 THEN
+	      CREATE FIELD OutputRoot.SOAP.Body.soapenv:Fault.detail.ns:createAccessFacilityAgreementException;
+	ENDIF;
+	WHILE count <= providerCount DO
+             SET faultRef.ExceptionElement.description = messageTextDetail;
+    END WHILE;	
+END;
+END MODULE;
+</pre>
