@@ -35,6 +35,8 @@ public class OneStatementPerLineCheckTest {
 		      new File("src/test/resources/oneStatementPerLine.esql"))
 	.next().atLine(5).withMessage("Reformat the code to have only one statement per line.")
 	.next().atLine(6).withMessage("Reformat the code to have only one statement per line.")
+	.next().atLine(8).withMessage("Reformat the code to have only one statement per line.")
+	.next().atLine(11).withMessage("Reformat the code to have only one statement per line.")
 	.noMore();
 	}
 }

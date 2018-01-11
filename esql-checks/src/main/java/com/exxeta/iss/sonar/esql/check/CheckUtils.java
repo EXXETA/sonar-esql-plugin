@@ -39,7 +39,7 @@ public class CheckUtils {
 			return reader.lines().collect(Collectors.toList());
 
 		} catch (IOException e) {
-			throw new IllegalStateException("Unable to read file " + file.relativePath(), e);
+			throw new IllegalStateException("Unable to read file " + file.toString(), e);
 		}
 	}
 

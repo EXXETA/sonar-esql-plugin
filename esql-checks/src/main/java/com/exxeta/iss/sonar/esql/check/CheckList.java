@@ -110,7 +110,6 @@ public final class CheckList {
 		SelfAssignmentCheck.class,
         ConditionBracesCheck.class,
         TrailingCommentsCheck.class,
-        MultipleStatementsCheck.class,
         CommentsCheck.class,
         DeclareCombineCheck.class
         
