@@ -137,7 +137,7 @@ public class CheckUtils {
 	                        if(!done && (thisLineAfterAnd.charAt(i) == ' ' || thisLineAfterAnd.charAt(i) == '='))
 	                            done=true;
 	                        i++;
-	                    } ;
+	                    }
 	                }
 
 	            }

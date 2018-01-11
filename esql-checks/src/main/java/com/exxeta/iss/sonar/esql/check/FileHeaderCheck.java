@@ -23,6 +23,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 
@@ -45,6 +47,8 @@ public class FileHeaderCheck extends DoubleDispatchVisitorCheck  {
 
 	private String[] expectedLines;
 	private Pattern searchPattern = null;
+
+	public static final Logger LOG = Loggers.get(FileHeaderCheck.class);
 
 
 	@Override
@@ -79,7 +83,7 @@ public class FileHeaderCheck extends DoubleDispatchVisitorCheck  {
 		    try {
 				fileContent = getContext().getEsqlFile().contents();
 			} catch (IOException e) {
-				e.printStackTrace();
+				LOG.error("Cannot read file contents", e);
 			}
 
 		    Matcher matcher = searchPattern.matcher(fileContent);

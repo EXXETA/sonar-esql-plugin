@@ -19,7 +19,6 @@ package com.exxeta.iss.sonar.esql.api.visitors;
 
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.config.Configuration;
-import org.sonar.api.config.Settings;
 
 import com.exxeta.iss.sonar.esql.api.symbols.SymbolModel;
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
