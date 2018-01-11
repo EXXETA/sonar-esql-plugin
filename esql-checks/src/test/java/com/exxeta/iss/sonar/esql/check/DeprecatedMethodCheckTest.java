@@ -21,19 +21,24 @@ import java.io.File;
 
 import org.junit.Test;
 
-import com.exxeta.iss.sonar.esql.api.EsqlCheck;
 import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
 
 /**
  * @author C50679
  *
  */
-public class DepricatedMethodCheckTest {
+public class DeprecatedMethodCheckTest {
 	@Test
 	public void test() {
-		EsqlCheck check = new DepricatedMethodCheck();
-		EsqlCheckVerifier.issues(check, new File("src/test/resources/DepricatedMethod.esql"))
-		.next().atLine(20).withMessage("Depricated methods should not be used.").noMore();
+		DeprecatedMethodCheck check = new DeprecatedMethodCheck();
+		EsqlCheckVerifier.issues(check, new File("src/test/resources/DeprecatedMethod.esql"))
+		.next().atLine(20).withMessage("Do not use BITSTREAM it is deprecated.").noMore();
+
+		check.deprecatedMethods = "EVAL,     BITSTREAM";
+		EsqlCheckVerifier.issues(check, new File("src/test/resources/DeprecatedMethod.esql"))
+		.next().atLine(19).withMessage("Do not use EVAL it is deprecated.")
+		.next().atLine(20).withMessage("Do not use BITSTREAM it is deprecated.")
+		.noMore();
 	
 	}	
 

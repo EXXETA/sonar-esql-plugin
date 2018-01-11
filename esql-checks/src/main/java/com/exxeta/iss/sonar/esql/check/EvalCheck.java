@@ -17,19 +17,23 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
+import java.util.List;
+
 import org.sonar.check.Rule;
 
+import com.google.common.collect.ImmutableList;
+
 @Rule(key="Eval")
-public class EvalCheck extends AbstractDoNotUseFunctinCheck {
+public class EvalCheck extends AbstractDoNotUseFunctionCheck {
 
 	@Override
-	public String getMessage() {
+	public String getMessage(String functionName) {
 		return "EVAL should not be used because untested code could be injected.";
 	}
 
 	@Override
-	public String getFunctionName() {
-		return "EVAL";
+	public List<String> getFunctionNames() {
+		return ImmutableList.of("EVAL");
 	}
 
 }

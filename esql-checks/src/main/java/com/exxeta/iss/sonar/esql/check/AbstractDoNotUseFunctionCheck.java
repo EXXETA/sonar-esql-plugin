@@ -17,22 +17,32 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
+import java.util.List;
+
 import com.exxeta.iss.sonar.esql.api.tree.expression.CallExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
 
-public abstract class AbstractDoNotUseFunctinCheck extends DoubleDispatchVisitorCheck{
+public abstract class AbstractDoNotUseFunctionCheck extends DoubleDispatchVisitorCheck{
 
-	public abstract String getMessage();
-	public abstract String getFunctionName();
+	public abstract String getMessage(String functionName);
+	public abstract List<String> getFunctionNames();
 	
 	@Override
 	public void visitCallExpression(CallExpressionTree tree) {
 		if (tree.functionName() instanceof IdentifierTree 
-			&& getFunctionName().equalsIgnoreCase(((IdentifierTree)tree.functionName()).name())){
-			addIssue(tree.functionName(), getMessage());
+			&& isDoNotUseFunction(((IdentifierTree)tree.functionName()).name())){
+			addIssue(tree.functionName(), getMessage(((IdentifierTree)tree.functionName()).name().toUpperCase()));
 		}
 		super.visitCallExpression(tree);
+	}
+	private boolean isDoNotUseFunction(String name) {
+		for (String functionName : getFunctionNames()){
+			if (functionName.equalsIgnoreCase(name)){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 }

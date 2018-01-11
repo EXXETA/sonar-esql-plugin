@@ -17,7 +17,7 @@ CREATE FIELD Environment.LogData;
 		DECLARE refEnv REFERENCE TO Environment.LogData;
 		SET refEnv.serviceOperationName = InputRoot.SOAP.Context.operation;
 		SET refEnv.operationId = EVAL(Environment.LogData.serviceOperationName);
-		SET refEnv.serviceName = BITSTREAM(InputRoot.MQMD.UserIdentifier);
+		SET refEnv.serviceName = BITSTREAM(InputRoot.MQMD.UserIdentifier); --Noncompliant {{Do not use BITSTREAM it is deprecated.}}
 		SET refEnv.interfaceId = InputRoot.SOAP.Header.ns:Info.consumerId;
 		SET refEnv.serviceVersion = SUBSTRING(SUBSTRING(SUBSTRING(InputRoot.SOAP.Context.portTypeNamespace AFTER InputRoot.SOAP.Context.service) AFTER '/')BEFORE '/');
 		SET OutputRoot=InputRoot;

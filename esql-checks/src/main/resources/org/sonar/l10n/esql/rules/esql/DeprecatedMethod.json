@@ -1,5 +1,5 @@
 {
-  "title": "Depricated methods should not be used.",
+  "title": "Deprecated methods should not be used.",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {
@@ -7,8 +7,9 @@
     "constantCost": "240min"
   },
   "tags": [
-  
-   "depricated"
+   "misra",
+   "cert",
+   "deprecated"
     
   ],
   "defaultSeverity": "Major"

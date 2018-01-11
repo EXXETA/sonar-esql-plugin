@@ -17,23 +17,45 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.sonar.check.Rule;
+import org.sonar.check.RuleProperty;
 
-import com.google.common.collect.ImmutableList;
 
-@Rule(key="Sleep")
-public class SleepCheck extends AbstractDoNotUseFunctionCheck {
+/**
+ * This Java class is created to implement the logic to avoid the deprecated methods.
+ * @author Sapna Singh
+ *
+ */
+@Rule(key = "DeprecatedMethod")
+public class DeprecatedMethodCheck extends AbstractDoNotUseFunctionCheck {
+	private static final String MESSAGE = "Do not use %s it is deprecated.";
 
+	private static final String DEFAULT_DEPRECATED_METHODS = "BITSTREAM";
+	@RuleProperty(
+			key = "DeprecatedMethod",
+			description = "Deprecated methods should not be used.",
+			defaultValue = DEFAULT_DEPRECATED_METHODS)
+	public String deprecatedMethods = DEFAULT_DEPRECATED_METHODS;
+
+	
+	
 	@Override
 	public String getMessage(String functionName) {
-		return "SLEEP should not be used because it blocks the executing thread.";
+		return String.format(MESSAGE, functionName);
 	}
 
 	@Override
 	public List<String> getFunctionNames() {
-		return ImmutableList.of("SLEEP");
+		List<String> functionNames = new ArrayList<>(); 
+		for (String method : deprecatedMethods.split(",")){
+			functionNames.add(method.trim());
+		}
+		return functionNames;
 	}
 
+
 }
+
