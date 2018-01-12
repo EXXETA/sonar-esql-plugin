@@ -15,6 +15,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/**
+  
+ * @author Sapna Singh
+ *
+ */
 package com.exxeta.iss.sonar.esql.check;
 
 import java.io.File;

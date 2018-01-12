@@ -1,20 +1,5 @@
-
-/*
- * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
- * http://www.exxeta.com
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+/**
  * 
- *     http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
  */
 package com.exxeta.iss.sonar.esql.check;
 
@@ -32,11 +17,12 @@ import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
 import com.exxeta.iss.sonar.esql.api.visitors.EsqlFile;
 import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
+import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
 import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
 
 /**
  * This java class is created to implement the logic for reference check, Navigating message tree could be replaced by a reference. 
- * @author Sapna  singh
+ * @author Sapna. singh
  *
  */
 @Rule(key = "NavigatingTreeCouldBeReference")
@@ -47,7 +33,7 @@ public class NavigatingTreeCouldBeReferenceCheck extends DoubleDispatchVisitorCh
 	private static final int DEFAULT_THRESHOLD = 3;
 	 @RuleProperty(
 			    key = "NavigatingTreeCouldBeReference",
-			    description = "The maximum authorized method/procedure length.",
+			    description = "Navigating message tree could be replaced by a reference.",
 			    defaultValue = "" + DEFAULT_THRESHOLD)
 	 public static int threshold = DEFAULT_THRESHOLD;
 	
@@ -78,7 +64,8 @@ public class NavigatingTreeCouldBeReferenceCheck extends DoubleDispatchVisitorCh
             Integer lineNumber = (Integer)iterator1.next();
             if(linesNumbers.add(lineNumber))
             {
-            	addIssue(new PreciseIssue(this, new IssueLocation(tree,   MESSAGE )));
+            	//addIssue(new PreciseIssue(this, new IssueLocation(tree,   MESSAGE )));
+            	addIssue(new LineIssue(this, lineNumber,   MESSAGE ));
             }
         } while(true);
     
@@ -106,8 +93,11 @@ public class NavigatingTreeCouldBeReferenceCheck extends DoubleDispatchVisitorCh
                     if(equalsPos > 0)
                     
                     {
+                    	String endLine = null;
                         String startLine = removeQuotedComment.substring(0, equalsPos).trim();
-                        String endLine = removeQuotedComment.substring(equalsPos + 1).trim();
+                        if (!(equalsPos + 1  > removeQuotedComment.length())){
+                         endLine = removeQuotedComment.substring(equalsPos + 1).trim();
+                        }
                         Set keyValuesAll = new HashSet();
                         Set keyValuesStart = new HashSet();
                         Set keyValuesEnd = new HashSet();
@@ -160,4 +150,26 @@ public class NavigatingTreeCouldBeReferenceCheck extends DoubleDispatchVisitorCh
             } while(true);
         }
 	}
+	
+        	
+        	
+  	
+        	
+      	
+        	
+        	
+        	
+        	
+        	
+        	
+        	
+        	
+        	
+        	
+        	
+        	
+        	
+        	
+       
+
 	

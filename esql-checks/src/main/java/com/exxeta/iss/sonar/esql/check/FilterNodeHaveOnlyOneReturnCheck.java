@@ -29,7 +29,7 @@ import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
 import com.exxeta.iss.sonar.esql.tree.expression.LiteralTree;
 
 /**
- * @author C50679
+ * @author Sapna Singh
  *
  */
 @Rule(key = "FilterNodeHaveOnlyOneReturn")

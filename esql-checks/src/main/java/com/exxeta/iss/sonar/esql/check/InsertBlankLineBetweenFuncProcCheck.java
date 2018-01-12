@@ -28,7 +28,7 @@ import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
 
 /**
  * This java class is created to implement the logic for checking there should be one blank line between procedure and function.
- * @author C50679
+ * @author Sapna Singh
  *
  */
 @Rule(key = "InsertBlankLineBetweenFuncProc")

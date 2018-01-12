@@ -29,7 +29,7 @@ import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
 import com.google.common.collect.ImmutableList;
 
 /**
- * @author C50679
+ * @author Sapna Singh
  *
  */
 @Rule(key = "FilterNodeModifyMessage")
