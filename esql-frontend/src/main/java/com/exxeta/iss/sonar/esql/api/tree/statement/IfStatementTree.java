@@ -44,4 +44,6 @@ public interface IfStatementTree extends StatementTree {
 
 	SyntaxToken semiToken();
 
+	boolean hasElse();
+
 }

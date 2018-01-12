@@ -24,14 +24,13 @@ import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.statement.DeclareStatementTree;
-import com.exxeta.iss.sonar.esql.tree.impl.statement.DeclareStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
 public class DeclareStatementTest extends EsqlTreeModelTest<DeclareStatementTree>{
 
 	@Test
 	public void modelTest() throws Exception {
-		DeclareStatementTreeImpl tree = parse("DECLARE deployEnvironment EXTERNAL CHARACTER 'Dev';", Kind.DECLARE_STATEMENT);
+		DeclareStatementTree tree = parse("DECLARE deployEnvironment EXTERNAL CHARACTER 'Dev';", Kind.DECLARE_STATEMENT);
 		
 		assertNotNull(tree.declareToken());
 		assertNotNull(tree.nameList());

@@ -26,7 +26,6 @@ import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.statement.IfStatementTree;
-import com.exxeta.iss.sonar.esql.tree.impl.statement.IfStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
 public class IfStatementTest extends EsqlTreeModelTest<IfStatementTree> {
@@ -38,7 +37,7 @@ public class IfStatementTest extends EsqlTreeModelTest<IfStatementTree> {
 
 	@Test
 	public void modelTest() throws Exception {
-		IfStatementTreeImpl tree = parse("IF TRUE THEN CALL A(); ELSEIF TRUE THEN CALL B(); ELSE CALL C(); END IF;", Kind.IF_STATEMENT);
+		IfStatementTree tree = parse("IF TRUE THEN CALL A(); ELSEIF TRUE THEN CALL B(); ELSE CALL C(); END IF;", Kind.IF_STATEMENT);
 		assertNotNull(tree.ifKeyword());
 		assertNotNull(tree.condition());
 

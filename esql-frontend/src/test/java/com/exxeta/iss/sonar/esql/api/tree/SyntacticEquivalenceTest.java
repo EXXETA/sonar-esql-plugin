@@ -18,6 +18,7 @@
 package com.exxeta.iss.sonar.esql.api.tree;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
@@ -51,10 +52,10 @@ public class SyntacticEquivalenceTest extends EsqlTreeModelTest<Tree> {
 
   @Test
   public void test_equivalence_for_tree_list() throws Exception {
-	  CallStatementTree tree1 = parse("CALL f(a, b, c) ;", Tree.Kind.CALL_STATEMENT);
-    CallStatementTree tree2 = parse("CALL f(a, b, c) ;", Tree.Kind.CALL_STATEMENT);
-    CallStatementTree tree3 = parse("CALL f(a, b) ;", Tree.Kind.CALL_STATEMENT);
-    CallStatementTree tree4 = parse("CALL f(a, b, b) ;", Tree.Kind.CALL_STATEMENT);
+	  CallStatementTree tree1 = (CallStatementTree) parse("CALL f(a, b, c) ;", Tree.Kind.CALL_STATEMENT);
+    CallStatementTree tree2 = (CallStatementTree) parse("CALL f(a, b, c) ;", Tree.Kind.CALL_STATEMENT);
+    CallStatementTree tree3 = (CallStatementTree) parse("CALL f(a, b) ;", Tree.Kind.CALL_STATEMENT);
+    CallStatementTree tree4 = (CallStatementTree) parse("CALL f(a, b, b) ;", Tree.Kind.CALL_STATEMENT);
 
     assertThat(SyntacticEquivalence.areEquivalent(tree1.parameterList(), tree1.parameterList())).isTrue();
     assertThat(SyntacticEquivalence.areEquivalent(tree1.parameterList(), tree2.parameterList())).isTrue();
@@ -65,8 +66,8 @@ public class SyntacticEquivalenceTest extends EsqlTreeModelTest<Tree> {
 
   @Test
   public void test_equivalence_for_empty_tree_list() throws Exception {
-    CallStatementTree tree1 = parse("CALL f() ;", Tree.Kind.CALL_STATEMENT);
-    CallStatementTree tree2 = parse("CALL f() ;", Tree.Kind.CALL_STATEMENT);
+    CallStatementTree tree1 = (CallStatementTree) parse("CALL f() ;", Tree.Kind.CALL_STATEMENT);
+    CallStatementTree tree2 = (CallStatementTree) parse("CALL f() ;", Tree.Kind.CALL_STATEMENT);
 
     assertThat(SyntacticEquivalence.areEquivalent(tree1.parameterList(), tree1.parameterList())).isFalse();
     assertThat(SyntacticEquivalence.areEquivalent(tree1.parameterList(), tree2.parameterList())).isFalse();
@@ -83,10 +84,11 @@ public class SyntacticEquivalenceTest extends EsqlTreeModelTest<Tree> {
   
   @Test
   public void test_skip_parenthesis() throws Exception {
-	    IfStatementTree tree1 = parse("IF (TRUE) THEN END IF;", Tree.Kind.IF_STATEMENT);
-	    IfStatementTree tree2 = parse("IF TRUE THEN END IF;", Tree.Kind.IF_STATEMENT);
+	    IfStatementTree tree1 = (IfStatementTree) parse("IF (TRUE) THEN END IF;", Tree.Kind.IF_STATEMENT);
+	    IfStatementTree tree2 = (IfStatementTree) parse("IF TRUE THEN END IF;", Tree.Kind.IF_STATEMENT);
 
     assertThat(SyntacticEquivalence.skipParentheses(tree1.condition()).is(Kind.BOOLEAN_LITERAL)).isTrue();
+    assertNotNull(tree2);
   }
 
 }
