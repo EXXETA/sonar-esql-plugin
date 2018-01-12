@@ -127,6 +127,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.LoopStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.MessageSourceTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.MoveStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.NameClausesTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.NullableTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ParameterTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ParseClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.PassthruStatementTreeImpl;
@@ -1044,22 +1045,31 @@ public class TreeFactory {
 	}
 
 	public ParameterTreeImpl parameter(Optional<InternalSyntaxToken> directionIndicator, IdentifierTree identifier,
-			Optional<Object> optional) {
+			Optional<Object> optional, Optional<NullableTreeImpl> nullable) {
 		if (optional.isPresent()) {
 			if (optional.get() instanceof Tuple) {
 				Tuple<Optional<InternalSyntaxToken>, DataTypeTreeImpl> t = (Tuple) optional.get();
 				return new ParameterTreeImpl(directionIndicator.isPresent() ? directionIndicator.get() : null,
-						identifier, t.first().isPresent() ? t.first().get() : null, t.second());
+						identifier, t.first().isPresent() ? t.first().get() : null, t.second(), nullable.isPresent()?nullable.get():null);
 			} else {
 				return new ParameterTreeImpl(directionIndicator.isPresent() ? directionIndicator.get() : null,
-						identifier, (InternalSyntaxToken) optional.get());
+						identifier, (InternalSyntaxToken) optional.get(), nullable.isPresent()?nullable.get():null);
 			}
 
 		} else {
-			return new ParameterTreeImpl(directionIndicator.isPresent() ? directionIndicator.get() : null, identifier);
+			return new ParameterTreeImpl(directionIndicator.isPresent() ? directionIndicator.get() : null, identifier, nullable.isPresent()?nullable.get():null);
 
 		}
 	}
+	public NullableTreeImpl nullable(Object object){
+		if (object instanceof Tuple){
+			Tuple<InternalSyntaxToken, InternalSyntaxToken> tuple = (Tuple) object;
+			return new NullableTreeImpl(tuple.first(),tuple.second());
+		} else {
+			return new NullableTreeImpl((InternalSyntaxToken) object);
+		}
+	}
+	
 
 	public ReturnTypeTreeImpl returnType(InternalSyntaxToken returnsToken, DataTypeTreeImpl dataType,
 			Optional<Object> nullIndicator) {

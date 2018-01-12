@@ -36,7 +36,7 @@ public class MetricsTest extends EsqlTreeModelTest<ProgramTree> {
   public void complexity() {
     String path = "src/test/resources/metrics/complexity.esql";
     Tree tree = parse(new File(path));
-    assertThat(new ComplexityVisitor().getComplexity(tree)).isEqualTo(7);
+    assertThat(new ComplexityVisitor().getComplexity(tree)).isEqualTo(14);
   }
 
   @Test

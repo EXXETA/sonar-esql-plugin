@@ -84,6 +84,7 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.LoopStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.MessageSourceTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.MoveStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.NameClausesTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.NullableTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ParameterListTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ParameterTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ParseClauseTree;
@@ -262,7 +263,8 @@ public interface Tree {
 		BINDING_IDENTIFIER(IdentifierTree.class),
 		PROPERTY_IDENTIFIER(IdentifierTree.class), 
 		VARIABLE_REFERENCE(VariableReferenceTree.class), 
-		LIST_CONSTRUCTOR_FUNCTION(ListConstructorFunctionTree.class);
+		LIST_CONSTRUCTOR_FUNCTION(ListConstructorFunctionTree.class),
+		NULLABLE(NullableTree.class);
 
 		final Class<? extends Tree> associatedInterface;
 

@@ -21,6 +21,7 @@ import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.DataTypeTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.NullableTreeImpl;
 
 public interface ParameterTree extends Tree {
 	InternalSyntaxToken directionIndicator();
@@ -28,5 +29,6 @@ public interface ParameterTree extends Tree {
 	InternalSyntaxToken constantKeyword();
 	InternalSyntaxToken nameOrNamesapceKeyword();
 	DataTypeTreeImpl dataType();
+	NullableTreeImpl nullable();
 
 }

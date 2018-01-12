@@ -1,11 +1,14 @@
+BROKER SCHEMA A
+PATH B
+
 CREATE COMPUTE MODULE TestFlow_Compute
 	CREATE PROCEDURE Procedure() 
 	BEGIN
 		PROPAGATE TO LABEL 'ABC';
 		PROPAGATE TO TERMINAL 1;
-		IF FALSE THEN
-			IF FALSE THEN
-				IF FALSE THEN
+		IF A is NULL THEN
+			IF b in (c,d,e) THEN
+				IF c BETWEEN 1 and 10 THEN
 					IF NOT FALSE THEN --Non compliant
 						SET OutputRoot=InputRoot;
 					END IF;
@@ -15,10 +18,61 @@ CREATE COMPUTE MODULE TestFlow_Compute
 					END IF;
 				ELSEIF A = B.b[0] THEN --Compliant
 				ELSEIF FALSE THEN --Compliant
+					THROW USER EXCEPTION;
 				END IF;
 			END IF;
 		ELSE
+			SET a = (CURRENT_GMTTIME - InputRoot.MQMD.PutTime) MINUTE TO SECOND;
 		END IF;
-		
+		SET OutputRoot.XMLNSC.abc:abc = THE ( a(b,c,d) );
+		SET b = INTERVAL '1' HOUR;
+		SET b = CAST(StartDelyIntervalStr AS INTERVAL HOUR TO SECOND);
+		SET VAL = CAST('123456' AS DECIMAL(3,0));
+		X : WHILE i <= 3 DO
+ 
+        LEAVE X;
+        ITERATE X;
+      END WHILE X;
+	CALL ABC();
+	CASE size
+	  WHEN minimum + 0 THEN
+	    SET description = 'small';
+	  WHEN minimum + 0 THEN
+	    SET description = 'medium';        
+	  ELSE
+	    SET description = 'unknown';
+	    CALL handleError();
+	END CASE;
 	END;
+	
+	CREATE FUNCTION func() RETURNS BOOLEAN
+	BEGIN
+		B: LOOP
+		END LOOP B;
+		REPEAT 
+			SET i = i + 1; 
+		UNTIL  i>= 3 END REPEAT;
+		RETURN TRUE;
+		DETACH OutputRoot.a;
+		ATTACH a to OutputRoot AS FIRSTCHILD;
+		CREATE LASTCHILD OF OutputRoot.XMLNS.TestCase.Root IDENTITY (XML.Element)NSpace1:Element1[2] VALUE 'Element 2 Value';
+		CREATE NEXTSIBLING OF targetCursor AS targetCursor REPEAT;
+		CREATE LASTCHILD OF OutputRoot DOMAIN('MRM') PARSE(inBitStream, inEncoding, inCCSID, 'DP3UK14002001', 'TestCase', 'XML1', options);
+		SET a = OVERLAY ('ABCDEFGHIJ' PLACING '1234' FROM 4 FOR 3);
+		PASSTHRU('aaa');
+		PROPAGATE DELETE NONE;
+	END; 
+	
+	CREATE PROCEDURE SwapNullable ( 
+       IN a INTEGER NULLABLE, 
+       OUT b INTEGER NULLABLE, 
+       INOUT c INTEGER NULLABLE )
+	LANGUAGE CLR
+	EXTERNAL NAME "FunctionTests.SwapStringNullable"
+	--ASSEMBLY "MyAssembly2"
+	--APPDOMAIN "MyDomain"
+	;
+	
+	CREATE PROCEDURE myProc1 (IN P1 INT, OUT P2 INT) LANGUAGE DATABASE DYNAMIC RESULT SETS 2 EXTERNAL NAME "myschema.myproc1";
+
 END MODULE;

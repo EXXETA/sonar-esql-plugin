@@ -35,27 +35,31 @@ public class ParameterTreeImpl extends EsqlTree implements ParameterTree {
 	private InternalSyntaxToken constantKeyword;
 	private InternalSyntaxToken nameOrNamesapceKeyword;
 	private DataTypeTreeImpl dataType;
+	private NullableTreeImpl nullable;
 
-	public ParameterTreeImpl(InternalSyntaxToken directionIndicator, IdentifierTree identifier) {
+	public ParameterTreeImpl(InternalSyntaxToken directionIndicator, IdentifierTree identifier, NullableTreeImpl nullable) {
 		this.directionIndicator = directionIndicator;
 		this.identifier = identifier;
+		this.nullable = nullable;
 
 	}
 
-	public ParameterTreeImpl(InternalSyntaxToken directionIndicator, IdentifierTree identifier, InternalSyntaxToken nameOrNamesapceKeyword) {
+	public ParameterTreeImpl(InternalSyntaxToken directionIndicator, IdentifierTree identifier, InternalSyntaxToken nameOrNamesapceKeyword, NullableTreeImpl nullable) {
 		this.directionIndicator = directionIndicator;
 		this.identifier=identifier;
 		this.nameOrNamesapceKeyword = nameOrNamesapceKeyword;
+		this.nullable = nullable;
 				
 	}
 
 	public ParameterTreeImpl(InternalSyntaxToken directionIndicator, IdentifierTree identifier,
-			InternalSyntaxToken constantKeyword, DataTypeTreeImpl dataType) {
+			InternalSyntaxToken constantKeyword, DataTypeTreeImpl dataType, NullableTreeImpl nullable) {
 		this.directionIndicator = directionIndicator;
 		this.identifier = identifier;
 		this.nameOrNamesapceKeyword = null;
 		this.constantKeyword = constantKeyword;
 		this.dataType = dataType;
+		this.nullable = nullable;
 	}
 
 	
@@ -83,6 +87,11 @@ public class ParameterTreeImpl extends EsqlTree implements ParameterTree {
 	@Override
 	public DataTypeTreeImpl dataType() {
 		return dataType;
+	}
+	
+	@Override
+	public NullableTreeImpl nullable() {
+		return nullable;
 	}
 
 	@Override

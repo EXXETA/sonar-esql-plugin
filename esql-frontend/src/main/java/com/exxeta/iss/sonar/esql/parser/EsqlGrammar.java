@@ -119,6 +119,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.LoopStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.MessageSourceTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.MoveStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.NameClausesTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.NullableTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ParameterTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ParseClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.PassthruStatementTreeImpl;
@@ -224,8 +225,20 @@ public class EsqlGrammar {
 				BINDING_IDENTIFIER(),
 				b.optional(b.firstOf(b.token(EsqlNonReservedKeyword.NAME), b.token(EsqlNonReservedKeyword.NAMESPACE),
 						f.newTuple8(b.optional(b.token(EsqlNonReservedKeyword.CONSTANT)),
-								DATA_TYPE())))));
+								DATA_TYPE()))),
+				b.optional(NULLABLE())
+				));
 	}
+	
+	public NullableTreeImpl NULLABLE() {
+		return b.<NullableTreeImpl>nonterminal(Kind.NULLABLE).is(f.nullable(
+				b.firstOf(
+				b.token(EsqlNonReservedKeyword.NULLABLE), 
+				f.newTuple1(b.token(EsqlNonReservedKeyword.NOT), b.token(EsqlNonReservedKeyword.NULL)))
+				));
+	}
+	
+
 
 	public RoutineBodyTreeImpl ROUTINE_BODY() {
 		return b.<RoutineBodyTreeImpl>nonterminal(Kind.ROUTINE_BODY)
