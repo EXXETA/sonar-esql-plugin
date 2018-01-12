@@ -48,9 +48,10 @@ public class SubElementNameCheck extends DoubleDispatchVisitorCheck{
 
 				
 				if (strArr1.length > 0){
-					String envSubElement = strArr1[0];
+					
 				
 				if(! strArr1[1].isEmpty()){
+					String envSubElement = strArr1[0];
 					String envSubElement1 = null;
 					if (!(temp.indexOf("Environment") + 12  > envSubElement.length())){
 					 envSubElement1 = envSubElement.substring(temp.indexOf("Environment")+12,temp.indexOf("="));
