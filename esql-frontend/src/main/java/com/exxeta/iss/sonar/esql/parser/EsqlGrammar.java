@@ -770,11 +770,6 @@ public class EsqlGrammar {
 
 								), ADDITIVE_EXPRESSION()))));
 
-		/*
-		 * b.firstOf("<", ">", "<=", ">=", b.sequence("IS", b.optional("NOT")),
-		 * b.sequence(b.optional("NOT"), "LIKE")), b.firstOf(additiveExpression,
-		 * subtractiveExpression)))) .skipIfOneChild();
-		 */
 
 	}
 

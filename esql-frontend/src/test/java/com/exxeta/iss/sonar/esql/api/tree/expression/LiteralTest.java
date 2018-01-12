@@ -15,16 +15,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.esql.api.tree;
+package com.exxeta.iss.sonar.esql.api.tree.expression;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.parser.EsqlLegacyGrammar;
+import com.exxeta.iss.sonar.esql.tree.expression.LiteralTree;
+import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class LiteralTest {
+public class LiteralTest extends EsqlTreeModelTest<LiteralTree> {
 
 	@Test
 	public void stringLiteral() {
@@ -58,6 +61,16 @@ public class LiteralTest {
 		assertThat(Kind.TIMESTAMP_LITERAL)
 		.matches("TIMESTAMP '2017-01-01 00:00:00'")
 		.notMatches("timestamp");
+	}
+	
+	@Test
+	public void stringLiteralModelTest() throws Exception{
+		LiteralTree tree = parse("'a'", Kind.STRING_LITERAL);
+		assertNotNull(tree);
+		assertNotNull(tree.token());
+		assertNotNull(tree.value());
+		assertNotNull(tree.toString());
+		
 	}
 	
 }

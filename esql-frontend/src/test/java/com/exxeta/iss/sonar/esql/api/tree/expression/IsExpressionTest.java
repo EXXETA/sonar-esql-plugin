@@ -15,15 +15,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.esql.api.tree;
+package com.exxeta.iss.sonar.esql.api.tree.expression;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
+import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class IsExpressionTest {
+public class IsExpressionTest extends EsqlTreeModelTest<IsExpressionTree>{
 
 	@Test
 	public void expression() {
@@ -36,4 +40,15 @@ public class IsExpressionTest {
 		;
 	}
 	
+	@Test
+	public void modelTest() throws Exception {
+		IsExpressionTree tree = parse("a IS NULL", Kind.IS_EXPRESSION);
+		assertNotNull(tree);
+		assertNotNull(tree.expression());
+		assertNotNull(tree.isKeyword());
+		assertNull(tree.notKeyword());
+		assertNull(tree.plusMinus());
+		assertNotNull(tree.with());
+	}
+
 }

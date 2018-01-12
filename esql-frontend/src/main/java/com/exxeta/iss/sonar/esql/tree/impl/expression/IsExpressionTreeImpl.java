@@ -89,7 +89,7 @@ public class IsExpressionTreeImpl extends EsqlTree implements IsExpressionTree, 
 
 	@Override
 	public Kind getKind() {
-		return Kind.IN_EXPRESSION;
+		return Kind.IS_EXPRESSION;
 	}
 
 	@Override
