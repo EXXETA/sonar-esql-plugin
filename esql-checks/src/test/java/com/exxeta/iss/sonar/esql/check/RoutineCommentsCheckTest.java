@@ -28,14 +28,16 @@ import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
  * @author 
  *
  */
-public class FunctionCommentsCheckTest {
+public class RoutineCommentsCheckTest {
 	@Test
 	public void test() {
 				
-		EsqlCheckVerifier.issues(new FunctionCommentsCheck(), new File("src/test/resources/functionComments.esql"))
+		EsqlCheckVerifier.issues(new RoutineCommentsCheck(), new File("src/test/resources/routineComments.esql"))
         .next().atLine(3).withMessage("Document this function with all parameters and return types.")
         .next().atLine(15).withMessage("Document this function with all parameters and return types.")      
         .next().atLine(42).withMessage("Document this function with all parameters and return types.")      
+        .next().atLine(57).withMessage("Document this procedure with all parameters and return types.")
+        .next().atLine(66).withMessage("Document this procedure with all parameters and return types.")      
         .noMore();
 	}
 }

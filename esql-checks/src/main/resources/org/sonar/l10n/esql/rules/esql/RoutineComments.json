@@ -1,5 +1,5 @@
 {
-  "title": "Each Procedure should have comments",
+  "title": "Each function or procedure should have comments",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {
@@ -11,3 +11,6 @@
   ],
   "defaultSeverity": "Major"
 }
+
+ 
+

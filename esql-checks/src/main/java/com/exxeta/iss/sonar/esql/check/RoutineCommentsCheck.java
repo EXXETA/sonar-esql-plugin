@@ -20,34 +20,47 @@ package com.exxeta.iss.sonar.esql.check;
 import org.apache.commons.lang.StringUtils;
 import org.sonar.check.Rule;
 
+import com.exxeta.iss.sonar.esql.api.tree.RoutineDeclarationTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxTrivia;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateFunctionStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
 
 /**
- * This Java class is created to check function header comments
+ * This Java class is created to check function or procedure header comments
  * @author 
  *
  */
-@Rule(key="FunctionComments")
-public class FunctionCommentsCheck extends DoubleDispatchVisitorCheck{
+@Rule(key="RoutineComments")
+public class RoutineCommentsCheck extends DoubleDispatchVisitorCheck{
 
 
-	private static final String MESSAGE = "Document this function with all parameters and return types.";
+	private static final String MESSAGE = "Document this %s with all parameters and return types.";
 
 
 	@Override
 	public void visitCreateFunctionStatement(CreateFunctionStatementTree tree) {
+		visitRoutine(tree, String.format(MESSAGE, "function"));
+		super.visitCreateFunctionStatement(tree);
+		
+	}
+
+	@Override
+	public void visitCreateProcedureStatement(CreateProcedureStatementTree tree) {
+		visitRoutine(tree, String.format(MESSAGE, "procedure"));
+		super.visitCreateProcedureStatement(tree);
+	}
+	
+	private void visitRoutine(RoutineDeclarationTree tree, String message) {
 		String comment = getComment(tree);
 		
 		// check comments
 		if (isEmptyComment(comment)|| !containsAny(comment,new String[]{"Parameters:","IN:","INOUT:","OUT:","RETURNS:"})){
-			addIssue(tree, MESSAGE);
+			addIssue(tree, message);
 		}
-		
 	}	
-		
+	
 	private boolean containsAny(String haystack, String[] needles) {
 		for (String needle : needles){
 			if (haystack.contains(needle)){
