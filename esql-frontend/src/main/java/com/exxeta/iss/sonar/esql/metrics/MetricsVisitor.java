@@ -119,6 +119,7 @@ public class MetricsVisitor extends SubscriptionVisitor {
     int fileComplexity = new ComplexityVisitor().getComplexity(context.getTopTree());
 
     saveMetricOnFile(CoreMetrics.COMPLEXITY, fileComplexity);
+    saveMetricOnFile(EsqlMetrics.MODULE_COMPLEXITY, moduleComplexity);
     saveMetricOnFile(CoreMetrics.COMPLEXITY_IN_FUNCTIONS, functionComplexity);
 
     sensorContext.<String>newMeasure()

@@ -21,7 +21,6 @@ import static com.exxeta.iss.sonar.esql.codecoverage.CodeCoverageExtension.LOG;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -33,10 +32,7 @@ import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.batch.sensor.coverage.CoverageType;
 import org.sonar.api.batch.sensor.coverage.NewCoverage;
-
-import com.google.common.io.Files;
 
 public abstract class AbstractAnalyzer implements ExecutionDataVisitor {
 
@@ -68,18 +64,18 @@ public abstract class AbstractAnalyzer implements ExecutionDataVisitor {
 
 		// Create new coverages for all InputFiles
 		for (InputFile file : files) {
-			NewCoverage coverage = context.newCoverage().onFile(file).ofType(CoverageType.UNIT);
+			NewCoverage coverage = context.newCoverage().onFile(file);
 			Set<Integer> fileExecutableLines = executableLines.get(file);
 			Set<Integer> fileExecutedLines = executedLines.get(file);
 			if (fileExecutableLines != null && fileExecutedLines == null) {
-				LOG.info("File has not been executed " + file.absolutePath());
+				LOG.info("File has not been executed " + file.uri());
 				for (int line : fileExecutableLines) {
 					coverage.lineHits(line, 0);
 					coverage.conditions(line, 1, 0);
 				}
 				coverage.save();
 			} else if (fileExecutableLines == null) {
-				LOG.warn("File has not been parsed " + file.absolutePath());
+				LOG.warn("File has not been parsed " + file.uri());
 			} else {
 				String lineHits = "";
 				for (int line : fileExecutableLines) {
@@ -92,7 +88,7 @@ public abstract class AbstractAnalyzer implements ExecutionDataVisitor {
 						coverage.conditions(line, 1, 0);
 					}
 				}
-					LOG.info("Saving execution data found for " + file.absolutePath()+lineHits);
+					LOG.info("Saving execution data found for " + file.uri()+lineHits);
 				coverage.save();
 			}
 		}
@@ -132,7 +128,7 @@ public abstract class AbstractAnalyzer implements ExecutionDataVisitor {
 		String moduleName = "";
 		String routineName = "";
 		try {
-			String contents = Files.toString(file.file(), Charset.defaultCharset());
+			String contents = file.contents();
 			int lineNumber = 0;
 			for (String line : contents.split("\\r?\\n")) {
 				lineNumber++;

@@ -17,14 +17,11 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
 
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.EsqlCheck;
-
 import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
 
 

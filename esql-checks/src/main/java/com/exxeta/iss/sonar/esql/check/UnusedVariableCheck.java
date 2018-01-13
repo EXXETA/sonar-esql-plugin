@@ -30,7 +30,6 @@ import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.DeclareStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
 import com.exxeta.iss.sonar.esql.api.visitors.EsqlFile;
-import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
 
 /**
  * This Java class is created to implement the logic to find all the unused variables.

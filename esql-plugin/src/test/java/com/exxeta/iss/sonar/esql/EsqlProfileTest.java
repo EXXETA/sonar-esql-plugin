@@ -77,7 +77,7 @@ public class EsqlProfileTest {
   }
 
   /**
-   * SonarLint will inject a rule finder containing only the rules coming from the javascript repository
+   * SonarLint will inject a rule finder containing only the rules coming from the esql repository
    */
   private RuleFinder sonarLintRuleFinder() {
     return when(mock(RuleFinder.class).findByKey(anyString(), anyString())).thenAnswer(invocation -> {

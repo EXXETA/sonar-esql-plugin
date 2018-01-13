@@ -73,6 +73,7 @@ import com.exxeta.iss.sonar.esql.codecoverage.TraceSensor;
 import com.exxeta.iss.sonar.esql.highlighter.HighlightSymbolTableBuilder;
 import com.exxeta.iss.sonar.esql.highlighter.HighlighterVisitor;
 import com.exxeta.iss.sonar.esql.metrics.MetricsVisitor;
+import com.exxeta.iss.sonar.esql.metrics.NoSonarVisitor;
 import com.exxeta.iss.sonar.esql.parser.EsqlParserBuilder;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
@@ -156,13 +157,13 @@ public class EsqlSquidSensor implements Sensor {
       scanFile(sensorContext, inputFile, executor, visitors, programTree);
     } catch (RecognitionException e) {
       checkInterrupted(e);
-      LOG.error("Unable to parse file: " + inputFile.absolutePath());
+      LOG.error("Unable to parse file: " + inputFile.uri());
       LOG.error(e.getMessage());
       processRecognitionException(e, sensorContext, inputFile);
     } catch (Exception e) {
       checkInterrupted(e);
       processException(e, sensorContext, inputFile);
-      throw new AnalysisException("Unable to analyse file: " + inputFile.absolutePath(), e);
+      throw new AnalysisException("Unable to analyse file: " + inputFile.uri(), e);
     }
   }
 
@@ -345,7 +346,10 @@ public class EsqlSquidSensor implements Sensor {
         context,
         ignoreHeaderComments,
         fileLinesContextFactory);
-      return Arrays.asList(metricsVisitor, new HighlighterVisitor(context));
+      return Arrays.asList(
+    		  metricsVisitor,
+    		  new NoSonarVisitor(noSonarFilter, ignoreHeaderComments),
+    		  new HighlighterVisitor(context));
     }
 
     @Override
@@ -395,7 +399,7 @@ public class EsqlSquidSensor implements Sensor {
   }
 
   private static boolean ignoreHeaderComments(SensorContext context) {
-	    return context.settings().getBoolean(EsqlPlugin.IGNORE_HEADER_COMMENTS);
+	    return context.config().getBoolean(EsqlPlugin.IGNORE_HEADER_COMMENTS).orElse(EsqlPlugin.IGNORE_HEADER_COMMENTS_DEFAULT_VALUE);
   }
 
   private static boolean isSonarLint(SensorContext context) {

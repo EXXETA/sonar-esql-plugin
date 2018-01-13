@@ -35,6 +35,7 @@ public class FunctionCommentsCheckTest {
 		EsqlCheckVerifier.issues(new FunctionCommentsCheck(), new File("src/test/resources/functionComments.esql"))
         .next().atLine(3).withMessage("Document this function with all parameters and return types.")
         .next().atLine(15).withMessage("Document this function with all parameters and return types.")      
+        .next().atLine(42).withMessage("Document this function with all parameters and return types.")      
         .noMore();
 	}
 }

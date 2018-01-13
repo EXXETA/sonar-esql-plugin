@@ -22,10 +22,7 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
-import com.exxeta.iss.sonar.esql.api.tree.FieldReferenceTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
-import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
-import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.api.tree.statement.DeleteFromStatementTree;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 

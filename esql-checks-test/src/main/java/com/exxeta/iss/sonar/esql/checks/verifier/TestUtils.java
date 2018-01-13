@@ -26,12 +26,10 @@ import java.nio.file.Paths;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
-import org.sonar.api.config.Settings;
 import org.sonar.api.config.internal.MapSettings;
 
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
-import com.exxeta.iss.sonar.esql.api.visitors.EsqlFileImpl;
 import com.exxeta.iss.sonar.esql.api.visitors.EsqlVisitorContext;
 import com.exxeta.iss.sonar.esql.parser.EsqlParserBuilder;
 import com.google.common.base.Throwables;

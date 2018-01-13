@@ -34,9 +34,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
 
 /**
- * This visitor creates new symbols for not hoisted variables (like class name)
- * and implicitly declared variables (declared without keyword). Also it creates
- * usages for all known symbols.
+ * This visitor creates usages for all known symbols.
  */
 public class SymbolVisitor extends DoubleDispatchVisitor {
 
@@ -133,14 +131,6 @@ public class SymbolVisitor extends DoubleDispatchVisitor {
 
 	private boolean isScopeAlreadyEntered(BeginEndStatementTree tree) {
 		return !treeScopeMap.containsKey(tree);
-	}
-
-	private Scope getFunctionScope() {
-		Scope scope = currentScope;
-		while (scope.isBlock()) {
-			scope = scope.outer();
-		}
-		return scope;
 	}
 
 }

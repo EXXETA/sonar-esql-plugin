@@ -34,30 +34,29 @@ import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
 public class FunctionCommentsCheck extends DoubleDispatchVisitorCheck{
 
 
+	private static final String MESSAGE = "Document this function with all parameters and return types.";
+
+
 	@Override
 	public void visitCreateFunctionStatement(CreateFunctionStatementTree tree) {
 		String comment = getComment(tree);
 		
 		// check comments
-		
-		if( "FUNCTION".equals(tree.routineType().toString())){
-			
-			if (comment == null || isEmptyComment(comment)){
-				addIssue(tree, "Document this function with all parameters and return types.");
-			}else{				
-					
-				if( !comment.contains("Parameters:") && 
-							!comment.contains("IN:") &&
-							!comment.contains("INOUT:") &&
-							!comment.contains("OUT:") &&
-							!comment.contains("RETURNS:")){
-						addIssue(tree, "Document this function with all parameters and return types.");
-				}				
-			}
+		if (isEmptyComment(comment)|| !containsAny(comment,new String[]{"Parameters:","IN:","INOUT:","OUT:","RETURNS:"})){
+			addIssue(tree, MESSAGE);
 		}
 		
 	}	
 		
+	private boolean containsAny(String haystack, String[] needles) {
+		for (String needle : needles){
+			if (haystack.contains(needle)){
+				return true;
+			}
+		}
+		return false;
+	}
+
 	private static String getComment(Tree tree){
 		for (SyntaxTrivia syntaxTrivia : tree.firstToken().trivias()){
 			if (syntaxTrivia.text().startsWith("/*")){
@@ -69,11 +68,13 @@ public class FunctionCommentsCheck extends DoubleDispatchVisitorCheck{
 	}
 	
 	
-	 private static boolean isEmptyComment(String comment) {
-		    //remove start and end of doc as well as stars.
-		    String cleanedupJavadoc = comment.trim().substring(2).replace("*/", "").replace("*", "").trim();
-		    return StringUtils.isBlank(cleanedupJavadoc);
-		  }
-	
+	private static boolean isEmptyComment(String comment) {
+		if (comment == null) {
+			return true;
+		}
+		// remove start and end of doc as well as stars.
+		String cleanedupJavadoc = comment.trim().substring(2).replace("*/", "").replace("*", "").trim();
+		return StringUtils.isBlank(cleanedupJavadoc);
+	}
 
 }

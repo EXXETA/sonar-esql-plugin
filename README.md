@@ -3,6 +3,12 @@
 
 This open source plugin can be used to analyze the ESQL-sourcecode of IBM Websphere Message Broker / IBM Integration Bus projects. 
 
+##Features
+* >75 rules
+* Support for Broker 7, 8, 9, 10
+* Metrics (complexity, number of lines, ...)
+* Import of traces as coverage reports
+
 
 ## Installation
 
@@ -24,6 +30,7 @@ This open source plugin can be used to analyze the ESQL-sourcecode of IBM Websph
 
 ## History
 
+- 2.3.0 - Additional rules
 - 2.2.0 - Code coverage analysis
 - 2.1.0 - A few bugfixes and a lot more checks/rules
 - 2.0.0 - complete refactoring and upgrade to SonarQube 5.6

@@ -25,7 +25,6 @@ import java.util.Set;
 import javax.annotation.Nullable;
 
 import org.sonar.api.config.Configuration;
-import org.sonar.api.config.Settings;
 
 import com.exxeta.iss.sonar.esql.api.symbols.Symbol;
 import com.exxeta.iss.sonar.esql.api.symbols.Symbol.Kind;
@@ -33,7 +32,6 @@ import com.exxeta.iss.sonar.esql.api.symbols.SymbolModel;
 import com.exxeta.iss.sonar.esql.api.symbols.SymbolModelBuilder;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.visitors.TreeVisitorContext;
-import com.exxeta.iss.sonar.esql.tree.symbols.SymbolVisitor;
 import com.exxeta.iss.sonar.esql.tree.symbols.type.TypeVisitor;
 
 public class SymbolModelImpl implements SymbolModel, SymbolModelBuilder {

@@ -22,9 +22,7 @@ import org.sonar.api.PropertyType;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
 
-import com.exxeta.iss.sonar.esql.codecoverage.CodeCoverageExtension;
 import com.exxeta.iss.sonar.esql.metrics.EsqlMetrics;
-import com.google.common.collect.ImmutableList;
 
 public class EsqlPlugin implements Plugin {
 

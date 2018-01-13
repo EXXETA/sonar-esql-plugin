@@ -24,7 +24,6 @@ import static org.junit.Assert.assertNull;
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
-import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
 public class IsExpressionTest extends EsqlTreeModelTest<IsExpressionTree>{

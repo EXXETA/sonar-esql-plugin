@@ -23,14 +23,8 @@ import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
-import com.exxeta.iss.sonar.esql.api.tree.FieldReferenceTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
-import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
-import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
-import com.exxeta.iss.sonar.esql.api.tree.statement.InsertStatementTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.SetColumnTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.UpdateStatementTree;
-import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
 public class UpdateStatementTest extends EsqlTreeModelTest<UpdateStatementTree>{

@@ -19,15 +19,11 @@ package com.exxeta.iss.sonar.esql.api.tree.expression;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.parser.EsqlLegacyGrammar;
-import com.exxeta.iss.sonar.esql.tree.impl.expression.InExpressionTreeImpl;
-import com.exxeta.iss.sonar.esql.tree.symbols.type.PrimitiveType;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
 public class UnaryExpressionTest extends EsqlTreeModelTest<UnaryExpressionTree>{

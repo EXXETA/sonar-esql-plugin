@@ -35,7 +35,18 @@ CREATE COMPUTE MODULE Module1
 		
 	END;
 	
+	/*
+ * Function description goes here.
+ * But not the right syntax
+ */
+	CREATE FUNCTION Main4() RETURNS BOOLEAN --Noncompliant
+	BEGIN
+		DECLARE myInt INTEGER 1;
+		DECLARE myInt2 INTEGER;
+		
+	END;
 	
+
 	
 
 

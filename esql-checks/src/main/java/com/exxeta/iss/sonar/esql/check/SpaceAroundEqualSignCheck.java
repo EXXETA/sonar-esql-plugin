@@ -46,7 +46,6 @@ public class SpaceAroundEqualSignCheck extends SubscriptionVisitorCheck {
 	private static final String MESSAGE = "Add space around \"=\" sign.";
 
 	private List<String> lines = null;
-	private String filePath = null;
 	  @Override
 	  public List<Kind> nodesToVisit() {
 	    return ImmutableList.of(	      
@@ -58,8 +57,6 @@ public class SpaceAroundEqualSignCheck extends SubscriptionVisitorCheck {
 		 
 		  if(lines == null){
 				try {
-					 //filePath = getContext().getFile().getPath();
-					 //lines = null;
 					lines = Arrays.asList(getContext().getEsqlFile().contents().split("\\r?\\n"));
 					
 				} catch (IOException e) {
