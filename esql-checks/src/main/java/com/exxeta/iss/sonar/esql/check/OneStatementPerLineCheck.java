@@ -22,7 +22,6 @@ import org.sonar.check.Rule;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
-import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
 import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
 import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitorCheck;
@@ -38,7 +37,7 @@ public class OneStatementPerLineCheck extends SubscriptionVisitorCheck {
 	
 	private static final String MESSAGE = "Reformat the code to have only one statement per line.";
 
-	  private ListMultimap<Integer, StatementTree> statementsPerLine = ArrayListMultimap.create();
+	  private ListMultimap<Integer, Tree> statementsPerLine = ArrayListMultimap.create();
 
 	  @Override
 	  public List<Kind> nodesToVisit() {
@@ -88,7 +87,7 @@ public class OneStatementPerLineCheck extends SubscriptionVisitorCheck {
 	   
 
 		  if (!tree.is(Kind.PROGRAM)){
-		      statementsPerLine.put(((EsqlTree) tree).getLine(), (StatementTree) tree);
+		      statementsPerLine.put(((EsqlTree) tree).getLine(), tree);
 		    }
 	  }
 
@@ -98,7 +97,7 @@ public class OneStatementPerLineCheck extends SubscriptionVisitorCheck {
 	  public void leaveNode(Tree tree) {
 	    if (tree.is(Kind.PROGRAM)){
 	      for (int line : statementsPerLine.keys().elementSet()) {
-	        List<StatementTree> statementsAtLine = statementsPerLine.get(line);
+	        List<Tree> statementsAtLine = statementsPerLine.get(line);
 
 	        if (statementsAtLine.size() > 1) {
 	          addIssue(statementsAtLine);
@@ -107,7 +106,7 @@ public class OneStatementPerLineCheck extends SubscriptionVisitorCheck {
 	    }
 	  }
 
-	  private void addIssue(List<StatementTree> statementsAtLine) {
+	  private void addIssue(List<Tree> statementsAtLine) {
 	    PreciseIssue issue = addIssue(statementsAtLine.get(1), MESSAGE);
 
 	    for (int i = 2; i < statementsAtLine.size(); i++) {
