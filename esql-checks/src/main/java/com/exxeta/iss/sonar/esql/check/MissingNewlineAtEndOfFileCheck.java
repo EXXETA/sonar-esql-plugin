@@ -34,7 +34,7 @@ public class MissingNewlineAtEndOfFileCheck extends DoubleDispatchVisitorCheck {
   public void visitProgram(ProgramTree tree) {
 	SyntaxToken lastToken = null;
 	  
-    if (tree.esqlContents() != null && tree.esqlContents().items().size()>0) {
+    if (!tree.esqlContents().items().isEmpty()) {
     	lastToken = ((EsqlTree) tree.esqlContents()).lastToken();
     } else if (tree.semiToken()!=null){
     	lastToken=tree.semiToken();
@@ -45,7 +45,7 @@ public class MissingNewlineAtEndOfFileCheck extends DoubleDispatchVisitorCheck {
     }
     if (lastToken!=null){
       int lastLine = tree.EOFToken().line();
-      int lastTokenLine = ((EsqlTree) tree.esqlContents()).lastToken().endLine();
+      int lastTokenLine = lastToken.endLine();
 
       if (lastLine == lastTokenLine) {
         addIssue(new FileIssue(this, MESSAGE));

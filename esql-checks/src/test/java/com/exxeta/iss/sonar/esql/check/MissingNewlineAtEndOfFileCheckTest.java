@@ -52,4 +52,22 @@ public class MissingNewlineAtEndOfFileCheckTest {
       .noMore();
   }
 
+  @Test
+  public void onlySchemaPathSemi() {
+    EsqlCheckVerifier.issues(check, new File(DIRECTORY, "onlySchemaPathSemi.esql"))
+      .noMore();
+  }
+
+  @Test
+  public void onlySchemaPath() {
+    EsqlCheckVerifier.issues(check, new File(DIRECTORY, "onlySchemaPath.esql"))
+      .noMore();
+  }
+
+  @Test
+  public void onlySchema() {
+    EsqlCheckVerifier.issues(check, new File(DIRECTORY, "onlySchema.esql"))
+      .noMore();
+  }
+
 }
