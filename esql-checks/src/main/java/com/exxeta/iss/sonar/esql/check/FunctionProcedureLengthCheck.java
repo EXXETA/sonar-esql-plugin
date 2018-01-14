@@ -65,7 +65,7 @@ public class FunctionProcedureLengthCheck extends DoubleDispatchVisitorCheck {
 	}
 
 	private void checkRoutineLength(RoutineDeclarationTree routineDeclarationTree) {
-		if (routineDeclarationTree.routineBody()!=null && routineDeclarationTree.routineBody().statement() instanceof BeginEndStatementTree){
+		if (routineDeclarationTree.routineBody().statement() instanceof BeginEndStatementTree){
 			
 		 BeginEndStatementTree body = (BeginEndStatementTree) routineDeclarationTree.routineBody().statement();
 		 
