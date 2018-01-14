@@ -76,14 +76,6 @@ public class CheckUtils {
 		return removeQuotedComment.toString();
 	}
 	
-	public static int countCharacters(String s, String ch) {
-		int cnt = 0;
-		String[] lines = s.split(ch);
-		cnt = lines.length - 1;
-		return cnt;
-	}
-	
-
 	    public static Set<String> buildKeys(String lineParam)
 	    {
 	       String line = lineParam;
