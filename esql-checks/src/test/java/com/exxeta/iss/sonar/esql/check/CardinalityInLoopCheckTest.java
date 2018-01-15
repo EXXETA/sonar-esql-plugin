@@ -30,6 +30,7 @@ public class CardinalityInLoopCheckTest {
 		.next().atLine(5).withMessage("Avoid using CARDINALITY in loops.")
 		.next().atLine(18).withMessage("Avoid using CARDINALITY in loops.")
 		.next().atLine(25).withMessage("Avoid using CARDINALITY in loops.")
+		.next().atLine(33).withMessage("Avoid using CARDINALITY in loops.")
 			.noMore();
 	}
 }

@@ -17,8 +17,12 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.sonar.check.Rule;
 
+import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
@@ -26,13 +30,23 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.LoopStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.RepeatStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.WhileStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
+import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
+import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.CallExpressionTreeImpl;
 
 @Rule(key = "CardinalityInLoop")
 public class CardinalityInLoopCheck extends DoubleDispatchVisitorCheck {
 
 	private static final String MESSAGE = "Avoid using CARDINALITY in loops.";
+	
+	private List<Tree> reportedStatements = new ArrayList<>();
 
+	@Override
+	public void visitProgram(ProgramTree tree) {
+		reportedStatements.clear();
+		super.visitProgram(tree);
+	}
+	
 	@Override
 	public void visitWhileStatement(WhileStatementTree tree) {
 		checkCardinalityInDecendants(tree);
@@ -57,6 +71,16 @@ public class CardinalityInLoopCheck extends DoubleDispatchVisitorCheck {
 				.filter(d -> "CARDINALITY".equalsIgnoreCase(
 						(((IdentifierTree)((CallExpressionTreeImpl) d).functionName()).name())))
 				.forEach(d -> addIssue(d, MESSAGE));
+	}
+
+	@Override
+	public PreciseIssue addIssue(Tree tree, String message) {
+		if (!reportedStatements.contains(tree)){
+			reportedStatements.add(tree);
+			return super.addIssue(tree, message);
+		} else {
+			return null;
+		}
 	}
 
 }
