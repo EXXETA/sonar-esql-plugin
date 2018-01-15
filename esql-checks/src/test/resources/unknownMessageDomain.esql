@@ -13,6 +13,7 @@ CREATE COMPUTE MODULE TestFlow_Compute
 		DECLARE refColl REFERENCE TO InputRoot.Collection.[>]; --Compliant
 		SET OutputRoot.HTTPReplyHeader."Content-Type"=contentType; --Compliant
 		CREATE FIELD OutputRoot.MQPCF; --Compliant
+		CREATE LASTCHILD OF OutputRoot DOMAIN ('SOAP'); --Compliant
 		RETURN TRUE;
 	END;
 END MODULE;
