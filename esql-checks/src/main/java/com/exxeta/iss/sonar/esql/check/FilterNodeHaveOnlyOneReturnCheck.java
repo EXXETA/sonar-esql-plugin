@@ -52,19 +52,25 @@ public class FilterNodeHaveOnlyOneReturnCheck extends DoubleDispatchVisitorCheck
 			falseCount = trueCount = returnOther = throwsError = 0;
 		}
 		super.visitCreateModuleStatement(tree);
-		boolean returnViolation = false;
-		if (trueCount + falseCount + returnOther + throwsError == 0)
-			returnViolation = true;
-		if (trueCount == 0 && returnOther == 0)
-			returnViolation = true;
-		if (falseCount == 0 && returnOther == 0 && throwsError == 0)
-			returnViolation = true;
-		if (returnViolation) {
-
-			addIssue(new PreciseIssue(this, new IssueLocation(tree, MESSAGE)));
+		if (this.insideFilterModule){
+			boolean returnViolation = false;
+			if (trueCount + falseCount + returnOther + throwsError == 0){   // no return or throw
+				returnViolation = true;
+			} 
+			if (trueCount == 0 && returnOther == 0){                        // only false or throw
+				returnViolation = true;
+			} 
+			if (falseCount == 0 && returnOther == 0 && throwsError == 0){   // only true
+				returnViolation = true;
+			}
+			
+			if (returnViolation) {
+	
+				addIssue(new PreciseIssue(this, new IssueLocation(tree, MESSAGE)));
+			}
+	
+			this.insideFilterModule=false;
 		}
-
-		this.insideFilterModule=false;
 	}
 	
 	@Override

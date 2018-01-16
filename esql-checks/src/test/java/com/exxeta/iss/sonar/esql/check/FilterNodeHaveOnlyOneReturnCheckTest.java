@@ -32,8 +32,12 @@ public class FilterNodeHaveOnlyOneReturnCheckTest {
 	@Test
 	public void test() {
 		EsqlCheck check = new FilterNodeHaveOnlyOneReturnCheck();
-		EsqlCheckVerifier.issues(check, new File("src/test/resources/FilterNodeHaveOnlyOneReturn.esql")).next().atLine(1)
-				.withMessage("This filter module always returns the same value").noMore();
+		EsqlCheckVerifier.issues(check, new File("src/test/resources/FilterNodeHaveOnlyOneReturn.esql"))
+		.next().atLine(1).withMessage("This filter module always returns the same value")
+		.next().atLine(21).withMessage("This filter module always returns the same value")
+		.next().atLine(29).withMessage("This filter module always returns the same value")
+		.next().atLine(57).withMessage("This filter module always returns the same value")
+		.noMore();
 	}
 
 }
