@@ -73,9 +73,9 @@
 
 		<version.source.plugin>2.4</version.source.plugin>
 		<version.site.plugin>3.4</version.site.plugin>
-		<version.resources.plugin>2.7</version.resources.plugin>
+		<version.resources.plugin>3.0.2</version.resources.plugin>
 		<version.shade.plugin>2.4.3</version.shade.plugin>
-		<version.jar.plugin>2.6</version.jar.plugin>
+		<version.jar.plugin>3.0.2</version.jar.plugin>
 
 
 		<version.buildnumber.plugin>1.4</version.buildnumber.plugin>
@@ -83,7 +83,7 @@
 		<version.compiler.plugin>3.5.1</version.compiler.plugin>
 		<version.dependency.plugin>2.9</version.dependency.plugin>
 		<version.deploy.plugin>2.8.2</version.deploy.plugin>
-		<version.enforcer.plugin>1.4.1</version.enforcer.plugin>
+		<version.enforcer.plugin>3.0.0-M1</version.enforcer.plugin>
 		<version.failsafe.plugin>2.18</version.failsafe.plugin>
 		<version.groovy.plugin>2.0</version.groovy.plugin>
 		<version.install.plugin>2.5.2</version.install.plugin>
