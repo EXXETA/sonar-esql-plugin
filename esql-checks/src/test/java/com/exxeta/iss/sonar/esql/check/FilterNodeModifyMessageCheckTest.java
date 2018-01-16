@@ -32,8 +32,9 @@ public class FilterNodeModifyMessageCheckTest {
 	@Test
 	public void test() {
 		EsqlCheck check = new FilterNodeModifyMessageCheck();
-		EsqlCheckVerifier.issues(check, new File("src/test/resources/FilterNodeModifyMessage.esql")).next().atLine(4)
-				.withMessage("The filter node cannot modify the message").noMore();
+		EsqlCheckVerifier.issues(check, new File("src/test/resources/FilterNodeModifyMessage.esql"))
+			.next().atLine(4).withMessage("The filter node cannot modify the message")
+			.noMore();
 	}
 
 }

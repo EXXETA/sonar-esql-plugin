@@ -1,18 +1,19 @@
 CREATE FILTER MODULE Flow2_Filter
-CREATE FUNCTION Main() RETURNS BOOLEAN
-BEGIN
-SET OutputRoot.XMLNSC.Response.details.person.age = '20';
-SET a = 'a';
-SET a.a = 'a';
-RETURN FALSE;
-END;
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		SET OutputRoot.XMLNSC.Response.details.person.age = '20';
+		SET a = 'a';
+		SET a.a = 'a';
+		RETURN FALSE;
+	END;
 END MODULE;
+
 CREATE COMPUTE MODULE Flow2
-CREATE FUNCTION Main() RETURNS BOOLEAN
-BEGIN
-SET OutputRoot.XMLNSC.Response.details.person.age = '20';
-SET a = 'a';
-SET a.a = 'a';
-RETURN FALSE;
-END;
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		SET OutputRoot.XMLNSC.Response.details.person.age = '20';
+		SET a = 'a';
+		SET a.a = 'a';
+		RETURN FALSE;
+	END;
 END MODULE;
