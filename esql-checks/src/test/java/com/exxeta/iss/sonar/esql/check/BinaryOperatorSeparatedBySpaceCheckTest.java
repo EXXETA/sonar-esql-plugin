@@ -28,13 +28,19 @@ import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
  * @author C50679
  *
  */
-public class BlankSpaceAfterCommaCheckTest {
+public class BinaryOperatorSeparatedBySpaceCheckTest {
+	
 	@Test
 	public void test() {
-		EsqlCheck check = new BlankSpaceAfterCommaCheck();
-		EsqlCheckVerifier.issues(check, new File("src/test/resources/BlankSpaceAfterComma.esql"))
-		.next().atLine(4).withMessage("A blank space should follow each comma in any ESQL statement that makes use of commas outside of a string literal.")
-		.next().atLine(10).withMessage("A blank space should follow each comma in any ESQL statement that makes use of commas outside of a string literal.").noMore();
+		EsqlCheck check = new BinaryOperatorSeparatedBySpaceCheck();
+		EsqlCheckVerifier.issues(check, new File("src/test/resources/BinaryOperatorSpace.esql"))
+		.next().atLine(5).withMessage("This binary operators should be separated from it's operands by spaces.")
+		.next().atLine(6).withMessage("This binary operators should be separated from it's operands by spaces.")
+		.next().atLine(7).withMessage("This binary operators should be separated from it's operands by spaces.")
+		.next().atLine(8).withMessage("This binary operators should be separated from it's operands by spaces.")
+		.next().atLine(12).withMessage("This binary operators should be separated from it's operands by spaces.")
+		.next().atLine(19).withMessage("This token should be followed by a space.")
+		.noMore();
 	}
 
 }

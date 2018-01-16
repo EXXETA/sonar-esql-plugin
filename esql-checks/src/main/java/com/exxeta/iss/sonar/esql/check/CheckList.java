@@ -85,7 +85,6 @@ public final class CheckList {
         VariablesSubtreeCheck.class,
         XmlnscDomainCheck.class,
         RoutineWithExcessiveReturnsCheck.class,
-        SpaceAroundEqualSignCheck.class,
         KeyWordCaseCheck.class,
         CyclomaticComplexityCheck.class,
         PassThruStatementCheck.class,
@@ -99,7 +98,6 @@ public final class CheckList {
         ProcessInvokingItselfCheck.class,
         InsertBlankLineBetweenFuncProcCheck.class,
         BlankLineBeforeCommentsCheck.class,
-        BlankSpaceAfterCommaCheck.class,
         RoutineCommentsCheck.class,
         FileHeaderCommentsCheck.class,
 		PropagateConsistencyCheck.class, 
@@ -109,7 +107,8 @@ public final class CheckList {
         ConditionBracesCheck.class,
         TrailingCommentsCheck.class,
         CommentsCheck.class,
-        DeclareCombineCheck.class
+        DeclareCombineCheck.class,
+        BinaryOperatorSeparatedBySpaceCheck.class
         
        
         

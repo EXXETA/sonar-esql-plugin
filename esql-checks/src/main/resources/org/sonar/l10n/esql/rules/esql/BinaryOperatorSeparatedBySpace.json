@@ -1,10 +1,10 @@
 {
-  "title": "A blank space should follow each comma in any ESQL statement that makes use of commas outside of a string literal.",
+  "title": "Binary operators should always be separated by spaces.",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",
-    "constantCost": "15min"
+    "constantCost": "1min"
   },
   "tags": [
     "readability"
