@@ -24,13 +24,14 @@ import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
+import com.exxeta.iss.sonar.esql.tree.SyntacticEquivalence;
 import com.exxeta.iss.sonar.esql.tree.expression.LiteralTree;
 import com.google.common.collect.ImmutableList;
 
 @Rule(key="XmlnscDomain")
 public class XmlnscDomainCheck extends DoubleDispatchVisitorCheck{
 
-	ImmutableList<String> rootElements = ImmutableList.of("Root", "IntputRoot", "OutputRoot");
+	ImmutableList<String> rootElements = ImmutableList.of("Root", "InputRoot", "OutputRoot");
 	ImmutableList<String> wrongDomain = ImmutableList.of("XML", "XMLNS");
 	
 	
@@ -39,7 +40,6 @@ public class XmlnscDomainCheck extends DoubleDispatchVisitorCheck{
 		super.visitFieldReference(tree);
 		if (rootElements.contains(tree.pathElement().name().name().text())
 				&& !tree.pathElements().isEmpty() 
-				&& tree.pathElements().get(0)!=null
 				&& tree.pathElements().get(0).name()!=null
 				&& tree.pathElements().get(0).name().name()!=null){
 			String domain = tree.pathElements().get(0).name().name().text();
@@ -50,8 +50,8 @@ public class XmlnscDomainCheck extends DoubleDispatchVisitorCheck{
 	@Override
 	public void visitCreateStatement(CreateStatementTree tree) {
 		super.visitCreateStatement(tree);
-		if (tree.domainExpression()!=null && tree.domainExpression().is(Kind.STRING_LITERAL)){
-			String domain = ((LiteralTree)tree.domainExpression()).value();
+		if (tree.domainExpression()!=null && SyntacticEquivalence.skipParentheses(tree.domainExpression()).is(Kind.STRING_LITERAL)){
+			String domain = ((LiteralTree)SyntacticEquivalence.skipParentheses(tree.domainExpression())).value();
 			domain = domain.substring(1, domain.length()-1);
 			checkDomain(domain, tree.domainExpression());
 		}
