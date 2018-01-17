@@ -72,7 +72,7 @@ public class FunctionProcedureLengthCheck extends DoubleDispatchVisitorCheck {
 		 int nbLines = new LineVisitor(body).getLinesOfCodeNumber();
 		    if (nbLines > maximumMethodProcedureLength) {
 		      String message = String.format(MESSAGE, nbLines, maximumMethodProcedureLength);
-		      IssueLocation primaryLocation = new IssueLocation(routineDeclarationTree, message);
+		      IssueLocation primaryLocation = new IssueLocation(routineDeclarationTree.firstToken(), message);
 		      addIssue(new PreciseIssue(this, primaryLocation));
 		    }
 		}

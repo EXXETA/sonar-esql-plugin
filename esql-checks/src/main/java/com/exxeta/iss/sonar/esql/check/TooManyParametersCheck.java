@@ -23,6 +23,8 @@ import org.sonar.check.RuleProperty;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateFunctionStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
+import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
+import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
 
 @Rule(key = "TooManyParameters")
 public class TooManyParametersCheck extends DoubleDispatchVisitorCheck {
@@ -38,7 +40,7 @@ public class TooManyParametersCheck extends DoubleDispatchVisitorCheck {
 
 		int size = tree.parameterList().size();
 		if (size > maximum) {
-			addIssue(tree, "Function has " + size + " parameters, which is greater than " + maximum + " authorized.");
+			addIssue(new PreciseIssue(this, new IssueLocation(tree.openingParenthesis(), tree.closingParenthesis(),  "Function has " + size + " parameters, which is greater than " + maximum + " authorized.")));
 		}
 	}
 
@@ -46,7 +48,7 @@ public class TooManyParametersCheck extends DoubleDispatchVisitorCheck {
 	public void visitCreateProcedureStatement(CreateProcedureStatementTree tree) {
 		int size = tree.parameterList().size();
 		if (size > maximum) {
-			addIssue(tree, "Procedure has " + size + " parameters, which is greater than " + maximum + " authorized.");
+			addIssue(new PreciseIssue(this, new IssueLocation(tree.openingParenthesis(), tree.closingParenthesis(), "Procedure has " + size + " parameters, which is greater than " + maximum + " authorized.")));
 		}
 	}
 
