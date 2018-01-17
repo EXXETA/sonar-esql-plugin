@@ -24,30 +24,58 @@ import org.sonar.check.Rule;
 import com.exxeta.iss.sonar.esql.api.tree.FieldReferenceTree;
 import com.exxeta.iss.sonar.esql.api.tree.PathElementTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.AliasedExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.function.PassthruFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.SelectFunctionTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
+import com.exxeta.iss.sonar.esql.tree.SyntacticEquivalence;
+import com.exxeta.iss.sonar.esql.tree.expression.LiteralTree;
 
-@Rule(key="SelectAll")
-public class SelectAllCheck extends DoubleDispatchVisitorCheck{
+@Rule(key = "SelectAll")
+public class SelectAllCheck extends DoubleDispatchVisitorCheck {
+
+	private static final String MESSAGE = "Specify the needed fields.";
 
 	@Override
 	public void visitSelectFunction(SelectFunctionTree tree) {
-		for (AliasedExpressionTree aliased : tree.selectClause().aliasedFieldReferenceList()){
-			if (aliased.expression()!= null && aliased.expression().is(Kind.FIELD_REFERENCE)){
+		for (AliasedExpressionTree aliased : tree.selectClause().aliasedFieldReferenceList()) {
+			if (aliased.expression() != null && aliased.expression().is(Kind.FIELD_REFERENCE)) {
 				FieldReferenceTree fieldReference = (FieldReferenceTree) aliased.expression();
-				if ("*".equals(fieldReference.pathElement().name().name().text())){
-					addIssue(fieldReference, "Specify the needed fields.");
+				if ("*".equals(fieldReference.pathElement().name().name().text())) {
+					addIssue(fieldReference, MESSAGE);
 				}
 				Iterator<PathElementTree> iter = fieldReference.pathElements().iterator();
-				while  (iter.hasNext()){
+				while (iter.hasNext()) {
 					PathElementTree element = iter.next();
-					if ("*".equals(element.name().name().text())){
-						addIssue(fieldReference, "Specify the needed fields.");
-					}	
+					if ("*".equals(element.name().name().text())) {
+						addIssue(fieldReference, MESSAGE);
+					}
 				}
 			}
 		}
 	}
-	
+
+	@Override
+	public void visitPassthruFunction(PassthruFunctionTree tree) {
+		if (SyntacticEquivalence.skipParentheses(tree.expression()).is(Kind.STRING_LITERAL)) {
+			checkSqlString(((LiteralTree) SyntacticEquivalence.skipParentheses(tree.expression())).value(),
+					tree.expression());
+		}
+		super.visitPassthruFunction(tree);
+	}
+
+	/*
+	 * Very simple implementation to check if there are any * in the sql
+	 * statement.
+	 */
+	private void checkSqlString(String sqlStatement, ExpressionTree expression) {
+		String unqotedStatement = CheckUtils.removeQuotedContent(sqlStatement.substring(1, sqlStatement.length() - 1))
+				.trim();
+		if (unqotedStatement.startsWith("SELECT") && unqotedStatement.contains("*")) {
+			addIssue(expression, MESSAGE);
+
+		}
+	}
+
 }
