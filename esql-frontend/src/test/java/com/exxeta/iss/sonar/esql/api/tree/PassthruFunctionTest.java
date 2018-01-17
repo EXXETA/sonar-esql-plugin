@@ -34,7 +34,8 @@ public class PassthruFunctionTest extends EsqlTreeModelTest<PassthruFunctionTree
 		Assertions.assertThat(Kind.PASSTHRU_FUNCTION)
 		.matches("PASSTHRU('SELECT R.* FROM Schema1.Table1 AS R WHERE R.Name = ? OR R.Name =            ? ORDER BY Name'   TO Database.DSN1   VALUES ('Name1', 'Name4'))")
 		.matches("PASSTHRU('aaaaa' VALUES ('aaaa'))")
-		.matches("PASSTHRU('aaaaa' )");
+		.matches("PASSTHRU('aaaaa' )")
+		.matches("PASSTHRU('a' || schema  TO Database.{xyz})");
 
 	}
 	

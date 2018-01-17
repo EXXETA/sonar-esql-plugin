@@ -1270,7 +1270,7 @@ public class EsqlGrammar {
 		return b.<PassthruFunctionTreeImpl>nonterminal(Kind.PASSTHRU_FUNCTION).is(f.finishPassthruFunction(
 				b.token(EsqlNonReservedKeyword.PASSTHRU), b.token(EsqlPunctuator.LPARENTHESIS),
 				b.firstOf(
-						f.passthruNewSyntax(CALL_EXPRESSION(), b.optional(f.newTuple115(b.token(EsqlNonReservedKeyword.TO), FIELD_REFERENCE())),
+						f.passthruNewSyntax(EXPRESSION(), b.optional(f.newTuple115(b.token(EsqlNonReservedKeyword.TO), FIELD_REFERENCE())),
 								b.optional(f.newTuple116(b.token(EsqlNonReservedKeyword.VALUES), ARGUMENT_CLAUSE()))), 
 						f.passthruOldSyntax(ARGUMENT_LIST())
 				), 
