@@ -33,8 +33,6 @@ public class DeclareCombineCheck extends DoubleDispatchVisitorCheck  {
 			"EXTERNALINTEGER;","EXTERNALINT;","CONSTANTCHAR;","CONSTANTCHARACTER;","EXTERNALCHAR;","EXTERNALCHARACTER;","SHAREDROW;");
 	
 
-	int j=0;
-	
 	@Override
 	public void visitProgram(ProgramTree tree) {
 		String arrayLastElement=null;
@@ -45,7 +43,7 @@ public class DeclareCombineCheck extends DoubleDispatchVisitorCheck  {
 		EsqlFile file = getContext().getEsqlFile();
 		List<String> lines = CheckUtils.readLines(file);
 		
-		for(j = 0; j < lines.size() ; j++)
+		for(int j = 0; j < lines.size() ; j++)
 		 {   
 			 String originalLine = lines.get(j);
 			 

@@ -59,8 +59,8 @@ public class UnusedVariableCheck extends DoubleDispatchVisitorCheck {
 	@Override
 	public void visitProgram(ProgramTree tree) {
 		
-		//calledRoutines.clear();
-		//declaredVariable.clear();
+		calledRoutines.clear();
+		declaredVariable.clear();
 		super.visitProgram(tree);
 		
 		

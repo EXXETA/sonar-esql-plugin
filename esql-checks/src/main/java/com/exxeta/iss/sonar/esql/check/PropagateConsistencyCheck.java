@@ -85,12 +85,14 @@ public class PropagateConsistencyCheck extends DoubleDispatchVisitorCheck {
 	public void visitCreateFunctionStatement(CreateFunctionStatementTree tree) {
 		currentRoutine = (CreateRoutineTreeImpl) tree;
 		super.visitCreateFunctionStatement(tree);
+		currentRoutine = null;
 	}
 
 	@Override
 	public void visitCreateProcedureStatement(CreateProcedureStatementTree tree) {
 		currentRoutine = (CreateRoutineTreeImpl) tree;
 		super.visitCreateProcedureStatement(tree);
+		currentRoutine = null;
 	}
 
 	@Override
