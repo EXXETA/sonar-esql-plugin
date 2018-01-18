@@ -45,30 +45,34 @@ public class PassThruStatementCheck extends DoubleDispatchVisitorCheck {
 	}
 
 	public static boolean checkQuery(PassthruStatementTree exp) {
-		boolean isQueryWhereComplient = false;
 		ExpressionTree query = exp.expression();
-		String queryString = query.toString().toUpperCase();
-		if (queryString.trim().contains("WHERE")) {
-			String whereClause = queryString.substring(queryString.indexOf("WHERE"));
-			whereClause = CheckUtils.removeQuotedContent(whereClause);
-			whereClause = whereClause.replaceAll(" ", "");
+		if (query != null) {
+			boolean isQueryWhereComplient = false;
+			String queryString = query.toString().toUpperCase();
+			if (queryString.trim().contains("WHERE")) {
+				String whereClause = queryString.substring(queryString.indexOf("WHERE"));
+				whereClause = CheckUtils.removeQuotedContent(whereClause);
+				whereClause = whereClause.replaceAll(" ", "");
 
-			if (whereClause.contains("GROUPBY")) {
-				whereClause = whereClause.substring(0, whereClause.indexOf("GROUPBY"));
-			} else if (whereClause.contains("ORDERBY")) {
-				whereClause = whereClause.substring(0, whereClause.indexOf("ORDERBY"));
-			}
+				if (whereClause.contains("GROUPBY")) {
+					whereClause = whereClause.substring(0, whereClause.indexOf("GROUPBY"));
+				} else if (whereClause.contains("ORDERBY")) {
+					whereClause = whereClause.substring(0, whereClause.indexOf("ORDERBY"));
+				}
 
-			if (StringUtils.countMatches(whereClause, "=") != StringUtils.countMatches(whereClause, "?")) {
-				isQueryWhereComplient = false;
+				if (StringUtils.countMatches(whereClause, "=") != StringUtils.countMatches(whereClause, "?")) {
+					isQueryWhereComplient = false;
+				} else {
+					isQueryWhereComplient = true;
+				}
+
 			} else {
 				isQueryWhereComplient = true;
 			}
-
-		} else {
-			isQueryWhereComplient = true;
-		}
 		return isQueryWhereComplient;
+		} else {
+			return true;
+		}
 
 	}
 

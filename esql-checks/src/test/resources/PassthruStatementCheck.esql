@@ -7,6 +7,8 @@ CREATE COMPUTE MODULE a
 		PASSTHRU 'SELECT COUNT(*) FROM Database.SHAREHOLDINGS AS S ' TO Database.DSN1; --Compliant
 		PASSTHRU 'SELECT COUNT(*) FROM Database.SHAREHOLDINGS AS S WHERE S.ACCOUNTNO = ? GROUP BY S:ACCOUNTNO' TO Database.DSN1 VALUES (InputBody.AccountNumber); --Compliant
 		PASSTHRU 'SELECT COUNT(*) FROM Database.SHAREHOLDINGS AS S WHERE S.ACCOUNTNO = ? ORDER BY S:ACCOUNTNO' TO Database.DSN1 VALUES (InputBody.AccountNumber); --Compliant
+		PASSTHRU (STMT, param); --Compliant
+		PASSTHRU ('' || STMT, param); --Compliant
 	END;
 
 END MODULE;
