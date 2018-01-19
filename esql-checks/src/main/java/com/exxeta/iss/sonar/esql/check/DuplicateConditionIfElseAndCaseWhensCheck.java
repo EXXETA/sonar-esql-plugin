@@ -39,12 +39,12 @@ public class DuplicateConditionIfElseAndCaseWhensCheck extends DoubleDispatchVis
 
 		for (int i = 0; i < tree.elseifClauses().size(); i++) {
 			if (SyntacticEquivalence.areEquivalent(condition, tree.elseifClauses().get(i).condition())) {
-				addIssue(condition, tree.elseifClauses().get(i), "branch");
+				addIssue(condition, tree.elseifClauses().get(i).condition(), "branch");
 			}
 			for (int j = 0; j < i; j++) {
 				if (SyntacticEquivalence.areEquivalent(tree.elseifClauses().get(j).condition(),
 						tree.elseifClauses().get(i).condition())) {
-					addIssue(tree.elseifClauses().get(j), tree.elseifClauses().get(i), "branch");
+					addIssue(tree.elseifClauses().get(j).condition(), tree.elseifClauses().get(i).condition(), "branch");
 				}
 			}
 		}
