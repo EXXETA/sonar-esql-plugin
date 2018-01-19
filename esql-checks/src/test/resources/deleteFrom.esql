@@ -5,6 +5,12 @@ CREATE COMPUTE MODULE a
 		DELETE FROM Database.SHAREHOLDINGS; --Noncompliant
 		DELETE FROM Database.SHAREHOLDINGS AS S; --Noncompliant
 		DELETE FROM Database.SHAREHOLDINGS AS S WHERE S.ACCOUNTNO = InputBody.AccountNumber; --Compliant
+		PASSTHRU('DELETE FROM users'); --Noncompliant
+		PASSTHRU 'DELETE FROM users'; --Noncompliant
+		PASSTHRU(('DELETE FROM users')); --Noncompliant
+		PASSTHRU(('DELETE FROM users WHERE NAME=''name''')); --Ccompliant
+		PASSTHRU(STMT); --Compliant
+		PASSTHRU('SELECT * FROM dual'); --Compliant
 	END;
 
 END MODULE;

@@ -20,16 +20,41 @@ package com.exxeta.iss.sonar.esql.check;
 import org.sonar.check.Rule;
 
 import com.exxeta.iss.sonar.esql.api.tree.statement.DeleteFromStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.PassthruStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
+import com.exxeta.iss.sonar.esql.tree.SyntacticEquivalence;
+import com.exxeta.iss.sonar.esql.tree.expression.LiteralTree;
 
-@Rule(key="DeleteFromWithoutWhere")
+@Rule(key = "DeleteFromWithoutWhere")
 public class DeleteFromWithoutWhereCheck extends DoubleDispatchVisitorCheck {
+
+	private static final String MESSAGE = "Add a where caluse to this DELETE FROM statement.";
 
 	@Override
 	public void visitDeleteFromStatement(DeleteFromStatementTree tree) {
-		if (tree.whereExpression()==null){
-			addIssue(tree, "Add a where caluse to this DELETE FROM statement.");
+		if (tree.whereExpression() == null) {
+			addIssue(tree, MESSAGE);
 		}
 	}
-	
+
+	@Override
+	public void visitPassthruStatement(PassthruStatementTree tree) {
+		String statement = null;
+		if (SyntacticEquivalence.skipParentheses(tree.expression()) instanceof LiteralTree) {
+			statement = ((LiteralTree) SyntacticEquivalence.skipParentheses(tree.expression())).value().trim();
+		} else if (SyntacticEquivalence
+				.skipParentheses(tree.expressionList().parameters().get(0)) instanceof LiteralTree) {
+			statement = ((LiteralTree) SyntacticEquivalence.skipParentheses(tree.expressionList().parameters().get(0)))
+					.value().trim();
+		} else {
+			// Cannot find statement
+		}
+		//Very simple check. Think about an SQL parser.
+		if (statement != null && statement.startsWith("'DELETE FROM") && !statement.contains(" WHERE ")) {
+			addIssue(tree, MESSAGE);
+		}
+
+		super.visitPassthruStatement(tree);
+	}
+
 }

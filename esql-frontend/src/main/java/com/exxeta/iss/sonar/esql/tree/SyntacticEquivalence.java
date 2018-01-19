@@ -101,12 +101,14 @@ public final class SyntacticEquivalence {
   }
   
   
-  public static ExpressionTree skipParentheses(ExpressionTree tree) {
-	    if (tree.is(Tree.Kind.PARENTHESISED_EXPRESSION)) {
-	      return skipParentheses(((ParenthesisedExpressionTree) tree).expression());
-	    } else {
-	    	return tree;
-	    }
-	  }
+	public static ExpressionTree skipParentheses(ExpressionTree tree) {
+		if (tree == null) {
+			return null;
+		} else if (tree.is(Tree.Kind.PARENTHESISED_EXPRESSION)) {
+			return skipParentheses(((ParenthesisedExpressionTree) tree).expression());
+		} else {
+			return tree;
+		}
+	}
 
 }
