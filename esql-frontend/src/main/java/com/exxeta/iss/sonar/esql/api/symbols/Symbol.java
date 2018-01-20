@@ -122,11 +122,11 @@ public class Symbol {
   }
 
   /**
-   * @return true if symbol created with var, let or const keywords or implicitly
+   * @return true if symbol created with CREATE
    */
- /* public boolean isVariable() {
-    return kind == Kind.LET_VARIABLE || kind == Kind.CONST_VARIABLE || kind == Kind.VARIABLE;
-  }*/
+  public boolean isVariable() {
+    return kind == Kind.CONST_VARIABLE || kind == Kind.VARIABLE;
+  }
 
   @Override
   public String toString() {
