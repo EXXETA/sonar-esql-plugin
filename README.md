@@ -17,7 +17,7 @@ This open source plugin can be used to analyze the ESQL-sourcecode of IBM Websph
 
 ## Requirements
 
-- SonarQube 5.6
+- SonarQube 6.7
 
 
 ## Contributing
@@ -30,7 +30,7 @@ This open source plugin can be used to analyze the ESQL-sourcecode of IBM Websph
 
 ## History
 
-- 2.3.0 - Additional rules
+- 2.3.0 - Additional rules and upgrade to SonarQube 6.7
 - 2.2.0 - Code coverage analysis
 - 2.1.0 - A few bugfixes and a lot more checks/rules
 - 2.0.0 - complete refactoring and upgrade to SonarQube 5.6
