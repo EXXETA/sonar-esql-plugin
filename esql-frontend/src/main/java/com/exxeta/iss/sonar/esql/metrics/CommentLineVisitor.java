@@ -17,16 +17,16 @@
  */
 package com.exxeta.iss.sonar.esql.metrics;
 
+import java.util.Set;
+
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxTrivia;
 import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitor;
 import com.exxeta.iss.sonar.esql.tree.EsqlCommentAnalyser;
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-import java.util.List;
-import java.util.Set;
 
 public class CommentLineVisitor extends SubscriptionVisitor {
 
@@ -50,8 +50,8 @@ public class CommentLineVisitor extends SubscriptionVisitor {
 	}
 
 	@Override
-	public List<Kind> nodesToVisit() {
-		return ImmutableList.of(Tree.Kind.TOKEN);
+	public Set<Kind> nodesToVisit() {
+		return ImmutableSet.of(Tree.Kind.TOKEN);
 	}
 
 	@Override

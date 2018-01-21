@@ -18,7 +18,6 @@
 package com.exxeta.iss.sonar.esql.metrics;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
@@ -27,7 +26,7 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.CreateModuleStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.DeclareStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitorCheck;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
 public class ExecutableLineVisitor extends SubscriptionVisitorCheck {
 
@@ -38,9 +37,9 @@ public class ExecutableLineVisitor extends SubscriptionVisitorCheck {
   }
 
   @Override
-  public List<Kind> nodesToVisit() {
+  public Set<Kind> nodesToVisit() {
 
-	  return ImmutableList.of(
+	  return ImmutableSet.of(
 				Kind.IF_STATEMENT, 
 				Kind.DECLARE_STATEMENT, 
 				Kind.THE_FUNCTION, 

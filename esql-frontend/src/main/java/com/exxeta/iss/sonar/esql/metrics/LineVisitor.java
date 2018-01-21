@@ -17,15 +17,15 @@
  */
 package com.exxeta.iss.sonar.esql.metrics;
 
+import java.util.Set;
+
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Visitor that computes the number of lines of code of a file.
@@ -40,8 +40,8 @@ public class LineVisitor extends SubscriptionVisitor {
   }
 
   @Override
-  public List<Kind> nodesToVisit() {
-    return ImmutableList.of(Kind.TOKEN);
+  public Set<Kind> nodesToVisit() {
+    return ImmutableSet.of(Kind.TOKEN);
   }
 
   @Override
