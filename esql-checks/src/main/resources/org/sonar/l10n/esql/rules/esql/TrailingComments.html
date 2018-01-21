@@ -1,4 +1,5 @@
 <p>The line contains both code and comments. Trailing comments are discouraged.</p>
+<p>Comments are far better placed on the previous empty line of code, where they will always be visible and properly formatted.</p>
 
 <h2>Compliant Code Example</h2>
 
@@ -7,8 +8,11 @@ CREATE COMPUTE MODULE initialize
 CREATE FUNCTION main() RETURNS BOOLEAN
 BEGIN
 
+ -- Create field statement
  CREATE FIELD OutputRoot.SOAP.Body.soapenv:Fault.detail.ns:createAccessFacilityAgreementException;
+ -- Create field statement
  CREATE FIELD OutputRoot.SOAP.Body.soapenv:Fault.detail.ns:createAccessFacilityAgreementException;
+ -- Set statement
  SET faultRef.ExceptionElement.description = messageTextDetail;
     	
 END;

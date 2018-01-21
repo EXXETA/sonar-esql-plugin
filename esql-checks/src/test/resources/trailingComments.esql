@@ -11,7 +11,7 @@ ELSEIF oprName = 'updateAccessFacilityAgreement' OR refIpSrvcOpName = '"http://c
 				CREATE FIELD OutputRoot.SOAP.Body.soapenv:Fault.detail.ns:updateAccessFacilityAgreementException;
 				DECLARE faultRef REFERENCE TO OutputRoot.SOAP.Body.soapenv:Fault.detail.ns:updateAccessFacilityAgreementException; -- Declare statement trailing comment.		
 				SET faultRef.ExceptionElement.description = messageTextDetail;
-END IF;	
+END IF; --NOSONAR	
 WHILE count <= providerCount DO--while statement.
                 SET faultRef.ExceptionElement.description = messageTextDetail; -- Set statement.
 END WHILE;

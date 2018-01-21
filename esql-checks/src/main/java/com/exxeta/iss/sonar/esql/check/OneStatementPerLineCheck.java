@@ -17,6 +17,7 @@
  */package com.exxeta.iss.sonar.esql.check;
 
 import java.util.List;
+import java.util.Set;
 
 import org.sonar.check.Rule;
 
@@ -28,6 +29,7 @@ import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitorCheck;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ListMultimap;
 
 @Rule(key = "OneStatementPerLine")
@@ -40,8 +42,8 @@ public class OneStatementPerLineCheck extends SubscriptionVisitorCheck {
 	  private ListMultimap<Integer, Tree> statementsPerLine = ArrayListMultimap.create();
 
 	  @Override
-	  public List<Kind> nodesToVisit() {
-	    return ImmutableList.of(
+	  public Set<Kind> nodesToVisit() {
+	    return ImmutableSet.of(
 	        Kind.IF_STATEMENT,
             Kind.DECLARE_STATEMENT,
             Kind.BROKER_SCHEMA_STATEMENT,

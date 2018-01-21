@@ -18,7 +18,7 @@
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.sonar.check.Rule;
@@ -32,7 +32,7 @@ import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxTrivia;
 import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
 import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitorCheck;
 import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
 @Rule(  key = "CommentRegularExpression" )
 @RuleTemplate
@@ -92,8 +92,8 @@ public class CommentRegularExpressionCheck  extends SubscriptionVisitorCheck {
   }
 
   @Override
-  public List<Kind> nodesToVisit() {
-    return ImmutableList.of(Kind.TOKEN);
+  public Set<Kind> nodesToVisit() {
+    return ImmutableSet.of(Kind.TOKEN);
   }
 
 }

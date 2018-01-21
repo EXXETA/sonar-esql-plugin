@@ -19,6 +19,7 @@ package com.exxeta.iss.sonar.esql.check;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.sonar.check.Rule;
 
@@ -28,6 +29,7 @@ import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitorCheck;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
 /**
  * This Java class is created to implement the logic for all binary operators
@@ -87,8 +89,8 @@ public class BinaryOperatorSeparatedBySpaceCheck extends SubscriptionVisitorChec
 	}
 
 	@Override
-	public List<Kind> nodesToVisit() {
-		return ImmutableList.of(Tree.Kind.TOKEN);
+	public Set<Kind> nodesToVisit() {
+		return ImmutableSet.of(Tree.Kind.TOKEN);
 	}
 
 }

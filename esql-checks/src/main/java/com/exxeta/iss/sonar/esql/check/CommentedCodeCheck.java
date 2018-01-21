@@ -19,6 +19,7 @@ package com.exxeta.iss.sonar.esql.check;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.sonar.check.Rule;
 
@@ -33,6 +34,7 @@ import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitorCheck;
 import com.exxeta.iss.sonar.esql.parser.EsqlParserBuilder;
 import com.exxeta.iss.sonar.esql.tree.EsqlCommentAnalyser;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.sonar.sslr.api.typed.ActionParser;
 
 @Rule(key = "CommentedCode")
@@ -51,8 +53,8 @@ public class CommentedCodeCheck extends SubscriptionVisitorCheck {
 			"%s END;");
 	
 	@Override
-	public List<Kind> nodesToVisit() {
-		return ImmutableList.of(Kind.TOKEN);
+	public Set<Kind> nodesToVisit() {
+		return ImmutableSet.of(Kind.TOKEN);
 	}
 
 	@Override
