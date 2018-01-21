@@ -5,6 +5,9 @@ CREATE COMPUTE MODULE Module1
 		SET Environment.ABC='ABC'; --Noncompliant
 		SET Environment.{abc}='ABC'; --Noncompliant
 		SET Environment.Variables.abc='ABC'; --Compliant
+		SET Environment.[]='ABC'; --Noncompliant
+		SET OutputRoot.XMLNSC.abc='ABC'; --Compliant
+		SET Environment='ABC'; --Compliant
 		
 	END;
 
