@@ -33,6 +33,7 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.PropagateStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ReturnStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
 import com.exxeta.iss.sonar.esql.api.visitors.EsqlFile;
+import com.exxeta.iss.sonar.esql.tree.expression.LiteralTree;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.PrefixExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateRoutineTreeImpl;
 import com.exxeta.iss.sonar.msgflow.model.MessageFlow;
@@ -124,7 +125,10 @@ public class PropagateConsistencyCheck extends DoubleDispatchVisitorCheck {
 		if (propagateStatement.targetType() == null){
 			checkTerminal("OutTerminal.out", propagateStatement);
 		}else if ( "TERMINAL".equalsIgnoreCase(propagateStatement.targetType().text())) {
-			checkTerminal("OutTerminal." + getTerminalName(propagateStatement.target()), propagateStatement);
+			String terminalName = getTerminalName(propagateStatement.target());
+			if (terminalName!=null){
+				checkTerminal("OutTerminal." + terminalName, propagateStatement);
+			}
 		} 
 
 		super.visitPropagateStatement(propagateStatement);
@@ -145,8 +149,10 @@ public class PropagateConsistencyCheck extends DoubleDispatchVisitorCheck {
 	}
 
 	private static String getTerminalName(ExpressionTree expression) {
-		String target = expression.toString();
-		if (expression instanceof PrefixExpressionTreeImpl){
+		String target = null;
+		if (expression instanceof LiteralTree){
+			target = ((LiteralTree)expression).value().replace("'", "");
+		}else if (expression instanceof PrefixExpressionTreeImpl){
 			PrefixExpressionTreeImpl prefixEx = (PrefixExpressionTreeImpl) expression;
 			target = prefixEx.operator().text() + prefixEx.expression().toString();
 		}
