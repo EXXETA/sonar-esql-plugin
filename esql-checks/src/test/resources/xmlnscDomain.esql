@@ -12,6 +12,7 @@ CREATE COMPUTE MODULE Module1
 		SET OutputRoot.XML.abc.abc='ABC'; --Noncompliant
 		SET OutputRoot.XMLNS.abc.abc='ABC'; --Noncompliant
 		SET OutputRoot.XMLNSC.abc.abc='ABC'; --Compliant
+		SET OutputRoot.XMLNSC.abc.(XML.Attribute)abc='ABC'; --Noncompliant
 		SET Environment.a = InputRoot.XMLNS; --Noncompliant
 		SET OutputRoot = InputRoot; --Compliant
 		
