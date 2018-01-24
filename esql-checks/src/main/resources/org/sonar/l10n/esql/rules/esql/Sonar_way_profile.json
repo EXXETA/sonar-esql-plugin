@@ -43,7 +43,6 @@
   	"SelectAll",
   	"Sleep",
   	"Eval",
-  	"Bitstream",
   	"CaseWithTooManyWhens",
   	"InitializeVariables",
   	"TooManyParameters",
