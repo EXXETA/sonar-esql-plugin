@@ -99,7 +99,6 @@ public final class CheckList {
         InsertBlankLineBetweenFuncProcCheck.class,
         BlankLineBeforeCommentsCheck.class,
         RoutineCommentsCheck.class,
-        FileHeaderCommentsCheck.class,
 		PropagateConsistencyCheck.class, 
 		UnreachableCodeCheck.class, 
 		CommentedCodeCheck.class,

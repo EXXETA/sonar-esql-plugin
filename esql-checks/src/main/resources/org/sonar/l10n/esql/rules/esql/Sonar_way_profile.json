@@ -59,7 +59,6 @@
   	"UnusedVariable",
   	"DeprecatedMethod",
   	"BinaryOperatorSeparatedBySpace",
-  	"FileHeaderComments",
   	"RoutineComments",
   	"PropagateConsistency",
     "UnreachableCode",
