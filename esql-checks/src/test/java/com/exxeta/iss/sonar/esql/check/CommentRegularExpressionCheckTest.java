@@ -26,25 +26,49 @@ import org.junit.Test;
 import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
 
 public class CommentRegularExpressionCheckTest {
-	 @Test
-	 public void test() {
-		 CommentRegularExpressionCheck check = new CommentRegularExpressionCheck();
-	 
-		 check.setRegularExpression( "(?i).*TODO.*");
-		 check.message = "Avoid TODO";
-		 
-		 
-	    EsqlCheckVerifier.issues(check, new File("src/test/resources/empty.esql"))
-	      .next().atLine(1).withMessage("Avoid TODO")
-	      .noMore();
+	@Test
+	public void test() {
+		CommentRegularExpressionCheck check = new CommentRegularExpressionCheck();
 
-	    try {
-	      check.setRegularExpression("[abc");
-	    } catch (IllegalStateException e) {
-	      assertThat(e.getMessage()).isEqualTo("Unable to compile regular expression: [abc");
-	    }
+		check.setRegularExpression("(?i).*TODO.*");
+		check.setMessage("Avoid TODO");
 
-	    
-	    
-	 }
+		EsqlCheckVerifier.issues(check, new File("src/test/resources/empty.esql")).next().atLine(1)
+				.withMessage("Avoid TODO").noMore();
+
+	}
+
+	@Test
+	public void exception() {
+		CommentRegularExpressionCheck check = new CommentRegularExpressionCheck();
+
+		try {
+			check.setRegularExpression("[abc");
+		} catch (IllegalStateException e) {
+			assertThat(e.getMessage()).isEqualTo("Unable to compile regular expression: [abc");
+		}
+
+	}
+
+	@Test
+	public void emptyPattern() {
+		CommentRegularExpressionCheck check = new CommentRegularExpressionCheck();
+
+		check.setRegularExpression("");
+		check.setMessage("Avoid TODO");
+
+		EsqlCheckVerifier.issues(check, new File("src/test/resources/empty.esql")).noMore();
+
+	}
+
+	@Test
+	public void noMatch() {
+		CommentRegularExpressionCheck check = new CommentRegularExpressionCheck();
+
+		check.setRegularExpression("(?i).*FIXME.*");
+		check.setMessage("Avoid TODO");
+
+		EsqlCheckVerifier.issues(check, new File("src/test/resources/empty.esql")).noMore();
+
+	}
 }
