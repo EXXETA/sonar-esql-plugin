@@ -56,7 +56,11 @@ public class XmlnscDomainCheck extends DoubleDispatchVisitorCheck {
 	}
 
 	private boolean rootIs(FieldReferenceTree tree, List<String> names) {
-		return names.contains(tree.pathElement().name().name().name());
+		if (tree.pathElement().name().name()!=null){
+			return names.contains(tree.pathElement().name().name().name());
+		} else {
+			return false;
+		}
 	}
 
 	@Override
