@@ -29,13 +29,13 @@ import com.exxeta.iss.sonar.esql.api.tree.function.AliasedExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.PassthruFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.SelectFunctionTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
-import com.exxeta.iss.sonar.esql.tree.SyntacticEquivalence;
 import com.exxeta.iss.sonar.esql.tree.expression.LiteralTree;
 
 @Rule(key = "SelectAll")
 public class SelectAllCheck extends DoubleDispatchVisitorCheck {
 
 	private static final String MESSAGE = "Specify the needed fields.";
+	private PassthruFunctionTree passthruTree = null;
 
 	@Override
 	public void visitSelectFunction(SelectFunctionTree tree) {
@@ -58,18 +58,26 @@ public class SelectAllCheck extends DoubleDispatchVisitorCheck {
 
 	@Override
 	public void visitPassthruFunction(PassthruFunctionTree tree) {
-		if (SyntacticEquivalence.skipParentheses(tree.expression()).is(Kind.STRING_LITERAL)) {
-			checkSqlString(((LiteralTree) SyntacticEquivalence.skipParentheses(tree.expression())).value(),
-					tree.expression());
-		}
+		this.passthruTree =tree;
 		super.visitPassthruFunction(tree);
+		this.passthruTree=null;
+	}
+	
+	@Override
+	public void visitLiteral(LiteralTree tree) {
+		if (this.passthruTree!=null && tree.is(Kind.STRING_LITERAL)) {
+			checkSqlString(tree.value(),
+					passthruTree);
+		}
+
+		super.visitLiteral(tree);
 	}
 
 	/*
 	 * Very simple implementation to check if there are any * in the sql
 	 * statement.
 	 */
-	private void checkSqlString(String sqlStatement, ExpressionTree expression) {
+	private void checkSqlString(String sqlStatement, PassthruFunctionTree expression) {
 		String unqotedStatement = CheckUtils.removeQuotedContent(sqlStatement.substring(1, sqlStatement.length() - 1))
 				.trim();
 		if (unqotedStatement.startsWith("SELECT") && unqotedStatement.contains("*")) {
