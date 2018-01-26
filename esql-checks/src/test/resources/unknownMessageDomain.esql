@@ -15,6 +15,7 @@ CREATE COMPUTE MODULE TestFlow_Compute
 		SET OutputRoot.HTTPReplyHeader."Content-Type"=contentType; --Compliant
 		CREATE FIELD OutputRoot.MQPCF; --Compliant
 		CREATE LASTCHILD OF OutputRoot DOMAIN ('SOAP'); --Compliant
+		SET a = SELECT * from Database;
 		RETURN TRUE;
 	END;
 END MODULE;
