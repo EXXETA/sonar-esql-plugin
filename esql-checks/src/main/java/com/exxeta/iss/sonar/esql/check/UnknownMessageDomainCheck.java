@@ -49,7 +49,8 @@ public class UnknownMessageDomainCheck extends DoubleDispatchVisitorCheck {
 		String pathElement1 = tree.pathElement().name().name().name();
 		if (rootElements.contains(pathElement1) 
 			&& !tree.pathElements().isEmpty()
-			&& tree.pathElements().get(0).name()!=null){
+			&& tree.pathElements().get(0).name()!=null
+			&& tree.pathElements().get(0).name().name()!=null){
 			String pathElement2 = tree.pathElements().get(0).name().name().name();
 			if (!domains.contains(pathElement2)){
 				addIssue(tree, "Unknown domain \""+pathElement2+"\".");

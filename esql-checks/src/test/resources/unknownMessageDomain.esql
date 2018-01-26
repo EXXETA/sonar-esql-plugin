@@ -10,6 +10,7 @@ CREATE COMPUTE MODULE TestFlow_Compute
 		SET OutputRoot=InputRoot; -- Compliant
 		SET OutputRoot.[].a='a'; -- Compliant
 		SET Environment.a.b='a'; --Compliant
+		SET OutputRoot.*='a'; --Compliant
 		DECLARE refColl REFERENCE TO InputRoot.Collection.[>]; --Compliant
 		SET OutputRoot.HTTPReplyHeader."Content-Type"=contentType; --Compliant
 		CREATE FIELD OutputRoot.MQPCF; --Compliant
