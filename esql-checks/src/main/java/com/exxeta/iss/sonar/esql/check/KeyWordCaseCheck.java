@@ -55,7 +55,7 @@ public class KeyWordCaseCheck extends SubscriptionVisitorCheck {
 		String upperCase = value.toUpperCase();
 		if (!value.equals(upperCase)
 				&& (reservedKeywords.contains(upperCase) || nonReservedKeywords.contains(upperCase))
-				&& !(tree.parent() instanceof PathElementNameTree)) {
+				&& !(tree.parent().parent() instanceof PathElementNameTree)) {
 			addIssue(tree, MESSAGE);
 		}
 		super.visitNode(tree);

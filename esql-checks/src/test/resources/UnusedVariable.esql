@@ -14,6 +14,13 @@ CrEATE COMPUTE MODULE responseTransformation
 			DECLARE inRef REFERENCE TO InputLocalEnvironment.DFDL.BROKERMESSAGEFROMBB;
 			CALL updateAccessFacilityAgreement_response(inRef,outRef,Environment);
 		END CASE;
-RETURN TRUE;
-END;
+	RETURN TRUE;
+	END;
+
+	CREATE FUNCTION A() RETURNS BOOLEAN
+	BEGIN
+		DECLARE refEnv REFERENCE TO Environment.LogData;
+		SET refEnv.serviceOperationName = InputRoot.SOAP.Context.operation;
+		SET refEnv.operationId = EVAL(Environment.LogData.serviceOperationName);
+	END;
 END MOdULE;

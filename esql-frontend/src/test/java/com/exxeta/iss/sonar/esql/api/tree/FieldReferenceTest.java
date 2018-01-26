@@ -68,7 +68,7 @@ public class FieldReferenceTest extends EsqlTreeModelTest<FieldReferenceTree> {
 	
 	@Test
 	public void model() throws Exception{
-		FieldReferenceTree tree = parse("(XML.Element)NSpace1:Element1[<2].{nsexp()}:{nameexp()}.*:abc.:aaa", Kind.FIELD_REFERENCE);
+		FieldReferenceTree tree = parse("(XML.Element)NSpace1:Element1[<2].{nsexp()}:{nameexp()}.*:abc.:aaa.*", Kind.FIELD_REFERENCE);
 		assertNotNull(tree);
 		assertNotNull(tree.pathElement());
 		PathElementTree firstElement = tree.pathElement();
@@ -99,6 +99,7 @@ public class FieldReferenceTest extends EsqlTreeModelTest<FieldReferenceTree> {
 		assertNotNull(index.direction());
 		assertNotNull(index.index());
 		assertNotNull(index.closeBracket());
+		assertNotNull(tree.pathElements().get(3).name().star());
 	}
 	
 }

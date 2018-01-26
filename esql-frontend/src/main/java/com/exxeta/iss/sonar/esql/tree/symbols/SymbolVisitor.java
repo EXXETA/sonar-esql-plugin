@@ -22,6 +22,7 @@ import java.util.Map;
 import com.exxeta.iss.sonar.esql.api.symbols.Symbol;
 import com.exxeta.iss.sonar.esql.api.symbols.SymbolModelBuilder;
 import com.exxeta.iss.sonar.esql.api.symbols.Usage;
+import com.exxeta.iss.sonar.esql.api.tree.FieldReferenceTree;
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
@@ -81,11 +82,11 @@ public class SymbolVisitor extends DoubleDispatchVisitor {
 
 	@Override
 	public void visitIdentifier(IdentifierTree tree) {
-		if (tree.is(Tree.Kind.IDENTIFIER_REFERENCE)) {
+		if (tree.is(Tree.Kind.IDENTIFIER_REFERENCE, Tree.Kind.PROPERTY_IDENTIFIER)) {
 			addUsageFor(tree, Usage.Kind.READ);
 		}
 	}
-
+	
 	@Override
 	public void visitBeginEndStatement(BeginEndStatementTree tree) {
 		if (isScopeAlreadyEntered(tree)) {

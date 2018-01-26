@@ -1354,6 +1354,8 @@ public class TreeFactory {
 		if (name instanceof Triple) {
 			Triple<InternalSyntaxToken, ExpressionTree, InternalSyntaxToken> triple = (Triple) name;
 			return new PathElementNameTreeImpl(triple.first(), triple.second(), triple.third());
+		} else if(name instanceof IdentifierTreeImpl)  {
+			return new PathElementNameTreeImpl((IdentifierTreeImpl)name);
 		} else {
 			return new PathElementNameTreeImpl((InternalSyntaxToken) name);
 		}

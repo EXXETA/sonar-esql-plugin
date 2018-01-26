@@ -85,14 +85,14 @@ public class HardcodedURICheck extends DoubleDispatchVisitorCheck {
 		if (fieldReference==null){
 			return false;
 		}
-		if (VARIABLE_NAME_PATTERN.matcher(fieldReference.pathElement().name().name().text()).find()) {
+		if (VARIABLE_NAME_PATTERN.matcher(fieldReference.pathElement().name().name().name()).find()) {
 			return true;
 		}
 		Iterator<PathElementTree> iter = fieldReference.pathElements().iterator();
 		while (iter.hasNext()) {
 			PathElementTree pathElement = iter.next();
 			if (pathElement.name()!=null && pathElement.name().name()!=null
-					&& VARIABLE_NAME_PATTERN.matcher(pathElement.name().name().text()).find()) {
+					&& VARIABLE_NAME_PATTERN.matcher(pathElement.name().name().name()).find()) {
 				return true;
 			}
 		}

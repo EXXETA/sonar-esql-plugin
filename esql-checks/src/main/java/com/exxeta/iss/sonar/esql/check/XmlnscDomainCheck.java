@@ -40,10 +40,10 @@ public class XmlnscDomainCheck extends DoubleDispatchVisitorCheck {
 	public void visitFieldReference(FieldReferenceTree tree) {
 		super.visitFieldReference(tree);
 		if (rootIs(tree, WRONG_DOMAINS)) {
-			String domain = tree.pathElements().get(0).name().name().text();
+			String domain = tree.pathElements().get(0).name().name().name();
 			addIssue(tree, String.format(MESSAGE, domain));
 		} else if (rootIs(tree, ROOT_ELEMENTS) && secondElementIs(tree, WRONG_DOMAINS)) {
-			String domain = tree.pathElement().name().name().text();
+			String domain = tree.pathElement().name().name().name();
 			addIssue(tree, String.format(MESSAGE, domain));
 		}
 	}
@@ -52,11 +52,11 @@ public class XmlnscDomainCheck extends DoubleDispatchVisitorCheck {
 		return !tree.pathElements().isEmpty() 
 				&& tree.pathElements().get(0).name() != null
 				&& tree.pathElements().get(0).name().name() != null
-				&& names.contains(tree.pathElements().get(0).name().name().text());
+				&& names.contains(tree.pathElements().get(0).name().name().name());
 	}
 
 	private boolean rootIs(FieldReferenceTree tree, List<String> names) {
-		return names.contains(tree.pathElement().name().name().text());
+		return names.contains(tree.pathElement().name().name().name());
 	}
 
 	@Override

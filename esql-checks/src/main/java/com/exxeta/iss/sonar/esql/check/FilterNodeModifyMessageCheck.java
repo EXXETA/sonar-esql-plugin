@@ -53,7 +53,7 @@ public class FilterNodeModifyMessageCheck extends DoubleDispatchVisitorCheck {
 	public void visitSetStatement(SetStatementTree tree) {
 		if (this.insideFilterModule && tree.variableReference() instanceof FieldReferenceTree) {
 			FieldReferenceTree fieldReference = (FieldReferenceTree) tree.variableReference();
-			if (rootElements.contains(fieldReference.pathElement().name().name().text())) {
+			if (rootElements.contains(fieldReference.pathElement().name().name().name())) {
 				addIssue(new LineIssue(this, tree, MESSAGE));
 			}
 

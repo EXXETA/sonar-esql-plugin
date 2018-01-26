@@ -42,13 +42,13 @@ public class SelectAllCheck extends DoubleDispatchVisitorCheck {
 		for (AliasedExpressionTree aliased : tree.selectClause().aliasedFieldReferenceList()) {
 			if (aliased.expression() != null && aliased.expression().is(Kind.FIELD_REFERENCE)) {
 				FieldReferenceTree fieldReference = (FieldReferenceTree) aliased.expression();
-				if ("*".equals(fieldReference.pathElement().name().name().text())) {
+				if (fieldReference.pathElement().name().star()!=null) {
 					addIssue(fieldReference, MESSAGE);
 				}
 				Iterator<PathElementTree> iter = fieldReference.pathElements().iterator();
 				while (iter.hasNext()) {
 					PathElementTree element = iter.next();
-					if ("*".equals(element.name().name().text())) {
+					if (element.name().star()!=null) {
 						addIssue(fieldReference, MESSAGE);
 					}
 				}

@@ -77,7 +77,7 @@ public class SelectFunctionTest extends EsqlTreeModelTest<SelectFunctionTree>{
 		assertNotNull(tree.whereClause());
 		assertTrue(tree.selectClause().aliasedFieldReferenceList().get(0).expression().is(Kind.FIELD_REFERENCE));
 		FieldReferenceTree field = (FieldReferenceTree)tree.selectClause().aliasedFieldReferenceList().get(0).expression();
-		assertEquals(field.pathElement().name().name().text(),"*");
+		assertEquals(field.pathElement().name().star().text(),"*");
 	}
 
 }

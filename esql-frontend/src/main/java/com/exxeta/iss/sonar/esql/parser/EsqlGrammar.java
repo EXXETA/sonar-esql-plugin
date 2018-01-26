@@ -894,7 +894,7 @@ public class EsqlGrammar {
 	public PathElementNameTreeImpl PATH_ELEMENT_NAME(){
 		return b.<PathElementNameTreeImpl>nonterminal(Kind.PATH_ELEMENT_NAME)
 				.is(f.pathElementName(
-						b.firstOf(b.token(EsqlLegacyGrammar.IDENTIFIER_NAME),
+						b.firstOf(IDENTIFIER_NAME(),
 								f.newTriple3(b.token(EsqlPunctuator.LCURLYBRACE), CALL_EXPRESSION(),
 										b.token(EsqlPunctuator.RCURLYBRACE)),
 								b.token(EsqlPunctuator.STAR))
