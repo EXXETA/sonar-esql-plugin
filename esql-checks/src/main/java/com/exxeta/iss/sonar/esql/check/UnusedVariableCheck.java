@@ -47,7 +47,7 @@ public class UnusedVariableCheck extends DoubleDispatchVisitorCheck {
 		for (Symbol symbol : symbolModel.getSymbols()) {
 
 			Collection<Usage> usages = symbol.usages();
-			if (noUsages(usages) && symbol.isVariable()) {
+			if (noUsages(usages) && symbol.isVariable() && !symbol.scope().isGlobal()) {
 				raiseIssuesOnDeclarations(symbol, String.format(MESSAGE, symbol.name()));
 			}
 		}
