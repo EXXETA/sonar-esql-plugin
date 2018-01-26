@@ -50,7 +50,8 @@ public class CommentedCodeCheck extends SubscriptionVisitorCheck {
 			"IF TRUE THEN %s END IF;",
 			"CASE A %s END CASE;", 
 			"BEGIN %s", 
-			"%s END;");
+			"%s END;",
+			"%s;");
 	
 	@Override
 	public Set<Kind> nodesToVisit() {
@@ -82,8 +83,12 @@ public class CommentedCodeCheck extends SubscriptionVisitorCheck {
 	}
 
 	private boolean isParseable(String string) {
-		StatementsTree parsedTree = (StatementsTree) PARSER.parse(string);
-		return !parsedTree.statements().isEmpty();
+		try{
+			StatementsTree parsedTree = (StatementsTree) PARSER.parse(string);
+			return !parsedTree.statements().isEmpty();
+		}catch (Exception e){
+			return false;
+		}
 
 	}
 

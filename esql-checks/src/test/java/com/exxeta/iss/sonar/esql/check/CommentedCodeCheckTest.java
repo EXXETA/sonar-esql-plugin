@@ -31,6 +31,7 @@ public class CommentedCodeCheckTest {
 		 .next().atLine(5).withMessage("Remove this commented out code.")
 		 .next().atLine(9).withMessage("Remove this commented out code.")
 		 .next().atLine(14).withMessage("Remove this commented out code.")
+		 .next().atLine(18).withMessage("Remove this commented out code.")
 		 .next().atLine(22).withMessage("Remove this commented out code.")
 		 .next().atLine(32).withMessage("Remove this commented out code.")
 		 .noMore();

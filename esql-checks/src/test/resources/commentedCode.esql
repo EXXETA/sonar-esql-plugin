@@ -15,7 +15,7 @@ CREATE COMPUTE MODULE ProcessCardAccount
 		--	SET OutputRoot=InputRoot;
 		END IF;
 		
-		
+		-- Move RetryCountDown to environment
 		CASE size
 		  WHEN minimum + 0 THEN
 		    SET description = 'small';
