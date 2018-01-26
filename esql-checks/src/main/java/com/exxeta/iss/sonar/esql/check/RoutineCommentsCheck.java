@@ -57,7 +57,7 @@ public class RoutineCommentsCheck extends DoubleDispatchVisitorCheck{
 		
 		// check comments
 		if (isEmptyComment(comment)|| !containsAny(comment,new String[]{"Parameters:","IN:","INOUT:","OUT:","RETURNS:"})){
-			addIssue(tree, message);
+			addIssue(tree.firstToken(), message);
 		}
 	}	
 	
