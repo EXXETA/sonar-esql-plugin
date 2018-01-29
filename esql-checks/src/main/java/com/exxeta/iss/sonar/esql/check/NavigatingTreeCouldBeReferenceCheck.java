@@ -22,7 +22,7 @@ import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
 
 /**
  * This java class is created to implement the logic for reference check, Navigating message tree could be replaced by a reference. 
- * @author Sapna. singh
+ * @author Sapna  singh
  *
  */
 @Rule(key = "NavigatingTreeCouldBeReference")
@@ -64,7 +64,7 @@ public class NavigatingTreeCouldBeReferenceCheck extends DoubleDispatchVisitorCh
             Integer lineNumber = (Integer)iterator1.next();
             if(linesNumbers.add(lineNumber))
             {
-            	//addIssue(new PreciseIssue(this, new IssueLocation(tree,   MESSAGE )));
+            	
             	addIssue(new LineIssue(this, lineNumber,   MESSAGE ));
             }
         } while(true);
