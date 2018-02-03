@@ -46,9 +46,9 @@ public class NavigatingTreeCouldBeReferenceCheck extends DoubleDispatchVisitorCh
 	private static final int DEFAULT_THRESHOLD = 3;
 	 @RuleProperty(
 			    key = "NavigatingTreeCouldBeReference",
-			    description = "The maximum authorized method/procedure length.",
+			    description = "Navigating message tree could be replaced by a reference.",
 			    defaultValue = "" + DEFAULT_THRESHOLD)
-	 public int threshold = DEFAULT_THRESHOLD;
+	 public static int threshold = DEFAULT_THRESHOLD;
 	
 	
 	
@@ -83,7 +83,7 @@ public class NavigatingTreeCouldBeReferenceCheck extends DoubleDispatchVisitorCh
     
 	}    
         
-        private void processSingleModuleForReferences(  int startingLine, List<String> moduleLines, HashSet<Integer> violatingLinesWithPossibleReference)
+        private static void processSingleModuleForReferences(  int startingLine, List<String> moduleLines, HashSet<Integer> violatingLinesWithPossibleReference)
         {
             HashMap<String, Integer> allKeys = new HashMap<>();
             Iterator<String> iterator = moduleLines.iterator();
@@ -103,18 +103,25 @@ public class NavigatingTreeCouldBeReferenceCheck extends DoubleDispatchVisitorCh
                         removeQuotedComment = removeQuotedComment.substring(0, removeQuotedComment.length() - 1);
                     int equalsPos = removeQuotedComment.indexOf('=');
                     if(equalsPos > 0) {
+                    	String endLine = null;
                         String startLine = removeQuotedComment.substring(0, equalsPos).trim();
-                        String endLine = removeQuotedComment.substring(equalsPos + 1).trim();
+                        if (!(equalsPos + 1  > removeQuotedComment.length())){
+                            endLine = removeQuotedComment.substring(equalsPos + 1).trim();
+                        }
                         Set<String> keyValuesAll = new HashSet<>();
                         Set<String> keyValuesStart = CheckUtils.buildKeys(startLine);
-                        Set<String> keyValuesEnd = CheckUtils.buildKeys(endLine);
+                        Set<String> keyValuesEnd = new HashSet<>();
+                        if (endLine!=null){
+                            CheckUtils.buildKeys(endLine);
+                        }
+
                         keyValuesStart.addAll(keyValuesEnd);
                         for(Iterator<String> iterator1 = keyValuesStart.iterator(); iterator1.hasNext();) {
                             String key = iterator1.next();
                             if (!key.contains("OutputLocalEnvironment") && !key.contains("InputLocalEnvironment")) {
                                     keyValuesAll.add(key);
+                                } 
                             }
-                        }
 
                         Iterator<String> iterator2 = keyValuesAll.iterator();
                         while(iterator2.hasNext()) 
