@@ -59,10 +59,15 @@ public class SubElementNameCheck extends DoubleDispatchVisitorCheck{
 
 				String[] strArr1 = line.split(Pattern.quote("="));
 
-				String envSubElement = strArr1[0];
-				if(! strArr1[1].isEmpty()){
-
-					String envSubElement1 = envSubElement.substring(line.indexOf("Environment")+12,line.indexOf('='));
+				
+				   if (strArr1.length > 0){
+					
+					String envSubElement = strArr1[0];
+					String envSubElement1 = null;
+					if (!(line.indexOf("Environment") + 12  > line.length())){
+						if (!(line.indexOf("Environment") + 12  > envSubElement.length())){
+					 envSubElement1 = envSubElement.substring(line.indexOf("Environment")+12,line.indexOf("="));
+					}
 					String[] strArray = envSubElement1.split(Pattern.quote("."));
 
 					int strCount =0;
@@ -83,6 +88,7 @@ public class SubElementNameCheck extends DoubleDispatchVisitorCheck{
 					}
 
 				}
+				}
 
 
 
@@ -91,6 +97,7 @@ public class SubElementNameCheck extends DoubleDispatchVisitorCheck{
 
 	}
 }
+
 
 
 
