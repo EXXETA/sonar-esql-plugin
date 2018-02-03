@@ -39,7 +39,8 @@ public class UnknownMessageDomainCheck extends DoubleDispatchVisitorCheck {
 			"MQCIH", "MQDLH", "MQIIH",  "MQMD", "MQMDE", "MQPCF", "MQRFH", "MQRFH2", "MQRFH2C", "MQRMH", "MQSAPH", "MQWIH",
 			"EmailOutputHeader", "EmailInputHeader", 
 			"Collection", "*", 
-			"DataObject", "IDOC", "SMQ_BMH", "SQL" 
+			"DataObject", "IDOC", "SMQ_BMH", "SQL",
+			"ComIbmAggregateReplyBody"
 		));
 	
 	
