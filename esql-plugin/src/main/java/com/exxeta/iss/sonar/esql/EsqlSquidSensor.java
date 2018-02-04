@@ -371,11 +371,9 @@ public class EsqlSquidSensor implements Sensor {
     private static void executeCoverageSensors(SensorContext context, Map<InputFile, Set<Integer>> executableLines) {
       Configuration configuration = context.config();
 	
-	    Optional<String> traces = configuration.get(EsqlPlugin.TRACE_PATHS_PROPERTY);
+	    String[] traces = configuration.getStringArray(EsqlPlugin.TRACE_PATHS_PROPERTY);
 	
-	    if (traces.isPresent() && !traces.get().isEmpty()) {
-	      (new TraceSensor()).execute(context, executableLines, traces.get().split(","));
-	    }
+	      (new TraceSensor()).execute(context, executableLines, traces);
 	
     }
    
