@@ -17,12 +17,17 @@
  */
 package com.exxeta.iss.sonar.esql.utils;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.fs.internal.FileMetadata;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.config.internal.MapSettings;
 
@@ -42,6 +47,16 @@ public class TestUtils {
       throw Throwables.propagate(e);
     }
   }
+  public static DefaultInputFile createTestInputFile(File file, String contents, Charset encoding) {
+	    final DefaultInputFile inputFile = new TestInputFileBuilder("module1", file.getAbsolutePath()).setCharset(encoding).build();
+	    try {
+	      Files.write(file.toPath(), contents.getBytes(encoding));
+	      inputFile.setMetadata(new FileMetadata().readMetadata(new FileInputStream(file), encoding, file.getAbsolutePath()));
+	    } catch (IOException e) {
+	      throw Throwables.propagate(e);
+	    }
+	    return inputFile;
+	  }
   
   public static DefaultInputFile createTestInputFile(String baseDir, String relativePath) {
 	    final DefaultInputFile inputFile = new TestInputFileBuilder("module1", relativePath)

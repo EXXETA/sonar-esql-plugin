@@ -70,6 +70,7 @@ import com.exxeta.iss.sonar.esql.api.visitors.TreeVisitorContext;
 import com.exxeta.iss.sonar.esql.check.CheckList;
 import com.exxeta.iss.sonar.esql.check.ParsingErrorCheck;
 import com.exxeta.iss.sonar.esql.codecoverage.TraceSensor;
+import com.exxeta.iss.sonar.esql.cpd.CpdVisitor;
 import com.exxeta.iss.sonar.esql.highlighter.HighlightSymbolTableBuilder;
 import com.exxeta.iss.sonar.esql.highlighter.HighlighterVisitor;
 import com.exxeta.iss.sonar.esql.metrics.MetricsVisitor;
@@ -349,7 +350,8 @@ public class EsqlSquidSensor implements Sensor {
       return Arrays.asList(
     		  metricsVisitor,
     		  new NoSonarVisitor(noSonarFilter, ignoreHeaderComments),
-    		  new HighlighterVisitor(context));
+    		  new HighlighterVisitor(context),
+    		  new CpdVisitor(context));
     }
 
     @Override
