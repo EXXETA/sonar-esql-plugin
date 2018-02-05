@@ -48,6 +48,7 @@ public class CommentedCodeCheck extends SubscriptionVisitorCheck {
 			"%s",
 			"IF TRUE THEN %s", 
 			"IF TRUE THEN %s END IF;",
+			"%s END IF;",
 			"CASE A %s END CASE;", 
 			"BEGIN %s", 
 			"%s END;",
