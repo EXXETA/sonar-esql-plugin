@@ -56,6 +56,7 @@ public class CreateStatementTest  extends EsqlTreeModelTest<CreateStatementTreeI
 		.matches("CREATE LASTCHILD OF OutputRoot DOMAIN('MRM') PARSE(inBitStream ENCODING inEncoding CCSID inCCSID);")
 		.matches("CREATE LASTCHILD OF OutputRoot DOMAIN('MRM') PARSE(inBitStream SET 'abc' TYPE 'TestCase' FORMAT 'XML1');")
 		.matches("CREATE LASTCHILD OF OutputRoot DOMAIN('MRM') PARSE(inBitStream OPTIONS options);")
+		.matches("CREATE LASTCHILD OF OutputRoot DOMAIN ('SOAP') PARSE (InputLocalEnvironment.Variables.Pas.Request CCSID 1208 OPTIONS RootBitStream );")
 		;
 	}
 	
@@ -157,6 +158,31 @@ public class CreateStatementTest  extends EsqlTreeModelTest<CreateStatementTreeI
 		assertNotNull(valuesClause.valueKeyword());
 		assertNotNull(valuesClause.value());
 		
+	}
+
+	@Test
+	public void modelTest2() throws Exception {
+		CreateStatementTreeImpl tree = parse("CREATE LASTCHILD OF OutputRoot DOMAIN('MRM') PARSE(inBitStream ENCODING inEncoding CCSID inCCSID SET 'DP3UK14002001' TYPE 'TestCase' FORMAT 'XML1' OPTIONS options);", Kind.CREATE_STATEMENT);
+		ParseClauseTreeImpl parseClause = tree.parseClause();
+		assertNotNull(parseClause);
+		assertNotNull(parseClause.parseKeyword());
+		assertEquals(parseClause.parseKeyword().text(), "PARSE");
+		assertNotNull(parseClause.openingParenthesis());
+		assertEquals(parseClause.openingParenthesis().text(), "(");
+		
+		assertNotNull(parseClause.expression());
+		assertNotNull(parseClause.optionsSeparator());
+		assertNotNull(parseClause.optionsExpression());
+		assertNotNull(parseClause.encodingSeparator());
+		assertNotNull(parseClause.encodingExpression());
+		assertNotNull(parseClause.ccsidSeparator());
+		assertNotNull(parseClause.ccsidExpression());
+		assertNotNull(parseClause.setSeparator());
+		assertNotNull(parseClause.setExpression());
+		assertNotNull(parseClause.typeSeparator());
+		assertNotNull(parseClause.typeExpression());
+		assertNotNull(parseClause.formatSeparator());
+		assertNotNull(parseClause.formatExpression());
 	}
 	
 }
