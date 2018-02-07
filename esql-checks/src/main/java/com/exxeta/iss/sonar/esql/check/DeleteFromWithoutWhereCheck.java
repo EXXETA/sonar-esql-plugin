@@ -42,7 +42,9 @@ public class DeleteFromWithoutWhereCheck extends DoubleDispatchVisitorCheck {
 		String statement = null;
 		if (SyntacticEquivalence.skipParentheses(tree.expression()) instanceof LiteralTree) {
 			statement = ((LiteralTree) SyntacticEquivalence.skipParentheses(tree.expression())).value().trim();
-		} else if (SyntacticEquivalence
+		} else if (tree.expressionList()!=null 
+				&& !tree.expressionList().parameters().isEmpty() 
+				&& SyntacticEquivalence
 				.skipParentheses(tree.expressionList().parameters().get(0)) instanceof LiteralTree) {
 			statement = ((LiteralTree) SyntacticEquivalence.skipParentheses(tree.expressionList().parameters().get(0)))
 					.value().trim();

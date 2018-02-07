@@ -11,6 +11,8 @@ CREATE COMPUTE MODULE a
 		PASSTHRU(('DELETE FROM users WHERE NAME=''name''')); --Ccompliant
 		PASSTHRU(STMT); --Compliant
 		PASSTHRU('SELECT * FROM dual'); --Compliant
+		PASSTHRU loadStatement(); --Compliant
+		PASSTHRU (); --Compliant
 	END;
 
 END MODULE;
