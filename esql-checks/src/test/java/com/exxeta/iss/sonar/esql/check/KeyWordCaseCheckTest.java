@@ -33,8 +33,8 @@ public class KeyWordCaseCheckTest {
 	public void test() {
 		EsqlCheck check = new KeyWordCaseCheck();
 		EsqlCheckVerifier.issues(check, new File("src/test/resources/KeyWordCaseCheck.esql"))
-		.next().atLine(6).withMessage("This keyword should be in uppercase.")
-		.next().atLine(25).withMessage("This keyword should be in uppercase.")
+		.next().atLine(7).withMessage("This keyword should be in uppercase.")
+		.next().atLine(26).withMessage("This keyword should be in uppercase.")
 		.noMore();
 	}
 }

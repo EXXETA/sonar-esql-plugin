@@ -23,6 +23,7 @@ import org.sonar.check.Rule;
 
 import com.exxeta.iss.sonar.esql.api.EsqlNonReservedKeyword;
 import com.exxeta.iss.sonar.esql.api.tree.PathElementNameTree;
+import com.exxeta.iss.sonar.esql.api.tree.SchemaNameTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitorCheck;
@@ -55,7 +56,8 @@ public class KeyWordCaseCheck extends SubscriptionVisitorCheck {
 		String upperCase = value.toUpperCase();
 		if (!value.equals(upperCase)
 				&& (reservedKeywords.contains(upperCase) || nonReservedKeywords.contains(upperCase))
-				&& !(tree.parent().parent() instanceof PathElementNameTree)) {
+				&& !(tree.parent().parent() instanceof PathElementNameTree)
+				&& !(tree.parent() instanceof SchemaNameTree)) {
 			addIssue(tree, MESSAGE);
 		}
 		super.visitNode(tree);

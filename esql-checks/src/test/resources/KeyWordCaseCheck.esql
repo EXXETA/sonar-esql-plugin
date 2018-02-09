@@ -1,3 +1,4 @@
+BROKER SCHEMA country.common.esql.util --Compliant
 /****************************************************************************
 	* This module will CALL the procedures which will do the request
 	transformation for all operations in a given service.
