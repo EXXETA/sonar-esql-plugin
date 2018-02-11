@@ -15,19 +15,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.esql.api.tree.function;
+package com.exxeta.iss.sonar.esql.api.tree.expression;
 
-import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
-import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
+import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
 
-public interface RoundFunctionTree extends NumericFunctionTree{
+import org.junit.Test;
 
-	SyntaxToken roundKeyword();
-	SyntaxToken openingParenthesis();
-	ExpressionTree sourceNumber();
-	SyntaxToken comma();
-	ExpressionTree precision();
-	SyntaxToken modeKeyword();
-	SyntaxToken roundingMode();
-	SyntaxToken closingParenthesis();
+import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+
+public class ExpressionTest {
+
+	@Test
+	public void expression() {
+		assertThat(Kind.EXPRESSION)
+		.matches("b")
+		.matches("b.c")
+		.matches("0")
+		;
+	}
+	
 }
