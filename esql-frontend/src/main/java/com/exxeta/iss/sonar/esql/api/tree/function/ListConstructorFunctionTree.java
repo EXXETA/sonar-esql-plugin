@@ -18,12 +18,12 @@
 package com.exxeta.iss.sonar.esql.api.tree.function;
 
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
-import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 
 public interface ListConstructorFunctionTree extends ComplexFunctionTree{
-	InternalSyntaxToken listKeyword();
-	InternalSyntaxToken openingCurlyBrace();
+	SyntaxToken listKeyword();
+	SyntaxToken openingCurlyBrace();
 	SeparatedList<ExpressionTree> expressions();
-	InternalSyntaxToken closingCurlyBrace();
+	SyntaxToken closingCurlyBrace();
 }
