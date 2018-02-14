@@ -7,6 +7,7 @@ CREATE COMPUTE MODULE TestFlow_Compute
 	Create FUNCTION Badly_Named_Function() RETURNS BOOLEAN
 	BEGIN
 	END;
+	
 	CREATE FUNCTION too_long_function_name_because_it_has_more_than_30_characters() RETURNS BOOLEAN
 	BEGIN -- begin is ok
 --	begin	
@@ -16,6 +17,10 @@ CREATE COMPUTE MODULE TestFlow_Compute
 		SET I = Badly_Named_Function();
 		SET OutputRoot.attach = 'AAA';
 		SET Environment.ABC = 'AAA';
+		DECLARE count INTEGER 0;
+		SET count = 15;
+		IF not condition THEN
+		END IF;
 	END;
 	CREATE FUNCTION Main() RETURNS BOOLEAN
 	BEGIN
