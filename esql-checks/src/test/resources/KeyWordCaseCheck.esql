@@ -24,6 +24,7 @@ CREATE COMPUTE MODULE TestFlow_Compute
 	END;
 	CREATE FUNCTION Main() RETURNS BOOLEAN
 	BEGIN
+		CALL ABC(Environment);
 		RETURN TRUE;/* 
 	
 	comment ends here
