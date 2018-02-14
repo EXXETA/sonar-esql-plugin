@@ -78,6 +78,7 @@ public class SymbolVisitor extends DoubleDispatchVisitor {
 			scan(identifier);
 			declaredBlockScopeNames.put(currentScope, identifier.name());
 		}
+		super.visitDeclareStatement(tree);
 	}
 
 	@Override
@@ -85,6 +86,7 @@ public class SymbolVisitor extends DoubleDispatchVisitor {
 		if (tree.is(Tree.Kind.IDENTIFIER_REFERENCE, Tree.Kind.PROPERTY_IDENTIFIER)) {
 			addUsageFor(tree, Usage.Kind.READ);
 		}
+		super.visitIdentifier(tree);
 	}
 	
 	@Override
