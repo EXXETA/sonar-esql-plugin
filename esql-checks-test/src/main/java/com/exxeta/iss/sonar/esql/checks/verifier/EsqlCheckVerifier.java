@@ -63,11 +63,11 @@ public class EsqlCheckVerifier {
 	 * source file where you expect an issue. For example:
 	 * 
 	 * <pre>
-	 * var x = 1; -- Noncompliant {{A message for this line.}}
+	 * SET x = 1; -- Noncompliant {{A message for this line.}}
 	 *
-	 * function foo() { -- Noncompliant [[effortToFix=2]] [[secondary=+0,+1]]
-	 * 					-- [[sc=5;ec=6;el=+0]]
-	 * }
+	 * function foo() BEGIN -- Noncompliant [[effortToFix=2]] [[secondary=+0,+1]]
+	 * 					    -- [[sc=5;ec=6;el=+0]]
+	 * END
 	 * </pre>
 	 * 
 	 * How to write these comments:

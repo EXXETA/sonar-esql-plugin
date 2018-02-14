@@ -35,7 +35,7 @@ public class DeclareStatementTest extends EsqlTreeModelTest<DeclareStatementTree
 		assertNotNull(tree.declareToken());
 		assertNotNull(tree.nameList());
 		assertNotNull(tree.sharedExt());
-		assertNull(tree.namesapce());
+		assertNull(tree.namespace());
 		assertNull(tree.constantKeyword());
 		assertNotNull(tree.dataType());
 		assertNotNull(tree.initialValueExpression());
