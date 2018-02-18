@@ -21,9 +21,13 @@ import org.sonar.check.Rule;
 
 import com.exxeta.iss.sonar.esql.api.tree.statement.DeleteFromStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.PassthruStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.SetStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
 import com.exxeta.iss.sonar.esql.tree.SyntacticEquivalence;
 import com.exxeta.iss.sonar.esql.tree.expression.LiteralTree;
+import com.exxeta.iss.sonar.esql.tree.impl.expression.BinaryExpressionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.expression.CallExpressionTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.function.PassthruFunctionTreeImpl;
 
 @Rule(key = "DeleteFromWithoutWhere")
 public class DeleteFromWithoutWhereCheck extends DoubleDispatchVisitorCheck {
@@ -55,8 +59,29 @@ public class DeleteFromWithoutWhereCheck extends DoubleDispatchVisitorCheck {
 		if (statement != null && statement.startsWith("'DELETE FROM") && !statement.contains(" WHERE ")) {
 			addIssue(tree, MESSAGE);
 		}
-
 		super.visitPassthruStatement(tree);
+	}
+	
+	@Override
+	public void visitSetStatement(SetStatementTree tree) {
+		if(tree.expression() instanceof CallExpressionTreeImpl) {
+			CallExpressionTreeImpl callExpression = (CallExpressionTreeImpl) tree.expression();
+			if(callExpression.function() instanceof PassthruFunctionTreeImpl) {
+				PassthruFunctionTreeImpl passthru = (PassthruFunctionTreeImpl) callExpression.function();				
+				if(passthru.expression() instanceof BinaryExpressionTreeImpl) {
+					BinaryExpressionTreeImpl binaryExpression = (BinaryExpressionTreeImpl) passthru.expression();
+					if(!binaryExpression.firstToken().text().contains("WHERE")) {
+						addIssue(tree, MESSAGE);
+					}			
+				} else {
+					if (!passthru.expression().firstToken().text().concat(passthru.expression().lastToken().text()).contains("WHERE")) {
+						addIssue(tree, MESSAGE);
+					}			
+				}
+			}			
+		}
+		
+		super.visitSetStatement(tree);
 	}
 
 }
