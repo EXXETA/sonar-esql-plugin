@@ -17,23 +17,38 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.sonar.check.Rule;
 
+import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
+import com.exxeta.iss.sonar.esql.api.tree.Tree;
+import com.exxeta.iss.sonar.esql.api.tree.function.PassthruFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.DeleteFromStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.PassthruStatementTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.SetStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
-import com.exxeta.iss.sonar.esql.tree.SyntacticEquivalence;
 import com.exxeta.iss.sonar.esql.tree.expression.LiteralTree;
-import com.exxeta.iss.sonar.esql.tree.impl.expression.BinaryExpressionTreeImpl;
-import com.exxeta.iss.sonar.esql.tree.impl.expression.CallExpressionTreeImpl;
-import com.exxeta.iss.sonar.esql.tree.impl.function.PassthruFunctionTreeImpl;
 
 @Rule(key = "DeleteFromWithoutWhere")
 public class DeleteFromWithoutWhereCheck extends DoubleDispatchVisitorCheck {
 
 	private static final String MESSAGE = "Add a where caluse to this DELETE FROM statement.";
 
+	private Map<Tree, List<LiteralTree>> passthruStack = new HashMap<>();
+	Tree currentPassthru = null;
+	
+	
+	@Override
+	public void visitProgram(ProgramTree tree) {
+		passthruStack.clear();
+		currentPassthru=null;
+		super.visitProgram(tree);
+	}
+	
+	
 	@Override
 	public void visitDeleteFromStatement(DeleteFromStatementTree tree) {
 		if (tree.whereExpression() == null) {
@@ -43,45 +58,46 @@ public class DeleteFromWithoutWhereCheck extends DoubleDispatchVisitorCheck {
 
 	@Override
 	public void visitPassthruStatement(PassthruStatementTree tree) {
-		String statement = null;
-		if (SyntacticEquivalence.skipParentheses(tree.expression()) instanceof LiteralTree) {
-			statement = ((LiteralTree) SyntacticEquivalence.skipParentheses(tree.expression())).value().trim();
-		} else if (tree.expressionList()!=null 
-				&& !tree.expressionList().parameters().isEmpty() 
-				&& SyntacticEquivalence
-				.skipParentheses(tree.expressionList().parameters().get(0)) instanceof LiteralTree) {
-			statement = ((LiteralTree) SyntacticEquivalence.skipParentheses(tree.expressionList().parameters().get(0)))
-					.value().trim();
-		} else {
-			// Cannot find statement
-		}
-		//Very simple check. Think about an SQL parser.
-		if (statement != null && statement.startsWith("'DELETE FROM") && !statement.contains(" WHERE ")) {
-			addIssue(tree, MESSAGE);
-		}
+		Tree prevPassthru = currentPassthru;
+		currentPassthru = tree;
+		passthruStack.put(tree,new ArrayList<>());
 		super.visitPassthruStatement(tree);
+		List<LiteralTree> literals = passthruStack.remove(tree);
+		checkLiterals(tree, literals);
+		currentPassthru=prevPassthru;
 	}
 	
 	@Override
-	public void visitSetStatement(SetStatementTree tree) {
-		if(tree.expression() instanceof CallExpressionTreeImpl) {
-			CallExpressionTreeImpl callExpression = (CallExpressionTreeImpl) tree.expression();
-			if(callExpression.function() instanceof PassthruFunctionTreeImpl) {
-				PassthruFunctionTreeImpl passthru = (PassthruFunctionTreeImpl) callExpression.function();				
-				if(passthru.expression() instanceof BinaryExpressionTreeImpl) {
-					BinaryExpressionTreeImpl binaryExpression = (BinaryExpressionTreeImpl) passthru.expression();
-					if(!binaryExpression.firstToken().text().contains("WHERE")) {
-						addIssue(tree, MESSAGE);
-					}			
-				} else {
-					if (!passthru.expression().firstToken().text().concat(passthru.expression().lastToken().text()).contains("WHERE")) {
-						addIssue(tree, MESSAGE);
-					}			
-				}
-			}			
-		}
+	public void visitPassthruFunction(PassthruFunctionTree tree) {
+		Tree prevPassthru = currentPassthru;
+		currentPassthru = tree;
+		passthruStack.put(tree,new ArrayList<>());
+		super.visitPassthruFunction(tree);
+		List<LiteralTree> literals = passthruStack.remove(tree);
+		checkLiterals(tree, literals);
+		currentPassthru=prevPassthru;
 		
-		super.visitSetStatement(tree);
+	}
+	
+	@Override
+	public void visitLiteral(LiteralTree tree) {
+		passthruStack.get(currentPassthru).add(tree);
+		super.visitLiteral(tree);
+	}
+	
+	private void checkLiterals(Tree tree, List<LiteralTree> literals) {
+		if (!literals.isEmpty() && literals.get(0).value().toUpperCase().matches("'.*DELETE\\s+FROM.*")){
+			boolean hasWhereClause=false;
+			for (LiteralTree literal:literals){
+				if (literal.value().toUpperCase().matches(".*WHERE.*")){
+					hasWhereClause=true;
+				}
+						
+			}
+			if (!hasWhereClause){
+				addIssue(tree, MESSAGE);
+			}
+		}
 	}
 
 }
