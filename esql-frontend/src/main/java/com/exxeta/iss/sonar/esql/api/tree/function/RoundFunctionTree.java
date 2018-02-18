@@ -25,9 +25,9 @@ public interface RoundFunctionTree extends NumericFunctionTree{
 	SyntaxToken roundKeyword();
 	SyntaxToken openingParenthesis();
 	ExpressionTree sourceNumber();
-//	SyntaxToken comma();
-//	ExpressionTree precision();
-	/*SyntaxToken modeKeyword();
-	SyntaxToken roundingMode();*/
+	SyntaxToken comma();
+	ExpressionTree precision();
+	SyntaxToken modeKeyword();
+	SyntaxToken roundingMode();
 	SyntaxToken closingParenthesis();
 }

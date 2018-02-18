@@ -107,7 +107,7 @@ public class ParameterTreeImpl extends EsqlTree implements ParameterTree {
 
 	@Override
 	public Iterator<Tree> childrenIterator() {
-		return Iterators.forArray(directionIndicator, identifier, constantKeyword, nameOrNamesapceKeyword, dataType);
+		return Iterators.forArray(directionIndicator, identifier, constantKeyword, nameOrNamesapceKeyword, dataType, nullable);
 	}
 
 }

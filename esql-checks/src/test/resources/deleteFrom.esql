@@ -8,11 +8,13 @@ CREATE COMPUTE MODULE a
 		PASSTHRU('DELETE FROM users'); --Noncompliant
 		PASSTHRU 'DELETE FROM users'; --Noncompliant
 		PASSTHRU(('DELETE FROM users')); --Noncompliant
-		PASSTHRU(('DELETE FROM users WHERE NAME=''name''')); --Ccompliant
+		PASSTHRU(('DELETE FROM users WHERE NAME=''name''')); --Compliant
 		PASSTHRU(STMT); --Compliant
 		PASSTHRU('SELECT * FROM dual'); --Compliant
 		PASSTHRU loadStatement(); --Compliant
 		PASSTHRU (); --Compliant
+		SET resultSet.rowReference[] = PASSTHRU('DELETE FROM ABC A' TO Database.{dsDB}); --Noncompliant
+		SET resultSet.rowReference[] = PASSTHRU('DELETE FROM '||db2_table||'.ABC A' TO Database.{dsDB}); --Noncompliant
 	END;
 
 END MODULE;

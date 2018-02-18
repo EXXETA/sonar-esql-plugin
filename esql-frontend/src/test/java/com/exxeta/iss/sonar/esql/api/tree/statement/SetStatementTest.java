@@ -15,15 +15,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.esql.api.tree.function;
+package com.exxeta.iss.sonar.esql.api.tree.statement;
 
-import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
-import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
-import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
+import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
 
-public interface ListConstructorFunctionTree extends ComplexFunctionTree{
-	SyntaxToken listKeyword();
-	SyntaxToken openingCurlyBrace();
-	SeparatedList<ExpressionTree> expressions();
-	SyntaxToken closingCurlyBrace();
+import org.junit.Test;
+
+import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+
+public class SetStatementTest {
+
+	@Test
+	public void setStatement() {
+		assertThat(Kind.SET_STATEMENT)
+		.matches("SET a=b;")
+		.matches("SET a = b.c;")
+		.matches("SET i = 0;")
+		.matches("SET OutputRoot=InputRoot;")
+		.matches("SET a = PASSTHRU('aaaaa' VALUES ('aaaa'));")
+		.matches("SET outRef.ns36:eventPayLoad.(XMLNSC.NamespaceDecl)=NULL;")
+		;
+		
+
+		
+	}
+	
 }

@@ -17,34 +17,23 @@
  */
 package com.exxeta.iss.sonar.esql.api.tree.statement;
 
-import com.exxeta.iss.sonar.esql.api.tree.FieldReferenceTree;
-import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
-import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
+import static org.assertj.core.api.Assertions.assertThat;
 
-public interface CreateStatementTree extends StatementTree {
-	SyntaxToken createKeyword();
+import org.junit.Test;
 
-	SyntaxToken qualifierName();
+import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.api.tree.statement.SetStatementTree;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.SetStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-	SyntaxToken qualifierOfKeyword();
+public class SemicolonTest extends EsqlTreeModelTest<SetStatementTreeImpl> {
 
-	FieldReferenceTree target();
-	
-	SyntaxToken asKeyword();
+  @Test
+  public void with_semicolon() throws Exception {
+    SetStatementTree tree = parse("SET a = 1;", Kind.SET_STATEMENT);
 
-	FieldReferenceTree aliasFieldReference();
+    assertThat(tree.semiToken()).isNotNull();
+    assertThat(tree.semiToken().text()).isEqualTo(";");
+  }
 
-	SyntaxToken domainKeyword();
-
-	ExpressionTree domainExpression();
-
-	RepeatClauseTree repeatClause();
-
-	ValuesClauseTree valuesClause();
-
-	FromClauseTree fromClause();
-
-	ParseClauseTree parseClause();
-
-	SyntaxToken semi();
 }
