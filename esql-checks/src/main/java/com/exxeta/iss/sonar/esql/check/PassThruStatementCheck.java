@@ -17,11 +17,13 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
+import java.util.List;
+
 import org.apache.commons.lang.StringUtils;
 import org.sonar.check.Rule;
-import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.PassthruStatementTree;
-import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
+
+import com.exxeta.iss.sonar.esql.api.tree.Tree;
+import com.exxeta.iss.sonar.esql.tree.expression.LiteralTree;
 
 /**
  * This java class is created to implement the logic to check the PassThru
@@ -32,48 +34,45 @@ import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
  */
 
 @Rule(key = "PassThruStatement")
-public class PassThruStatementCheck extends DoubleDispatchVisitorCheck {
+public class PassThruStatementCheck extends AbstractPassthruCheck {
 
 	private static final String MESSAGE = "Use parameter markers '?' when using the PASSTHRU statement in ESQL";
-
+	
 	@Override
-	public void visitPassthruStatement(PassthruStatementTree tree) {
-		if (!checkQuery(tree)) {
-			addIssue(tree, MESSAGE);
-
+	protected void checkLiterals(Tree tree, List<LiteralTree> literals) {
+		
+		StringBuilder query =new StringBuilder();
+		for (LiteralTree literal:literals){
+			query.append(literal.value());
 		}
-	}
 
-	public static boolean checkQuery(PassthruStatementTree exp) {
-		ExpressionTree query = exp.expression();
-		if (query != null) {
-			boolean isQueryWhereComplient = false;
-			String queryString = query.toString().toUpperCase();
-			if (queryString.trim().contains("WHERE")) {
-				String whereClause = queryString.substring(queryString.indexOf("WHERE"));
-				whereClause = CheckUtils.removeQuotedContent(whereClause);
-				whereClause = whereClause.replaceAll(" ", "");
+		boolean isQueryWhereComplient = false;
+		String queryString = query.toString().toUpperCase();
+		if (queryString.trim().contains("WHERE")) {
+			String whereClause = queryString.substring(queryString.indexOf("WHERE"));
+			whereClause = CheckUtils.removeQuotedContent(whereClause);
+			whereClause = whereClause.replaceAll(" ", "");
 
-				if (whereClause.contains("GROUPBY")) {
-					whereClause = whereClause.substring(0, whereClause.indexOf("GROUPBY"));
-				} else if (whereClause.contains("ORDERBY")) {
-					whereClause = whereClause.substring(0, whereClause.indexOf("ORDERBY"));
-				}
+			if (whereClause.contains("GROUPBY")) {
+				whereClause = whereClause.substring(0, whereClause.indexOf("GROUPBY"));
+			} else if (whereClause.contains("ORDERBY")) {
+				whereClause = whereClause.substring(0, whereClause.indexOf("ORDERBY"));
+			}
 
-				if (StringUtils.countMatches(whereClause, "=") != StringUtils.countMatches(whereClause, "?")) {
-					isQueryWhereComplient = false;
-				} else {
-					isQueryWhereComplient = true;
-				}
-
+			if (StringUtils.countMatches(whereClause, "=") != StringUtils.countMatches(whereClause, "?")) {
+				isQueryWhereComplient = false;
 			} else {
 				isQueryWhereComplient = true;
 			}
-		return isQueryWhereComplient;
+
 		} else {
-			return true;
+			isQueryWhereComplient = true;
+		}
+		if (!isQueryWhereComplient){
+			addIssue(tree, MESSAGE);
 		}
 
+		
 	}
 
 }
