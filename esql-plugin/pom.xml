@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.exxeta.iss</groupId>
 		<artifactId>sonar-esql-plugin</artifactId>
-		<version>2.3.0-RC1</version>
+		<version>2.3.0-RC2</version>
 	</parent>
 
 	<artifactId>esql-plugin</artifactId>
@@ -118,8 +118,8 @@
 						<configuration>
 							<rules>
 								<requireFilesSize>
-									<minsize>2400000</minsize>
-									<maxsize>4000000</maxsize>
+									<minsize>3800000</minsize>
+									<maxsize>3900000</maxsize>
 									<files>
 										<file>${project.build.directory}/${project.build.finalName}.jar</file>
 									</files>
