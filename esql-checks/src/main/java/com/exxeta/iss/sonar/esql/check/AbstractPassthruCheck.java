@@ -55,7 +55,9 @@ public abstract class AbstractPassthruCheck extends DoubleDispatchVisitorCheck{
 
 	@Override
 	public void visitLiteral(LiteralTree tree) {
-		passthruStack.get(currentPassthru).add(tree);
+		if (currentPassthru!=null){
+			passthruStack.get(currentPassthru).add(tree);
+		}
 		super.visitLiteral(tree);
 	}
 	

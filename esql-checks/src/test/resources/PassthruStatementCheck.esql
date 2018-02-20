@@ -2,6 +2,7 @@ CREATE COMPUTE MODULE a
 
 	CREATE PROCEDURE delete()
 	BEGIN
+		SET A = 'AAA';
 		PASSTHRU 'SELECT COUNT(*) FROM Database.SHAREHOLDINGS AS S WHERE S.ACCOUNTNO = InputBody.AccountNumber' TO Database.DSN1 VALUES (); --Noncompliant
 		PASSTHRU 'SELECT COUNT(*) FROM Database.SHAREHOLDINGS AS S WHERE S.ACCOUNTNO = ?' TO Database.DSN1 VALUES (InputBody.AccountNumber); --Compliant
 		PASSTHRU 'SELECT COUNT(*) FROM Database.SHAREHOLDINGS AS S ' TO Database.DSN1; --Compliant
