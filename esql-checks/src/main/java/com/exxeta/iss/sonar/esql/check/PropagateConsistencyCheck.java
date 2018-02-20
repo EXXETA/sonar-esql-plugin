@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.math.NumberUtils;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.check.Rule;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
@@ -44,6 +46,7 @@ import com.exxeta.iss.sonar.msgflow.model.MessageFlowParser;
 public class PropagateConsistencyCheck extends DoubleDispatchVisitorCheck {
 
 	private static final String MESSAGE = "Compute node connections are inconsistent";
+    private static final Logger LOG = Loggers.get(PropagateConsistencyCheck.class);
 
 	private MessageFlowNode msgFlownode = null;
 
@@ -72,13 +75,19 @@ public class PropagateConsistencyCheck extends DoubleDispatchVisitorCheck {
 	}
 
 	private File getProjectDirectory(EsqlFile esqlFile) {
-		File projectDirectory = new File(esqlFile.relativePath());
+		File projectDirectory = new File(new File(esqlFile.relativePath()).getAbsolutePath());
+		if (!projectDirectory.isDirectory()){
+			projectDirectory=projectDirectory.getParentFile();
+		}
 		while (projectDirectory != null) {
-			projectDirectory = projectDirectory.getParentFile();
+			LOG.info("Checking "+(projectDirectory==null?"null":projectDirectory.getAbsolutePath()));
 			if (new File(projectDirectory, ".project").exists()) {
+				LOG.info("Returning "+(projectDirectory==null?"null":projectDirectory.getAbsolutePath()));
 				return projectDirectory;
 			}
+			projectDirectory = projectDirectory.getParentFile();
 		}
+		LOG.info("Nothing found.");
 		return null;
 	}
 
