@@ -1199,7 +1199,7 @@ public class EsqlGrammar {
 	
 	public CaseFunctionTreeImpl CASE_FUNCTION(){
 		return b.<CaseFunctionTreeImpl>nonterminal(Kind.CASE_FUNCTION).is(f.caseFunction(
-				b.token(EsqlReservedKeyword.CASE), b.firstOf(b.oneOrMore(WHEN_CLAUSE_EXPRESSION()), f.newTuple111(CALL_EXPRESSION(), b.oneOrMore(WHEN_CLAUSE_EXPRESSION()))), 
+				b.token(EsqlReservedKeyword.CASE), b.firstOf(b.oneOrMore(WHEN_CLAUSE_EXPRESSION()), f.newTuple111(EXPRESSION(), b.oneOrMore(WHEN_CLAUSE_EXPRESSION()))), 
 				b.optional(f.newTuple110(b.token(EsqlNonReservedKeyword.ELSE), EXPRESSION())),
 				b.token(EsqlNonReservedKeyword.END)
 		));

@@ -42,7 +42,8 @@ public class CaseFunctionTest extends EsqlTreeModelTest<CaseFunctionTree> {
 				.matches("CASE   " + "WHEN Month = '01' THEN 'January'  " + "WHEN Month = '02' THEN 'February'  "
 						+ "WHEN Month = '03' THEN 'March'  " + "WHEN Month = '04' THEN 'April'  "
 						+ "WHEN Month = '05' THEN 'May'  " + "WHEN Month = '06' THEN 'June'  "
-						+ "ELSE 'Second half of year'  " + "END");
+						+ "ELSE 'Second half of year'  " + "END")
+				.matches("CASE field IN('1','2','3', '4', '5', '6')	WHEN TRUE THEN	REPLACE(field, '.',',')	ELSE field END");
 	}
 	
 	@Test
