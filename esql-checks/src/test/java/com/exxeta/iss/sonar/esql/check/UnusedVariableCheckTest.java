@@ -36,7 +36,9 @@ public class UnusedVariableCheckTest  {
 		EsqlCheck check = new UnusedVariableCheck();
 		EsqlCheckVerifier.issues(check, new File("src/test/resources/UnusedVariable.esql"))
 		
-		.next().atLine(11).withMessage("Remove the unused Variable.").noMore();
+		.next().atLine(11).withMessage("Remove the unused Variable.")
+		.next().atLine(33).withMessage("Remove the unused Variable.")
+		.noMore();
 	
 	}	
 

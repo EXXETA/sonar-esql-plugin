@@ -18,12 +18,11 @@
 package com.exxeta.iss.sonar.esql.tree.impl.statement;
 
 import java.util.Iterator;
-import java.util.List;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateModuleStatementTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.StatementsTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
@@ -35,13 +34,13 @@ public class CreateModuleStatementTreeImpl extends EsqlTree implements CreateMod
 	private final InternalSyntaxToken moduleType;
 	private final InternalSyntaxToken moduleKeyword;
 	private final IdentifierTree moduleName;
-	private final List<StatementTree> moduleStatementsList;
+	private final StatementsTree moduleStatementsList;
 	private final InternalSyntaxToken endKeyword;
 	private final InternalSyntaxToken moduleKeyword2;
 
 	public CreateModuleStatementTreeImpl(InternalSyntaxToken createKeyword, InternalSyntaxToken moduleType,
 			InternalSyntaxToken moduleKeyword, IdentifierTree indentifier,
-			List<StatementTree> moduleStatementsList, InternalSyntaxToken endKeyword,
+			StatementsTree moduleStatementsList, InternalSyntaxToken endKeyword,
 			InternalSyntaxToken moduleKeyword2) {
 		super();
 		this.createKeyword = createKeyword;
@@ -74,7 +73,7 @@ public class CreateModuleStatementTreeImpl extends EsqlTree implements CreateMod
 	}
 
 	@Override
-	public List<StatementTree> moduleStatementsList() {
+	public StatementsTree moduleStatementsList() {
 		return moduleStatementsList;
 	}
 
@@ -95,8 +94,7 @@ public class CreateModuleStatementTreeImpl extends EsqlTree implements CreateMod
 
 	@Override
 	public Iterator<Tree> childrenIterator() {
-		return Iterators.concat(Iterators.forArray(createKeyword, moduleType, moduleKeyword, moduleName),
-				Iterators.forArray(moduleStatementsList.toArray(new StatementTree[moduleStatementsList.size()])),
+		return Iterators.concat(Iterators.forArray(createKeyword, moduleType, moduleKeyword, moduleName, moduleStatementsList),
 				Iterators.forArray(endKeyword, moduleKeyword2));
 	}
 

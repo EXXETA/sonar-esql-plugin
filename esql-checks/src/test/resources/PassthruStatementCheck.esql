@@ -2,6 +2,7 @@ CREATE COMPUTE MODULE a
 
 	CREATE PROCEDURE delete()
 	BEGIN
+		SET A = 'AAA';
 		PASSTHRU 'SELECT COUNT(*) FROM Database.SHAREHOLDINGS AS S WHERE S.ACCOUNTNO = InputBody.AccountNumber' TO Database.DSN1 VALUES (); --Noncompliant
 		PASSTHRU 'SELECT COUNT(*) FROM Database.SHAREHOLDINGS AS S WHERE S.ACCOUNTNO = ?' TO Database.DSN1 VALUES (InputBody.AccountNumber); --Compliant
 		PASSTHRU 'SELECT COUNT(*) FROM Database.SHAREHOLDINGS AS S ' TO Database.DSN1; --Compliant
@@ -9,6 +10,13 @@ CREATE COMPUTE MODULE a
 		PASSTHRU 'SELECT COUNT(*) FROM Database.SHAREHOLDINGS AS S WHERE S.ACCOUNTNO = ? ORDER BY S:ACCOUNTNO' TO Database.DSN1 VALUES (InputBody.AccountNumber); --Compliant
 		PASSTHRU (STMT, param); --Compliant
 		PASSTHRU ('' || STMT, param); --Compliant
+		
+		SET resultSet.rowReference[]= PASSTHRU('SELECT * FROM '||table||'.ABC A,'||table||'.BCD B,'||table|| --Noncompliant
+			'.CDE C	 WHERE A.IDENT = '||Ident||'
+			 AND B.ID_NUMBER = '||inRef.xyz.value||'
+			 AND B.ID_NUMBER = A.ID_NUMBER
+			 AND C.IDENT = '||Ident||'
+			 AND B.DATE_MODIFIED < C.DATE' TO Database.{DB});
 	END;
 
 END MODULE;

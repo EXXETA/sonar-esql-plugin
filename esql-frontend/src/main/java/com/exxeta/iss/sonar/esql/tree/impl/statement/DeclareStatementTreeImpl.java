@@ -95,7 +95,7 @@ public class DeclareStatementTreeImpl  extends EsqlTree implements DeclareStatem
 
 
 	@Override
-	public InternalSyntaxToken namesapce() {
+	public InternalSyntaxToken namespace() {
 		return namesapce;
 	}
 

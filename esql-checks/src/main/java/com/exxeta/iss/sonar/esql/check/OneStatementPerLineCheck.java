@@ -28,7 +28,6 @@ import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
 import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitorCheck;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
 import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ListMultimap;
 
@@ -51,7 +50,6 @@ public class OneStatementPerLineCheck extends SubscriptionVisitorCheck {
             Kind.CREATE_MODULE_STATEMENT,
             Kind.CREATE_PROCEDURE_STATEMENT,
             Kind.PROPAGATE_STATEMENT,
-            Kind.BEGIN_END_STATEMENT,
             Kind.SET_STATEMENT,
             Kind.ITERATE_STATEMENT,
             Kind.CALL_STATEMENT,

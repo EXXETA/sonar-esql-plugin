@@ -15,7 +15,13 @@ CREATE FUNCTION Main() RETURNS BOOLEAN
 		END CASE;
  --this is comment line
 		CREATE FIELD Environment.LogData;
-		DECLARE refEnv REFERENCE TO Environment.LogData;		
+		DECLARE refEnv REFERENCE TO Environment.LogData;
+		
+		--Another comment line		
 		RETURN TRUE;
 	END;
+	
+	/*
+	 * And a comment block
+	 */
 END MODULE;

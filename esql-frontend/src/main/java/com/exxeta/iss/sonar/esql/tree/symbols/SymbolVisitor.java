@@ -22,7 +22,6 @@ import java.util.Map;
 import com.exxeta.iss.sonar.esql.api.symbols.Symbol;
 import com.exxeta.iss.sonar.esql.api.symbols.SymbolModelBuilder;
 import com.exxeta.iss.sonar.esql.api.symbols.Usage;
-import com.exxeta.iss.sonar.esql.api.tree.FieldReferenceTree;
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
@@ -78,6 +77,7 @@ public class SymbolVisitor extends DoubleDispatchVisitor {
 			scan(identifier);
 			declaredBlockScopeNames.put(currentScope, identifier.name());
 		}
+		super.visitDeclareStatement(tree);
 	}
 
 	@Override
@@ -85,6 +85,7 @@ public class SymbolVisitor extends DoubleDispatchVisitor {
 		if (tree.is(Tree.Kind.IDENTIFIER_REFERENCE, Tree.Kind.PROPERTY_IDENTIFIER)) {
 			addUsageFor(tree, Usage.Kind.READ);
 		}
+		super.visitIdentifier(tree);
 	}
 	
 	@Override

@@ -17,8 +17,6 @@
  */
 package com.exxeta.iss.sonar.esql.api.tree.statement;
 
-import java.util.List;
-
 import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 
@@ -32,7 +30,7 @@ public interface CreateModuleStatementTree extends StatementTree {
 
 	IdentifierTree moduleName();
 
-	List<StatementTree> moduleStatementsList();
+	StatementsTree moduleStatementsList();
 
 	SyntaxToken endKeyword();
 

@@ -30,8 +30,7 @@ import org.sonar.check.RuleProperty;
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
 import com.exxeta.iss.sonar.esql.api.visitors.EsqlFile;
-import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
-import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
+import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
 
 /**
  * This java class is created to implement the logic for reference check, Navigating message tree could be replaced by a reference. 
@@ -77,7 +76,7 @@ public class NavigatingTreeCouldBeReferenceCheck extends DoubleDispatchVisitorCh
             Integer lineNumber = iterator1.next();
             if(linesNumbers.add(lineNumber))
             {
-            	addIssue(new PreciseIssue(this, new IssueLocation(tree,   MESSAGE )));
+            	addIssue(new LineIssue(this, lineNumber,   MESSAGE ));
             }
         } while(true);
     

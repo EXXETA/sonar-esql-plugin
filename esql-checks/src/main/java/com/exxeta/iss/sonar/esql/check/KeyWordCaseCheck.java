@@ -23,16 +23,17 @@ import org.sonar.check.Rule;
 
 import com.exxeta.iss.sonar.esql.api.EsqlNonReservedKeyword;
 import com.exxeta.iss.sonar.esql.api.tree.PathElementNameTree;
+import com.exxeta.iss.sonar.esql.api.tree.SchemaNameTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
 import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitorCheck;
 import com.exxeta.iss.sonar.esql.lexer.EsqlReservedKeyword;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.google.common.collect.ImmutableSet;
 
 /**
- * This Java Class Is created to ensure that all the keywords in esql file
- * should be in UPPER CASE
+ * This check ensures that all the keywords in ESQL files are in UPPER CASE
  * 
  * @author sapna singh
  *
@@ -55,7 +56,9 @@ public class KeyWordCaseCheck extends SubscriptionVisitorCheck {
 		String upperCase = value.toUpperCase();
 		if (!value.equals(upperCase)
 				&& (reservedKeywords.contains(upperCase) || nonReservedKeywords.contains(upperCase))
-				&& !(tree.parent().parent() instanceof PathElementNameTree)) {
+				&& !(tree.parent().parent() instanceof PathElementNameTree)
+				&& !(tree.parent() instanceof IdentifierTree)
+				&& !(tree.parent() instanceof SchemaNameTree)) {
 			addIssue(tree, MESSAGE);
 		}
 		super.visitNode(tree);

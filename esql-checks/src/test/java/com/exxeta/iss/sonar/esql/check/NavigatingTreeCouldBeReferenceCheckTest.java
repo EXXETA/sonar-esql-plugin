@@ -33,8 +33,9 @@ public class NavigatingTreeCouldBeReferenceCheckTest {
      @Test
 		public void test() {
 			EsqlCheck check = new NavigatingTreeCouldBeReferenceCheck();
-			EsqlCheckVerifier.issues(check, new File("src/test/resources/NavigatingTreeCouldBeReference.esql")).next().atLine(1)
-					.withMessage("Navigating message tree could be replaced by a reference.").noMore();
+			EsqlCheckVerifier.issues(check, new File("src/test/resources/NavigatingTreeCouldBeReference.esql"))
+			.next().atLine(4).withMessage("Navigating message tree could be replaced by a reference.")
+			.noMore();
 		}
 }
 

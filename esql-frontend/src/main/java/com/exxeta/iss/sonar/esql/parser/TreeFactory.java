@@ -1089,11 +1089,11 @@ public class TreeFactory {
 
 	public CreateModuleStatementTreeImpl createModuleStatement(InternalSyntaxToken createKeyword,
 			InternalSyntaxToken moduleType, InternalSyntaxToken moduleKeyword, IdentifierTree indentifier,
-			Optional<List<StatementTree>> optional, InternalSyntaxToken endKeyword, InternalSyntaxToken moduleKeyword2,
+			Optional<List<StatementTree>> statements, InternalSyntaxToken endKeyword, InternalSyntaxToken moduleKeyword2,
 			InternalSyntaxToken semi) {
-		List<StatementTree> moduleStatementsList = optionalList(optional);
+		
 		return new CreateModuleStatementTreeImpl(createKeyword, moduleType, moduleKeyword, indentifier,
-				moduleStatementsList, endKeyword, moduleKeyword2);
+				statements(statements), endKeyword, moduleKeyword2);
 	}
 
 	public ResultSetTreeImpl resultSet(InternalSyntaxToken dynamicKeyword, InternalSyntaxToken resultKeyword,
@@ -1317,8 +1317,11 @@ public class TreeFactory {
 		return pathElement;
 	}
 	
-	public PathElementTreeImpl pathElement(IndexTreeImpl index) {
+	public PathElementTreeImpl pathElement(Optional<PathElementTypeTreeImpl> type, IndexTreeImpl index) {
 		PathElementTreeImpl pathElement = new PathElementTreeImpl();
+		if (type.isPresent()){
+			pathElement.type(type.get());
+		}
 		pathElement.index(index);
 		return pathElement;
 	}
