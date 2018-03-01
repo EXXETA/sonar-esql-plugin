@@ -1317,8 +1317,11 @@ public class TreeFactory {
 		return pathElement;
 	}
 	
-	public PathElementTreeImpl pathElement(IndexTreeImpl index) {
+	public PathElementTreeImpl pathElement(Optional<PathElementTypeTreeImpl> type, IndexTreeImpl index) {
 		PathElementTreeImpl pathElement = new PathElementTreeImpl();
+		if (type.isPresent()){
+			pathElement.type(type.get());
+		}
 		pathElement.index(index);
 		return pathElement;
 	}

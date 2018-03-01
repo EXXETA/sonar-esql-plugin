@@ -871,7 +871,7 @@ public class EsqlGrammar {
 										b.optional(INDEX())
 										
 								),
-								f.pathElement(INDEX()),
+								f.pathElement(b.optional(PATH_ELEMENT_TYPE()),INDEX()),
 								f.pathElement(PATH_ELEMENT_TYPE())
 								)
 					));

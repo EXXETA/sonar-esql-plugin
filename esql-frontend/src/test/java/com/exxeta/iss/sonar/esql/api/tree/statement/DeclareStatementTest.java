@@ -34,7 +34,8 @@ public class DeclareStatementTest extends EsqlTreeModelTest<DeclareStatementTree
 		assertThat(Kind.DECLARE_STATEMENT)
 		.matches("DECLARE aaa NAMESPACE 'com.exxeta.test';")
 		.matches("DECLARE Schema1 NAME 'Joe';")
-		.matches("DECLARE var CHARACTER CASE field IN('1','2','3', '4', '5', '6') WHEN TRUE THEN	REPLACE(field, '.',',')	ELSE field END;");
+		.matches("DECLARE var CHARACTER CASE field IN('1','2','3', '4', '5', '6') WHEN TRUE THEN	REPLACE(field, '.',',')	ELSE field END;")
+		.matches("DECLARE a NAMESPACE FIELDNAMESPACE(InputRoot.XMLNSC.(XML.Element)[1]);");
 
 	}
 	
