@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -71,7 +71,7 @@ public class HardCodedCredentialsCheck extends DoubleDispatchVisitorCheck {
 		if (fieldReference==null) {
 			return false;
 		}
-		return isPasswordVariableName(fieldReference.pathElement().name().name().text()) || isPasswordVariableName(fieldReference.pathElements());
+		return isPasswordVariableName(fieldReference.pathElement().name().name().name()) || isPasswordVariableName(fieldReference.pathElements());
 	}
 
 	private boolean isPasswordVariableName(IdentifierTree identifier) {
@@ -95,7 +95,7 @@ public class HardCodedCredentialsCheck extends DoubleDispatchVisitorCheck {
 		while (nameListIter.hasNext()) {
 			PathElementTree pathElement= nameListIter.next();
 			if (pathElement.name()!=null && pathElement.name().name()!=null && 
-					isPasswordVariableName(pathElement.name().name().text())) {
+					isPasswordVariableName(pathElement.name().name().name())) {
 				return true;
 			}
 		}

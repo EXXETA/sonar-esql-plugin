@@ -15,15 +15,32 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.InputFile.Type;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.FileMetadata;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
-import org.sonar.api.config.MapSettings;
-import org.sonar.api.config.Settings;
+import org.sonar.api.config.internal.MapSettings;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableSet;
+/*
+ * Sonar ESQL Plugin
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * http://www.exxeta.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 public class TraceSensorTest {
 	  private SensorContextTester context;
-	 private Settings settings;
+	 private MapSettings settings;
 	 
 	 private File moduleBaseDir = new File("src/test/resources/codecoverage/");
 	 
@@ -32,17 +49,21 @@ public class TraceSensorTest {
 	  private TraceSensor sensor;
 	 
 	@Before
-	  public void init() {
-	    settings = new MapSettings();
+	  public void init() throws FileNotFoundException {
+		settings = new MapSettings();
 	    settings.setProperty("sonar.esql.trace.reportPaths", "TraceSensorTest/trace.txt");
 	    context = SensorContextTester.create(moduleBaseDir);
 	    context.setSettings(settings);
 
 	    InputFile inputFile1 = inputFile("file1.esql", Type.MAIN);
+	    InputFile inputFile2 = inputFile("file2.esql", Type.MAIN);
+	    InputFile inputFile3 = inputFile("file3.esql", Type.MAIN);
 	    //inputFile("tests/file1.esql", Type.TEST);
 
 	    linesOfCode = new HashMap<>();
 	    linesOfCode.put(inputFile1, ImmutableSet.of(1, 2, 3, 4));
+	    linesOfCode.put(inputFile2, null);
+	    linesOfCode.put(inputFile3, ImmutableSet.of(1, 2, 3, 4));
 	    
 	    
 	    sensor = new TraceSensor();
@@ -51,18 +72,15 @@ public class TraceSensorTest {
 	    
 	  }
 
-	  private InputFile inputFile(String relativePath, Type type) {
-	    DefaultInputFile inputFile = new DefaultInputFile("moduleKey", relativePath)
+	  private InputFile inputFile(String relativePath, Type type) throws FileNotFoundException {
+	    DefaultInputFile inputFile = new TestInputFileBuilder("moduleKey", relativePath)
 	      .setModuleBaseDir(moduleBaseDir.toPath())
 	      .setLanguage("esql")
 	      .setType(type)
-	      .setCharset(Charsets.UTF_8);
+	      .setCharset(Charsets.UTF_8)
+	      .build();
 
-	    try {
-			inputFile.initMetadata(new FileMetadata().readMetadata(new FileReader(   inputFile.file())));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
+	    inputFile.setMetadata(new FileMetadata().readMetadata(new FileReader(   inputFile.file())));
 	    context.fileSystem().add(inputFile);
 
 	    return inputFile;
@@ -75,7 +93,14 @@ public class TraceSensorTest {
 
 	    assertThat(context.lineHits("moduleKey:file1.js", 1)).isNull();
 	  }
-	  
+
+	  @Test
+	  public void folder_test() {
+	    sensor.execute(context,linesOfCode,new String[]{"TraceSensorTest"});
+	    assertThat(sensor.toString()).isEqualTo("TraceSensor");
+	    assertThat(context.conditions("moduleKey:file1.esql", 1)).isEqualTo(1);
+	  }
+
 	  @Test
 	  public void test_overall_coverage() {
 	    sensor.execute(context,linesOfCode,new String[]{"TraceSensorTest/trace.txt"});

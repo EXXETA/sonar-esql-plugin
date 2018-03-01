@@ -1,0 +1,12 @@
+<p>This rule applies whenever the deprecated methods are used in the ESQL file. </p>
+<p><code>BITSTREAM</code> should not be used it is deprecated. Rather use <code>ASBITSTREAM</code>.</p>
+
+<p>Deprecated methods should not be used. </p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+	SET refEnv.operationId = BITSTREAM(Environment.LogData.serviceOperationName);
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+	SET refEnv.operationId = ASBITSTREAMEnvironment.LogData.serviceOperationName,,1208);
+</pre>

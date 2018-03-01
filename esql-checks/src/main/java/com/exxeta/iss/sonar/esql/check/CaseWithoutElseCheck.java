@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -41,12 +41,8 @@ public class CaseWithoutElseCheck extends DoubleDispatchVisitorCheck {
 
 		if (tree.elseKeyword() == null) {
 			List<WhenClauseExpressionTreeImpl> whens = tree.whenClauses();
-			if (whens.isEmpty()) {
-				addIssue(new PreciseIssue(this, new IssueLocation(tree, MESSAGE)));
-			} else {
-				WhenClauseExpressionTree lastWhen = whens.get(whens.size() - 1);
-				addIssue(new PreciseIssue(this, new IssueLocation(tree.caseKeyword(), lastWhen, MESSAGE)));
-			}
+			WhenClauseExpressionTree lastWhen = whens.get(whens.size() - 1);
+			addIssue(new PreciseIssue(this, new IssueLocation(tree.caseKeyword(), lastWhen, MESSAGE)));
 		}
 
 		super.visitCaseFunction(tree);
@@ -54,15 +50,11 @@ public class CaseWithoutElseCheck extends DoubleDispatchVisitorCheck {
 
 	@Override
 	public void visitCaseStatement(CaseStatementTree tree) {
-		  if(tree.elseKeyword()==null){
-			  List<WhenClauseTreeImpl> whens = tree.whenClauses();
-			  if (whens.isEmpty()){
-				  addIssue(new PreciseIssue(this, new IssueLocation(tree, MESSAGE)));
-			  } else {
-				  WhenClauseTree lastWhen = whens.get(whens.size()-1);
-				  addIssue(new PreciseIssue(this, new IssueLocation(tree.caseKeyword(), lastWhen, MESSAGE)));
-			  }
-		  }
+		if (tree.elseKeyword() == null) {
+			List<WhenClauseTreeImpl> whens = tree.whenClauses();
+			WhenClauseTree lastWhen = whens.get(whens.size() - 1);
+			addIssue(new PreciseIssue(this, new IssueLocation(tree.caseKeyword(), lastWhen, MESSAGE)));
+		}
 		super.visitCaseStatement(tree);
 	}
 

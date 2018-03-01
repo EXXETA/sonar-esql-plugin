@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,8 +17,14 @@
  */
 package com.exxeta.iss.sonar.esql.api.visitors;
 
+import java.io.IOException;
+import java.net.URI;
+
 public interface EsqlFile {
 
+	  /**
+	   * @deprecated use {@link EsqlFile#fileName()} or {@link EsqlFile#uri()}
+	   */
   String relativePath();
 
   /**
@@ -26,5 +32,11 @@ public interface EsqlFile {
    */
   String fileName();
 
-  String contents();
+  String contents() throws IOException;
+  
+  /**
+   * Identifier of the file. The only guarantee is that it is unique in the project.
+   * You should not assume it is a file:// URI.
+   */
+  URI uri();
 }

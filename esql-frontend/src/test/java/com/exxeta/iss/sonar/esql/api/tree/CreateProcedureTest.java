@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -53,6 +53,12 @@ public class CreateProcedureTest extends EsqlTreeModelTest<CreateProcedureStatem
 		assertEquals(tree.createKeyword().text(),"CREATE");
 		assertNotNull(tree.routineType());
 		assertNotNull(tree.identifier());
+		assertNotNull(tree.identifier().name());
+		assertNotNull(tree.identifier().toString());
+		assertNotNull(tree.identifier().symbol());
+		assertNull(tree.identifier().scope());
+		
+		
 		assertNotNull(tree.openingParenthesis());
 		assertNotNull(tree.parameterList());
 		assertNotNull(tree.closingParenthesis());

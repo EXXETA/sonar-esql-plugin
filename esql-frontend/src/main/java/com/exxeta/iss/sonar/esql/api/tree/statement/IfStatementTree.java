@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -43,5 +43,7 @@ public interface IfStatementTree extends StatementTree {
 	SyntaxToken ifKeyword2();
 
 	SyntaxToken semiToken();
+
+	boolean hasElse();
 
 }

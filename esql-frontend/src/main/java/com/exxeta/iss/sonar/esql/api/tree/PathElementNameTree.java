@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,13 +18,15 @@
 package com.exxeta.iss.sonar.esql.api.tree;
 
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
+import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 
 public interface PathElementNameTree extends Tree{
 	SyntaxToken nameCurlyOpen();
 	ExpressionTree nameExpression();
 	SyntaxToken nameCurlyClose();
-	SyntaxToken name();
+	IdentifierTree name();
+	SyntaxToken star();
 
 	
 }

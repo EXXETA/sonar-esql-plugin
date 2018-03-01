@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,6 +24,7 @@ import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
+import com.exxeta.iss.sonar.esql.tree.impl.expression.IdentifierTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.google.common.collect.Iterators;
 
@@ -31,7 +32,8 @@ public class PathElementNameTreeImpl extends EsqlTree implements PathElementName
 	private InternalSyntaxToken nameCurlyOpen;
 	private ExpressionTree nameExpression;
 	private InternalSyntaxToken nameCurlyClose;
-	private InternalSyntaxToken name;
+	private IdentifierTreeImpl name;
+	private InternalSyntaxToken star;
 
 	public PathElementNameTreeImpl(InternalSyntaxToken nameCurlyOpen, ExpressionTree nameExpression,
 			InternalSyntaxToken nameCurlyClose) {
@@ -41,8 +43,12 @@ public class PathElementNameTreeImpl extends EsqlTree implements PathElementName
 
 	}
 
-	public PathElementNameTreeImpl(InternalSyntaxToken name) {
+	public PathElementNameTreeImpl(IdentifierTreeImpl name) {
 		this.name = name;
+
+	}
+	public PathElementNameTreeImpl(InternalSyntaxToken star) {
+		this.star = star;
 
 	}
 	@Override
@@ -61,8 +67,13 @@ public class PathElementNameTreeImpl extends EsqlTree implements PathElementName
 	}
 
 	@Override
-	public InternalSyntaxToken name() {
+	public IdentifierTreeImpl name() {
 		return name;
+	}
+
+	@Override
+	public InternalSyntaxToken star() {
+		return star;
 	}
 
 	@Override
@@ -77,7 +88,7 @@ public class PathElementNameTreeImpl extends EsqlTree implements PathElementName
 
 	@Override
 	public Iterator<Tree> childrenIterator() {
-		return Iterators.forArray(nameCurlyOpen, nameExpression, nameCurlyClose, name);
+		return Iterators.forArray(nameCurlyOpen, nameExpression, nameCurlyClose, name, star);
 	}
 
 }

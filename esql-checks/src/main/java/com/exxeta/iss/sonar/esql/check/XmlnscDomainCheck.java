@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,51 +17,64 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
+import java.util.List;
+
 import org.sonar.check.Rule;
 
 import com.exxeta.iss.sonar.esql.api.tree.FieldReferenceTree;
-import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
+import com.exxeta.iss.sonar.esql.tree.SyntacticEquivalence;
 import com.exxeta.iss.sonar.esql.tree.expression.LiteralTree;
 import com.google.common.collect.ImmutableList;
 
-@Rule(key="XmlnscDomain")
-public class XmlnscDomainCheck extends DoubleDispatchVisitorCheck{
+@Rule(key = "XmlnscDomain")
+public class XmlnscDomainCheck extends DoubleDispatchVisitorCheck {
 
-	ImmutableList<String> rootElements = ImmutableList.of("Root", "IntputRoot", "OutputRoot");
-	ImmutableList<String> wrongDomain = ImmutableList.of("XML", "XMLNS");
-	
-	
+	private static final ImmutableList<String> ROOT_ELEMENTS = ImmutableList.of("Root", "InputRoot", "OutputRoot");
+	private static final ImmutableList<String> WRONG_DOMAINS = ImmutableList.of("XML", "XMLNS");
+	private static final String MESSAGE = "Use the XMLNSC domain instead of %s.";
+
 	@Override
 	public void visitFieldReference(FieldReferenceTree tree) {
 		super.visitFieldReference(tree);
-		if (rootElements.contains(tree.pathElement().name().name().text())
-				&& !tree.pathElements().isEmpty() 
-				&& tree.pathElements().get(0)!=null
-				&& tree.pathElements().get(0).name()!=null
-				&& tree.pathElements().get(0).name().name()!=null){
-			String domain = tree.pathElements().get(0).name().name().text();
-			checkDomain(domain, tree.pathElements().get(0));
-		}
-	}
-	
-	@Override
-	public void visitCreateStatement(CreateStatementTree tree) {
-		super.visitCreateStatement(tree);
-		if (tree.domainExpression()!=null && tree.domainExpression().is(Kind.STRING_LITERAL)){
-			String domain = ((LiteralTree)tree.domainExpression()).value();
-			domain = domain.substring(1, domain.length()-1);
-			checkDomain(domain, tree.domainExpression());
+		if (rootIs(tree, WRONG_DOMAINS)) {
+			String domain = tree.pathElement().name().name().name();
+			addIssue(tree, String.format(MESSAGE, domain));
+		} else if (rootIs(tree, ROOT_ELEMENTS) && secondElementIs(tree, WRONG_DOMAINS)) {
+			String domain = tree.pathElements().get(0).name().name().name();
+			addIssue(tree, String.format(MESSAGE, domain));
 		}
 	}
 
-	private void checkDomain(String domain, Tree tree) {
-		if (wrongDomain.contains(domain)){
-			addIssue(tree, "Use the XMLNSC domain instead of "+domain+".");
+	private boolean secondElementIs(FieldReferenceTree tree, List<String> names) {
+		return !tree.pathElements().isEmpty() 
+				&& tree.pathElements().get(0).name() != null
+				&& tree.pathElements().get(0).name().name() != null
+				&& names.contains(tree.pathElements().get(0).name().name().name());
+	}
+
+	private boolean rootIs(FieldReferenceTree tree, List<String> names) {
+		if (tree.pathElement().name().name()!=null){
+			return names.contains(tree.pathElement().name().name().name());
+		} else {
+			return false;
 		}
 	}
-	
-	
+
+	@Override
+	public void visitCreateStatement(CreateStatementTree tree) {
+		super.visitCreateStatement(tree);
+		if (tree.domainExpression() != null
+				&& SyntacticEquivalence.skipParentheses(tree.domainExpression()).is(Kind.STRING_LITERAL)) {
+			String domain = ((LiteralTree) SyntacticEquivalence.skipParentheses(tree.domainExpression())).value();
+			domain = domain.substring(1, domain.length() - 1);
+			if (WRONG_DOMAINS.contains(domain)) {
+				addIssue(tree, String.format(MESSAGE, domain));
+			}
+		}
+	}
+
+
 }

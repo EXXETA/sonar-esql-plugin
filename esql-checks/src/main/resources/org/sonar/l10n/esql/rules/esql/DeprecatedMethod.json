@@ -1,0 +1,16 @@
+{
+  "title": "Deprecated methods should not be used.",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "240min"
+  },
+  "tags": [
+   "misra",
+   "cert",
+   "deprecated"
+    
+  ],
+  "defaultSeverity": "Major"
+}

@@ -1,0 +1,15 @@
+{
+  "title": "The filter node cannot modify the message",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "60min"
+  },
+  "tags": [
+  
+   "correctness"
+    
+  ],
+  "defaultSeverity": "Critical"
+}

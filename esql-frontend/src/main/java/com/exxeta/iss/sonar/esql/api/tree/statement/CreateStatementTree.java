@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,37 +19,32 @@ package com.exxeta.iss.sonar.esql.api.tree.statement;
 
 import com.exxeta.iss.sonar.esql.api.tree.FieldReferenceTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
-import com.exxeta.iss.sonar.esql.tree.impl.declaration.FieldReferenceTreeImpl;
-import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
-import com.exxeta.iss.sonar.esql.tree.impl.statement.FromClauseTreeImpl;
-import com.exxeta.iss.sonar.esql.tree.impl.statement.ParseClauseTreeImpl;
-import com.exxeta.iss.sonar.esql.tree.impl.statement.RepeatClauseTreeImpl;
-import com.exxeta.iss.sonar.esql.tree.impl.statement.ValuesClauseTreeImpl;
+import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 
 public interface CreateStatementTree extends StatementTree {
-	InternalSyntaxToken createKeyword();
+	SyntaxToken createKeyword();
 
-	InternalSyntaxToken qualifierName();
+	SyntaxToken qualifierName();
 
-	InternalSyntaxToken qualifierOfKeyword();
+	SyntaxToken qualifierOfKeyword();
 
 	FieldReferenceTree target();
 	
-	InternalSyntaxToken asKeyword();
+	SyntaxToken asKeyword();
 
-	FieldReferenceTreeImpl aliasFieldReference();
+	FieldReferenceTree aliasFieldReference();
 
-	InternalSyntaxToken domainKeyword();
+	SyntaxToken domainKeyword();
 
 	ExpressionTree domainExpression();
 
-	RepeatClauseTreeImpl repeatClause();
+	RepeatClauseTree repeatClause();
 
-	ValuesClauseTreeImpl valuesClause();
+	ValuesClauseTree valuesClause();
 
-	FromClauseTreeImpl fromClause();
+	FromClauseTree fromClause();
 
-	ParseClauseTreeImpl parseClause();
+	ParseClauseTree parseClause();
 
-	InternalSyntaxToken semi();
+	SyntaxToken semi();
 }

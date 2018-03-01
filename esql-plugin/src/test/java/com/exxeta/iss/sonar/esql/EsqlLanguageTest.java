@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,17 +21,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.sonar.api.config.MapSettings;
-import org.sonar.api.config.Settings;
+import org.sonar.api.config.internal.MapSettings;
 
 public class EsqlLanguageTest {
-	  private Settings settings;
+	  private MapSettings settings;
 	  private EsqlLanguage esqlLanguage;
 
 	  @Before
 	  public void setUp() {
 	    settings = new MapSettings();
-	    esqlLanguage = new EsqlLanguage(settings);
+	    esqlLanguage = new EsqlLanguage(settings.asConfig());
 	  }
 
 	  @Test

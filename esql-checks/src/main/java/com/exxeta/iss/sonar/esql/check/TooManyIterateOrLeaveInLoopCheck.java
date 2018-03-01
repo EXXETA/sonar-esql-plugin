@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,8 +21,6 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
-
-import javax.annotation.Nullable;
 
 import org.sonar.check.Rule;
 
@@ -150,9 +148,9 @@ public class TooManyIterateOrLeaveInLoopCheck extends DoubleDispatchVisitorCheck
 		jumpTargets.pop();
 	}
 
-	private void increaseNumberOfJumpInScopes(SyntaxToken jump, @Nullable LabelTree label) {
+	private void increaseNumberOfJumpInScopes(SyntaxToken jump, LabelTree label) {
+		String labelName = label.name().name();
 		for (JumpTarget jumpTarget : jumpTargets) {
-			String labelName = label == null ? null : label.name().name();
 			jumpTarget.jumps.add(jump);
 
 			if (Objects.equal(labelName, jumpTarget.label)) {
@@ -172,26 +170,5 @@ public class TooManyIterateOrLeaveInLoopCheck extends DoubleDispatchVisitorCheck
 		}
 	}
 
-	/*
-	 * 
-	 * @Override public void init() { subscribeTo(EsqlGrammar.beginEndStatement,
-	 * EsqlGrammar.whileStatement, EsqlGrammar.repeatStatement,
-	 * EsqlGrammar.loopStatement); }
-	 * 
-	 * 
-	 * @Override public void visitNode(AstNode astNode) { if
-	 * (astNode.getFirstChild(EsqlGrammar.LABEL)!=null){ String labelName =
-	 * astNode.getFirstChild(EsqlGrammar.LABEL).getTokenOriginalValue(); int
-	 * countIterate = 0; int countLeave = 0; for (AstNode statement:
-	 * astNode.getDescendants(EsqlGrammar.iterateStatement)){ String innerLabel
-	 * = statement.getFirstChild(EsqlGrammar.LABEL).getTokenOriginalValue(); if
-	 * (innerLabel.equals(labelName)){ countIterate++; } } for (AstNode
-	 * statement: astNode.getDescendants(EsqlGrammar.leaveStatement)){ String
-	 * innerLabel =
-	 * statement.getFirstChild(EsqlGrammar.LABEL).getTokenOriginalValue(); if
-	 * (innerLabel.equals(labelName)){ countLeave++; } } if (countIterate>1 ||
-	 * countLeave>1){ getContext().createLineViolation(this,
-	 * "Loops should not contain more than a single \"ITERATE\" or \"LEAVE\" statement."
-	 * , astNode); } } }
-	 */
+	
 }

@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +17,7 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
-import java.util.List;
+import java.util.Set;
 
 import org.sonar.check.Rule;
 
@@ -27,13 +27,13 @@ import com.exxeta.iss.sonar.esql.api.tree.expression.BinaryExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.UnaryExpressionTree;
 import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitorCheck;
 import com.exxeta.iss.sonar.esql.tree.expression.LiteralTree;
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
 @Rule(key="BooleanLiteral")
 public class BooleanLiteralCheck extends SubscriptionVisitorCheck {
 	@Override
-	  public List<Kind> nodesToVisit() {
-	    return ImmutableList.of(Kind.EQUAL_TO, Kind.NOT_EQUAL_TO, Kind.CONDITIONAL_AND, Kind.CONDITIONAL_OR, Kind.LOGICAL_COMPLEMENT);
+	  public Set<Kind> nodesToVisit() {
+	    return ImmutableSet.of(Kind.EQUAL_TO, Kind.NOT_EQUAL_TO, Kind.CONDITIONAL_AND, Kind.CONDITIONAL_OR, Kind.LOGICAL_COMPLEMENT);
 	  }
 
 	  @Override

@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +18,7 @@
 package com.exxeta.iss.sonar.esql.check;
 
 import java.util.Collections;
-import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.sonar.check.Rule;
@@ -46,8 +46,8 @@ public class FileNameCheck extends SubscriptionVisitorCheck {
 	
 	
 	@Override
-	public List<Kind> nodesToVisit() {
-		return Collections.emptyList();
+	public Set<Kind> nodesToVisit() {
+		return Collections.emptySet();
 	}
 
 	@Override

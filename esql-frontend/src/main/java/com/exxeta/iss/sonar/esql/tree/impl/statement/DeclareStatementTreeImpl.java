@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -95,7 +95,7 @@ public class DeclareStatementTreeImpl  extends EsqlTree implements DeclareStatem
 
 
 	@Override
-	public InternalSyntaxToken namesapce() {
+	public InternalSyntaxToken namespace() {
 		return namesapce;
 	}
 

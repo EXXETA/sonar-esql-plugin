@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -68,7 +68,7 @@ public class FieldReferenceTest extends EsqlTreeModelTest<FieldReferenceTree> {
 	
 	@Test
 	public void model() throws Exception{
-		FieldReferenceTree tree = parse("(XML.Element)NSpace1:Element1[<2].{nsexp()}:{nameexp()}.*:abc.:aaa", Kind.FIELD_REFERENCE);
+		FieldReferenceTree tree = parse("(XML.Element)NSpace1:Element1[<2].{nsexp()}:{nameexp()}.*:abc.:aaa.*", Kind.FIELD_REFERENCE);
 		assertNotNull(tree);
 		assertNotNull(tree.pathElement());
 		PathElementTree firstElement = tree.pathElement();
@@ -99,6 +99,7 @@ public class FieldReferenceTest extends EsqlTreeModelTest<FieldReferenceTree> {
 		assertNotNull(index.direction());
 		assertNotNull(index.index());
 		assertNotNull(index.closeBracket());
+		assertNotNull(tree.pathElements().get(3).name().star());
 	}
 	
 }

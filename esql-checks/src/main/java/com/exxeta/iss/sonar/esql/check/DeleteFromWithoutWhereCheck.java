@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,19 +17,40 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
+import java.util.List;
+
 import org.sonar.check.Rule;
 
+import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.DeleteFromStatementTree;
-import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
+import com.exxeta.iss.sonar.esql.tree.expression.LiteralTree;
 
-@Rule(key="DeleteFromWithoutWhere")
-public class DeleteFromWithoutWhereCheck extends DoubleDispatchVisitorCheck {
+@Rule(key = "DeleteFromWithoutWhere")
+public class DeleteFromWithoutWhereCheck extends AbstractPassthruCheck {
+
+	private static final String MESSAGE = "Add a where caluse to this DELETE FROM statement.";
 
 	@Override
 	public void visitDeleteFromStatement(DeleteFromStatementTree tree) {
-		if (tree.whereExpression()==null){
-			addIssue(tree, "Add a where caluse to this DELETE FROM statement.");
+		if (tree.whereExpression() == null) {
+			addIssue(tree, MESSAGE);
 		}
 	}
-	
+
+	@Override
+	protected void checkLiterals(Tree tree, List<LiteralTree> literals) {
+		if (!literals.isEmpty() && literals.get(0).value().toUpperCase().matches("'.*DELETE\\s+FROM.*")) {
+			boolean hasWhereClause = false;
+			for (LiteralTree literal : literals) {
+				if (literal.value().toUpperCase().matches(".*WHERE.*")) {
+					hasWhereClause = true;
+				}
+
+			}
+			if (!hasWhereClause) {
+				addIssue(tree, MESSAGE);
+			}
+		}
+	}
+
 }

@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,7 +34,7 @@ public final class CheckList {
 
   public static List<Class> getChecks() {
     return ImmutableList.<Class> of(
-        CommentRegularExpressionCheck.class,
+    	CommentRegularExpressionCheck.class,
         ElseIfWithoutElseCheck.class,
         FileNameCheck.class,
         FunctionNameCheck.class,
@@ -77,7 +77,6 @@ public final class CheckList {
         SelectAllCheck.class,
         SleepCheck.class,
         EvalCheck.class,
-        BitstreamCheck.class,
         CaseWithTooManyWhensCheck.class,
         InitializeVariablesCheck.class,
         UndocumentedModuleCheck.class,
@@ -85,10 +84,39 @@ public final class CheckList {
         TooManyParametersCheck.class,
         VariablesSubtreeCheck.class,
         XmlnscDomainCheck.class,
-        RoutineWithExcessiveReturnsCheck.class
+        RoutineWithExcessiveReturnsCheck.class,
+        KeyWordCaseCheck.class,
+        CyclomaticComplexityCheck.class,
+        PassThruStatementCheck.class,
+        SubElementNameCheck.class,
+        FunctionProcedureLengthCheck.class,
+        FilterNodeModifyMessageCheck.class,
+        FilterNodeHaveOnlyOneReturnCheck.class,
+        NavigatingTreeCouldBeReferenceCheck.class,
+        UnusedVariableCheck.class,
+        DeprecatedMethodCheck.class,
+        ProcessInvokingItselfCheck.class,
+        InsertBlankLineBetweenFuncProcCheck.class,
+        BlankLineBeforeCommentsCheck.class,
+        RoutineCommentsCheck.class,
+		PropagateConsistencyCheck.class, 
+		UnreachableCodeCheck.class, 
+		CommentedCodeCheck.class,
+		SelfAssignmentCheck.class,
+        ConditionBracesCheck.class,
+        TrailingCommentsCheck.class,
+        CommentsCheck.class,
+        DeclareCombineCheck.class,
+        BinaryOperatorSeparatedBySpaceCheck.class
+        
+       
+        
+      
+       
+        
         
         /*
-        
+        The process is invoking itself. This may be a circular reference(SI)
  Backlog       
         
 - Use the SOAP domain not soap in the xmlnsc domain

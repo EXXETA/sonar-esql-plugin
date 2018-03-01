@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,7 +36,7 @@ public class MetricsTest extends EsqlTreeModelTest<ProgramTree> {
   public void complexity() {
     String path = "src/test/resources/metrics/complexity.esql";
     Tree tree = parse(new File(path));
-    assertThat(new ComplexityVisitor().getComplexity(tree)).isEqualTo(7);
+    assertThat(new ComplexityVisitor().getComplexity(tree)).isEqualTo(16);
   }
 
   @Test

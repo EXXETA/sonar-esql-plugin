@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,8 +27,6 @@ import com.exxeta.iss.sonar.esql.api.visitors.EsqlVisitorContext;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 import com.exxeta.iss.sonar.esql.utils.TestUtils;
 
-import static com.exxeta.iss.sonar.esql.compat.CompatibilityHelper.wrap;
-
 public abstract class TypeTest extends EsqlTreeModelTest<Tree> {
   protected ProgramTree ROOT_NODE;
   protected SymbolModel SYMBOL_MODEL;
@@ -40,6 +38,6 @@ public abstract class TypeTest extends EsqlTreeModelTest<Tree> {
   protected void setUp(String filename) throws Exception {
     InputFile file = TestUtils.createTestInputFile("src/test/resources/ast/resolve/type/", filename);
     ROOT_NODE = parse(file.contents());
-    SYMBOL_MODEL = new EsqlVisitorContext(ROOT_NODE, wrap(file), null).getSymbolModel();
+    SYMBOL_MODEL = new EsqlVisitorContext(ROOT_NODE, file, null).getSymbolModel();
   }
 }

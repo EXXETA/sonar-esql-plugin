@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,10 +17,11 @@
  */
 package com.exxeta.iss.sonar.esql.highlighter;
 
-import static com.exxeta.iss.sonar.esql.compat.CompatibilityHelper.wrap;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 
@@ -30,29 +31,29 @@ import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.DefaultTextPointer;
 import org.sonar.api.batch.fs.internal.DefaultTextRange;
 import org.sonar.api.batch.fs.internal.FileMetadata;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.symbol.NewSymbolTable;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
-import com.exxeta.iss.sonar.esql.compat.CompatibleInputFile;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 import com.google.common.io.Files;
 
 public class HighlightSymbolTableBuilderTest extends EsqlTreeModelTest<Tree> {
 
   private SensorContextTester sensorContext;
-  private CompatibleInputFile inputFile;
+  private DefaultInputFile inputFile;
 
-  private NewSymbolTable newSymbolTable(String filename) {
+  private NewSymbolTable newSymbolTable(String filename) throws FileNotFoundException  {
     File moduleBaseDir = new File("src/test/resources/highlighter/");
     sensorContext = SensorContextTester.create(moduleBaseDir);
-    DefaultInputFile defaultInputFile = new DefaultInputFile("moduleKey", filename)
+    inputFile = new TestInputFileBuilder("moduleKey", filename)
       .setModuleBaseDir(moduleBaseDir.toPath())
-      .setCharset(StandardCharsets.UTF_8);
-    inputFile = wrap(defaultInputFile);
-    defaultInputFile.initMetadata(new FileMetadata().readMetadata(inputFile.file(), defaultInputFile.charset()));
+      .setCharset(StandardCharsets.UTF_8)
+      .build();
+    inputFile.setMetadata(new FileMetadata().readMetadata(new FileInputStream(inputFile.file()), inputFile.charset(), inputFile.absolutePath()));
 
-    return sensorContext.newSymbolTable().onFile(defaultInputFile);
+    return sensorContext.newSymbolTable().onFile(inputFile);
   }
 
   private static DefaultTextRange textRange(int line, int startColumn, int endColumn) {

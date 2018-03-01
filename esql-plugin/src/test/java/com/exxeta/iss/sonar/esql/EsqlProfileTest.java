@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -77,7 +77,7 @@ public class EsqlProfileTest {
   }
 
   /**
-   * SonarLint will inject a rule finder containing only the rules coming from the javascript repository
+   * SonarLint will inject a rule finder containing only the rules coming from the esql repository
    */
   private RuleFinder sonarLintRuleFinder() {
     return when(mock(RuleFinder.class).findByKey(anyString(), anyString())).thenAnswer(invocation -> {

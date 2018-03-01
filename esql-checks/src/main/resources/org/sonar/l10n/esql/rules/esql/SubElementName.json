@@ -1,0 +1,14 @@
+{
+  "title": "sub-elements should be in UpperCamel-case and elements containing simple value should be in lowercase.",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    
+    "standards"
+  ],
+  "defaultSeverity": "Major"
+}

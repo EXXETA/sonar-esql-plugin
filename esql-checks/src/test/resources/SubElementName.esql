@@ -1,0 +1,13 @@
+CREATE COMPUTE MODULE Module1
+
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+	      SET Environment.Variables.startVar.xyz ='ABC';
+	      SET Environment.Variables.Flag ='ABC';
+	      SET Environment.xyz ='true';
+	      SET Environment.Fault.faultcode ='soapenv:Client';
+	    
+		
+	END;
+
+END MODULE;

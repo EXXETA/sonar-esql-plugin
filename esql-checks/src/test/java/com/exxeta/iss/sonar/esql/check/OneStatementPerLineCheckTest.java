@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,8 +33,10 @@ public class OneStatementPerLineCheckTest {
 	EsqlCheckVerifier.issues(
 		      check,
 		      new File("src/test/resources/oneStatementPerLine.esql"))
-	.next().atLine(5).withMessage("Reformat the code to have only one statement per line.")
 	.next().atLine(6).withMessage("Reformat the code to have only one statement per line.")
+	.next().atLine(7).withMessage("Reformat the code to have only one statement per line.")
+	.next().atLine(9).withMessage("Reformat the code to have only one statement per line.")
+	.next().atLine(12).withMessage("Reformat the code to have only one statement per line.")
 	.noMore();
 	}
 }

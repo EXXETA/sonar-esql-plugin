@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -39,21 +39,21 @@ public class UnknownMessageDomainCheck extends DoubleDispatchVisitorCheck {
 			"MQCIH", "MQDLH", "MQIIH",  "MQMD", "MQMDE", "MQPCF", "MQRFH", "MQRFH2", "MQRFH2C", "MQRMH", "MQSAPH", "MQWIH",
 			"EmailOutputHeader", "EmailInputHeader", 
 			"Collection", "*", 
-			"DataObject", "IDOC", "SMQ_BMH", "SQL" 
+			"DataObject", "IDOC", "SMQ_BMH", "SQL",
+			"ComIbmAggregateReplyBody"
 		));
 	
 	
 	@Override
 	public void visitFieldReference(FieldReferenceTree tree) {
-		
-		String pathElement1 = tree.pathElement().name().name().text();
-		if (rootElements.contains(pathElement1) 
-			&& !tree.pathElements().isEmpty()
-			&& tree.pathElements().get(0).name()!=null
-			&&tree.pathElements().get(0).name().name()!=null){
-			String pathElement2 = tree.pathElements().get(0).name().name().text();
-			if (!domains.contains(pathElement2)){
-				addIssue(tree, "Unknown domain \""+pathElement2+"\".");
+		if (tree.pathElement().name().name() != null) {
+			String pathElement1 = tree.pathElement().name().name().name();
+			if (rootElements.contains(pathElement1) && !tree.pathElements().isEmpty()
+					&& tree.pathElements().get(0).name() != null && tree.pathElements().get(0).name().name() != null) {
+				String pathElement2 = tree.pathElements().get(0).name().name().name();
+				if (!domains.contains(pathElement2)) {
+					addIssue(tree, "Unknown domain \"" + pathElement2 + "\".");
+				}
 			}
 		}
 		super.visitFieldReference(tree);

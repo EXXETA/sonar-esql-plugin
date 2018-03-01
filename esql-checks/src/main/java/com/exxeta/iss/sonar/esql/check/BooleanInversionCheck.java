@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,8 +17,8 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.sonar.check.Rule;
 
@@ -31,8 +31,8 @@ import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
 import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
 import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitorCheck;
 import com.exxeta.iss.sonar.esql.tree.SyntacticEquivalence;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 
 @Rule(key="BooleanInversion")
 public class BooleanInversionCheck extends SubscriptionVisitorCheck {
@@ -45,8 +45,8 @@ public class BooleanInversionCheck extends SubscriptionVisitorCheck {
 			.build();
 
 	@Override
-	public List<Kind> nodesToVisit() {
-		return ImmutableList.of(Tree.Kind.LOGICAL_COMPLEMENT);
+	public Set<Kind> nodesToVisit() {
+		return ImmutableSet.of(Tree.Kind.LOGICAL_COMPLEMENT);
 	}
 	
 	@Override

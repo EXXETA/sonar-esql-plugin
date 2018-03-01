@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +19,7 @@ package com.exxeta.iss.sonar.esql.api.visitors;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Set;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
@@ -30,7 +30,7 @@ import com.google.common.base.Preconditions;
 		  private TreeVisitorContext context;
 		  private Collection<Tree.Kind> nodesToVisit;
 
-		  public abstract List<Tree.Kind> nodesToVisit();
+		  public abstract Set<Tree.Kind> nodesToVisit();
 
 		  public void visitNode(Tree tree) {
 		    // Default behavior : do nothing.

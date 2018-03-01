@@ -43,12 +43,30 @@
   	"SelectAll",
   	"Sleep",
   	"Eval",
-  	"Bitstream",
   	"CaseWithTooManyWhens",
   	"InitializeVariables",
   	"TooManyParameters",
   	"XmlnscDomain",
-  	"RoutineWithExcessiveReturns"
-  ]
+  	"RoutineWithExcessiveReturns",
+  	"KeyWordCaseCheck",
+  	"CyclomaticComplexity",
+  	"PassThruStatement",
+  	"SubElementName",
+  	"FunctionProcedureLength",
+  	"FilterNodeModifyMessage",
+  	"FilterNodeHaveOnlyOneReturn",
+  	"NavigatingTreeCouldBeReference",
+  	"UnusedVariable",
+  	"DeprecatedMethod",
+  	"BinaryOperatorSeparatedBySpace",
+  	"RoutineComments",
+  	"PropagateConsistency",
+    "UnreachableCode",
+    "Comments",
+    "DeclareCombine"
+    
+   
+   
+]
 }
   

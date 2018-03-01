@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,6 +49,24 @@ public class MissingNewlineAtEndOfFileCheckTest {
   @Test
   public void empty() {
     EsqlCheckVerifier.issues(check, new File(DIRECTORY, "empty.esql"))
+      .noMore();
+  }
+
+  @Test
+  public void onlySchemaPathSemi() {
+    EsqlCheckVerifier.issues(check, new File(DIRECTORY, "onlySchemaPathSemi.esql"))
+      .noMore();
+  }
+
+  @Test
+  public void onlySchemaPath() {
+    EsqlCheckVerifier.issues(check, new File(DIRECTORY, "onlySchemaPath.esql"))
+      .noMore();
+  }
+
+  @Test
+  public void onlySchema() {
+    EsqlCheckVerifier.issues(check, new File(DIRECTORY, "onlySchema.esql"))
       .noMore();
   }
 

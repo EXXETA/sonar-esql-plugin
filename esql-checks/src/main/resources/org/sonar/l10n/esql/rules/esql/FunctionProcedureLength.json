@@ -1,0 +1,14 @@
+{
+  "title": "The length of the function or procedure should not be higher than the given threshold value.",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "60min"
+  },
+  "tags": [
+    "complexity",
+    "readability"
+  ],
+  "defaultSeverity": "Major"
+}

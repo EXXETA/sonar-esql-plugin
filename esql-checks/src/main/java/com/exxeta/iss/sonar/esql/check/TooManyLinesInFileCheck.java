@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +17,7 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
-import java.util.List;
+import java.util.Set;
 
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
@@ -29,7 +29,7 @@ import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 import com.exxeta.iss.sonar.esql.api.visitors.FileIssue;
 import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitorCheck;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
 @Rule(key = "TooManyLinesInFile")
 @NoSqale
@@ -62,7 +62,7 @@ public class TooManyLinesInFileCheck extends SubscriptionVisitorCheck {
 	  }
 
 	  @Override
-	  public List<Tree.Kind> nodesToVisit() {
-	    return ImmutableList.of(Tree.Kind.TOKEN);
+	  public Set<Tree.Kind> nodesToVisit() {
+	    return ImmutableSet.of(Tree.Kind.TOKEN);
 	  }
 }

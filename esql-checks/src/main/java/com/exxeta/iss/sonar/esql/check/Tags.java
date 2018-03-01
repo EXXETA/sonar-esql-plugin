@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,7 +27,16 @@ public class Tags {
 	public static final String CERT = "cert";
 	public static final String PITFALL = "pitfall";
 	public static final String CONFUSING = "confusing";
-
+	public static final String DATABASE = "database";
+	public static final String PERFORMANCE  = "performance";
+	public static final String READABILITY  = "readability";
+	public static final String STANDARDS  = "standards";
+	public static final String COMPLEXITY  = "complexity";
+	public static final String COMPLETNESS  = "completness";
+	public static final String CORRECTNESS  = "correctness";
+	public static final String DEPRICATED  = "depricated";
+	
+	
 	private Tags() {
 		// This class only defines constants
 	}

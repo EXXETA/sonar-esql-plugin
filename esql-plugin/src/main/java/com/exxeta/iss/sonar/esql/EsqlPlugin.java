@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,9 +22,7 @@ import org.sonar.api.PropertyType;
 import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
 
-import com.exxeta.iss.sonar.esql.codecoverage.CodeCoverageExtension;
 import com.exxeta.iss.sonar.esql.metrics.EsqlMetrics;
-import com.google.common.collect.ImmutableList;
 
 public class EsqlPlugin implements Plugin {
 
@@ -57,9 +55,10 @@ public class EsqlPlugin implements Plugin {
 			PropertyDefinition.builder(FILE_SUFFIXES_KEY)
 			        .defaultValue(FILE_SUFFIXES_DEFVALUE)
 			        .name("File Suffixes")
-			        .description("Comma-separated list of suffixes for files to analyze.")
+			        .description("List of suffixes for files to analyze.")
 			        .subCategory(GENERAL)
 			        .category(ESQL_CATEGORY)
+			        .multiValues(true)
 			        .onQualifiers(Qualifiers.PROJECT)
 			        .build(),
 			      
@@ -79,6 +78,7 @@ public class EsqlPlugin implements Plugin {
 			      .name("IIB trace file")
 			      .description("Path to the IIB trace files containing coverage data. The path may be absolute or relative to the project base directory.")
 			      .onQualifiers(Qualifiers.PROJECT, Qualifiers.MODULE)
+			      .multiValues(true)
 			      .build()
 			);
 

@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,11 +17,14 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 
@@ -44,6 +47,8 @@ public class FileHeaderCheck extends DoubleDispatchVisitorCheck  {
 
 	private String[] expectedLines;
 	private Pattern searchPattern = null;
+
+	public static final Logger LOG = Loggers.get(FileHeaderCheck.class);
 
 
 	@Override
@@ -74,7 +79,12 @@ public class FileHeaderCheck extends DoubleDispatchVisitorCheck  {
 		        throw new IllegalArgumentException("[" + getClass().getSimpleName() + "] Unable to compile the regular expression: " + headerFormat, e);
 		      }
 		    }
-		    String fileContent = getContext().getEsqlFile().contents();
+		    String fileContent = null;
+		    try {
+				fileContent = getContext().getEsqlFile().contents();
+			} catch (IOException e) {
+				LOG.error("Cannot read file contents", e);
+			}
 
 		    Matcher matcher = searchPattern.matcher(fileContent);
 		    if (!matcher.find() || matcher.start() != 0) {

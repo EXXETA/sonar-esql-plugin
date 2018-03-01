@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +17,6 @@
  */
 package com.exxeta.iss.sonar.esql.highlighter;
 
-import static com.exxeta.iss.sonar.esql.compat.CompatibilityHelper.wrap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -36,11 +35,13 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.sonar.api.batch.fs.InputFile.Type;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.highlighting.TypeOfText;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
+import com.exxeta.iss.sonar.esql.api.visitors.EsqlFileImpl;
 import com.exxeta.iss.sonar.esql.api.visitors.TreeVisitorContext;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 import com.google.common.base.Charsets;
@@ -67,13 +68,14 @@ public class HighlighterVisitorTest extends EsqlTreeModelTest<ProgramTree> {
 
 	private void initFile(String text) throws IOException {
 		File file = tempFolder.newFile();
-		inputFile = new DefaultInputFile("moduleKey", file.getName())
+		inputFile = new TestInputFileBuilder("moduleKey", file.getName())
 				.setLanguage("esql")
 				.setType(Type.MAIN)
 				.setCharset(CHARSET)
-				.initMetadata(text);
+				.initMetadata(text)
+				.build();
 
-		when(visitorContext.getEsqlFile()).thenReturn(wrap(inputFile));
+		when(visitorContext.getEsqlFile()).thenReturn(new EsqlFileImpl(inputFile));
 	}
 
 	private void highlight(String string) throws Exception {

@@ -1,0 +1,10 @@
+CREATE COMPUTE MODULE a
+
+	CREATE PROCEDURE set()
+	BEGIN
+		SET a = a; --Noncompliant
+		SET OutputRoot.a = OutputRoot.a; --Noncompliant
+		SET a = OutputRoot.a; --Compliant
+	END;
+
+END MODULE;

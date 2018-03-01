@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +17,6 @@
  */
 package com.exxeta.iss.sonar.esql.metrics;
 
-import static com.exxeta.iss.sonar.esql.compat.CompatibilityHelper.wrap;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
@@ -32,11 +31,13 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.api.measures.FileLinesContextFactory;
 
+import com.exxeta.iss.sonar.esql.api.visitors.EsqlFileImpl;
 import com.exxeta.iss.sonar.esql.api.visitors.TreeVisitorContext;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
@@ -44,10 +45,11 @@ public class MetricsVisitorTest extends EsqlTreeModelTest {
 
   private static final File MODULE_BASE_DIR = new File("src/test/resources/metrics/");
 
-  private static final DefaultInputFile INPUT_FILE = new DefaultInputFile("moduleKey", "lines.esql")
+  private static final DefaultInputFile INPUT_FILE = new TestInputFileBuilder("moduleKey", "lines.esql")
     .setModuleBaseDir(MODULE_BASE_DIR.toPath())
     .setLanguage("esql")
-    .setType(InputFile.Type.MAIN);
+    .setType(InputFile.Type.MAIN)
+    .build();
 
   private static final String COMPONENT_KEY = "moduleKey:lines.esql";
   private FileLinesContext linesContext;
@@ -60,13 +62,13 @@ public class MetricsVisitorTest extends EsqlTreeModelTest {
     context.fileSystem().add(INPUT_FILE);
     linesContext = mock(FileLinesContext.class);
     treeVisitorContext = mock(TreeVisitorContext.class);
-    when(treeVisitorContext.getEsqlFile()).thenReturn(wrap(INPUT_FILE));
+    when(treeVisitorContext.getEsqlFile()).thenReturn(new EsqlFileImpl(INPUT_FILE));
     when(treeVisitorContext.getTopTree()).thenReturn(parse(INPUT_FILE.file()));
   }
 
   @Test
   public void test() {
-    MetricsVisitor metricsVisitor = createMetricsVisitor(false);
+    MetricsVisitor metricsVisitor = createMetricsVisitor();
     metricsVisitor.scanTree(treeVisitorContext);
     assertThat(context.measure(COMPONENT_KEY, CoreMetrics.FUNCTIONS).value()).isEqualTo(0);
     assertThat(context.measure(COMPONENT_KEY, CoreMetrics.STATEMENTS).value()).isEqualTo(1);
@@ -77,15 +79,15 @@ public class MetricsVisitorTest extends EsqlTreeModelTest {
 
   @Test
   public void save_executable_lines() {
-    final MetricsVisitor metricsVisitorWithSave = createMetricsVisitor(true);
+    final MetricsVisitor metricsVisitorWithSave = createMetricsVisitor();
     metricsVisitorWithSave.scanTree(treeVisitorContext);
     Mockito.verify(linesContext, atLeastOnce()).setIntValue(eq(CoreMetrics.EXECUTABLE_LINES_DATA_KEY), any(Integer.class), any(Integer.class));
   }
 
-  private MetricsVisitor createMetricsVisitor(boolean saveExecutableLines) {
+  private MetricsVisitor createMetricsVisitor() {
     FileLinesContextFactory linesContextFactory = mock(FileLinesContextFactory.class);
     when(linesContextFactory.createFor(INPUT_FILE)).thenReturn(linesContext);
-    return new MetricsVisitor(context, false, linesContextFactory, saveExecutableLines);
+    return new MetricsVisitor(context, false, linesContextFactory);
   }
 
 }

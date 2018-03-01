@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,6 +30,7 @@ public class FileHeaderCheckTest {
 
 		  private final File file1 = new File("src/test/resources/FileHeaderCheck/file1.esql");
 		  private final File file2 = new File("src/test/resources/FileHeaderCheck/file2.esql");
+		  private final File file4 = new File("src/test/resources/FileHeaderCheck/file4.esql");
 
 		  @Rule
 		  public ExpectedException thrown = ExpectedException.none();
@@ -89,6 +90,9 @@ public class FileHeaderCheckTest {
 
 		    EsqlCheckVerifier.issues(checkWithRegex("-- copyright 20\\d\\d\\r-- foo"), file2)
 		      .next().atLine(null);
+
+		    EsqlCheckVerifier.issues(checkWithRegex("\\/\\*\\r?\\nChange Log\\r?\\nNo. Incident Number  Jira Number  Description  Date Fixed  Updated ESQL/Node.*\\r?\\n\\*\\/"), file4)
+		      .noMore();;
 		  }
 
 		  @Test

@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,19 +17,23 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
+import java.util.List;
+
 import org.sonar.check.Rule;
 
+import com.google.common.collect.ImmutableList;
+
 @Rule(key="Sleep")
-public class SleepCheck extends AbstractDoNotUseFunctinCheck {
+public class SleepCheck extends AbstractDoNotUseFunctionCheck {
 
 	@Override
-	public String getMessage() {
+	public String getMessage(String functionName) {
 		return "SLEEP should not be used because it blocks the executing thread.";
 	}
 
 	@Override
-	public String getFunctionName() {
-		return "SLEEP";
+	public List<String> getFunctionNames() {
+		return ImmutableList.of("SLEEP");
 	}
 
 }

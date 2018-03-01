@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,9 +34,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
 
 /**
- * This visitor creates new symbols for not hoisted variables (like class name)
- * and implicitly declared variables (declared without keyword). Also it creates
- * usages for all known symbols.
+ * This visitor creates usages for all known symbols.
  */
 public class SymbolVisitor extends DoubleDispatchVisitor {
 
@@ -79,15 +77,17 @@ public class SymbolVisitor extends DoubleDispatchVisitor {
 			scan(identifier);
 			declaredBlockScopeNames.put(currentScope, identifier.name());
 		}
+		super.visitDeclareStatement(tree);
 	}
 
 	@Override
 	public void visitIdentifier(IdentifierTree tree) {
-		if (tree.is(Tree.Kind.IDENTIFIER_REFERENCE)) {
+		if (tree.is(Tree.Kind.IDENTIFIER_REFERENCE, Tree.Kind.PROPERTY_IDENTIFIER)) {
 			addUsageFor(tree, Usage.Kind.READ);
 		}
+		super.visitIdentifier(tree);
 	}
-
+	
 	@Override
 	public void visitBeginEndStatement(BeginEndStatementTree tree) {
 		if (isScopeAlreadyEntered(tree)) {
@@ -133,14 +133,6 @@ public class SymbolVisitor extends DoubleDispatchVisitor {
 
 	private boolean isScopeAlreadyEntered(BeginEndStatementTree tree) {
 		return !treeScopeMap.containsKey(tree);
-	}
-
-	private Scope getFunctionScope() {
-		Scope scope = currentScope;
-		while (scope.isBlock()) {
-			scope = scope.outer();
-		}
-		return scope;
 	}
 
 }

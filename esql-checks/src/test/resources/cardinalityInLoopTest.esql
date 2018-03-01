@@ -28,7 +28,11 @@ CREATE COMPUTE MODULE CardinalityInLoop
        WHILE LASTMOVE(bc) DO                          
            SET a = CAST(b AS CHARACTER);  
        END WHILE;
-
+	   WHILE l <= aCount DO
+	     WHILE m <= eCount DO 
+	       DECLARE aCount1 INTEGER CARDINALITY(inRef.entity[m].association[]);
+	     END WHILE;
+	   END WHILE;
 
 
 

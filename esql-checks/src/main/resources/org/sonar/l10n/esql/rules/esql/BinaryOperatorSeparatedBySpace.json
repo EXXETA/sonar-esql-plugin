@@ -1,0 +1,14 @@
+{
+  "title": "Binary operators should always be separated by spaces.",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "1min"
+  },
+  "tags": [
+    "readability"
+    
+ ],
+  "defaultSeverity": "Major"
+}

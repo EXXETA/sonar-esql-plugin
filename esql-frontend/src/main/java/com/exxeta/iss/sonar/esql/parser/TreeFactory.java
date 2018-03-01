@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -127,6 +127,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.LoopStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.MessageSourceTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.MoveStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.NameClausesTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.NullableTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ParameterTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ParseClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.PassthruStatementTreeImpl;
@@ -1044,22 +1045,31 @@ public class TreeFactory {
 	}
 
 	public ParameterTreeImpl parameter(Optional<InternalSyntaxToken> directionIndicator, IdentifierTree identifier,
-			Optional<Object> optional) {
+			Optional<Object> optional, Optional<NullableTreeImpl> nullable) {
 		if (optional.isPresent()) {
 			if (optional.get() instanceof Tuple) {
 				Tuple<Optional<InternalSyntaxToken>, DataTypeTreeImpl> t = (Tuple) optional.get();
 				return new ParameterTreeImpl(directionIndicator.isPresent() ? directionIndicator.get() : null,
-						identifier, t.first().isPresent() ? t.first().get() : null, t.second());
+						identifier, t.first().isPresent() ? t.first().get() : null, t.second(), nullable.isPresent()?nullable.get():null);
 			} else {
 				return new ParameterTreeImpl(directionIndicator.isPresent() ? directionIndicator.get() : null,
-						identifier, (InternalSyntaxToken) optional.get());
+						identifier, (InternalSyntaxToken) optional.get(), nullable.isPresent()?nullable.get():null);
 			}
 
 		} else {
-			return new ParameterTreeImpl(directionIndicator.isPresent() ? directionIndicator.get() : null, identifier);
+			return new ParameterTreeImpl(directionIndicator.isPresent() ? directionIndicator.get() : null, identifier, nullable.isPresent()?nullable.get():null);
 
 		}
 	}
+	public NullableTreeImpl nullable(Object object){
+		if (object instanceof Tuple){
+			Tuple<InternalSyntaxToken, InternalSyntaxToken> tuple = (Tuple) object;
+			return new NullableTreeImpl(tuple.first(),tuple.second());
+		} else {
+			return new NullableTreeImpl((InternalSyntaxToken) object);
+		}
+	}
+	
 
 	public ReturnTypeTreeImpl returnType(InternalSyntaxToken returnsToken, DataTypeTreeImpl dataType,
 			Optional<Object> nullIndicator) {
@@ -1079,11 +1089,11 @@ public class TreeFactory {
 
 	public CreateModuleStatementTreeImpl createModuleStatement(InternalSyntaxToken createKeyword,
 			InternalSyntaxToken moduleType, InternalSyntaxToken moduleKeyword, IdentifierTree indentifier,
-			Optional<List<StatementTree>> optional, InternalSyntaxToken endKeyword, InternalSyntaxToken moduleKeyword2,
+			Optional<List<StatementTree>> statements, InternalSyntaxToken endKeyword, InternalSyntaxToken moduleKeyword2,
 			InternalSyntaxToken semi) {
-		List<StatementTree> moduleStatementsList = optionalList(optional);
+		
 		return new CreateModuleStatementTreeImpl(createKeyword, moduleType, moduleKeyword, indentifier,
-				moduleStatementsList, endKeyword, moduleKeyword2);
+				statements(statements), endKeyword, moduleKeyword2);
 	}
 
 	public ResultSetTreeImpl resultSet(InternalSyntaxToken dynamicKeyword, InternalSyntaxToken resultKeyword,
@@ -1307,8 +1317,11 @@ public class TreeFactory {
 		return pathElement;
 	}
 	
-	public PathElementTreeImpl pathElement(IndexTreeImpl index) {
+	public PathElementTreeImpl pathElement(Optional<PathElementTypeTreeImpl> type, IndexTreeImpl index) {
 		PathElementTreeImpl pathElement = new PathElementTreeImpl();
+		if (type.isPresent()){
+			pathElement.type(type.get());
+		}
 		pathElement.index(index);
 		return pathElement;
 	}
@@ -1344,6 +1357,8 @@ public class TreeFactory {
 		if (name instanceof Triple) {
 			Triple<InternalSyntaxToken, ExpressionTree, InternalSyntaxToken> triple = (Triple) name;
 			return new PathElementNameTreeImpl(triple.first(), triple.second(), triple.third());
+		} else if(name instanceof IdentifierTreeImpl)  {
+			return new PathElementNameTreeImpl((IdentifierTreeImpl)name);
 		} else {
 			return new PathElementNameTreeImpl((InternalSyntaxToken) name);
 		}

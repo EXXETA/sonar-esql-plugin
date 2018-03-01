@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +17,12 @@
  */
 package com.exxeta.iss.sonar.esql.checks.verifier;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import javax.annotation.Nullable;
+
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
@@ -24,10 +30,7 @@ import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxTrivia;
 import com.exxeta.iss.sonar.esql.api.visitors.EsqlVisitorContext;
 import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitorCheck;
 import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
-import java.util.ArrayList;
-import java.util.List;
-import javax.annotation.Nullable;
+import com.google.common.collect.ImmutableSet;
 
 class ExpectedIssuesParser extends SubscriptionVisitorCheck {
 
@@ -43,8 +46,8 @@ class ExpectedIssuesParser extends SubscriptionVisitorCheck {
   }
 
   @Override
-  public List<Kind> nodesToVisit() {
-    return ImmutableList.of(Kind.TOKEN);
+  public Set<Kind> nodesToVisit() {
+    return ImmutableSet.of(Kind.TOKEN);
   }
 
   @Override

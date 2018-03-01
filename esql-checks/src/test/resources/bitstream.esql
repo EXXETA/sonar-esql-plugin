@@ -1,9 +1,0 @@
-CREATE COMPUTE MODULE a
-
-	CREATE PROCEDURE test()
-	BEGIN
-		DECLARE returnValue BOOLEAN; --Compliant
-		SET returnValue = BITSTREAM('SLEEP(1000)'); --Noncompliant {{Do not use BITSTREAM it is deprecated.}}
-	END;
-
-END MODULE;

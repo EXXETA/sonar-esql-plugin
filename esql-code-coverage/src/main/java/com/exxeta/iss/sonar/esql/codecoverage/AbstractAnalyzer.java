@@ -1,8 +1,26 @@
+/*
+ * Sonar ESQL Plugin
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * http://www.exxeta.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.exxeta.iss.sonar.esql.codecoverage;
+
+import static com.exxeta.iss.sonar.esql.codecoverage.CodeCoverageExtension.LOG;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -14,15 +32,11 @@ import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.batch.sensor.coverage.CoverageType;
 import org.sonar.api.batch.sensor.coverage.NewCoverage;
-
-import com.google.common.io.Files;
-import static com.exxeta.iss.sonar.esql.codecoverage.CodeCoverageExtension.LOG;
 
 public abstract class AbstractAnalyzer implements ExecutionDataVisitor {
 
-	private Pattern pathPattern = Pattern.compile("(?i)\\s*CREATE\\s+SCHEMA\\s+([\\w\\.]+)\\s+PATH");
+	private Pattern pathPattern = Pattern.compile("(?i)\\s*BROKER\\s+SCHEMA\\s+([\\w\\.]+)\\s+PATH.*");
 	private Pattern modulePattern = Pattern.compile("(?i)\\s*CREATE\\s+(COMPUTE|FILTER|DATABASE)\\s+MODULE\\s+(.+)");
 	private Pattern routinePattern = Pattern.compile("(?i)\\s*CREATE\\s+(FUNCTION|PROCEDURE)\\s+([\\w]+)\\W+.*");
 	private Pattern endModulePattern = Pattern.compile("(?i)\\s*END\\s+MODULE;.*");
@@ -50,18 +64,18 @@ public abstract class AbstractAnalyzer implements ExecutionDataVisitor {
 
 		// Create new coverages for all InputFiles
 		for (InputFile file : files) {
-			NewCoverage coverage = context.newCoverage().onFile(file).ofType(CoverageType.UNIT);
+			NewCoverage coverage = context.newCoverage().onFile(file);
 			Set<Integer> fileExecutableLines = executableLines.get(file);
 			Set<Integer> fileExecutedLines = executedLines.get(file);
 			if (fileExecutableLines != null && fileExecutedLines == null) {
-				LOG.info("File has not been executed " + file.absolutePath());
+				LOG.info("File has not been executed " + file.uri());
 				for (int line : fileExecutableLines) {
 					coverage.lineHits(line, 0);
 					coverage.conditions(line, 1, 0);
 				}
 				coverage.save();
 			} else if (fileExecutableLines == null) {
-				LOG.warn("File has not been parsed " + file.absolutePath());
+				LOG.warn("File has not been parsed " + file.uri());
 			} else {
 				String lineHits = "";
 				for (int line : fileExecutableLines) {
@@ -74,7 +88,7 @@ public abstract class AbstractAnalyzer implements ExecutionDataVisitor {
 						coverage.conditions(line, 1, 0);
 					}
 				}
-					LOG.info("Saving execution data found for " + file.absolutePath()+lineHits);
+					LOG.info("Saving execution data found for " + file.uri()+lineHits);
 				coverage.save();
 			}
 		}
@@ -114,7 +128,7 @@ public abstract class AbstractAnalyzer implements ExecutionDataVisitor {
 		String moduleName = "";
 		String routineName = "";
 		try {
-			String contents = Files.toString(file.file(), Charset.defaultCharset());
+			String contents = file.contents();
 			int lineNumber = 0;
 			for (String line : contents.split("\\r?\\n")) {
 				lineNumber++;

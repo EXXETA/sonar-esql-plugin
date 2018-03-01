@@ -1,0 +1,10 @@
+{
+  "title": "Cyclomatic Complexity should not be higher than the given threshold value.",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "tags": [
+    "database",
+    "performance"
+  ],
+  "defaultSeverity": "Major"
+}

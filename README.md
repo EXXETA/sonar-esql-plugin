@@ -1,7 +1,13 @@
-sonar-esql-plugin
-=================
+# sonar-esql-plugin [![Build Status](https://travis-ci.org/EXXETA/sonar-esql-plugin.svg)](https://travis-ci.org/EXXETA/sonar-esql-plugin) [![codecov](https://codecov.io/gh/EXXETA/sonar-esql-plugin/branch/develop/graph/badge.svg)](https://codecov.io/gh/EXXETA/sonar-esql-plugin)
+
 
 This open source plugin can be used to analyze the ESQL-sourcecode of IBM Websphere Message Broker / IBM Integration Bus projects. 
+
+## Features
+* \>75 rules
+* Support for Broker 7, 8, 9, 10
+* Metrics (complexity, number of lines, ...)
+* Import of traces as coverage reports
 
 
 ## Installation
@@ -11,7 +17,7 @@ This open source plugin can be used to analyze the ESQL-sourcecode of IBM Websph
 
 ## Requirements
 
-- SonarQube 5.6
+- SonarQube 6.7
 
 
 ## Contributing
@@ -24,6 +30,8 @@ This open source plugin can be used to analyze the ESQL-sourcecode of IBM Websph
 
 ## History
 
+- 2.3.0 - Additional rules, upgrade to SonarQube 6.7, copy paste detector
+- 2.2.0 - Code coverage analysis
 - 2.1.0 - A few bugfixes and a lot more checks/rules
 - 2.0.0 - complete refactoring and upgrade to SonarQube 5.6
 - 1.1.0 - Fix issues #7(https://github.com/EXXETA/sonar-esql-plugin/issues/7) and #8(https://github.com/EXXETA/sonar-esql-plugin/issues/8)

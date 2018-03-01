@@ -1,0 +1,19 @@
+CREATE COMPUTE MODULE responseTransformation
+CREATE FUNCTION main() RETURNS BOOLEAN
+BEGIN
+---------Begin comment---------
+/*---------Begin block comment---------*/
+IF oprName = 'createAccessFacilityAgreement' OR refIpSrvcOpName = '"http://com/abnamro/Services/AccessFacilityAgreement/v2/AccessFacilityAgreement/IAccessFacilityAgreementPort"' THEN
+				CREATE FIELD OutputRoot.SOAP.Body.soapenv:Fault.detail.ns:createAccessFacilityAgreementException; -- Create field statement. 
+				DECLARE faultRef REFERENCE TO OutputRoot.SOAP.Body.soapenv:Fault.detail.ns:createAccessFacilityAgreementException;				
+				SET faultRef.ExceptionElement.description = messageTextDetail;
+ELSEIF oprName = 'updateAccessFacilityAgreement' OR refIpSrvcOpName = '"http://com/abnamro/Services/AccessFacilityAgreement/v2/AccessFacilityAgreement/IAccessFacilityAgreementPort"' THEN
+				CREATE FIELD OutputRoot.SOAP.Body.soapenv:Fault.detail.ns:updateAccessFacilityAgreementException;
+				DECLARE faultRef REFERENCE TO OutputRoot.SOAP.Body.soapenv:Fault.detail.ns:updateAccessFacilityAgreementException; -- Declare statement trailing comment.		
+				SET faultRef.ExceptionElement.description = messageTextDetail;
+END IF; --NOSONAR	
+WHILE count <= providerCount DO--while statement.
+                SET faultRef.ExceptionElement.description = messageTextDetail; -- Set statement.
+END WHILE;
+END;
+END MODULE;

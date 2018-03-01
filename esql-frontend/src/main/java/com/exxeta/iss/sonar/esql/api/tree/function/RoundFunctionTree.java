@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,9 +25,9 @@ public interface RoundFunctionTree extends NumericFunctionTree{
 	SyntaxToken roundKeyword();
 	SyntaxToken openingParenthesis();
 	ExpressionTree sourceNumber();
-//	SyntaxToken comma();
-//	ExpressionTree precision();
-	/*SyntaxToken modeKeyword();
-	SyntaxToken roundingMode();*/
+	SyntaxToken comma();
+	ExpressionTree precision();
+	SyntaxToken modeKeyword();
+	SyntaxToken roundingMode();
 	SyntaxToken closingParenthesis();
 }

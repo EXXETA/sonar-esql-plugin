@@ -7,6 +7,18 @@ CREATE COMPUTE MODULE a
 		SET a = SELECT COUNT(*) FROM Database.SHAREHOLDINGS AS S WHERE S.ACCOUNTNO = InputBody.AccountNumber; --Compliant
 		SET a = SELECT A FROM Database.SHAREHOLDINGS; --Compliant
 		SET a = SELECT S.A FROM Database.SHAREHOLDINGS AS S; --Compliant
+		SET a = PASSTHRU('SELECT * FROM DUAL'); --Noncompliant
+		SET a = PASSTHRU('SELECT A FROM B'); --Compliant
+		SET a = PASSTHRU('DROP SCHEMA ABC'); --Compliant
+		SET a = PASSTHRU(loadSQL()); --Compliant
+		SET resultSet.rowReference[] = PASSTHRU('SELECT * FROM '||schema||'.table1 A,' --Noncompliant
+			||schema||'.table2 B,'
+			||schema||'.table3 C
+			WHERE A.ID = '''||value1||'''
+			AND B.b_NUMBER = '||tree.some.value2||'
+			AND B.b_NUMBER = A.b_NUMBER
+			AND C.ID = '''||value1||'''
+			AND B.a_DATE < C.a_DATE' TO Database.{xyz});
 	END;
 
 END MODULE;

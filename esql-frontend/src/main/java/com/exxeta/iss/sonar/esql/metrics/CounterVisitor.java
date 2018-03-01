@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,9 +17,9 @@
  */
 package com.exxeta.iss.sonar.esql.metrics;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
@@ -52,8 +52,9 @@ public class CounterVisitor extends SubscriptionVisitor {
 	}
 
 	@Override
-	public List<Kind> nodesToVisit() {
-		List<Kind> result = new ArrayList<>();
+	public Set<Kind> nodesToVisit() {
+		
+		Set<Kind> result = new HashSet<>();
 		result.addAll(Arrays.asList(STATEMENT_NODES));
 		result.add(Kind.CREATE_FUNCTION_STATEMENT);
 		result.add(Kind.CREATE_PROCEDURE_STATEMENT);

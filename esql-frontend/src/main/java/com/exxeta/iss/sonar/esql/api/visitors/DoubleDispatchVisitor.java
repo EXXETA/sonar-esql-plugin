@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -103,6 +103,7 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.LoopStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.MessageSourceTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.MoveStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.NameClausesTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.NullableTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ParameterListTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ParameterTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ParseClauseTree;
@@ -594,7 +595,10 @@ public abstract class DoubleDispatchVisitor implements TreeVisitor {
 
 	public void visitListConstructorFunction(ListConstructorFunctionTree tree) {
 		scanChildren(tree);
-		
+	}
+
+	public void visitNullable(NullableTree tree) {
+		scanChildren(tree);
 	}
 
 }

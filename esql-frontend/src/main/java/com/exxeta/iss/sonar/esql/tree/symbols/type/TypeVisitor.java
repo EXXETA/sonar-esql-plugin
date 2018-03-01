@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2017 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,11 +18,10 @@
 package com.exxeta.iss.sonar.esql.tree.symbols.type;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.annotation.Nullable;
 
-import org.sonar.api.config.Settings;
+import org.sonar.api.config.Configuration;
 
 import com.exxeta.iss.sonar.esql.api.symbols.Symbol;
 import com.exxeta.iss.sonar.esql.api.symbols.Type;
@@ -45,7 +44,7 @@ import com.google.common.base.Preconditions;
 
 public class TypeVisitor extends DoubleDispatchVisitor {
 
-	public TypeVisitor(@Nullable Settings settings) {
+	public TypeVisitor( @Nullable Configuration configuration) {
 
 	}
 
