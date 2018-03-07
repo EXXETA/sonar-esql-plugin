@@ -186,7 +186,7 @@ public class EsqlGrammar {
 
 	public IdentifierTree BINDING_IDENTIFIER() {
 		    return b.<IdentifierTree>nonterminal(EsqlLegacyGrammar.BINDING_IDENTIFIER)
-		      .is(f.bindingIdentifier(b.token(EsqlTokenType.IDENTIFIER))
+		      .is(f.bindingIdentifier(b.token(EsqlLegacyGrammar.IDENTIFIER_NAME))
 		      );
 	}
 
