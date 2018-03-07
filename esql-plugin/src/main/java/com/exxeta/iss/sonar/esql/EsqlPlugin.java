@@ -32,8 +32,11 @@ public class EsqlPlugin implements Plugin {
 	// Global ESQL constants
 	public static final String FALSE = "false";
 
-	public static final String FILE_SUFFIXES_KEY = "sonar.esql.file.suffixes";
-	public static final String FILE_SUFFIXES_DEFVALUE = ".esql";
+	public static final String ESQL_FILE_SUFFIXES_KEY = "sonar.esql.file.suffixes";
+	public static final String ESQL_FILE_SUFFIXES_DEFVALUE = ".esql";
+
+	public static final String MSGFLOW_FILE_SUFFIXES_KEY = "sonar.esql.msgflow.file.suffixes";
+	public static final String MSGFLOW_FILE_SUFFIXES_DEFVALUE = ".msgflow,.subflow";
 
 	public static final String PROPERTY_PREFIX = "sonar.esql";
 	public static final String TEST_FRAMEWORK_KEY = PROPERTY_PREFIX + ".testframework";
@@ -52,10 +55,20 @@ public class EsqlPlugin implements Plugin {
 				new EsqlRulesDefinition(context.getSonarQubeVersion()), EsqlProfile.class, EsqlMetrics.class);
 
 		  context.addExtensions(
-			PropertyDefinition.builder(FILE_SUFFIXES_KEY)
-			        .defaultValue(FILE_SUFFIXES_DEFVALUE)
-			        .name("File Suffixes")
-			        .description("List of suffixes for files to analyze.")
+				PropertyDefinition.builder(ESQL_FILE_SUFFIXES_KEY)
+			        .defaultValue(ESQL_FILE_SUFFIXES_DEFVALUE)
+			        .name("ESQL File Suffixes")
+			        .description("List of suffixes for esql files to analyze.")
+			        .subCategory(GENERAL)
+			        .category(ESQL_CATEGORY)
+			        .multiValues(true)
+			        .onQualifiers(Qualifiers.PROJECT)
+			        .build(),
+			      
+		        PropertyDefinition.builder(MSGFLOW_FILE_SUFFIXES_KEY)
+			        .defaultValue(MSGFLOW_FILE_SUFFIXES_DEFVALUE)
+			        .name("Msgflow file suffixes")
+			        .description("List of suffixes for msgflow files to analyze.")
 			        .subCategory(GENERAL)
 			        .category(ESQL_CATEGORY)
 			        .multiValues(true)
@@ -71,6 +84,7 @@ public class EsqlPlugin implements Plugin {
 	        .category(ESQL_CATEGORY)
 	        .type(PropertyType.BOOLEAN)
 	        .build(),
+	        
 	       PropertyDefinition.builder(TRACE_PATHS_PROPERTY)
 			      .defaultValue(TRACE_PATHS_DEFAULT_VALUE)
 			      .category("Esql")
