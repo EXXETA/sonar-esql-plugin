@@ -23,26 +23,26 @@ import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.config.internal.MapSettings;
 
-public class EsqlLanguageTest {
+public class MsgflowLanguageTest {
 	  private MapSettings settings;
-	  private EsqlLanguage esqlLanguage;
+	  private MsgflowLanguage msgflowLanguage;
 
 	  @Before
 	  public void setUp() {
 	    settings = new MapSettings();
-	    esqlLanguage = new EsqlLanguage(settings.asConfig());
+	    msgflowLanguage = new MsgflowLanguage(settings.asConfig());
 	  }
 
 	  @Test
 	  public void defaultSuffixes() {
-	    settings.setProperty(EsqlPlugin.ESQL_FILE_SUFFIXES_KEY, "");
-	    assertThat(esqlLanguage.getFileSuffixes()).containsOnly(".esql");
+	    settings.setProperty(EsqlPlugin.MSGFLOW_FILE_SUFFIXES_KEY, "");
+	    assertThat(msgflowLanguage.getFileSuffixes()).containsOnly(".msgflow", ".subflow");
 	  }
 
 	  @Test
 	  public void customSuffixes() {
-	    settings.setProperty(EsqlPlugin.ESQL_FILE_SUFFIXES_KEY, "esql");
-	    assertThat(esqlLanguage.getFileSuffixes()).containsOnly("esql");
+	    settings.setProperty(EsqlPlugin.MSGFLOW_FILE_SUFFIXES_KEY, "abc");
+	    assertThat(msgflowLanguage.getFileSuffixes()).containsOnly("abc");
 	  }
 
 }

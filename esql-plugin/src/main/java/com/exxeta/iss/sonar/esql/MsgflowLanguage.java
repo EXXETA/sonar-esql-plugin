@@ -21,22 +21,22 @@ import org.apache.commons.lang.StringUtils;
 import org.sonar.api.config.Configuration;
 import org.sonar.api.resources.AbstractLanguage;
 
-public class EsqlLanguage extends AbstractLanguage {
+public class MsgflowLanguage extends AbstractLanguage {
 
-	public static final String KEY = "esql";
+	public static final String KEY = "msgflow";
 
 	private  Configuration configuration;
 
-	public EsqlLanguage(Configuration configuration) {
-		super(KEY, "Esql");
+	public MsgflowLanguage(Configuration configuration) {
+		super(KEY, "Msgflow");
 		this.configuration = configuration;
 	}
 
 	@Override
 	public String[] getFileSuffixes() {
-		String[] suffixes = configuration.getStringArray(EsqlPlugin.ESQL_FILE_SUFFIXES_KEY);
+		String[] suffixes = configuration.getStringArray(EsqlPlugin.MSGFLOW_FILE_SUFFIXES_KEY);
 		if (suffixes == null || suffixes.length == 0) {
-			suffixes = StringUtils.split(EsqlPlugin.ESQL_FILE_SUFFIXES_DEFVALUE, ",");
+			suffixes = StringUtils.split(EsqlPlugin.MSGFLOW_FILE_SUFFIXES_DEFVALUE, ",");
 		}
 		return suffixes;
 	}
