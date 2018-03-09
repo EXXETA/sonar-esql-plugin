@@ -864,13 +864,13 @@ public class EsqlGrammar {
 				Kind.PATH_ELEMENT).is(
 						f.finishPathElement(
 								b.firstOf (
-								f.pathElement(
-										b.optional(PATH_ELEMENT_TYPE()),
-										b.optional(PATH_ELEMENT_NAMESPACE()),
-										PATH_ELEMENT_NAME(),
-										b.optional(INDEX())
+									f.pathElement(
+											b.optional(PATH_ELEMENT_TYPE()),
+											b.optional(PATH_ELEMENT_NAMESPACE()),
+											PATH_ELEMENT_NAME(),
+											b.optional(INDEX())
 										
-								),
+									),
 								f.pathElement(b.optional(PATH_ELEMENT_TYPE()),INDEX()),
 								f.pathElement(PATH_ELEMENT_TYPE())
 								)
@@ -895,7 +895,7 @@ public class EsqlGrammar {
 		return b.<PathElementNameTreeImpl>nonterminal(Kind.PATH_ELEMENT_NAME)
 				.is(f.pathElementName(
 						b.firstOf(IDENTIFIER_NAME(),
-								f.newTriple3(b.token(EsqlPunctuator.LCURLYBRACE), CALL_EXPRESSION(),
+								f.newTriple3(b.token(EsqlPunctuator.LCURLYBRACE), EXPRESSION(),
 										b.token(EsqlPunctuator.RCURLYBRACE)),
 								b.token(EsqlPunctuator.STAR))
 				));

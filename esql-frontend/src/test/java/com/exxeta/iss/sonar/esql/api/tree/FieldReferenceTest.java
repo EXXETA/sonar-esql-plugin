@@ -62,7 +62,12 @@ public class FieldReferenceTest extends EsqlTreeModelTest<FieldReferenceTree> {
 			.matches("a.b[]")
 			.matches("a.b[].c")
 			.notMatches("")
-			.matches("Body.Invoice.Purchases.\"Item\"[]");
+			.matches("Body.Invoice.Purchases.\"Item\"[]")
+			.matches("MyVar.ns:{CCCC}")
+			.matches("MyVar.{'Content-'}")
+			.matches("MyVar.{getName()}")
+			.matches("MyVar.{'Content-' ||'Type'}")
+			;
 		
 	}
 	

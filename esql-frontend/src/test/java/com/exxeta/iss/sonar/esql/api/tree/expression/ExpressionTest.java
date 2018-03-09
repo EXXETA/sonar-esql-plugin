@@ -31,6 +31,7 @@ public class ExpressionTest {
 		.matches("b")
 		.matches("b.c")
 		.matches("0")
+		.matches("'Content-' ||'Type'")
 		;
 	}
 	
