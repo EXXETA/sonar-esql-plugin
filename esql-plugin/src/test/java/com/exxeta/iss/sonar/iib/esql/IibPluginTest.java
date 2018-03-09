@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.esql;
+package com.exxeta.iss.sonar.iib.esql;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,15 +27,16 @@ import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.internal.SonarRuntimeImpl;
 import org.sonar.api.utils.Version;
 
+import com.exxeta.iss.sonar.iib.IibPlugin;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class EsqlPluginTest {
+public class IibPluginTest {
 
   @Test
-  public void count_extensions_for_sonarqube_server_5_6() throws Exception {
-    Plugin.Context context = setupContext(SonarRuntimeImpl.forSonarQube(Version.create(5, 6), SonarQubeSide.SERVER));
-
-    assertThat(context.getExtensions()).hasSize(9);
+  public void count_extensions() throws Exception {
+    Plugin.Context context = setupContext(SonarRuntimeImpl.forSonarQube(Version.create(6, 7), SonarQubeSide.SERVER));
+    assertThat(context.getExtensions()).hasSize(10);
   }
 
   @Test
@@ -56,24 +57,10 @@ public class EsqlPluginTest {
   }
 
   @Test
-  public void count_extensions_for_sonarqube_server_6_0() throws Exception {
-    Plugin.Context context = setupContext(SonarRuntimeImpl.forSonarQube(Version.create(6, 0), SonarQubeSide.SERVER));
-
-    assertThat(context.getExtensions()).hasSize(9);
-  }
-
-  @Test
-  public void count_extensions_for_sonarqube_server_6_2() throws Exception {
-    Plugin.Context context = setupContext(SonarRuntimeImpl.forSonarQube(Version.create(6, 2), SonarQubeSide.SERVER));
-
-    assertThat(context.getExtensions()).hasSize(9);
-  }
-
-  @Test
   public void count_extensions_for_sonarlint() throws Exception {
-    Plugin.Context context = setupContext(SonarRuntimeImpl.forSonarLint(Version.create(6, 0)));
+    Plugin.Context context = setupContext(SonarRuntimeImpl.forSonarLint(Version.create(6, 7)));
 
-    assertThat(context.getExtensions()).hasSize(9);
+    assertThat(context.getExtensions()).hasSize(10);
   }
 
   private List<PropertyDefinition> properties() {
@@ -91,7 +78,7 @@ public class EsqlPluginTest {
 
   private Plugin.Context setupContext(SonarRuntime runtime) {
     Plugin.Context context = new Plugin.Context(runtime);
-    new EsqlPlugin().define(context);
+    new IibPlugin().define(context);
     return context;
   }
 

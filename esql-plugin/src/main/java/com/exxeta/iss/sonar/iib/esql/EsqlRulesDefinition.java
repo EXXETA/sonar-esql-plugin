@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.esql;
+package com.exxeta.iss.sonar.iib.esql;
 
 import java.io.IOException;
 import java.net.URL;
@@ -32,6 +32,7 @@ import org.sonar.api.utils.Version;
 import org.sonar.squidbridge.annotations.AnnotationBasedRulesDefinition;
 
 import com.exxeta.iss.sonar.esql.check.CheckList;
+import com.exxeta.iss.sonar.iib.JsonProfileReader;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import com.google.gson.Gson;

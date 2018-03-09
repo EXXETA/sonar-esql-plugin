@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.esql;
+package com.exxeta.iss.sonar.iib;
 
 /**
  * Exception thrown when the context is cancelled.

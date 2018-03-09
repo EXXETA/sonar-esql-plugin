@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.esql.rules;
+package com.exxeta.iss.sonar.iib.esql.rules;
 
 import org.junit.Test;
 import org.sonar.api.rules.RuleType;
@@ -27,8 +27,8 @@ import org.sonar.api.server.rule.RulesDefinition.Repository;
 import org.sonar.api.server.rule.RulesDefinition.Rule;
 import org.sonar.api.utils.Version;
 
-import com.exxeta.iss.sonar.esql.EsqlRulesDefinition;
 import com.exxeta.iss.sonar.esql.check.CheckList;
+import com.exxeta.iss.sonar.iib.esql.EsqlRulesDefinition;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
