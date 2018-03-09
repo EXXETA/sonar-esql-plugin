@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.esql;
+package com.exxeta.iss.sonar.iib.esql;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
@@ -62,8 +62,6 @@ import org.sonar.check.RuleProperty;
 import org.sonar.squidbridge.ProgressReport;
 import org.sonar.squidbridge.api.AnalysisException;
 
-import com.exxeta.iss.sonar.esql.EsqlSquidSensor.ProductDependentExecutor;
-import com.exxeta.iss.sonar.esql.EsqlSquidSensor.SonarLintProductExecutor;
 import com.exxeta.iss.sonar.esql.api.CustomEsqlRulesDefinition;
 import com.exxeta.iss.sonar.esql.api.EsqlCheck;
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
@@ -73,13 +71,15 @@ import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
 import com.exxeta.iss.sonar.esql.api.visitors.TreeVisitor;
 import com.exxeta.iss.sonar.esql.api.visitors.TreeVisitorContext;
 import com.exxeta.iss.sonar.esql.check.CheckList;
+import com.exxeta.iss.sonar.iib.esql.EsqlSensor.ProductDependentExecutor;
+import com.exxeta.iss.sonar.iib.esql.EsqlSensor.SonarLintProductExecutor;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.RecognitionException;
 
-public class EsqlSquidSensorTest {
+public class EsqlSensorTest {
 
-	private static final Version SONARLINT_DETECTABLE_VERSION = Version.create(6, 0);
+	private static final Version SONARLINT_DETECTABLE_VERSION = Version.create(6, 7);
 	private static final SonarRuntime SONARLINT_RUNTIME = SonarRuntimeImpl.forSonarLint(SONARLINT_DETECTABLE_VERSION);
 	private static final SonarRuntime NOSONARLINT_RUNTIME = SonarRuntimeImpl.forSonarQube(SONARLINT_DETECTABLE_VERSION,
 			SonarQubeSide.SERVER);
@@ -115,8 +115,8 @@ public class EsqlSquidSensorTest {
 	private final ProgressReport progressReport = mock(ProgressReport.class);
 	private SensorContextTester context = SensorContextTester.create(baseDir);
 
-	private EsqlSquidSensor createSensor() {
-		return new EsqlSquidSensor(checkFactory, fileLinesContextFactory, context.fileSystem(), new NoSonarFilter(),
+	private EsqlSensor createSensor() {
+		return new EsqlSensor(checkFactory, fileLinesContextFactory, context.fileSystem(), new NoSonarFilter(),
 				CUSTOM_RULES);
 	}
 
@@ -291,7 +291,7 @@ public class EsqlSquidSensorTest {
 	public void cancelled_context_should_cancel_progress_report_and_return_with_no_exception() {
 		EsqlCheck check = new DoubleDispatchVisitorCheck() {
 		};
-		EsqlSquidSensor sensor = createSensor();
+		EsqlSensor sensor = createSensor();
 		SensorContextTester cancelledContext = SensorContextTester.create(baseDir);
 		cancelledContext.setCancelled(true);
 		sensor.analyseFiles(cancelledContext, ImmutableList.of((TreeVisitor) check),
@@ -301,7 +301,7 @@ public class EsqlSquidSensorTest {
 
 	private void analyseFileWithException(EsqlCheck check,InputFile inputFile,
 			String expectedMessageSubstring) {
-		EsqlSquidSensor sensor = createSensor();
+		EsqlSensor sensor = createSensor();
 		thrown.expect(AnalysisException.class);
 		thrown.expectMessage(expectedMessageSubstring);
 		try {

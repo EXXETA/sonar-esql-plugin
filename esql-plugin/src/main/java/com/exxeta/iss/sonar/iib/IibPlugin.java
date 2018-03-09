@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.esql;
+package com.exxeta.iss.sonar.iib;
 
 import org.sonar.api.Plugin;
 import org.sonar.api.PropertyType;
@@ -23,8 +23,13 @@ import org.sonar.api.config.PropertyDefinition;
 import org.sonar.api.resources.Qualifiers;
 
 import com.exxeta.iss.sonar.esql.metrics.EsqlMetrics;
+import com.exxeta.iss.sonar.iib.esql.EsqlLanguage;
+import com.exxeta.iss.sonar.iib.esql.EsqlProfile;
+import com.exxeta.iss.sonar.iib.esql.EsqlRulesDefinition;
+import com.exxeta.iss.sonar.iib.esql.EsqlSensor;
+import com.exxeta.iss.sonar.iib.msgflow.MsgflowLanguage;
 
-public class EsqlPlugin implements Plugin {
+public class IibPlugin implements Plugin {
 
 	private static final String GENERAL = "General";
 	private static final String ESQL_CATEGORY = "Esql";
@@ -51,8 +56,11 @@ public class EsqlPlugin implements Plugin {
 
 	@Override
 	public void define(Context context) {
-		context.addExtensions(EsqlLanguage.class, EsqlSquidSensor.class,
+		context.addExtensions(EsqlLanguage.class, EsqlSensor.class,
 				new EsqlRulesDefinition(context.getSonarQubeVersion()), EsqlProfile.class, EsqlMetrics.class);
+
+		context.addExtension(MsgflowLanguage.class/*, MsgflowSensor.class,
+				new MsgflowRulesDefinition(context.getSonarQubeVersion()), MsgflowProfile.class, MsgflowMetrics.class*/);
 
 		  context.addExtensions(
 				PropertyDefinition.builder(ESQL_FILE_SUFFIXES_KEY)
@@ -75,8 +83,8 @@ public class EsqlPlugin implements Plugin {
 			        .onQualifiers(Qualifiers.PROJECT)
 			        .build(),
 			      
-	      PropertyDefinition.builder(EsqlPlugin.IGNORE_HEADER_COMMENTS)
-	        .defaultValue(EsqlPlugin.IGNORE_HEADER_COMMENTS_DEFAULT_VALUE.toString())
+	      PropertyDefinition.builder(IibPlugin.IGNORE_HEADER_COMMENTS)
+	        .defaultValue(IibPlugin.IGNORE_HEADER_COMMENTS_DEFAULT_VALUE.toString())
 	        .name("Ignore header comments")
 	        .description("True to not count file header comments in comment metrics.")
 	        .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)

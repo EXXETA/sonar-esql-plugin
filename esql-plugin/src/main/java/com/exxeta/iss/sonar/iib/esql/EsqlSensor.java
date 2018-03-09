@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.esql;
+package com.exxeta.iss.sonar.iib.esql;
 
 import java.io.File;
 import java.io.InterruptedIOException;
@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -75,6 +76,7 @@ import com.exxeta.iss.sonar.esql.highlighter.HighlighterVisitor;
 import com.exxeta.iss.sonar.esql.metrics.MetricsVisitor;
 import com.exxeta.iss.sonar.esql.metrics.NoSonarVisitor;
 import com.exxeta.iss.sonar.esql.parser.EsqlParserBuilder;
+import com.exxeta.iss.sonar.iib.IibPlugin;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Throwables;
@@ -82,9 +84,9 @@ import com.google.common.collect.Lists;
 import com.sonar.sslr.api.RecognitionException;
 import com.sonar.sslr.api.typed.ActionParser;
 
-public class EsqlSquidSensor implements Sensor {
+public class EsqlSensor implements Sensor {
 
-  private static final Logger LOG = Loggers.get(EsqlSquidSensor.class);
+  private static final Logger LOG = Loggers.get(EsqlSensor.class);
 
   private final EsqlChecks checks;
   private final FileLinesContextFactory fileLinesContextFactory;
@@ -95,12 +97,12 @@ public class EsqlSquidSensor implements Sensor {
   // parsingErrorRuleKey equals null if ParsingErrorCheck is not activated
   private RuleKey parsingErrorRuleKey = null;
 
-  public EsqlSquidSensor(
+  public EsqlSensor(
     CheckFactory checkFactory, FileLinesContextFactory fileLinesContextFactory, FileSystem fileSystem, NoSonarFilter noSonarFilter) {
     this(checkFactory, fileLinesContextFactory, fileSystem, noSonarFilter, null);
   }
 
-  public EsqlSquidSensor(
+  public EsqlSensor(
     CheckFactory checkFactory, FileLinesContextFactory fileLinesContextFactory, FileSystem fileSystem, NoSonarFilter noSonarFilter,
     @Nullable CustomEsqlRulesDefinition[] customRulesDefinition
   ) {
@@ -370,7 +372,7 @@ public class EsqlSquidSensor implements Sensor {
     private static void executeCoverageSensors(SensorContext context, Map<InputFile, Set<Integer>> executableLines) {
       Configuration configuration = context.config();
 	
-	    String[] traces = configuration.getStringArray(EsqlPlugin.TRACE_PATHS_PROPERTY);
+	    String[] traces = configuration.getStringArray(IibPlugin.TRACE_PATHS_PROPERTY);
 	
 	      (new TraceSensor()).execute(context, executableLines, traces);
 	
@@ -398,7 +400,7 @@ public class EsqlSquidSensor implements Sensor {
   }
 
   private static boolean ignoreHeaderComments(SensorContext context) {
-	    return context.config().getBoolean(EsqlPlugin.IGNORE_HEADER_COMMENTS).orElse(EsqlPlugin.IGNORE_HEADER_COMMENTS_DEFAULT_VALUE);
+	    return context.config().getBoolean(IibPlugin.IGNORE_HEADER_COMMENTS).orElse(IibPlugin.IGNORE_HEADER_COMMENTS_DEFAULT_VALUE);
   }
 
   private static boolean isSonarLint(SensorContext context) {

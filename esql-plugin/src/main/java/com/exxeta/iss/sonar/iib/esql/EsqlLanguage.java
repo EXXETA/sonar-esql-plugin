@@ -15,11 +15,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.esql;
+package com.exxeta.iss.sonar.iib.esql;
 
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.config.Configuration;
 import org.sonar.api.resources.AbstractLanguage;
+
+import com.exxeta.iss.sonar.iib.IibPlugin;
 
 public class EsqlLanguage extends AbstractLanguage {
 
@@ -34,9 +36,9 @@ public class EsqlLanguage extends AbstractLanguage {
 
 	@Override
 	public String[] getFileSuffixes() {
-		String[] suffixes = configuration.getStringArray(EsqlPlugin.ESQL_FILE_SUFFIXES_KEY);
+		String[] suffixes = configuration.getStringArray(IibPlugin.ESQL_FILE_SUFFIXES_KEY);
 		if (suffixes == null || suffixes.length == 0) {
-			suffixes = StringUtils.split(EsqlPlugin.ESQL_FILE_SUFFIXES_DEFVALUE, ",");
+			suffixes = StringUtils.split(IibPlugin.ESQL_FILE_SUFFIXES_DEFVALUE, ",");
 		}
 		return suffixes;
 	}

@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.esql;
+package com.exxeta.iss.sonar.iib.esql;
 
 import org.sonar.api.profiles.ProfileDefinition;
 import org.sonar.api.profiles.RulesProfile;
@@ -24,6 +24,7 @@ import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.utils.ValidationMessages;
 
 import com.exxeta.iss.sonar.esql.check.CheckList;
+import com.exxeta.iss.sonar.iib.JsonProfileReader;
 
 public class EsqlProfile extends ProfileDefinition {
 

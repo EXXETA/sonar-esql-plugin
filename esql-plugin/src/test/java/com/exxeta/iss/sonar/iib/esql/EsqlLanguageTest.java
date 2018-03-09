@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.esql;
+package com.exxeta.iss.sonar.iib.esql;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,26 +23,28 @@ import org.junit.Before;
 import org.junit.Test;
 import org.sonar.api.config.internal.MapSettings;
 
-public class MsgflowLanguageTest {
+import com.exxeta.iss.sonar.iib.IibPlugin;
+
+public class EsqlLanguageTest {
 	  private MapSettings settings;
-	  private MsgflowLanguage msgflowLanguage;
+	  private EsqlLanguage esqlLanguage;
 
 	  @Before
 	  public void setUp() {
 	    settings = new MapSettings();
-	    msgflowLanguage = new MsgflowLanguage(settings.asConfig());
+	    esqlLanguage = new EsqlLanguage(settings.asConfig());
 	  }
 
 	  @Test
 	  public void defaultSuffixes() {
-	    settings.setProperty(EsqlPlugin.MSGFLOW_FILE_SUFFIXES_KEY, "");
-	    assertThat(msgflowLanguage.getFileSuffixes()).containsOnly(".msgflow", ".subflow");
+	    settings.setProperty(IibPlugin.ESQL_FILE_SUFFIXES_KEY, "");
+	    assertThat(esqlLanguage.getFileSuffixes()).containsOnly(".esql");
 	  }
 
 	  @Test
 	  public void customSuffixes() {
-	    settings.setProperty(EsqlPlugin.MSGFLOW_FILE_SUFFIXES_KEY, "abc");
-	    assertThat(msgflowLanguage.getFileSuffixes()).containsOnly("abc");
+	    settings.setProperty(IibPlugin.ESQL_FILE_SUFFIXES_KEY, "esql");
+	    assertThat(esqlLanguage.getFileSuffixes()).containsOnly("esql");
 	  }
 
 }
