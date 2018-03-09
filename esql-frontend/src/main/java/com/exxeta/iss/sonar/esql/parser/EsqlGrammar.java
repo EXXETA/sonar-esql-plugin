@@ -1192,7 +1192,7 @@ public class EsqlGrammar {
 				ARGUMENT_LIST(), b.token(EsqlNonReservedKeyword.AS), DATA_TYPE(),
 				b.zeroOrMore(f.newTuple109(b.firstOf(b.token(EsqlNonReservedKeyword.CCSID), 
 						b.token(EsqlNonReservedKeyword.ENCODING), b.token(EsqlNonReservedKeyword.FORMAT),
-						b.token(EsqlNonReservedKeyword.DEFAULT)), CALL_EXPRESSION())), b.token(EsqlPunctuator.RPARENTHESIS)
+						b.token(EsqlNonReservedKeyword.DEFAULT)), EXPRESSION())), b.token(EsqlPunctuator.RPARENTHESIS)
 				
 		));
 	}
