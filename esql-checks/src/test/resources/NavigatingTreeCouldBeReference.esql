@@ -6,4 +6,23 @@ CREATE COMPUTE MODULE testModule
     SET OutputRoot.XMLNSC.Response.details.person.lname = 'xyz';
     SET OutputRoot.XMLNSC.Response.details.person.middlename = 'sdsd';
       END;
+      CREATE FUNCTION Main2() RETURNS BOOLEAN
+	BEGIN
+    DECLARE ns000 NAMESPACE 'http://www.somewhere.com/v1';
+		DECLARE ns002 NAMESPACE 'http://www.somewhere.com/v2';
+		DECLARE ns001 NAMESPACE 'http://www.somewhere.com/v3';
+		DECLARE inVar REFERENCE TO Environment;
+		DECLARE outupdateOrderWhenParametersReq_v1Ref REFERENCE TO Environment;
+		SET outupdateOrderWhenParametersReq_v1Ref.ns001:{'ele01'}.ns001:ele02 = FIELDVALUE(inVar.*:ele01.*:ele02);
+		IF EXISTS(inVar) THEN
+			SET outupdateOrderWhenParametersReq_v1Ref.ns001:{'ele01'}.ns001:ele02 = FIELDVALUE(inVar.*:ele01.*:ele02);
+		END IF;
+		IF EXISTS(inVar) THEN
+			SET outupdateOrderWhenParametersReq_v1Ref.ns001:{'ele01'}.ns001:ele02 = FIELDVALUE(inVar.*:ele01.*:ele02);
+		END IF;
+		IF EXISTS(inVar) THEN
+			SET outupdateOrderWhenParametersReq_v1Ref.ns001:{'ele01'}.ns001:ele02 = FIELDVALUE(inVar.*:ele01.*:ele02);
+		END IF;
+		RETURN TRUE;
+	END;
 END MODULE;

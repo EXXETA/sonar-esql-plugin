@@ -139,20 +139,18 @@ public class NavigatingTreeCouldBeReferenceCheck extends DoubleDispatchVisitorCh
             } while(true);
             iterator = allKeys.keySet().iterator();
           
-            do
+            while (iterator.hasNext())
             {
-                if(!iterator.hasNext())
-                    break;
                 String key = iterator.next();
                 Integer count = allKeys.get(key);
                 if(count.intValue() > threshold )
                 {
                     Integer lineNumber = CheckUtils.findLineInText(moduleLines, key);
-                    if(lineNumber == null)
-                        throw new RuntimeException((new StringBuilder()).append("Cannot find line again ").append(key).toString());
-                    Integer absLine = Integer.valueOf(lineNumber.intValue() + startingLine);
-                    violatingLinesWithPossibleReference.add(absLine);
+                    if(lineNumber != null){
+	                    Integer absLine = Integer.valueOf(lineNumber.intValue() + startingLine);
+	                    violatingLinesWithPossibleReference.add(absLine);
+                    }
                 }
-            } while(true);
+            }
         }
 	}

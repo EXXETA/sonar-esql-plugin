@@ -19,6 +19,10 @@ CREATE COMPUTE MODULE a
 			AND B.b_NUMBER = A.b_NUMBER
 			AND C.ID = '''||value1||'''
 			AND B.a_DATE < C.a_DATE' TO Database.{xyz});
+		SET resultSet.rowReference[]=PASSTHRU('SELECT * FROM '||table||'.ABC A,' --Noncompliant
+		    ||table||'.BCD B,'||table||'.CDE C
+			WHERE A.IDENT = '''||Ident||'''
+			' TO Database.{DB});
 	END;
 
 END MODULE;
