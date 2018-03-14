@@ -8,8 +8,10 @@ import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
 public class CallExpressionTest extends EsqlTreeModelTest<CallExpressionTree> {
+
+	
 	@Test
-	public void test() throws Exception {
+	public void modelTest() throws Exception {
 		CallExpressionTree tree = parse("a(b,c,d,e)", Kind.CALL_EXPRESSION);
 
 		assertThat(tree.is(Kind.CALL_EXPRESSION)).isTrue();

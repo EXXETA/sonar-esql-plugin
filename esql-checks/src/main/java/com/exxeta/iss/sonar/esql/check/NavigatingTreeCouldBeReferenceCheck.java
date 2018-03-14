@@ -47,7 +47,7 @@ public class NavigatingTreeCouldBeReferenceCheck extends DoubleDispatchVisitorCh
 			    key = "NavigatingTreeCouldBeReference",
 			    description = "Navigating message tree could be replaced by a reference.",
 			    defaultValue = "" + DEFAULT_THRESHOLD)
-	 public static int threshold = DEFAULT_THRESHOLD;
+	 public int threshold = DEFAULT_THRESHOLD;
 	
 	
 	
@@ -82,7 +82,7 @@ public class NavigatingTreeCouldBeReferenceCheck extends DoubleDispatchVisitorCh
     
 	}    
         
-        private static void processSingleModuleForReferences(  int startingLine, List<String> moduleLines, HashSet<Integer> violatingLinesWithPossibleReference)
+        private void processSingleModuleForReferences(  int startingLine, List<String> moduleLines, HashSet<Integer> violatingLinesWithPossibleReference)
         {
             HashMap<String, Integer> allKeys = new HashMap<>();
             Iterator<String> iterator = moduleLines.iterator();
@@ -139,20 +139,18 @@ public class NavigatingTreeCouldBeReferenceCheck extends DoubleDispatchVisitorCh
             } while(true);
             iterator = allKeys.keySet().iterator();
           
-            do
+            while (iterator.hasNext())
             {
-                if(!iterator.hasNext())
-                    break;
                 String key = iterator.next();
                 Integer count = allKeys.get(key);
                 if(count.intValue() > threshold )
                 {
                     Integer lineNumber = CheckUtils.findLineInText(moduleLines, key);
-                    if(lineNumber == null)
-                        throw new RuntimeException((new StringBuilder()).append("Cannot find line again ").append(key).toString());
-                    Integer absLine = Integer.valueOf(lineNumber.intValue() + startingLine);
-                    violatingLinesWithPossibleReference.add(absLine);
+                    if(lineNumber != null){
+	                    Integer absLine = Integer.valueOf(lineNumber.intValue() + startingLine);
+	                    violatingLinesWithPossibleReference.add(absLine);
+                    }
                 }
-            } while(true);
+            }
         }
 	}

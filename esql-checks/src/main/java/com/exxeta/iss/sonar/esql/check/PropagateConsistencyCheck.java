@@ -80,9 +80,9 @@ public class PropagateConsistencyCheck extends DoubleDispatchVisitorCheck {
 			projectDirectory=projectDirectory.getParentFile();
 		}
 		while (projectDirectory != null) {
-			LOG.info("Checking "+(projectDirectory==null?"null":projectDirectory.getAbsolutePath()));
+			LOG.info("Checking " + projectDirectory.getAbsolutePath());
 			if (new File(projectDirectory, ".project").exists()) {
-				LOG.info("Returning "+(projectDirectory==null?"null":projectDirectory.getAbsolutePath()));
+				LOG.info("Returning " + projectDirectory.getAbsolutePath());
 				return projectDirectory;
 			}
 			projectDirectory = projectDirectory.getParentFile();

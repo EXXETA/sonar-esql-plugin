@@ -87,7 +87,7 @@ public class CommentedCodeCheck extends SubscriptionVisitorCheck {
 		try{
 			StatementsTree parsedTree = (StatementsTree) PARSER.parse(string);
 			return !parsedTree.statements().isEmpty();
-		}catch (Exception e){
+		}catch (Exception e){ //NOSONAR
 			return false;
 		}
 
