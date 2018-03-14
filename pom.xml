@@ -242,13 +242,6 @@
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.sonarsource.esql</groupId>
-				<artifactId>sonar-esql-plugin</artifactId>
-				<type>sonar-plugin</type>
-				<version>${project.version}</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>
 				<version>${slf4j.version}</version>
