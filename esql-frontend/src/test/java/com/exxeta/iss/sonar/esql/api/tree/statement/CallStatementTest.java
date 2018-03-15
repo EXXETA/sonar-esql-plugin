@@ -40,6 +40,7 @@ public class CallStatementTest extends EsqlTreeModelTest<CallStatementTreeImpl> 
 			.matches("CALL myProc1() INTO OutputRoot.XMLNS.TestValue1;")
 			.matches("CALL myProc1() EXTERNAL SCHEMA 'test';")
 			.matches("CALL myProc1() IN Database.test;")
+			.matches("CALL myFunc(inBody, outBody.ns01:ele01.{}[<], InputLocalEnvironment);")
 			;
 
 	}
