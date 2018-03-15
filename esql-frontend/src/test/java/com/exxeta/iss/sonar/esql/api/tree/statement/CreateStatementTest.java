@@ -43,7 +43,8 @@ public class CreateStatementTest  extends EsqlTreeModelTest<CreateStatementTreeI
 	@Test
 	public void valueClause(){
 		assertThat(Kind.VALUES_CLAUSE)
-		.matches("VALUE 'Element 2 Value'");
+		.matches("VALUE 'Element 2 Value'")
+		.matches("IDENTITY(JSON.Object)");
 	}
 	
 	@Test
@@ -183,6 +184,9 @@ public class CreateStatementTest  extends EsqlTreeModelTest<CreateStatementTreeI
 		assertNotNull(parseClause.typeExpression());
 		assertNotNull(parseClause.formatSeparator());
 		assertNotNull(parseClause.formatExpression());
+		
+		tree = parse("CREATE FIELD OutputRoot.JSON.Data.Item[1] IDENTITY(JSON.Object);", Kind.CREATE_STATEMENT);
+		assertNotNull(tree);
 	}
 	
 }

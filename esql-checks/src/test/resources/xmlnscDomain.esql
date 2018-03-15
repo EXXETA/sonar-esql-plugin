@@ -19,6 +19,7 @@ CREATE COMPUTE MODULE Module1
 		SET Environment.a = InputRoot.XMLNS; --Noncompliant  {{Use the XMLNSC domain instead of XMLNS.}}
 		SET OutputRoot = InputRoot; --Compliant
 		DECLARE C INTEGER SELECT COUNT(*) FROM Database.DUAL; --Compliant
+		CREATE FIELD OutputRoot.JSON.Data.Item[1] IDENTITY(JSON.Object); --Compliant
 		
 		
 	END;

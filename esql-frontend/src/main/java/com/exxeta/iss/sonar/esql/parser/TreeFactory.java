@@ -1621,7 +1621,7 @@ public class TreeFactory {
 				value.isPresent() ? value.get().second() : null);
 	}
 
-	public ValuesClauseTreeImpl valuesClause(Optional<Tuple<InternalSyntaxToken, FieldReferenceTreeImpl>> identity,
+	public ValuesClauseTreeImpl valuesClause(Optional<Tuple<InternalSyntaxToken, ExpressionTree>> identity,
 			Optional<Tuple<InternalSyntaxToken, ExpressionTree>> type,
 			Optional<Tuple<InternalSyntaxToken, ExpressionTree>> namespace,
 			Optional<Tuple<InternalSyntaxToken, ExpressionTree>> name,
