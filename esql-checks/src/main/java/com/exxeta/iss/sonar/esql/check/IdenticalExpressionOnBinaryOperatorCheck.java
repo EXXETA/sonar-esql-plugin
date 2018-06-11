@@ -31,7 +31,7 @@ public class IdenticalExpressionOnBinaryOperatorCheck extends DoubleDispatchVisi
 	 
 	 @Override
 	  public void visitBinaryExpression(BinaryExpressionTree tree) {
-	    if (!tree.is(Kind.MULTIPLY, Kind.PLUS)
+	    if (!tree.is(Kind.MULTIPLY, Kind.PLUS, Kind.CONCAT)
 	      && SyntacticEquivalence.areEquivalent(tree.leftOperand(), tree.rightOperand()) ) {
 
 	      String message = String.format(MESSAGE, tree.operator().text());
