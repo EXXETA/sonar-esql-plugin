@@ -122,8 +122,7 @@ CALL GFUNC_BrokerLog(
  /* msgCode */ 'KZ', /* msgType */ 'INF',
  /* srcSys */ 'srcFrom', /* srcMsg */ srcMsgBitStream,
  /* trgSys */ 'trgTo', /* trgMsg */ NULL,
- /* shrtDsc */ 'abc-def', /* longDsc */ NULL aaa
- );
+ /* shrtDsc */ 'abc-def', /* longDsc */ NULL );
 
    END;
    
