@@ -77,12 +77,12 @@ public abstract class AbstractAnalyzer implements ExecutionDataVisitor {
 			} else if (fileExecutableLines == null) {
 				LOG.warn("File has not been parsed " + file.uri());
 			} else {
-				String lineHits = "";
+				StringBuilder lineHits = new StringBuilder();
 				for (int line : fileExecutableLines) {
 					if (fileExecutedLines.contains(line)) {
 						coverage.lineHits(line, 1);
 						coverage.conditions(line, 1, 1);
-						lineHits+=" "+line;
+						lineHits.append(" "+line);
 					} else {
 						coverage.lineHits(line, 0);
 						coverage.conditions(line, 1, 0);

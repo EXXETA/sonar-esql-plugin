@@ -51,7 +51,7 @@ public class TraceSensor {
 
 
 
-	class UnitTestsAnalyzer extends AbstractAnalyzer {
+	static class UnitTestsAnalyzer extends AbstractAnalyzer {
 		private final File trace;
 		
 
