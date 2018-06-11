@@ -19,6 +19,7 @@ package com.exxeta.iss.sonar.esql.tree.impl.statement;
 
 import java.util.Iterator;
 
+import com.exxeta.iss.sonar.esql.api.tree.PathElementTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ValuesClauseTree;
@@ -30,7 +31,7 @@ import com.google.common.collect.Iterators;
 public class ValuesClauseTreeImpl extends EsqlTree implements ValuesClauseTree {
 
 	private InternalSyntaxToken identityKeyword;
-	private ExpressionTree identity;
+	private PathElementTree identity;
 	private InternalSyntaxToken typeKeyword;
 	private ExpressionTree type;
 	private InternalSyntaxToken namespaceKeyword;
@@ -40,7 +41,7 @@ public class ValuesClauseTreeImpl extends EsqlTree implements ValuesClauseTree {
 	private InternalSyntaxToken valueKeyword;
 	private ExpressionTree value;
 
-	public ValuesClauseTreeImpl(InternalSyntaxToken identityKeyword, ExpressionTree identity,
+	public ValuesClauseTreeImpl(InternalSyntaxToken identityKeyword, PathElementTree identity,
 			InternalSyntaxToken typeKeyword, ExpressionTree type, InternalSyntaxToken namespaceKeyword,
 			ExpressionTree namespace, InternalSyntaxToken nameKeyword, ExpressionTree name,
 			InternalSyntaxToken valueKeyword, ExpressionTree value) {
@@ -63,7 +64,7 @@ public class ValuesClauseTreeImpl extends EsqlTree implements ValuesClauseTree {
 	}
 
 	@Override
-	public ExpressionTree identity() {
+	public PathElementTree identity() {
 		return identity;
 	}
 

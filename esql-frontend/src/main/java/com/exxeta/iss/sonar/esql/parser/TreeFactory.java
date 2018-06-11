@@ -757,6 +757,10 @@ public class TreeFactory {
 		return newTriple(first, second, third);
 	}
 
+	public <T, U, V> Triple<T, U, V> newTriple7(T first, U second, V third) {
+		return newTriple(first, second, third);
+	}
+
 	public ProgramTreeImpl program(Optional<BrokerSchemaStatementTree> brokerSchema,
 			Optional<PathClauseTree> pathClause, Optional<InternalSyntaxToken> semi, EsqlContentsTree esqlContents,
 			Tree spacing, InternalSyntaxToken eof) {
@@ -1621,7 +1625,7 @@ public class TreeFactory {
 				value.isPresent() ? value.get().second() : null);
 	}
 
-	public ValuesClauseTreeImpl valuesClause(Optional<Tuple<InternalSyntaxToken, ExpressionTree>> identity,
+	public ValuesClauseTreeImpl valuesClause(Optional<Tuple<InternalSyntaxToken, PathElementTree>> identity,
 			Optional<Tuple<InternalSyntaxToken, ExpressionTree>> type,
 			Optional<Tuple<InternalSyntaxToken, ExpressionTree>> namespace,
 			Optional<Tuple<InternalSyntaxToken, ExpressionTree>> name,
