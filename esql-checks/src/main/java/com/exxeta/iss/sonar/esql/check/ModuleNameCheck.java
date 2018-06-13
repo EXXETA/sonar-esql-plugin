@@ -36,10 +36,7 @@ public class ModuleNameCheck extends DoubleDispatchVisitorCheck {
 	@RuleProperty(key = "format", description = "regular expression", defaultValue = "" + DEFAULT_FORMAT)
 	public String format = DEFAULT_FORMAT;
 
-	private Pattern pattern;
-
 	public ModuleNameCheck() {
-		pattern = Pattern.compile(getFormat());
 	}
 
 	public String getFormat() {
@@ -49,7 +46,7 @@ public class ModuleNameCheck extends DoubleDispatchVisitorCheck {
 	@Override
 	public void visitCreateModuleStatement(CreateModuleStatementTree tree) {
 		super.visitCreateModuleStatement(tree);
-		if (!pattern.matcher(tree.moduleName().name()).matches()) {
+		if (!tree.moduleName().name().matches(format)) {
 			addIssue(
 					new PreciseIssue(this, new IssueLocation(tree.moduleName(), tree.moduleName(), "Rename module \""
 							+ tree.moduleName().name() + "\" to match the regular expression " + format + ".")));
