@@ -35,5 +35,7 @@ SET result = 5 / x;
 
 SET result = 5 - x;
 
+SET result = 'a' || 'a';
+
 END;
 END MODULE;

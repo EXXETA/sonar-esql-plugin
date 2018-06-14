@@ -64,7 +64,7 @@ class ExpectedIssuesParser extends SubscriptionVisitorCheck {
 
         if (paramsAndMessage.startsWith("@+")) {
           String[] spaceSplit = paramsAndMessage.split("[\\s\\[{]", 2);
-          issueLine += Integer.valueOf(spaceSplit[0].substring(2));
+          issueLine += Integer.parseInt(spaceSplit[0].substring(2));
           paramsAndMessage = spaceSplit.length > 1 ? spaceSplit[1] : "";
         }
 
@@ -134,13 +134,13 @@ class ExpectedIssuesParser extends SubscriptionVisitorCheck {
       String value = param.substring(equalIndex + 1);
 
       if ("effortToFix".equalsIgnoreCase(name)) {
-        issue.effortToFix(Integer.valueOf(value));
+        issue.effortToFix(Integer.parseInt(value));
 
       } else if ("sc".equalsIgnoreCase(name)) {
-        issue.startColumn(Integer.valueOf(value));
+        issue.startColumn(Integer.parseInt(value));
 
       } else if ("ec".equalsIgnoreCase(name)) {
-        issue.endColumn(Integer.valueOf(value));
+        issue.endColumn(Integer.parseInt(value));
 
       } else if ("el".equalsIgnoreCase(name)) {
         issue.endLine(lineValue(issue.line(), value));
@@ -177,12 +177,12 @@ class ExpectedIssuesParser extends SubscriptionVisitorCheck {
 
   private static int lineValue(int baseLine, String shift) {
     if (shift.startsWith("+")) {
-      return baseLine + Integer.valueOf(shift.substring(1));
+      return baseLine + Integer.parseInt(shift.substring(1));
     }
     if (shift.startsWith("-")) {
-      return baseLine - Integer.valueOf(shift.substring(1));
+      return baseLine - Integer.parseInt(shift.substring(1));
     }
-    return Integer.valueOf(shift);
+    return Integer.parseInt(shift);
   }
 
 

@@ -48,6 +48,7 @@ public class FieldReferenceTest extends EsqlTreeModelTest<FieldReferenceTree> {
 		.matches("PRICE")
 		.notMatches("a a")
 		.matches("cursor")
+		.matches("(XML.Element)NSpace1:Element1[2]")
 		;
 		
 
@@ -67,6 +68,7 @@ public class FieldReferenceTest extends EsqlTreeModelTest<FieldReferenceTree> {
 			.matches("MyVar.{'Content-'}")
 			.matches("MyVar.{getName()}")
 			.matches("MyVar.{'Content-' ||'Type'}")
+			.matches("(XML.Element)NSpace1:Element1[2]")
 			;
 		
 	}

@@ -74,8 +74,7 @@ public class TraceFileReader {
 		}
 
 		// Iterate over the moduleCache and the visitor
-		for (String moduleName : moduleCache.keySet()){
-			ModuleExecutionData data = moduleCache.get(moduleName);
+		for (ModuleExecutionData data : moduleCache.values()){
 			executionDataVisitor.visitModuleExecution(data);
 		}
 		

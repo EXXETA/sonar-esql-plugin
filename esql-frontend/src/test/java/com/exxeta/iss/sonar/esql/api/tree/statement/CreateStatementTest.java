@@ -43,7 +43,8 @@ public class CreateStatementTest  extends EsqlTreeModelTest<CreateStatementTreeI
 	@Test
 	public void valueClause(){
 		assertThat(Kind.VALUES_CLAUSE)
-		.matches("VALUE 'Element 2 Value'");
+		.matches("VALUE 'Element 2 Value'")
+		.matches("IDENTITY(JSON.Object)");
 	}
 	
 	@Test
@@ -57,6 +58,7 @@ public class CreateStatementTest  extends EsqlTreeModelTest<CreateStatementTreeI
 		.matches("CREATE LASTCHILD OF OutputRoot DOMAIN('MRM') PARSE(inBitStream SET 'abc' TYPE 'TestCase' FORMAT 'XML1');")
 		.matches("CREATE LASTCHILD OF OutputRoot DOMAIN('MRM') PARSE(inBitStream OPTIONS options);")
 		.matches("CREATE LASTCHILD OF OutputRoot DOMAIN ('SOAP') PARSE (InputLocalEnvironment.Variables.Pas.Request CCSID 1208 OPTIONS RootBitStream );")
+		.matches("CREATE LASTCHILD OF OutputRoot.XMLNS.TestCase.Root IDENTITY (XML.Element)NSpace1:Element1[2] VALUE 'Element 2 Value';");
 		;
 	}
 	
@@ -183,6 +185,9 @@ public class CreateStatementTest  extends EsqlTreeModelTest<CreateStatementTreeI
 		assertNotNull(parseClause.typeExpression());
 		assertNotNull(parseClause.formatSeparator());
 		assertNotNull(parseClause.formatExpression());
+		
+		tree = parse("CREATE FIELD OutputRoot.JSON.Data.Item[1] IDENTITY(JSON.Object);", Kind.CREATE_STATEMENT);
+		assertNotNull(tree);
 	}
 	
 }

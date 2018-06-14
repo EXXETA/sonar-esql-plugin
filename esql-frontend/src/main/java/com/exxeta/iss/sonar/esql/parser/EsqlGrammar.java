@@ -895,7 +895,7 @@ public class EsqlGrammar {
 		return b.<PathElementNameTreeImpl>nonterminal(Kind.PATH_ELEMENT_NAME)
 				.is(f.pathElementName(
 						b.firstOf(IDENTIFIER_NAME(),
-								f.newTriple3(b.token(EsqlPunctuator.LCURLYBRACE), EXPRESSION(),
+								f.newTriple3(b.token(EsqlPunctuator.LCURLYBRACE), b.optional(EXPRESSION()),
 										b.token(EsqlPunctuator.RCURLYBRACE)),
 								b.token(EsqlPunctuator.STAR))
 				));
@@ -1015,7 +1015,7 @@ public class EsqlGrammar {
 	
 	public ValuesClauseTreeImpl VALUES_CLAUSE() {
 		return b.<ValuesClauseTreeImpl>nonterminal(Kind.VALUES_CLAUSE). is(f.valuesClause(
-				b.optional(f.newTuple70(b.token(EsqlNonReservedKeyword.IDENTITY), FIELD_REFERENCE())),
+				b.optional(f.newTuple70(b.token(EsqlNonReservedKeyword.IDENTITY), PATH_ELEMENT())),
 				b.optional(f.newTuple71(b.token(EsqlNonReservedKeyword.TYPE), EXPRESSION())),
 				b.optional(f.newTuple72(b.token(EsqlNonReservedKeyword.NAMESPACE), EXPRESSION())),
 				b.optional(f.newTuple73(b.token(EsqlNonReservedKeyword.NAME), EXPRESSION())),

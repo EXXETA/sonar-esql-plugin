@@ -757,6 +757,10 @@ public class TreeFactory {
 		return newTriple(first, second, third);
 	}
 
+	public <T, U, V> Triple<T, U, V> newTriple7(T first, U second, V third) {
+		return newTriple(first, second, third);
+	}
+
 	public ProgramTreeImpl program(Optional<BrokerSchemaStatementTree> brokerSchema,
 			Optional<PathClauseTree> pathClause, Optional<InternalSyntaxToken> semi, EsqlContentsTree esqlContents,
 			Tree spacing, InternalSyntaxToken eof) {
@@ -1355,8 +1359,8 @@ public class TreeFactory {
 
 	public PathElementNameTreeImpl pathElementName(Object name){
 		if (name instanceof Triple) {
-			Triple<InternalSyntaxToken, ExpressionTree, InternalSyntaxToken> triple = (Triple) name;
-			return new PathElementNameTreeImpl(triple.first(), triple.second(), triple.third());
+			Triple<InternalSyntaxToken, Optional<ExpressionTree>, InternalSyntaxToken> triple = (Triple) name;
+			return new PathElementNameTreeImpl(triple.first(), triple.second().isPresent()?triple.second().get():null, triple.third());
 		} else if(name instanceof IdentifierTreeImpl)  {
 			return new PathElementNameTreeImpl((IdentifierTreeImpl)name);
 		} else {
@@ -1621,7 +1625,7 @@ public class TreeFactory {
 				value.isPresent() ? value.get().second() : null);
 	}
 
-	public ValuesClauseTreeImpl valuesClause(Optional<Tuple<InternalSyntaxToken, FieldReferenceTreeImpl>> identity,
+	public ValuesClauseTreeImpl valuesClause(Optional<Tuple<InternalSyntaxToken, PathElementTree>> identity,
 			Optional<Tuple<InternalSyntaxToken, ExpressionTree>> type,
 			Optional<Tuple<InternalSyntaxToken, ExpressionTree>> namespace,
 			Optional<Tuple<InternalSyntaxToken, ExpressionTree>> name,

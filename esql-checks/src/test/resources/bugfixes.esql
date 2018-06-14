@@ -116,8 +116,32 @@ ATTACH bpFSAAssocRef TO OutputRoot.XMLNSC.ens:Envelope.ens:Body.tns:TFeed.tns:Bu
 
 	SET duration = (stateRef.Endtime - stateRef.Starttime) HOUR TO SECOND;
 	CALL ABC() into OutputRoot.ABC;
+
+	CALL GFUNC_BrokerLog(
+	 /* ifName */ 'myTestFlow',
+	 /* msgCode */ 'KZ', /* msgType */ 'INF',
+	 /* srcSys */ 'srcFrom', /* srcMsg */ srcMsgBitStream,
+	 /* trgSys */ 'trgTo', /* trgMsg */ NULL,
+	 /* shrtDsc */ 'abc-def', /* longDsc */ NULL );
+	 
+	 CALL myFunc(inBody, outBody.ns01:ele01.{}[<], InputLocalEnvironment);
+
    END;
    
 
+END MODULE;
+
+CREATE COMPUTE MODULE "TEST_<Log> success"
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		RETURN TRUE;
+	END;
+END MODULE;
+
+CREATE COMPUTE MODULE "TEST_<Log> success"
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		RETURN TRUE;
+	END;
 END MODULE;
 

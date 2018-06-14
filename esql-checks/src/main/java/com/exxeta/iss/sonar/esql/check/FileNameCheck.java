@@ -19,7 +19,6 @@ package com.exxeta.iss.sonar.esql.check;
 
 import java.util.Collections;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
@@ -52,7 +51,7 @@ public class FileNameCheck extends SubscriptionVisitorCheck {
 
 	@Override
 	public void visitFile(Tree scriptTree) {
-		if (!Pattern.compile(format).matcher(getContext().getEsqlFile().fileName()).matches()){
+		if (!getContext().getEsqlFile().fileName().matches(format)){
 			addIssue(new FileIssue(this, String.format(MESSAGE, getContext().getEsqlFile().fileName(), format)));
 		}
 		super.visitFile(scriptTree);
