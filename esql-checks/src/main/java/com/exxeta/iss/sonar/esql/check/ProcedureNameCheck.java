@@ -17,8 +17,6 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
-import java.util.regex.Pattern;
-
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 
@@ -37,12 +35,7 @@ public class ProcedureNameCheck extends DoubleDispatchVisitorCheck {
 			defaultValue = "" + DEFAULT_FORMAT)
 	public String format = DEFAULT_FORMAT;
 
-	private Pattern pattern;
-
-	
-	
 	public ProcedureNameCheck() {
-		pattern = Pattern.compile(getFormat());
 	}
 
 
@@ -54,7 +47,7 @@ public class ProcedureNameCheck extends DoubleDispatchVisitorCheck {
 	@Override
 	public void visitCreateProcedureStatement(CreateProcedureStatementTree tree) {
 		super.visitCreateProcedureStatement(tree);
-		if (!pattern.matcher(tree.identifier().name()).matches()){
+		if (!tree.identifier().name().matches(format)){
 			 addIssue(new PreciseIssue(this, new IssueLocation(tree.identifier(), tree.identifier(), "Rename procedure \""+tree.identifier().name()+"\" to match the regular expression "+format+".")));
 			 
 		}

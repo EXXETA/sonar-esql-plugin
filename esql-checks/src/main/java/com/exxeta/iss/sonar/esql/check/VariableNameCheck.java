@@ -17,8 +17,6 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
-import java.util.regex.Pattern;
-
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 
@@ -38,10 +36,7 @@ public class VariableNameCheck extends DoubleDispatchVisitorCheck {
 			defaultValue = "" + DEFAULT_FORMAT)
 	public String format = DEFAULT_FORMAT;
 
-	private Pattern pattern;
-
 	public VariableNameCheck() {
-		pattern = Pattern.compile(getFormat());
 	}
 	public String getFormat() {
 		return format;
@@ -54,7 +49,7 @@ public class VariableNameCheck extends DoubleDispatchVisitorCheck {
 
 		if (!isConstant) {
 			for (int i = 0; i < tree.nameList().size(); i++) {
-				if (!pattern.matcher(tree.nameList().get(i).name()).matches()) {
+				if (!tree.nameList().get(i).name().matches(format)) {
 					addIssue(new PreciseIssue(this,
 							new IssueLocation(tree.nameList().get(i), tree.nameList().get(i),
 									"Rename variable \"" + tree.nameList().get(i).name()

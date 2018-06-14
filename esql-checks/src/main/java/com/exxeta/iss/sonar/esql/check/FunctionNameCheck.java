@@ -17,8 +17,6 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
-import java.util.regex.Pattern;
-
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
@@ -40,10 +38,7 @@ public class FunctionNameCheck extends DoubleDispatchVisitorCheck {
 	@RuleProperty(key="ignoreMain", description = "igonre Main function", defaultValue="TRUE", type="BOOLEAN")
 	public boolean ignoreMain = true;
 
-	private Pattern pattern;
-
 	public FunctionNameCheck() {
-		pattern = Pattern.compile(getFormat());
 	}
 
 	public String getFormat() {
@@ -53,7 +48,7 @@ public class FunctionNameCheck extends DoubleDispatchVisitorCheck {
 	@Override
 	public void visitCreateFunctionStatement(CreateFunctionStatementTree tree) {
 		super.visitCreateFunctionStatement(tree);
-		if (!pattern.matcher(tree.identifier().name()).matches()) {
+		if (!tree.identifier().name().matches(format)) {
 			if (!ignoreMain || !"Main".equalsIgnoreCase(tree.identifier().name()))
 			addIssue(
 					new PreciseIssue(this, new IssueLocation(tree.identifier(), tree.identifier(), "Rename function \""
