@@ -36,10 +36,10 @@ import org.sonar.api.batch.sensor.coverage.NewCoverage;
 
 public abstract class AbstractAnalyzer implements ExecutionDataVisitor {
 
-	private Pattern pathPattern = Pattern.compile("(?i)\\s*BROKER\\s+SCHEMA\\s+([\\w\\.]+)\\s+PATH.*");
-	private Pattern modulePattern = Pattern.compile("(?i)\\s*CREATE\\s+(COMPUTE|FILTER|DATABASE)\\s+MODULE\\s+(.+)");
-	private Pattern routinePattern = Pattern.compile("(?i)\\s*CREATE\\s+(FUNCTION|PROCEDURE)\\s+([\\w]+)\\W+.*");
-	private Pattern endModulePattern = Pattern.compile("(?i)\\s*END\\s+MODULE;.*");
+	final Pattern pathPattern = Pattern.compile("(?i)\\s*BROKER\\s+SCHEMA\\s+([\\w\\.]+).*");
+	final Pattern modulePattern = Pattern.compile("(?i)\\s*CREATE\\s+(COMPUTE|FILTER|DATABASE)\\s+MODULE\\s+(.+)");
+	final Pattern routinePattern = Pattern.compile("(?i)\\s*CREATE\\s+(FUNCTION|PROCEDURE)\\s+([\\w]+)\\W+.*");
+	final Pattern endModulePattern = Pattern.compile("(?i)\\s*END\\s+MODULE;.*");
 
 	private HashMap<String, CodePosition> offsetCache = null;
 	private HashMap<InputFile, HashSet<Integer>> executedLines = new HashMap<>();
