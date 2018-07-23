@@ -120,13 +120,17 @@ public class TraceFileReader {
 		if (matcher.matches()) {
 			String function = matcher.group(1).trim();
 			String relativeLine = matcher.group(2).trim();
-			String statement = line.substring(line.indexOf("''") + 2, line.lastIndexOf("''", line.indexOf(" at ")))
-					.trim();
-			String schemaAndModuleName = "";
-			if (function.contains(".")) {
-				schemaAndModuleName = function.substring(0, function.lastIndexOf('.')).trim();
+			int statementBegin = line.indexOf("''") + 2;
+			int statementEnd = line.lastIndexOf("''", line.indexOf(" at "));
+			if (statementEnd > statementBegin){
+				String statement = line.substring(statementBegin, statementEnd)
+						.trim();
+				String schemaAndModuleName = "";
+				if (function.contains(".")) {
+					schemaAndModuleName = function.substring(0, function.lastIndexOf('.')).trim();
+				}
+				addExecution(function, relativeLine, statement, schemaAndModuleName);
 			}
-			addExecution(function, relativeLine, statement, schemaAndModuleName);
 		}
 	}
 
