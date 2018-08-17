@@ -9,11 +9,14 @@ This open source plugin can be used to analyze the ESQL-sourcecode of IBM Websph
 * Metrics (complexity, number of lines, ...)
 * Import of traces as coverage reports
 
+## Build
+
+1. mvn clean install
 
 ## Installation
 
 1. Install SonarQube (https://docs.sonarqube.org/display/SONAR/Get+Started+in+Two+Minutes)
-2. Place the plugin-jar in the plugin directory (\extensions\plugins)
+2. Place the latest esql-plugin-<version>.jar from esql-plugin/target to the plugin directory of SonarQube(\extensions\plugins)
 
 ## Requirements
 
