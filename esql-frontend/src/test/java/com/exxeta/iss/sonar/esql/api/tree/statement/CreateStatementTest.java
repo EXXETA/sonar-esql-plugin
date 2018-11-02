@@ -157,9 +157,14 @@ public class CreateStatementTest  extends EsqlTreeModelTest<CreateStatementTreeI
 		assertNull(valuesClause.nameKeyword());
 		assertNull(valuesClause.name());
 		
+		
 		assertNotNull(valuesClause.valueKeyword());
 		assertNotNull(valuesClause.value());
 		
+		tree = parse("CREATE LASTCHILD OF OutputRoot DOMAIN('MRM') PARSE(inBitStream, inEncoding,);", Kind.CREATE_STATEMENT);
+		assertNull(tree.parseClause().formatSeparator());
+		assertNull(tree.parseClause().formatExpression());
+		assertNull(tree.parseClause().ccsidExpression());
 	}
 
 	@Test
@@ -188,6 +193,12 @@ public class CreateStatementTest  extends EsqlTreeModelTest<CreateStatementTreeI
 		
 		tree = parse("CREATE FIELD OutputRoot.JSON.Data.Item[1] IDENTITY(JSON.Object);", Kind.CREATE_STATEMENT);
 		assertNotNull(tree);
+		
+		tree = parse("CREATE LASTCHILD OF OutputRoot DOMAIN('MRM') PARSE(inBitStream ENCODING inEncoding CCSID inCCSID SET 'DP3UK14002001' TYPE 'TestCase' FORMAT 'XML1');", Kind.CREATE_STATEMENT);
+		assertNull(tree.parseClause().optionsExpression());
+		assertNull(tree.parseClause().optionsSeparator());
+		tree = parse("CREATE LASTCHILD OF OutputRoot DOMAIN('MRM') PARSE(inBitStream);", Kind.CREATE_STATEMENT);
+		assertNull(tree.parseClause().optionsExpression());
 	}
 	
 }

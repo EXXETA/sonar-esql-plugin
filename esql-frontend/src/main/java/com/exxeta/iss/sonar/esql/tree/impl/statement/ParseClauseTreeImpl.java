@@ -160,14 +160,14 @@ public class ParseClauseTreeImpl extends EsqlTree implements ParseClauseTree{
 			} else {
 				return null;
 			}
-		} else {
+		} else if (parameters!=null){
 			for (Tuple<InternalSyntaxToken, Optional<ExpressionTree>> tuple : parameters){
 				if (tuple.first().is(keyword) && tuple.second().isPresent()){
 					return tuple.second().get();
 				}
 			}
-			return null;
 		}		
+		return null;
 	}
 
 	public boolean isCommaSeparated() {

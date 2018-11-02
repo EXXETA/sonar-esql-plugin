@@ -1097,7 +1097,7 @@ public class TreeFactory {
 			InternalSyntaxToken semi) {
 		
 		return new CreateModuleStatementTreeImpl(createKeyword, moduleType, moduleKeyword, indentifier,
-				statements(statements), endKeyword, moduleKeyword2);
+				statements(statements), endKeyword, moduleKeyword2, semi);
 	}
 
 	public ResultSetTreeImpl resultSet(InternalSyntaxToken dynamicKeyword, InternalSyntaxToken resultKeyword,
