@@ -35,42 +35,17 @@ import com.google.common.collect.Iterators;
 
 public class FieldReferenceTreeImpl extends EsqlTree implements FieldReferenceTree, TypableTree {
 
-	private final ExpressionTree primaryExpression;
-	private final InternalSyntaxToken variable;
+	
 	private final PathElementTree pathElement;
 	private final SeparatedList<PathElementTree> pathElements;
 
 	private TypeSet types = TypeSet.emptyTypeSet();
 
-	public FieldReferenceTreeImpl(ExpressionTree primaryExpression, SeparatedList<PathElementTree> pathElements) {
-		this.primaryExpression = primaryExpression;
-		this.variable = null;
-		this.pathElements = pathElements;
-		this.pathElement = null;
-	}
-
-	public FieldReferenceTreeImpl(InternalSyntaxToken variable, SeparatedList<PathElementTree> pathElements) {
-		this.primaryExpression = null;
-		this.variable = variable;
-		this.pathElements = pathElements;
-		this.pathElement = null;
-	}
 
 	public FieldReferenceTreeImpl(PathElementTree pathElement, SeparatedList<PathElementTree> pathElements) {
-		this.primaryExpression = null;
-		this.variable = null;
+		
 		this.pathElements = pathElements;
 		this.pathElement = pathElement;
-	}
-
-	@Override
-	public ExpressionTree primaryExpression() {
-		return primaryExpression;
-	}
-
-	@Override
-	public InternalSyntaxToken variable() {
-		return variable;
 	}
 
 	@Override
@@ -97,7 +72,7 @@ public class FieldReferenceTreeImpl extends EsqlTree implements FieldReferenceTr
 
 	@Override
 	public Iterator<Tree> childrenIterator() {
-		return Iterators.concat(Iterators.forArray(primaryExpression, variable, pathElement),
+		return Iterators.concat(Iterators.forArray( pathElement),
 				pathElements.elementsAndSeparators(Functions.<PathElementTree>identity()));
 	}
 

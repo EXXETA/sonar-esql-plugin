@@ -1277,15 +1277,10 @@ public class TreeFactory {
 		return new IntervalExpressionTreeImpl(openParenToken, additiveExpression, closeParenToken, intervalQualifier);
 	}
 
-	public FieldReferenceTreeImpl fieldReference(Object first,
+	public FieldReferenceTreeImpl fieldReference(PathElementTree first,
 			Optional<List<Tuple<InternalSyntaxToken, PathElementTreeImpl>>> zeroOrMore) {
-		if (first instanceof ExpressionTree) {
-			return new FieldReferenceTreeImpl((ExpressionTree) first, pathElementList(zeroOrMore));
-		} else if (first instanceof PathElementTree) {
-			return new FieldReferenceTreeImpl((PathElementTree) first, pathElementList(zeroOrMore));
-		} else {
-			return new FieldReferenceTreeImpl((InternalSyntaxToken) first, pathElementList(zeroOrMore));
-		}
+		return new FieldReferenceTreeImpl((PathElementTree) first, pathElementList(zeroOrMore));
+		
 	}
 
 	public NamespaceTreeImpl namespace(InternalSyntaxToken identifier) {
