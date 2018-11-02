@@ -18,12 +18,15 @@
 package com.exxeta.iss.sonar.esql.api.tree.statement;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class SetStatementTest {
+public class SetStatementTest extends EsqlTreeModelTest<SetStatementTree> {
 
 	@Test
 	public void setStatement() {
@@ -39,5 +42,17 @@ public class SetStatementTest {
 
 		
 	}
-	
+	@Test
+	public void model() throws Exception{
+		SetStatementTree tree = parse("SET a=b;", Kind.SET_STATEMENT);
+		assertNotNull(tree);
+		assertNotNull(tree.setKeyword());
+		assertNotNull(tree.variableReference());
+		assertNull(tree.type());
+		assertNotNull(tree.equalSign());
+		assertNotNull(tree.expression());
+		assertNotNull(tree.semiToken());
+		
+		
+	}
 }
