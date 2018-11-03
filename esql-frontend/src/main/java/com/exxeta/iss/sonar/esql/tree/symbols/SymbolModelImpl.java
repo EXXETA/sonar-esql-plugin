@@ -87,17 +87,6 @@ public class SymbolModelImpl implements SymbolModel, SymbolModelBuilder {
 	    return symbol;
 	  }
 
-	  @Override
-	  public Symbol declareBuiltInSymbol(String name, Symbol.Kind kind, Scope scope) {
-	    Symbol symbol = scope.getSymbol(name);
-	    if (symbol == null) {
-	      symbol = new Symbol(name, kind, scope);
-	      symbol.setBuiltIn(true);
-	      scope.addSymbol(symbol);
-	      symbols.add(symbol);
-	    }
-	    return symbol;
-	  }
 
 	  /**
 	   * Returns all symbols in script
