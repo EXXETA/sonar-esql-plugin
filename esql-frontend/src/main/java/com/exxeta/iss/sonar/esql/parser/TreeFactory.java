@@ -757,10 +757,6 @@ public class TreeFactory {
 		return newTriple(first, second, third);
 	}
 
-	public <T, U, V> Triple<T, U, V> newTriple7(T first, U second, V third) {
-		return newTriple(first, second, third);
-	}
-
 	public ProgramTreeImpl program(Optional<BrokerSchemaStatementTree> brokerSchema,
 			Optional<PathClauseTree> pathClause, Optional<InternalSyntaxToken> semi, EsqlContentsTree esqlContents,
 			Tree spacing, InternalSyntaxToken eof) {
@@ -1222,10 +1218,6 @@ public class TreeFactory {
 	}
 	
 
-	public LiteralTreeImpl listLiteral(InternalSyntaxToken listToken) {
-		return new LiteralTreeImpl(Kind.LIST_LITERAL, listToken);
-	}
-
 	public LiteralTreeImpl timeLiteral(InternalSyntaxToken timeToken) {
 		return new LiteralTreeImpl(Kind.TIME_LITERAL, timeToken);
 	}
@@ -1236,10 +1228,6 @@ public class TreeFactory {
 
 	public LiteralTreeImpl dateLiteral(InternalSyntaxToken dateToken) {
 		return new LiteralTreeImpl(Kind.DATE_LITERAL, dateToken);
-	}
-
-	public LiteralTreeImpl arrayLiteral(InternalSyntaxToken arrayToken) {
-		return new LiteralTreeImpl(Kind.ARRAY_LITERAL, arrayToken);
 	}
 
 	public LiteralTreeImpl intervalLiteral(InternalSyntaxToken intervalToken) {
@@ -1706,7 +1694,8 @@ public class TreeFactory {
 				> t2 = (Triple)params;
 
 				if (t2.second().isPresent() && t2.second().get().second() instanceof InternalSyntaxToken){
-					return new NameClausesTreeImpl(t2.first().isPresent()?t2.first().get().first():null, t2.first().isPresent()?t2.first().get().second():null, 
+					return new NameClausesTreeImpl(
+							t2.first().isPresent()?t2.first().get().first():null, t2.first().isPresent()?t2.first().get().second():null, 
 							t2.second().get().first(), null, (InternalSyntaxToken)t2.second().get().second(), 
 							t2.third().isPresent()?t2.third().get().first():null, t2.third().isPresent()?t2.third().get().second():null, 
 							null, null, null, null, null);
@@ -2059,21 +2048,21 @@ public class TreeFactory {
 		return new RowConstructorFunctionTreeImpl(rowKeyword, openingParenthesis, aliasedExpressionList(aliasedExpression, rest), closingParenthesis);
 	}
 
-	public PassthruFunctionTreeImpl passthruOldSyntax(SeparatedList<ExpressionTree> argumentList) {
-		return new PassthruFunctionTreeImpl(argumentList);
+	public PassthruFunctionTreeImpl passthruOldSyntax(InternalSyntaxToken comma, SeparatedList<ExpressionTree> argumentList) {
+		return new PassthruFunctionTreeImpl(comma, argumentList);
 	}
 
-	public PassthruFunctionTreeImpl passthruNewSyntax(ExpressionTree expression,
+	public PassthruFunctionTreeImpl passthruNewSyntax(
 			Optional<Tuple<InternalSyntaxToken, FieldReferenceTreeImpl>> toClause,
 			Optional<Tuple<InternalSyntaxToken, ParameterListTreeImpl>> valuesClause) {
 		
-		return new PassthruFunctionTreeImpl(expression, toClause.isPresent()?toClause.get().first():null,toClause.isPresent()?toClause.get().second():null,valuesClause.isPresent()?valuesClause.get().first():null,valuesClause.isPresent()?valuesClause.get().second():null);
+		return new PassthruFunctionTreeImpl(toClause.isPresent()?toClause.get().first():null,toClause.isPresent()?toClause.get().second():null,valuesClause.isPresent()?valuesClause.get().first():null,valuesClause.isPresent()?valuesClause.get().second():null);
 	}
 
 	public PassthruFunctionTreeImpl finishPassthruFunction(InternalSyntaxToken passthruKeyword, InternalSyntaxToken openingParenthesis,
-			PassthruFunctionTreeImpl tree, InternalSyntaxToken closingParenthesis) {
+			ExpressionTree expression, PassthruFunctionTreeImpl tree, InternalSyntaxToken closingParenthesis) {
 		
-		tree.finish(passthruKeyword, openingParenthesis, closingParenthesis);
+		tree.finish(passthruKeyword, openingParenthesis, expression, closingParenthesis);
 		return tree;
 	}
 

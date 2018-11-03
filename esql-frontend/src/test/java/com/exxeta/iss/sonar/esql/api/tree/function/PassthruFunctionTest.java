@@ -36,7 +36,9 @@ public class PassthruFunctionTest extends EsqlTreeModelTest<PassthruFunctionTree
 		.matches("PASSTHRU('aaaaa' VALUES ('aaaa'))")
 		.matches("PASSTHRU('aaaaa' )")
 		.matches("PASSTHRU('a' || schema  TO Database.{xyz})")
-		.matches(" PASSTHRU('SELECT column1,column2 FROM '||db_schema||'.table_name WHERE column3=? AND column4=?' VALUES('value1',value2))");
+		.matches(" PASSTHRU('SELECT column1,column2 FROM '||db_schema||'.table_name WHERE column3=? AND column4=?' VALUES('value1',value2))")
+		.matches("PASSTHRU ('SELECT * FROM A WHERE A.Name=?', 'hello')")
+		;
 
 	}
 	

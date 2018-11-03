@@ -35,6 +35,8 @@ public class DataTypeTest {
 			.matches("INTERVAL YEAR TO MONTH")
 			.matches("INTERVAL DAY TO HOUR")
 			.matches("INTERVAL MINUTE TO SECOND")
+			.matches("INTERVAL MONTH")
+			.matches("REFERENCE")
 			.notMatches("STRING");
 		
 	}

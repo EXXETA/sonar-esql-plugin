@@ -1269,10 +1269,12 @@ public class EsqlGrammar {
 	public PassthruFunctionTreeImpl PASSTHRU_FUNCTION(){
 		return b.<PassthruFunctionTreeImpl>nonterminal(Kind.PASSTHRU_FUNCTION).is(f.finishPassthruFunction(
 				b.token(EsqlNonReservedKeyword.PASSTHRU), b.token(EsqlPunctuator.LPARENTHESIS),
+				EXPRESSION(),
 				b.firstOf(
-						f.passthruNewSyntax(EXPRESSION(), b.optional(f.newTuple115(b.token(EsqlNonReservedKeyword.TO), FIELD_REFERENCE())),
-								b.optional(f.newTuple116(b.token(EsqlNonReservedKeyword.VALUES), ARGUMENT_CLAUSE()))), 
-						f.passthruOldSyntax(ARGUMENT_LIST())
+						f.passthruOldSyntax(b.token(EsqlPunctuator.COMMA), ARGUMENT_LIST()),
+						f.passthruNewSyntax( b.optional(f.newTuple115(b.token(EsqlNonReservedKeyword.TO), FIELD_REFERENCE())),
+								b.optional(f.newTuple116(b.token(EsqlNonReservedKeyword.VALUES), ARGUMENT_CLAUSE()))) 
+						
 				), 
 				b.token(EsqlPunctuator.RPARENTHESIS)
 		));

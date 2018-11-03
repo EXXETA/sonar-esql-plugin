@@ -27,6 +27,7 @@ public interface PassthruFunctionTree extends MiscellaneousFunctionTree{
 	SyntaxToken passthruKeyword();
 	SyntaxToken openingParenthesis();
 	ExpressionTree expression();
+	SyntaxToken comma();
 	SyntaxToken toKeyword();
 	FieldReferenceTree databaseReference();
 	SyntaxToken valuesKeyword();
