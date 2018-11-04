@@ -48,7 +48,7 @@ public class PassthruFunctionTest extends EsqlTreeModelTest<PassthruFunctionTree
 		assertThat(tree.passthruKeyword()).isNotNull();
 		assertThat(tree.openingParenthesis()).isNotNull();
 		assertThat(tree.expression()).isNotNull();
-		assertThat(tree.comma()).isNotNull();
+		assertThat(tree.comma()).isNull();
 		assertThat(tree.toKeyword()).isNull();
 		assertThat(tree.databaseReference()).isNull();
 		assertThat(tree.valuesKeyword()).isNotNull();
