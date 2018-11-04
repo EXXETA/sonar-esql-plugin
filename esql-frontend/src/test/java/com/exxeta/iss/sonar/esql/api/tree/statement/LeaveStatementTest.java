@@ -25,22 +25,25 @@ import org.junit.Test;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class ReturnStatementTest extends EsqlTreeModelTest<ReturnStatementTree> {
+public class LeaveStatementTest  extends EsqlTreeModelTest<LeaveStatementTree> {
+
+
 	@Test
-	public void returnStatement(){
-		assertThat(Kind.RETURN_STATEMENT)
-		.matches("RETURN;")
-		.matches("RETURN (PriceTotal/NumItems> 42);");
+	public void leaveStatement(){
+		assertThat(Kind.LEAVE_STATEMENT)
+		.matches("LEAVE A;");
 
 	}
+	
 	@Test
 	public void modelTest() throws Exception {
-		ReturnStatementTree tree = parse("RETURN;", Kind.RETURN_STATEMENT);
-		assertNotNull(tree.returnKeyword());
+		LeaveStatementTree tree = parse("LEAVE A;", Kind.LEAVE_STATEMENT);
+		assertNotNull(tree.leaveKeyword());
+
+		assertNotNull(tree.label());
 		
 		assertNotNull(tree.semi());
 
 	}
-		
 	
 }
