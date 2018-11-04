@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import org.sonar.check.Rule;
@@ -137,15 +138,15 @@ public class NavigatingTreeCouldBeReferenceCheck extends DoubleDispatchVisitorCh
                     }
                 }
             } while(true);
-            iterator = allKeys.keySet().iterator();
+            Iterator<Entry<String, Integer>> entrySetIterator = allKeys.entrySet().iterator();
           
-            while (iterator.hasNext())
+            while (entrySetIterator.hasNext())
             {
-                String key = iterator.next();
-                Integer count = allKeys.get(key);
+                Entry<String, Integer> entry = entrySetIterator.next();
+                Integer count = entry.getValue();
                 if(count.intValue() > threshold )
                 {
-                    Integer lineNumber = CheckUtils.findLineInText(moduleLines, key);
+                    Integer lineNumber = CheckUtils.findLineInText(moduleLines, entry.getKey());
                     if(lineNumber != null){
 	                    Integer absLine = Integer.valueOf(lineNumber.intValue() + startingLine);
 	                    violatingLinesWithPossibleReference.add(absLine);
