@@ -62,5 +62,29 @@ CREATE COMPUTE MODULE ProcessCardAccount
 
 
 	END B;
+CREATE PROCEDURE Main3()
+	BEGIN
+	  DECLARE i INTEGER;
+	  SET i = 1;
+      WHILE i <= 3 DO
+ 
+        SET i = i + 1;
+        LEAVE X;
+      END WHILE;
+      
+      SET i = 1;
+      LOOP 
+        IF i>= 4 THEN
+          LEAVE Y;
+        END IF;
+      SET i = i + 1;
+      END LOOP;
+		REPEAT
+		  SET i = i + 1;
+		
+		UNTIL
+		  i >= 4
+		END REPEAT;
 
+	END;
 END MODULE;

@@ -20,65 +20,68 @@ package com.exxeta.iss.sonar.esql.api.tree.function;
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.FieldReferenceTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
-import com.exxeta.iss.sonar.esql.api.tree.function.SelectFunctionTree;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
-public class SelectFunctionTest extends EsqlTreeModelTest<SelectFunctionTree>{
 
+
+public class SelectFunctionTest extends EsqlTreeModelTest<SelectFunctionTree> {
 	@Test
 	public void selectFunction() {
 		assertThat(Kind.SELECT_FUNCTION)
-		.matches("SELECT P.PartNumber AS a,  P.Description,  P.Price FROM PartsTable.Part[]")
-		.matches("SELECT * FROM Database.Datasource.SchemaName.Table As A")
-		.matches("SELECT P.PartNumber AS a,  P.Description,  P.Price FROM PartsTable.Part[] AS P")
-		.matches("SELECT COUNT(*) FROM Database.{UDP_Schemaname}.DATA AS DAT WHERE CON.a=a  AND CON.b NOT IN('C', 'I')")
-		.matches("SELECT FIELDVALUE(v.a) FROM vehicle.fb:VEHICLE[] AS v WHERE v.fb:c = Environment.Variables.F")
-		.matches("SELECT * FROM Employer AS e, Manager AS m")
-		.matches("SELECT ITEM NAME FROM Employer AS e")
-		;
-	}
-	
-	@Test
-	public void selectClause(){
-		assertThat(Kind.SELECT_CLAUSE)
-		.matches("P.PartNumber,  P.Description,  P.Price")
-		.matches("COUNT(*)")
-		.matches("FIELDVALUE(v.a)")
-		;
+				.matches("SELECT P.PartNumber AS a,  P.Description,  P.Price FROM PartsTable.Part[]")
+				.matches("SELECT * FROM Database.Datasource.SchemaName.Table As A")
+				.matches("SELECT P.PartNumber AS a,  P.Description,  P.Price FROM PartsTable.Part[] AS P")
+				.matches(
+						"SELECT COUNT(*) FROM Database.{UDP_Schemaname}.DATA AS DAT WHERE CON.a=a  AND CON.b NOT IN('C', 'I')")
+				.matches("SELECT FIELDVALUE(v.a) FROM vehicle.fb:VEHICLE[] AS v WHERE v.fb:c = Environment.Variables.F")
+				.matches("SELECT * FROM Employer AS e, Manager AS m").matches("SELECT ITEM NAME FROM Employer AS e");
 	}
 
 	@Test
-	public void fromClause(){
-		assertThat(Kind.FROM_CLAUSE_EXPRESSION)
-		.matches("FROM PartsTable.Part[] AS P")
-		.matches("FROM Database.Datasource.SchemaName.Table As A")
-		.matches("FROM Database.{UDP_Schemaname}.DATA AS DATN")
-		;
+	public void selectClause() {
+		assertThat(Kind.SELECT_CLAUSE).matches("P.PartNumber,  P.Description,  P.Price").matches("COUNT(*)")
+				.matches("FIELDVALUE(v.a)");
 	}
 
 	@Test
-	public void whereClause(){
-		assertThat(Kind.WHERE_CLAUSE)
-		.matches("WHERE A = B")
-		.matches("WHERE CON.a=a  AND CON.b NOT IN('C', 'I')");
+	public void fromClause() {
+		assertThat(Kind.FROM_CLAUSE_EXPRESSION).matches("FROM PartsTable.Part[] AS P")
+				.matches("FROM Database.Datasource.SchemaName.Table As A")
+				.matches("FROM Database.{UDP_Schemaname}.DATA AS DATN");
 	}
-	
+
 	@Test
-	public void modelTest() throws Exception{
-		SelectFunctionTree tree = parse("SELECT * FROM Database.Datasource.SchemaName.Table As A Where A.A>10", Kind.SELECT_FUNCTION);
+	public void whereClause() {
+		assertThat(Kind.WHERE_CLAUSE).matches("WHERE A = B").matches("WHERE CON.a=a  AND CON.b NOT IN('C', 'I')");
+	}
+
+	@Test
+	public void modelTest() throws Exception {
+		SelectFunctionTree tree = parse("SELECT * FROM Database.Datasource.SchemaName.Table As A Where A.A>10",
+				Kind.SELECT_FUNCTION);
 		assertNotNull(tree);
 		assertNotNull(tree.selectKeyword());
 		assertNotNull(tree.selectClause());
 		assertNotNull(tree.fromClause());
 		assertNotNull(tree.whereClause());
 		assertTrue(tree.selectClause().aliasedFieldReferenceList().get(0).expression().is(Kind.FIELD_REFERENCE));
-		FieldReferenceTree field = (FieldReferenceTree)tree.selectClause().aliasedFieldReferenceList().get(0).expression();
-		assertEquals(field.pathElement().name().star().text(),"*");
+		FieldReferenceTree field = (FieldReferenceTree) tree.selectClause().aliasedFieldReferenceList().get(0)
+				.expression();
+		assertEquals(field.pathElement().name().star().text(), "*");
+		SelectClauseTree clause = tree.selectClause();
+		assertNotNull(clause.aliasedFieldReferenceList());
+		assertNull(clause.itemKeyword());
+		assertNull(clause.itemExpression());
+		assertNull(clause.aggregationType());
+		assertNull(clause.openingParenthesis());
+		assertNull(clause.aggregationExpression());
+		assertNull(clause.closingParenthesis());
 	}
 
 }
