@@ -36,7 +36,7 @@ public class AsbitstreamFunctionTest extends EsqlTreeModelTest<AsbitstreamFuncti
 		.matches("ASBITSTREAM(cursor OPTIONS options CCSID 1208)")
 		.matches("ASBITSTREAM(Environment.Variables.MQRFH2.Data,,,,,,)")
 		.matches("ASBITSTREAM(Environment.Variables.MQRFH2.Data,,1208)")
-		.matches("ASBITSTREAM(Environment.Variables.MQRFH2.Data,enc,1208, set, type, format, options)")
+		.matches("ASBITSTREAM(Environment.Variables.MQRFH2.Data,enc,1208, set, type, format)")
 		.matches("ASBITSTREAM(Environment.Variables.MQRFH2.Data,enc)");
 	}
 	
@@ -62,6 +62,16 @@ public class AsbitstreamFunctionTest extends EsqlTreeModelTest<AsbitstreamFuncti
 		assertNull(tree.formatExpression());
 		
 		assertNotNull(tree.closingParenthesis());
+		tree = parse("ASBITSTREAM(Environment.Variables.MQRFH2.Data,enc,1208, set, ,)", Kind.ASBITSTREAM_FUNCTION);
+		assertNotNull(tree.setSeparator());
+		assertNotNull(tree.setExpression());
+		assertNotNull(tree.formatSeparator());
+		assertNull(tree.formatExpression());
+		assertNull(tree.typeExpression());
+		assertNull(tree.optionsSeparator());
+		assertNull(tree.optionsExpression());
+		
+		
 	}
 
 }
