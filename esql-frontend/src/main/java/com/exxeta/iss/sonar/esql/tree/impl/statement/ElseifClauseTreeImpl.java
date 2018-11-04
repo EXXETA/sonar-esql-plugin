@@ -43,12 +43,6 @@ public class ElseifClauseTreeImpl extends EsqlTree implements ElseifClauseTree {
 
 		  }
 
-	  public ElseifClauseTreeImpl(InternalSyntaxToken elseifKeyword) {
-		    this.elseifKeyword = elseifKeyword;
-		    this.statements = null;
-
-		  }
-
 	  @Override
 	  public SyntaxToken elseifKeyword() {
 	    return elseifKeyword;

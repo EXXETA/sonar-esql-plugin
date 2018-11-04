@@ -23,6 +23,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
@@ -199,6 +200,14 @@ public class CreateStatementTest  extends EsqlTreeModelTest<CreateStatementTreeI
 		assertNull(tree.parseClause().optionsSeparator());
 		tree = parse("CREATE LASTCHILD OF OutputRoot DOMAIN('MRM') PARSE(inBitStream);", Kind.CREATE_STATEMENT);
 		assertNull(tree.parseClause().optionsExpression());
+		tree = parse("CREATE NEXTSIBLING OF targetCursor AS targetCursor REPEAT;", Kind.CREATE_STATEMENT);
+		assertNotNull(tree);
+		assertNotNull(tree.repeatClause());
+		assertNotNull(tree.repeatClause().repeatKeyword());
+		assertNull(tree.repeatClause().valueKeyword());
+		assertNull(tree.repeatClause().expression());
+		Assertions.assertThat(tree.repeatClause().getKind()).isEqualTo(Kind.REPEAT_CLAUSE);
+		
 	}
 	
 }

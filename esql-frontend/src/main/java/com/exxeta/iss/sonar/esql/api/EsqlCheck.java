@@ -32,14 +32,15 @@ import com.google.common.annotations.Beta;
 @Beta
 public interface EsqlCheck {
 
-  @Deprecated
-  LineIssue addLineIssue(Tree tree, String message);
+	/**
+	 * @deprecated use use {@link EsqlCheck#addIssue(Issue)}
+	 */
+	@Deprecated
+	LineIssue addLineIssue(Tree tree, String message);
 
- 
-  PreciseIssue addIssue(Tree tree, String message);
+	PreciseIssue addIssue(Tree tree, String message);
 
+	<T extends Issue> T addIssue(T issue);
 
-  <T extends Issue> T addIssue(T issue);
-
-  List<Issue> scanFile(TreeVisitorContext context);
+	List<Issue> scanFile(TreeVisitorContext context);
 }

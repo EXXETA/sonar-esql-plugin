@@ -28,6 +28,7 @@ import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ResultSetTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ReturnTypeTree;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.ExternalRoutineBodyTreeImpl;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
 
@@ -86,6 +87,17 @@ public class CreateProcedureTest extends EsqlTreeModelTest<CreateProcedureStatem
 
 		tree = parse("CREATE PROCEDURE a () RETURNS CHAR BEGIN END;", Kind.CREATE_PROCEDURE_STATEMENT);
 		tree = parse("CREATE PROCEDURE a () RETURNS CHAR NULLABLE BEGIN END;", Kind.CREATE_PROCEDURE_STATEMENT);
+		tree = parse("CREATE PROCEDURE a () RETURNS INTEGER\n" + 
+				" LANGUAGE JAVA\n" + 
+				" EXTERNAL NAME \"com.ibm.broker.test.MyClass.myMethod1\";", Kind.CREATE_PROCEDURE_STATEMENT);
+		assertNotNull(tree.routineBody());
+		ExternalRoutineBodyTreeImpl externalRoutineBody = tree.routineBody().externalRoutineBody();
+		assertNotNull(externalRoutineBody);
+		assertNotNull(externalRoutineBody.externalKeyword());
+		assertNotNull(externalRoutineBody.nameKeyword());
+		assertNotNull(externalRoutineBody.externalRoutineName());
+		assertNotNull(externalRoutineBody.semi());
+		
 
 	}
 	
