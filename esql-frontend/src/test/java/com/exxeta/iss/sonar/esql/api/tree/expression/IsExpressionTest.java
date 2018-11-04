@@ -18,12 +18,15 @@
 package com.exxeta.iss.sonar.esql.api.tree.expression;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
+import org.assertj.core.api.Assertions;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.api.tree.symbols.type.TypableTree;
+import com.exxeta.iss.sonar.esql.tree.symbols.type.RoutineType;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
 public class IsExpressionTest extends EsqlTreeModelTest<IsExpressionTree>{
@@ -48,6 +51,10 @@ public class IsExpressionTest extends EsqlTreeModelTest<IsExpressionTree>{
 		assertNull(tree.notKeyword());
 		assertNull(tree.plusMinus());
 		assertNotNull(tree.with());
+		Assertions.assertThat(tree.types()).isEmpty();
+		((TypableTree)tree).add( RoutineType.create());
+		Assertions.assertThat(tree.types()).hasSize(1);
+
 	}
 
 }
