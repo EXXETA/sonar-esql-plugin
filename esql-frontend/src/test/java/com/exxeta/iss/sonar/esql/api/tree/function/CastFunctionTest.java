@@ -48,6 +48,9 @@ public class CastFunctionTest extends EsqlTreeModelTest<CastFunctionTree> {
 		assertNotNull(tree.sourceExpressions());
 		assertNotNull(tree.asKeyword());
 		assertNotNull(tree.dataType());
+		assertNull(tree.dataType().intervalDataType());
+		assertNull(tree.dataType().decimalDataType());
+		assertNull(tree.dataType().toKeyword());
 		assertNull(tree.ccsidKeyword());
 		assertNull(tree.ccsidExpression());
 		assertNull(tree.encodingKeyword());

@@ -82,6 +82,12 @@ public class SelectFunctionTest extends EsqlTreeModelTest<SelectFunctionTree> {
 		assertNull(clause.openingParenthesis());
 		assertNull(clause.aggregationExpression());
 		assertNull(clause.closingParenthesis());
+		tree = parse("SELECT A.Test AS T FROM Database.Datasource.SchemaName.Table As A Where A.A>10",
+				Kind.SELECT_FUNCTION);
+		AliasedFieldReferenceTree aliasedFieldRef = tree.fromClause().aliasedFieldReferences().get(0);
+		assertNotNull(aliasedFieldRef.fieldRefernce());
+		assertNotNull(aliasedFieldRef.asKeyword());
+		assertNotNull(aliasedFieldRef.alias());
 	}
 
 }
