@@ -23,7 +23,6 @@ import com.exxeta.iss.sonar.esql.api.symbols.Type;
 import com.exxeta.iss.sonar.esql.api.symbols.TypeSet;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.CallExpressionTree;
-import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.VariableReferenceTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.FunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.symbols.type.TypableTree;
@@ -37,7 +36,6 @@ public class CallExpressionTreeImpl extends EsqlTree implements CallExpressionTr
 	private FunctionTree function;
 	private VariableReferenceTree variableReference;
 	private ParameterListTreeImpl parameters;
-	private ExpressionTree expression;
 	private TypeSet types = TypeSet.emptyTypeSet();
 
 	public CallExpressionTreeImpl(FunctionTree function) {
@@ -51,10 +49,6 @@ public class CallExpressionTreeImpl extends EsqlTree implements CallExpressionTr
 
 	public CallExpressionTreeImpl(VariableReferenceTree variableReference) {
 		this.variableReference = variableReference;
-	}
-
-	public CallExpressionTreeImpl(ExpressionTree expression) {
-		this.expression = expression;
 	}
 
 	@Override
@@ -90,7 +84,7 @@ public class CallExpressionTreeImpl extends EsqlTree implements CallExpressionTr
 
 	@Override
 	public Iterator<Tree> childrenIterator() {
-		return Iterators.forArray(expression, function, variableReference, parameters);
+		return Iterators.forArray(function, variableReference, parameters);
 	}
 
 	@Override
