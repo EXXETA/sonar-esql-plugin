@@ -1,0 +1,7 @@
+
+CREATE FUNCTION Main() BEGIN
+	DECLARE par1 INTEGER load();
+	DECLARE par2 INTEGER 1;
+	
+END;
+
