@@ -30,6 +30,10 @@
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
+			<artifactId>msgflow-frontend</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>esql-checks</artifactId>
 		</dependency>
 		<dependency>
