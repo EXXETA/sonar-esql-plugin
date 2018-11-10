@@ -15,25 +15,42 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.msgflow.api;
+package com.exxeta.iss.sonar.msgflow.api.visitors;
 
-import java.util.List;
+import javax.annotation.Nullable;
 
-import com.exxeta.iss.sonar.msgflow.api.tree.MsgflowTree;
-import com.exxeta.iss.sonar.msgflow.api.visitors.Issue;
-import com.exxeta.iss.sonar.msgflow.api.visitors.MsgflowVisitorContext;
-import com.exxeta.iss.sonar.msgflow.api.visitors.PreciseIssue;
-import com.google.common.annotations.Beta;
+import com.exxeta.iss.sonar.msgflow.api.MsgflowCheck;
 
-/**
- * Marker interface for all ESQL checks.
- */
-@Beta
-public interface MsgflowCheck {
+public class FileIssue implements Issue {
 
-	PreciseIssue addIssue(MsgflowTree tree, String message);
+	private final MsgflowCheck check;
+	private Double cost;
+	private final String message;
 
-	<T extends Issue> T addIssue(T issue);
+	public FileIssue(final MsgflowCheck check, final String message) {
+		this.check = check;
+		this.message = message;
+		cost = null;
+	}
 
-	List<Issue> scanFile(MsgflowVisitorContext context);
+	@Override
+	public MsgflowCheck check() {
+		return check;
+	}
+
+	@Nullable
+	@Override
+	public Double cost() {
+		return cost;
+	}
+
+	@Override
+	public Issue cost(final double cost) {
+		this.cost = cost;
+		return this;
+	}
+
+	public String message() {
+		return message;
+	}
 }
