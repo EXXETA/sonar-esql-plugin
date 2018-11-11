@@ -1,7 +1,7 @@
 package com.exxeta.iss.sonar.msgflow.check;
 
+import com.exxeta.iss.sonar.msgflow.api.tree.node.routing.AggregateControlNode;
 import com.exxeta.iss.sonar.msgflow.api.visitors.MsgflowVisitorCheck;
-import com.exxeta.iss.sonar.msgflow.parser.AggregateControlNode;
 
 public class AggregateWithoutTimeoutCheck extends MsgflowVisitorCheck {
 
@@ -9,8 +9,8 @@ public class AggregateWithoutTimeoutCheck extends MsgflowVisitorCheck {
 
 	@Override
 	public void visitAggregateControlNode(final AggregateControlNode aggregateControlNode) {
-		if (aggregateControlNode.getTimeoutInterval().equals("0")) {
-			addIssue(aggregateControlNode, String.format(MESSAGE, aggregateControlNode.getName()));
+		if (aggregateControlNode.timeoutInterval().equals("0")) {
+			addIssue(aggregateControlNode, String.format(MESSAGE, aggregateControlNode.name()));
 		}
 	}
 

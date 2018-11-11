@@ -19,26 +19,26 @@ package com.exxeta.iss.sonar.msgflow.api.visitors;
 
 import javax.annotation.Nullable;
 
-import com.exxeta.iss.sonar.msgflow.api.tree.MsgflowTree;
+import com.exxeta.iss.sonar.msgflow.api.tree.Tree;
 
 public class IssueLocation {
 
-	private final MsgflowTree firstTree;
-	private final MsgflowTree lastTree;
+	private final Tree firstTree;
+	private final Tree lastTree;
 	private final String message;
 
-	public IssueLocation(final MsgflowTree tree) {
+	public IssueLocation(final Tree tree) {
 		this(tree, null);
 	}
 
-	public IssueLocation(final MsgflowTree firstTree, final MsgflowTree lastTree, @Nullable final String message) {
+	public IssueLocation(final Tree tree, @Nullable final String message) {
+		this(tree, tree, message);
+	}
+
+	public IssueLocation(final Tree firstTree, final Tree lastTree, @Nullable final String message) {
 		this.firstTree = firstTree;
 		this.lastTree = lastTree;
 		this.message = message;
-	}
-
-	public IssueLocation(final MsgflowTree tree, @Nullable final String message) {
-		this(tree, tree, message);
 	}
 
 	public int endLine() {

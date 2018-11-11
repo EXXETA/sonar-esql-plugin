@@ -19,7 +19,7 @@ package com.exxeta.iss.sonar.msgflow.api;
 
 import java.util.List;
 
-import com.exxeta.iss.sonar.msgflow.api.tree.MsgflowTree;
+import com.exxeta.iss.sonar.msgflow.api.tree.Tree;
 import com.exxeta.iss.sonar.msgflow.api.visitors.Issue;
 import com.exxeta.iss.sonar.msgflow.api.visitors.MsgflowVisitorContext;
 import com.exxeta.iss.sonar.msgflow.api.visitors.PreciseIssue;
@@ -31,9 +31,9 @@ import com.google.common.annotations.Beta;
 @Beta
 public interface MsgflowCheck {
 
-	PreciseIssue addIssue(MsgflowTree tree, String message);
-
 	<T extends Issue> T addIssue(T issue);
+
+	PreciseIssue addIssue(Tree tree, String message);
 
 	List<Issue> scanFile(MsgflowVisitorContext context);
 }

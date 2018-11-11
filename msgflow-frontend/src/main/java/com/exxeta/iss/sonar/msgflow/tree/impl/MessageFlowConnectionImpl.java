@@ -1,11 +1,14 @@
-package com.exxeta.iss.sonar.msgflow.parser;
+package com.exxeta.iss.sonar.msgflow.tree.impl;
+
+import com.exxeta.iss.sonar.msgflow.api.tree.MessageFlowConnection;
+
 /**
- * The class is a model of a message flow connection the properties of 
- * message flow connections.
- * 
+ * The class is a model of a message flow connection the properties of message
+ * flow connections.
+ *
  * @author Arjav Shah
  */
-public class MessageFlowConnection {
+public class MessageFlowConnectionImpl implements MessageFlowConnection {
 	/**
 	 * a source node ID of the connection
 	 */
@@ -30,13 +33,13 @@ public class MessageFlowConnection {
 	 * a target terminal of the connection
 	 */
 	private String targetTerminal;
-	
-	public MessageFlowConnection(){
-		
+
+	public MessageFlowConnectionImpl() {
+
 	}
-	
-	public MessageFlowConnection(String srcNode, String srcNodeName, String targetNode, String targetNodeName,
-			String srcTerminal, String targetTerminal) {
+
+	public MessageFlowConnectionImpl(final String srcNode, final String srcNodeName, final String targetNode,
+			final String targetNodeName, final String srcTerminal, final String targetTerminal) {
 		super();
 		this.srcNode = srcNode;
 		this.srcNodeName = srcNodeName;
@@ -48,51 +51,56 @@ public class MessageFlowConnection {
 
 	/**
 	 * The method returns the ID of the source Node.
-	 * 
+	 *
 	 * @return a ID of the source Node.
 	 */
 	public String getSrcNode() {
 		return srcNode;
 	}
+
 	/**
 	 * The method returns the Display Name of the source Node.
-	 * 
+	 *
 	 * @return a Display Name of the source Node.
 	 */
 	public String getSrcNodeName() {
 		return srcNodeName;
 	}
-	/**
-	 * The method returns the ID of the target Node.
-	 * 
-	 * @return a ID of the target Node.
-	 */
-	public String getTargetNode() {
-		return targetNode;
-	}
-	/**
-	 * The method returns the Display Name of the target Node.
-	 * 
-	 * @return a Display Name of the target Node.
-	 */
-	public String getTargetNodeName() {
-		return targetNodeName;
-	}
+
 	/**
 	 * The method returns the source terminal.
-	 * 
+	 *
 	 * @return a name of the source terminal.
 	 */
 	public String getSrcTerminal() {
 		return srcTerminal;
 	}
+
+	/**
+	 * The method returns the ID of the target Node.
+	 *
+	 * @return a ID of the target Node.
+	 */
+	public String getTargetNode() {
+		return targetNode;
+	}
+
+	/**
+	 * The method returns the Display Name of the target Node.
+	 *
+	 * @return a Display Name of the target Node.
+	 */
+	public String getTargetNodeName() {
+		return targetNodeName;
+	}
+
 	/**
 	 * The method returns the target terminal.
-	 * 
+	 *
 	 * @return a name of the target terminal.
 	 */
 	public String getTargetTerminal() {
 		return targetTerminal;
 	}
-	
+
 }

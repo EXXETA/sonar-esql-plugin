@@ -4,9 +4,10 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.exxeta.iss.sonar.msgflow.api.tree.MsgflowTree;
-import com.exxeta.iss.sonar.msgflow.parser.AggregateControlNode;
-import com.exxeta.iss.sonar.msgflow.parser.Msgflow;
+import com.exxeta.iss.sonar.msgflow.api.tree.node.mq.MQInputNode;
+import com.exxeta.iss.sonar.msgflow.api.tree.node.routing.AggregateControlNode;
+import com.exxeta.iss.sonar.msgflow.tree.impl.MsgflowImpl;
+import com.exxeta.iss.sonar.msgflow.tree.impl.MsgflowTree;
 import com.google.common.base.Preconditions;
 
 public class MsgflowVisitor {
@@ -37,7 +38,10 @@ public class MsgflowVisitor {
 	public void visitAggregateControlNode(final AggregateControlNode aggregateControlNode) {
 	}
 
-	public void visitMsgflow(final Msgflow msgflow) {
+	public void visitMQInputNode(final MQInputNode aggregateControlNode) {
+	}
+
+	public void visitMsgflow(final MsgflowImpl msgflow) {
 		msgflow.getMessageFlowNodes().stream().forEach(node -> node.accept(this));
 
 	}

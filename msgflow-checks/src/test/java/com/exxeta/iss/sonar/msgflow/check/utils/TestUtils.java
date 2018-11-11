@@ -28,9 +28,9 @@ import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 
 import com.exxeta.iss.sonar.msgflow.api.visitors.MsgflowVisitorContext;
-import com.exxeta.iss.sonar.msgflow.parser.Msgflow;
 import com.exxeta.iss.sonar.msgflow.parser.MsgflowParser;
 import com.exxeta.iss.sonar.msgflow.parser.MsgflowParserBuilder;
+import com.exxeta.iss.sonar.msgflow.tree.impl.MsgflowImpl;
 import com.google.common.base.Throwables;
 
 public class TestUtils {
@@ -42,7 +42,7 @@ public class TestUtils {
 
 	private static MsgflowVisitorContext createContext(final InputFile file, final MsgflowParser parser) {
 		try {
-			final Msgflow msgflow = parser.parse(file.contents());
+			final MsgflowImpl msgflow = parser.parse(file.contents());
 			return new MsgflowVisitorContext(msgflow, file);
 		} catch (final IOException e) {
 			throw Throwables.propagate(e);

@@ -1,10 +1,11 @@
-package com.exxeta.iss.sonar.msgflow.api.tree;
+package com.exxeta.iss.sonar.msgflow.tree.impl;
 
 import org.w3c.dom.Node;
 
+import com.exxeta.iss.sonar.msgflow.api.tree.Tree;
 import com.exxeta.iss.sonar.msgflow.api.visitors.MsgflowVisitor;
 
-public abstract class MsgflowTree {
+public abstract class MsgflowTree implements Tree {
 
 	private final Node domNode;
 

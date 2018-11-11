@@ -23,7 +23,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import com.exxeta.iss.sonar.msgflow.api.MsgflowCheck;
-import com.exxeta.iss.sonar.msgflow.api.tree.MsgflowTree;
+import com.exxeta.iss.sonar.msgflow.tree.impl.MsgflowTree;
 
 public class PreciseIssue implements Issue {
 	private final MsgflowCheck check;
