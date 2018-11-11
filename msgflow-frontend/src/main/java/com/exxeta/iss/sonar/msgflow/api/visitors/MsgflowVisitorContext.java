@@ -2,20 +2,20 @@ package com.exxeta.iss.sonar.msgflow.api.visitors;
 
 import org.sonar.api.batch.fs.InputFile;
 
-import com.exxeta.iss.sonar.msgflow.tree.impl.MsgflowImpl;
+import com.exxeta.iss.sonar.msgflow.tree.impl.MsgflowTree;
 
 public class MsgflowVisitorContext {
 
-	private final MsgflowImpl msgflow;
+	private final MsgflowTree msgflow;
 	private final MsgflowFile msgflowFile;
 
-	public MsgflowVisitorContext(final MsgflowImpl msgflow, final InputFile inputFile) {
+	public MsgflowVisitorContext(final MsgflowTree msgflow, final InputFile inputFile) {
 		super();
 		this.msgflow = msgflow;
 		msgflowFile = new MsgflowFileImpl(inputFile);
 	}
 
-	public MsgflowImpl getMsgflow() {
+	public MsgflowTree getMsgflow() {
 		return msgflow;
 	}
 

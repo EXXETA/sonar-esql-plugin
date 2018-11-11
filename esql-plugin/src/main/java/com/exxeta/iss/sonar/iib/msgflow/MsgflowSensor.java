@@ -19,6 +19,7 @@ import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.InputFile.Type;
+import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.rule.CheckFactory;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
@@ -32,21 +33,23 @@ import org.sonar.api.utils.log.Loggers;
 import org.sonar.squidbridge.ProgressReport;
 import org.sonar.squidbridge.api.AnalysisException;
 
-import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
-import com.exxeta.iss.sonar.esql.api.visitors.TreeVisitor;
+import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
+import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
 import com.exxeta.iss.sonar.esql.check.CheckList;
 import com.exxeta.iss.sonar.esql.check.ParsingErrorCheck;
 import com.exxeta.iss.sonar.iib.IibPlugin;
 import com.exxeta.iss.sonar.msgflow.api.CustomMsgflowRulesDefinition;
 import com.exxeta.iss.sonar.msgflow.api.MsgflowCheck;
+import com.exxeta.iss.sonar.msgflow.api.visitors.FileIssue;
 import com.exxeta.iss.sonar.msgflow.api.visitors.Issue;
 import com.exxeta.iss.sonar.msgflow.api.visitors.MsgflowVisitor;
 import com.exxeta.iss.sonar.msgflow.api.visitors.MsgflowVisitorContext;
 import com.exxeta.iss.sonar.msgflow.check.MsgflowCheckList;
 import com.exxeta.iss.sonar.msgflow.parser.MsgflowParser;
 import com.exxeta.iss.sonar.msgflow.parser.MsgflowParserBuilder;
-import com.exxeta.iss.sonar.msgflow.tree.impl.MsgflowImpl;
+import com.exxeta.iss.sonar.msgflow.tree.impl.MsgflowTree;
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.base.Preconditions;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import com.sonar.sslr.api.RecognitionException;
@@ -109,9 +112,58 @@ public class MsgflowSensor implements Sensor {
 		}
 	}
 
+	private static NewIssueLocation newLocation(final InputFile inputFile, final NewIssue issue,
+			final IssueLocation location) {
+		final TextRange range = inputFile.newRange(location.startLine(), location.startLineOffset(), location.endLine(),
+				location.endLineOffset());
+
+		final NewIssueLocation newLocation = issue.newLocation().on(inputFile).at(range);
+
+		if (location.message() != null) {
+			newLocation.message(location.message());
+		}
+		return newLocation;
+	}
+
 	private static void processException(final Exception e, final SensorContext sensorContext,
 			final InputFile inputFile) {
 		sensorContext.newAnalysisError().onFile(inputFile).message(e.getMessage()).save();
+	}
+
+	private static void saveFileIssue(final SensorContext sensorContext, final InputFile inputFile,
+			final RuleKey ruleKey, final FileIssue issue) {
+		final NewIssue newIssue = sensorContext.newIssue();
+
+		final NewIssueLocation primaryLocation = newIssue.newLocation().message(issue.message()).on(inputFile);
+
+		saveIssue(newIssue, primaryLocation, ruleKey, issue);
+	}
+
+	private static void saveIssue(final NewIssue newIssue, final NewIssueLocation primaryLocation,
+			final RuleKey ruleKey, final Issue issue) {
+		newIssue.forRule(ruleKey).at(primaryLocation);
+
+		if (issue.cost() != null) {
+			newIssue.gap(issue.cost());
+		}
+
+		newIssue.save();
+	}
+
+	private static void savePreciseIssue(final SensorContext sensorContext, final InputFile inputFile,
+			final RuleKey ruleKey, final PreciseIssue issue) {
+		final NewIssue newIssue = sensorContext.newIssue();
+
+		newIssue.forRule(ruleKey).at(newLocation(inputFile, newIssue, issue.primaryLocation()));
+
+		if (issue.cost() != null) {
+			newIssue.gap(issue.cost());
+		}
+
+		for (final IssueLocation secondary : issue.secondaryLocations()) {
+			newIssue.addLocation(newLocation(inputFile, newIssue, secondary));
+		}
+		newIssue.save();
 	}
 
 	private static void stopProgressReport(final ProgressReport progressReport, final boolean success) {
@@ -131,7 +183,7 @@ public class MsgflowSensor implements Sensor {
 	private final MsgflowParser parser;
 
 	// parsingErrorRuleKey equals null if ParsingErrorCheck is not activated
-	private RuleKey parsingErrorRuleKey = null;
+	private final RuleKey parsingErrorRuleKey = null;
 
 	public MsgflowSensor(final CheckFactory checkFactory, final FileSystem fileSystem) {
 		this(checkFactory, fileSystem, null);
@@ -150,12 +202,12 @@ public class MsgflowSensor implements Sensor {
 	}
 
 	private void analyse(final SensorContext sensorContext, final InputFile inputFile,
-			final ProductDependentExecutor executor, final List<TreeVisitor> visitors) {
-		ProgramTree programTree;
+			final ProductDependentExecutor executor, final List<MsgflowVisitor> visitors) {
+		MsgflowTree flow;
 
 		try {
-			programTree = (ProgramTree) parser.parse(inputFile.contents());
-			scanFile(sensorContext, inputFile, executor, visitors, programTree);
+			flow = parser.parse(inputFile.contents());
+			scanFile(sensorContext, inputFile, executor, visitors, flow);
 		} catch (final RecognitionException e) {
 			checkInterrupted(e);
 			LOG.error("Unable to parse file: " + inputFile.uri());
@@ -169,7 +221,7 @@ public class MsgflowSensor implements Sensor {
 	}
 
 	@VisibleForTesting
-	protected void analyseFiles(final SensorContext context, final List<TreeVisitor> treeVisitors,
+	protected void analyseFiles(final SensorContext context, final List<MsgflowVisitor> treeVisitors,
 			final Iterable<InputFile> inputFiles, final ProductDependentExecutor executor,
 			final ProgressReport progressReport) {
 		boolean success = false;
@@ -205,15 +257,15 @@ public class MsgflowSensor implements Sensor {
 	@Override
 	public void execute(final SensorContext context) {
 		final ProductDependentExecutor executor = createProductDependentExecutor(context);
-		final List<TreeVisitor> treeVisitors = Lists.newArrayList();
+		final List<MsgflowVisitor> treeVisitors = Lists.newArrayList();
 		treeVisitors.addAll(executor.getProductDependentTreeVisitors());
 		treeVisitors.addAll(checks.visitorChecks());
 
-		for (final TreeVisitor check : treeVisitors) {
-			if (check instanceof ParsingErrorCheck) {
-				parsingErrorRuleKey = checks.ruleKeyFor((MsgflowCheck) check);
-				break;
-			}
+		for (final MsgflowVisitor check : treeVisitors) {
+			/*
+			 * if (check instanceof ParsingErrorCheck) { parsingErrorRuleKey =
+			 * checks.ruleKeyFor((MsgflowCheck) check); break; }
+			 */
 		}
 
 		final Iterable<InputFile> inputFiles = fileSystem.inputFiles(mainFilePredicate);
@@ -244,8 +296,29 @@ public class MsgflowSensor implements Sensor {
 				.message(e.getMessage()).save();
 	}
 
+	private RuleKey ruleKey(final MsgflowCheck check) {
+		Preconditions.checkNotNull(check);
+		final RuleKey ruleKey = checks.ruleKeyFor(check);
+		if (ruleKey == null) {
+			throw new IllegalStateException("No rule key found for a rule");
+		}
+		return ruleKey;
+	}
+
+	private void saveFileIssues(final SensorContext sensorContext, final List<Issue> fileIssues,
+			final InputFile inputFile) {
+		for (final Issue issue : fileIssues) {
+			final RuleKey ruleKey = ruleKey(issue.check());
+			if (issue instanceof FileIssue) {
+				saveFileIssue(sensorContext, inputFile, ruleKey, (FileIssue) issue);
+			} else {
+				savePreciseIssue(sensorContext, inputFile, ruleKey, (PreciseIssue) issue);
+			}
+		}
+	}
+
 	private void scanFile(final SensorContext sensorContext, final InputFile inputFile,
-			final ProductDependentExecutor executor, final List<MsgflowVisitor> visitors, final MsgflowImpl msgflow) {
+			final ProductDependentExecutor executor, final List<MsgflowVisitor> visitors, final MsgflowTree msgflow) {
 		final MsgflowVisitorContext context = new MsgflowVisitorContext(msgflow, inputFile);
 
 		final List<Issue> fileIssues = new ArrayList<>();
@@ -260,5 +333,4 @@ public class MsgflowSensor implements Sensor {
 
 		saveFileIssues(sensorContext, fileIssues, inputFile);
 	}
-
 }
