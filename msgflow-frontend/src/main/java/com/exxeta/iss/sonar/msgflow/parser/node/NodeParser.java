@@ -14,7 +14,7 @@ public abstract class NodeParser<T extends AbstractMessageFlowNode> {
 	private static final Logger LOGGER = Loggers.get(NodeParser.class);
 
 	protected String getId(final Element nodeElement) throws XPathExpressionException {
-		return nodeElement.getAttribute("id");
+		return nodeElement.getAttribute("xmi:id");
 	}
 
 	protected int getLocationX(final Element nodeElement) throws XPathExpressionException {
