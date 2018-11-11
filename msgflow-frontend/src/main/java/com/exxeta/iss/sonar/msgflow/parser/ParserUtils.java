@@ -25,6 +25,8 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import com.exxeta.iss.sonar.msgflow.tree.impl.AbstractMessageFlowNode;
+
 public class ParserUtils {
 
 	public static Document createDocument(final File file)
@@ -111,7 +113,7 @@ public class ParserUtils {
 		return (String) expression.evaluate(nodeElement, XPathConstants.STRING);
 	}
 
-	public static MessageFlowNode parseNode(final Element element) {
+	public static AbstractMessageFlowNode parseNode(final Element element) {
 		final String type = element.getAttribute("xmi:type").split(":")[0];
 		return ParserLists.getNodeParser(type).parseMessageFlowNode(element);
 	}

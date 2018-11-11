@@ -15,21 +15,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.msgflow.parser;
+package com.exxeta.iss.sonar.msgflow.tree.impl;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.w3c.dom.Node;
 
-import com.exxeta.iss.sonar.msgflow.api.tree.MsgflowTree;
+import com.exxeta.iss.sonar.msgflow.api.tree.MessageFlowNode;
+import com.exxeta.iss.sonar.msgflow.api.tree.Terminal;
 
 /**
  * The class is a model of a message flow node. The model contains variables
  * holding connection data as well as configuration data of a message flow node.
  *
  */
-public abstract class MessageFlowNode extends MsgflowTree {
+public abstract class AbstractMessageFlowNode extends MsgflowTree implements MessageFlowNode {
 
 	/**
 	 * The logger for the class.
@@ -40,8 +41,6 @@ public abstract class MessageFlowNode extends MsgflowTree {
 	private final String id;
 
 	private final String name;
-
-	private String location;
 
 	/**
 	 * the flag for 'build Tree Using Schema' of a message flow node
@@ -124,23 +123,33 @@ public abstract class MessageFlowNode extends MsgflowTree {
 	/**
 	 * the list of input terminals of a message flow node
 	 */
-	private ArrayList<String> inputTerminals;
+	private List<Terminal> inputTerminals;
 
 	/**
 	 * the list of output terminals of a message flow node
 	 */
-	private ArrayList<String> outputTerminals;
+	private List<Terminal> outputTerminals;
 
 	/**
 	 * the list of custom properties of a message flow node
 	 */
 	private Map<String, Object> properties;
 
-	public MessageFlowNode(final Node node, final String id, final String name, final String location) {
+	private List<Terminal> sourceTerminals;
+
+	private List<Terminal> targetTerminals;
+
+	private int locationX;
+
+	private int locationY;
+
+	public AbstractMessageFlowNode(final Node node, final String id, final String name, final int locationX,
+			final int locationY) {
 		super(node);
 		this.id = id;
 		this.name = name;
-		this.location = location;
+		this.locationX = locationX;
+		this.locationY = locationY;
 	}
 
 	/**
@@ -148,13 +157,13 @@ public abstract class MessageFlowNode extends MsgflowTree {
 	 *
 	 * Creates a new message flow node (model) and initializes its properties.
 	 */
-	public MessageFlowNode(final Node node, final String id, final String name, final String type,
+	public AbstractMessageFlowNode(final Node node, final String id, final String name, final String type,
 			final boolean buildTreeUsingSchema, final boolean mixedContentRetainMode, final boolean commentsRetainMode,
 			final boolean validateMaster, final String messageDomainProperty, final String messageSetProperty,
 			final String requestMsgLocationInTree, final String messageDomain, final String messageSet,
 			final String recordDefinition, final boolean resetMessageDomain, final boolean resetMessageSet,
 			final boolean resetMessageType, final boolean resetMessageFormat, final boolean areMonitoringEventsEnabled,
-			final ArrayList<String> inputTerminals, final ArrayList<String> outputTerminals,
+			final List<Terminal> inputTerminals, final List<Terminal> outputTerminals,
 			final Map<String, Object> properties) {
 		super(node);
 		this.id = id;
@@ -194,7 +203,7 @@ public abstract class MessageFlowNode extends MsgflowTree {
 	 *
 	 * @return the ID of a message flow node
 	 */
-	public String getId() {
+	public String id() {
 		return id;
 	}
 
@@ -203,12 +212,8 @@ public abstract class MessageFlowNode extends MsgflowTree {
 	 *
 	 * @return the list of input terminals of a message flow node
 	 */
-	public ArrayList<String> getInputTerminals() {
+	public List<Terminal> getInputTerminals() {
 		return inputTerminals;
-	}
-
-	public String getLocation() {
-		return location;
 	}
 
 	/**
@@ -252,7 +257,7 @@ public abstract class MessageFlowNode extends MsgflowTree {
 	 *
 	 * @return the name of a message flow node
 	 */
-	public String getName() {
+	public String name() {
 		return name;
 	}
 
@@ -261,7 +266,7 @@ public abstract class MessageFlowNode extends MsgflowTree {
 	 *
 	 * @return the list of output terminals of a message flow node
 	 */
-	public ArrayList<String> getOutputTerminals() {
+	public List<Terminal> getOutputTerminals() {
 		return outputTerminals;
 	}
 
@@ -302,71 +307,52 @@ public abstract class MessageFlowNode extends MsgflowTree {
 		return buildTreeUsingSchema;
 	}
 
-	/**
-	 * The method returns a the flag for 'comments Retain Mode' of a message flow
-	 * node.
-	 *
-	 * @return the flag for 'comments Retain Mode' of a message flow node
-	 */
 	public boolean isCommentsRetainMode() {
 		return commentsRetainMode;
 	}
 
-	/**
-	 * The method returns a the flag for 'mixed Content Retain Mode' of a message
-	 * flow node.
-	 *
-	 * @return the flag for 'mixed Content Retain Mode' of a message flow node
-	 */
 	public boolean isMixedContentRetainMode() {
 		return mixedContentRetainMode;
 	}
 
-	/**
-	 * The method returns the flag for 'reset Message Domain' of a message flow
-	 * node.
-	 *
-	 * @return the flag for 'reset Message Domain' of a message flow node
-	 */
 	public boolean isResetMessageDomain() {
 		return resetMessageDomain;
 	}
 
-	/**
-	 * The method returns the flag for 'reset Message Format' of a message flow
-	 * node.
-	 *
-	 * @return the flag for 'reset Message Format' of a message flow node
-	 */
 	public boolean isResetMessageFormat() {
 		return resetMessageFormat;
 	}
 
-	/**
-	 * The method returns the flag for 'reset Message Set' of a message flow node.
-	 *
-	 * @return the flag for 'reset Message Set' of a message flow node
-	 */
 	public boolean isResetMessageSet() {
 		return resetMessageSet;
 	}
 
-	/**
-	 * The method returns the flag for 'reset Message Type' of a message flow node.
-	 *
-	 * @return the flag for 'reset Message Type' of a message flow node
-	 */
 	public boolean isResetMessageType() {
 		return resetMessageType;
 	}
 
-	/**
-	 * The method returns a the flag for 'validate Master' of a message flow node.
-	 *
-	 * @return the flag for 'validate Master' of a message flow node
-	 */
 	public boolean isValidateMaster() {
 		return validateMaster;
+	}
+
+	@Override
+	public int locationX() {
+		return locationX;
+	}
+
+	@Override
+	public int locationY() {
+		return locationY;
+	}
+
+	@Override
+	public List<Terminal> sourceTerminals() {
+		return sourceTerminals;
+	}
+
+	@Override
+	public List<Terminal> targetTerminals() {
+		return targetTerminals;
 	}
 
 }

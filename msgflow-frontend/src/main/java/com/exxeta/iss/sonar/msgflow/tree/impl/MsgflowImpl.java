@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.msgflow.parser;
+package com.exxeta.iss.sonar.msgflow.tree.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,27 +23,26 @@ import java.util.List;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 
-import com.exxeta.iss.sonar.msgflow.api.tree.MsgflowTree;
 import com.exxeta.iss.sonar.msgflow.api.visitors.MsgflowVisitor;
 
-public class Msgflow extends MsgflowTree {
+public class MsgflowImpl extends MsgflowTree {
 
 	/**
 	 * The logger for the class.
 	 */
-	private static final Logger LOGGER = Loggers.get(Msgflow.class);
+	private static final Logger LOGGER = Loggers.get(MsgflowImpl.class);
 
-	private final List<MessageFlowNode> nodes = new ArrayList<>();
+	private final List<AbstractMessageFlowNode> nodes = new ArrayList<>();
 
-	private final List<MessageFlowConnection> connections = new ArrayList<>();
+	private final List<MessageFlowConnectionImpl> connections = new ArrayList<>();
 
-	private final List<MessageFlowCommentNote> comments = new ArrayList<>();
+	private final List<MessageFlowCommentNoteImpl> comments = new ArrayList<>();
 
 	private String shortDescription;
 
 	private String longDescription;
 
-	public Msgflow() {
+	public MsgflowImpl() {
 		super(null);
 	}
 
@@ -53,15 +52,15 @@ public class Msgflow extends MsgflowTree {
 
 	}
 
-	public void addComment(final MessageFlowCommentNote msgFlowComment) {
+	public void addComment(final MessageFlowCommentNoteImpl msgFlowComment) {
 		comments.add(msgFlowComment);
 	}
 
-	public void addConnection(final MessageFlowConnection conection) {
+	public void addConnection(final MessageFlowConnectionImpl conection) {
 		connections.add(conection);
 	}
 
-	public void addNode(final MessageFlowNode mfn) {
+	public void addNode(final AbstractMessageFlowNode mfn) {
 		nodes.add(mfn);
 	}
 
@@ -70,7 +69,7 @@ public class Msgflow extends MsgflowTree {
 	 *
 	 * @return a list of comment objects
 	 */
-	public List<MessageFlowCommentNote> getComments() {
+	public List<MessageFlowCommentNoteImpl> getComments() {
 		return comments;
 	}
 
@@ -79,7 +78,7 @@ public class Msgflow extends MsgflowTree {
 	 *
 	 * @return a list of connections of the message flow
 	 */
-	public List<MessageFlowConnection> getConnections() {
+	public List<MessageFlowConnectionImpl> getConnections() {
 		return connections;
 	}
 
@@ -92,7 +91,7 @@ public class Msgflow extends MsgflowTree {
 		return longDescription;
 	}
 
-	public List<MessageFlowNode> getMessageFlowNodes() {
+	public List<AbstractMessageFlowNode> getMessageFlowNodes() {
 		return nodes;
 	}
 

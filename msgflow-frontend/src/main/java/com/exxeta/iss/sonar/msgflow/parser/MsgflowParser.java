@@ -36,6 +36,10 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import com.exxeta.iss.sonar.msgflow.tree.impl.MessageFlowCommentNoteImpl;
+import com.exxeta.iss.sonar.msgflow.tree.impl.MessageFlowConnectionImpl;
+import com.exxeta.iss.sonar.msgflow.tree.impl.MsgflowImpl;
+
 public final class MsgflowParser {
 
 	private static final Logger LOGGER = Loggers.get(MsgflowParser.class);
@@ -44,7 +48,7 @@ public final class MsgflowParser {
 
 	}
 
-	public Msgflow parse(File file) {
+	public MsgflowImpl parse(File file) {
 		try {
 			return parse(createDocument(file));
 		} catch (IOException | SAXException | ParserConfigurationException e) {
@@ -52,7 +56,7 @@ public final class MsgflowParser {
 		}
 	}
 
-	public Msgflow parse(String source) {
+	public MsgflowImpl parse(String source) {
 		Document document;
 		try {
 			document = createDocument(source);
@@ -63,8 +67,8 @@ public final class MsgflowParser {
 		}
 	}
 
-	private Msgflow parse(Document document) {
-		Msgflow msgflow = new Msgflow();
+	private MsgflowImpl parse(Document document) {
+		MsgflowImpl msgflow = new MsgflowImpl();
 		try {
 			XPathExpression nodesXPath = XPathFactory.newInstance().newXPath().compile("//nodes");
 			NodeList nodes = (NodeList) nodesXPath.evaluate(document, XPathConstants.NODESET);
@@ -518,7 +522,7 @@ public final class MsgflowParser {
 					String srcNodeName = (String) srcNodeNameExp.evaluate(document, XPathConstants.STRING);
 					String targetNodeName = (String) targetNodeNameExp.evaluate(document, XPathConstants.STRING);
 
-					MessageFlowConnection conection = new MessageFlowConnection(srcNode, srcNodeName, targetNode,
+					MessageFlowConnectionImpl conection = new MessageFlowConnectionImpl(srcNode, srcNodeName, targetNode,
 							targetNodeName, srcTerminal, targetTerminal);
 					msgflow.addConnection(conection);
 				}
@@ -548,7 +552,7 @@ public final class MsgflowParser {
 							.parseInt(((String) locationExp.evaluate(document, XPathConstants.STRING)).split(",")[0]);
 					int locationY = Integer
 							.parseInt(((String) locationExp.evaluate(document, XPathConstants.STRING)).split(",")[1]);
-					MessageFlowCommentNote msgFlowComment = new MessageFlowCommentNote(association, comment, locationX,
+					MessageFlowCommentNoteImpl msgFlowComment = new MessageFlowCommentNoteImpl(association, comment, locationX,
 							locationY);
 					msgflow.addComment(msgFlowComment);
 				}

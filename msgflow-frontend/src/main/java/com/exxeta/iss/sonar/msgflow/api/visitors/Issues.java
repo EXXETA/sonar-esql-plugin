@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.exxeta.iss.sonar.msgflow.api.MsgflowCheck;
-import com.exxeta.iss.sonar.msgflow.api.tree.MsgflowTree;
+import com.exxeta.iss.sonar.msgflow.api.tree.Tree;
 
 public class Issues {
 	private List<Issue> issueList;
@@ -15,15 +15,15 @@ public class Issues {
 		issueList = new ArrayList<>();
 	}
 
-	public PreciseIssue addIssue(final MsgflowTree tree, final String message) {
-		final PreciseIssue preciseIssue = new PreciseIssue(check, new IssueLocation(tree, message));
-		addIssue(preciseIssue);
-		return preciseIssue;
-	}
-
 	public <T extends Issue> T addIssue(final T issue) {
 		issueList.add(issue);
 		return issue;
+	}
+
+	public PreciseIssue addIssue(final Tree tree, final String message) {
+		final PreciseIssue preciseIssue = new PreciseIssue(check, new IssueLocation(tree, message));
+		addIssue(preciseIssue);
+		return preciseIssue;
 	}
 
 	public List<Issue> getList() {
