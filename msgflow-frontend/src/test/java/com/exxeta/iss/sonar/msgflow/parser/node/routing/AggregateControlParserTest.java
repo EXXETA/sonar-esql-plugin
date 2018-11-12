@@ -36,7 +36,7 @@ public class AggregateControlParserTest extends NodeParserTest<AggregateControlN
 		assertThat(node.locationX()).isEqualTo(230);
 		assertThat(node.locationY()).isEqualTo(60);
 		assertThat(node.name()).isEqualTo("Aggregate Control");
-		assertThat(node.sourceTerminals()).isEmpty();
-		assertThat(node.targetTerminals()).isEmpty();
+		assertThat(node.sourceTerminals()).isNull();
+		assertThat(node.targetTerminals()).isNull();
 	}
 }
