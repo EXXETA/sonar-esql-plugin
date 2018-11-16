@@ -1,0 +1,13 @@
+{
+  "title": "Aggregate control nodes should have a timeout",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "correctness","completeness"
+  ],
+  "defaultSeverity": "Major"
+}
