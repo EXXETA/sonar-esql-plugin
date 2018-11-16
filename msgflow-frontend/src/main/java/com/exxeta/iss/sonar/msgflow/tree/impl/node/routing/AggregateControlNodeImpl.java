@@ -3,7 +3,7 @@ package com.exxeta.iss.sonar.msgflow.tree.impl.node.routing;
 import org.w3c.dom.Node;
 
 import com.exxeta.iss.sonar.msgflow.api.tree.node.routing.AggregateControlNode;
-import com.exxeta.iss.sonar.msgflow.api.visitors.MsgflowVisitor;
+import com.exxeta.iss.sonar.msgflow.api.visitors.DoubleDispatchMsgflowVisitor;
 import com.exxeta.iss.sonar.msgflow.tree.impl.AbstractMessageFlowNode;
 
 public class AggregateControlNodeImpl extends AbstractMessageFlowNode implements AggregateControlNode {
@@ -21,13 +21,18 @@ public class AggregateControlNodeImpl extends AbstractMessageFlowNode implements
 	}
 
 	@Override
-	public void accept(final MsgflowVisitor visitor) {
+	public void accept(final DoubleDispatchMsgflowVisitor visitor) {
 		visitor.visitAggregateControlNode(this);
 	}
 
 	@Override
 	public String aggregateName() {
 		return aggregateName;
+	}
+
+	@Override
+	public Kind getKind() {
+		return Kind.AGGREGATE_CONTROL;
 	}
 
 	@Override

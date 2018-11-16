@@ -63,7 +63,7 @@ public class MsgflowSensor implements Sensor {
 
 	}
 
-	private static class SonarQubeProductExecutor implements ProductDependentExecutor {
+	static class SonarQubeProductExecutor implements ProductDependentExecutor {
 		private static void executeCoverageSensors(final SensorContext context,
 				final Map<InputFile, Set<Integer>> executableLines) {
 			final Configuration configuration = context.config();

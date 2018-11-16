@@ -40,9 +40,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
 
+import com.exxeta.iss.sonar.msgflow.api.visitors.DoubleDispatchMsgflowVisitor;
 import com.exxeta.iss.sonar.msgflow.api.visitors.FileIssue;
 import com.exxeta.iss.sonar.msgflow.api.visitors.IssueLocation;
-import com.exxeta.iss.sonar.msgflow.api.visitors.MsgflowVisitor;
 import com.exxeta.iss.sonar.msgflow.api.visitors.MsgflowVisitorCheck;
 import com.exxeta.iss.sonar.msgflow.api.visitors.PreciseIssue;
 import com.exxeta.iss.sonar.msgflow.tree.impl.MsgflowTree;
@@ -55,7 +55,7 @@ public class IssueTest {
 	private static final MsgflowTree token = new MsgflowTree(null) {
 
 		@Override
-		public void accept(final MsgflowVisitor visitor) {
+		public void accept(final DoubleDispatchMsgflowVisitor visitor) {
 		}
 
 		@Override
@@ -69,9 +69,14 @@ public class IssueTest {
 		};
 
 		@Override
+		public Kind getKind() {
+			return null;
+		};
+
+		@Override
 		public int startColumn() {
 			return 1;
-		};
+		}
 
 		@Override
 		public int startLine() {
@@ -96,7 +101,7 @@ public class IssueTest {
 		final MsgflowTree lastToken = new MsgflowTree(null) {
 
 			@Override
-			public void accept(final MsgflowVisitor visitor) {
+			public void accept(final DoubleDispatchMsgflowVisitor visitor) {
 			}
 
 			@Override
@@ -107,6 +112,11 @@ public class IssueTest {
 			@Override
 			public int endLine() {
 				return 10;
+			}
+
+			@Override
+			public Kind getKind() {
+				return null;
 			}
 
 			@Override

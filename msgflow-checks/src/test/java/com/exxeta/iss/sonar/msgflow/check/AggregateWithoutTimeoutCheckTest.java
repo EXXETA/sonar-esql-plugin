@@ -11,7 +11,8 @@ public class AggregateWithoutTimeoutCheckTest {
 	@Test
 	public void test() {
 		final MsgflowCheck check = new AggregateWithoutTimeoutCheck();
-		MsgflowCheckVerifier.issues(check, new File("src/test/resources/AggregateWithoutTimeout.esql")).next().atLine(9)
+		MsgflowCheckVerifier.issues(check, new File("src/test/resources/AggregateWithoutTimeout.msgflow")).next()
+				.atLine(9)
 				.withMessage(
 						"'timeoutInterval' property for Aggregate Control Node 'Aggregate Control' is set to infinite(value = 0).")
 				.noMore();

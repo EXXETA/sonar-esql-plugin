@@ -3,7 +3,6 @@ package com.exxeta.iss.sonar.msgflow.tree.impl;
 import org.w3c.dom.Node;
 
 import com.exxeta.iss.sonar.msgflow.api.tree.Tree;
-import com.exxeta.iss.sonar.msgflow.api.visitors.MsgflowVisitor;
 
 public abstract class MsgflowTree implements Tree {
 
@@ -13,20 +12,36 @@ public abstract class MsgflowTree implements Tree {
 		this.domNode = domNode;
 	}
 
-	public abstract void accept(MsgflowVisitor visitor);
-
+	@Override
 	public int endColumn() {
 		return domNode == null ? -1 : Integer.parseInt(domNode.getUserData("lineNumber").toString().split(":")[1]);
 	}
 
+	@Override
 	public int endLine() {
 		return domNode == null ? -1 : Integer.parseInt(domNode.getUserData("lineNumber").toString().split(":")[0]);
 	}
 
+	public abstract Kind getKind();
+
+	@Override
+	public final boolean is(final Kind... kind) {
+		if (getKind() != null) {
+			for (final Kind kindIter : kind) {
+				if (getKind() == kindIter) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	@Override
 	public int startColumn() {
 		return domNode == null ? -1 : Integer.parseInt(domNode.getUserData("lineNumber").toString().split(":")[1]);
 	}
 
+	@Override
 	public int startLine() {
 		return domNode == null ? -1 : Integer.parseInt(domNode.getUserData("lineNumber").toString().split(":")[0]);
 	}

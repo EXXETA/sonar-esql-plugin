@@ -1,6 +1,9 @@
 package com.exxeta.iss.sonar.msgflow.tree.impl;
 
+import org.w3c.dom.Node;
+
 import com.exxeta.iss.sonar.msgflow.api.tree.MessageFlowConnection;
+import com.exxeta.iss.sonar.msgflow.api.visitors.DoubleDispatchMsgflowVisitor;
 
 /**
  * The class is a model of a message flow connection the properties of message
@@ -8,7 +11,7 @@ import com.exxeta.iss.sonar.msgflow.api.tree.MessageFlowConnection;
  *
  * @author Arjav Shah
  */
-public class MessageFlowConnectionImpl implements MessageFlowConnection {
+public class MessageFlowConnectionImpl extends MsgflowTree implements MessageFlowConnection {
 	/**
 	 * a source node ID of the connection
 	 */
@@ -35,18 +38,28 @@ public class MessageFlowConnectionImpl implements MessageFlowConnection {
 	private String targetTerminal;
 
 	public MessageFlowConnectionImpl() {
-
+		super(null);
 	}
 
-	public MessageFlowConnectionImpl(final String srcNode, final String srcNodeName, final String targetNode,
+	public MessageFlowConnectionImpl(final Node srcNode, final String srcNodeName, final String targetNode,
 			final String targetNodeName, final String srcTerminal, final String targetTerminal) {
-		super();
-		this.srcNode = srcNode;
+		super(srcNode);
 		this.srcNodeName = srcNodeName;
 		this.targetNode = targetNode;
 		this.targetNodeName = targetNodeName;
 		this.srcTerminal = srcTerminal;
 		this.targetTerminal = targetTerminal;
+	}
+
+	@Override
+	public void accept(final DoubleDispatchMsgflowVisitor visitor) {
+		visitor.visitConnection(this);
+
+	}
+
+	@Override
+	public Kind getKind() {
+		return Kind.CONNECTION;
 	}
 
 	/**

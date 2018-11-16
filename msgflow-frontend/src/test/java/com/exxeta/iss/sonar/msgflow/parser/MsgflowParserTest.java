@@ -10,11 +10,13 @@ import org.junit.Test;
 public class MsgflowParserTest {
 	@Test
 	public void parseAll() throws IOException {
-		File resourcesDir = new File("src/test/resources");
-		for (File testFile : resourcesDir.listFiles()) {
-			System.out.println("Parsing " + testFile.getAbsolutePath());
-			MsgflowParser parser = MsgflowParserBuilder.createParser();
-			assertThat(parser.parse(testFile)).isNotNull();
+		final File resourcesDir = new File("src/test/resources");
+		for (final File testFile : resourcesDir.listFiles()) {
+			if (testFile.isFile()) {
+				System.out.println("Parsing " + testFile.getAbsolutePath());
+				final MsgflowParser parser = MsgflowParserBuilder.createParser();
+				assertThat(parser.parse(testFile)).isNotNull();
+			}
 		}
 
 	}

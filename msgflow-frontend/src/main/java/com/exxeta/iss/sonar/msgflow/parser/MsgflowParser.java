@@ -6,9 +6,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -48,30 +48,11 @@ public final class MsgflowParser {
 
 	}
 
-	public MsgflowImpl parse(File file) {
+	private MsgflowImpl parse(final Document document) {
+		final MsgflowImpl msgflow = new MsgflowImpl();
 		try {
-			return parse(createDocument(file));
-		} catch (IOException | SAXException | ParserConfigurationException e) {
-			return null;
-		}
-	}
-
-	public MsgflowImpl parse(String source) {
-		Document document;
-		try {
-			document = createDocument(source);
-			return parse(document);
-		} catch (SAXException | IOException | ParserConfigurationException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	private MsgflowImpl parse(Document document) {
-		MsgflowImpl msgflow = new MsgflowImpl();
-		try {
-			XPathExpression nodesXPath = XPathFactory.newInstance().newXPath().compile("//nodes");
-			NodeList nodes = (NodeList) nodesXPath.evaluate(document, XPathConstants.NODESET);
+			final XPathExpression nodesXPath = XPathFactory.newInstance().newXPath().compile("//nodes");
+			final NodeList nodes = (NodeList) nodesXPath.evaluate(document, XPathConstants.NODESET);
 			// numberOfNodes =
 			// XPathFactory.newInstance().newXPath().compile("count(//nodes)");
 
@@ -79,7 +60,7 @@ public final class MsgflowParser {
 			// XPathConstants.STRING));
 
 			for (int i = 0; i < nodes.getLength(); i++) {
-				Element element = (Element) nodes.item(i);
+				final Element element = (Element) nodes.item(i);
 
 				LOGGER.debug("Prepare expressions - START");
 
@@ -100,7 +81,7 @@ public final class MsgflowParser {
 				 * "]/@messageSetProperty"); XPathExpression requestMsgLocationInTreeExpr =
 				 * XPathFactory.newInstance().newXPath() .compile("//nodes[" + non +
 				 * "]/@requestMsgLocationInTree");
-				 * 
+				 *
 				 * XPathExpression messageDomainExpr = XPathFactory.newInstance().newXPath()
 				 * .compile("//nodes[" + non + "]/@messageDomain"); XPathExpression
 				 * messageSetExpr = XPathFactory.newInstance().newXPath() .compile("//nodes[" +
@@ -125,7 +106,6 @@ public final class MsgflowParser {
 
 //				String id = (String) idExpr.evaluate(document, XPathConstants.STRING);
 //				String name = (String) nameExpr.evaluate(document, XPathConstants.STRING);
-				
 
 //				LOGGER.debug("id: " + id);
 //				LOGGER.debug("name: " + name);
@@ -166,7 +146,7 @@ public final class MsgflowParser {
 				 * XPathConstants.STRING)); boolean resetMessageFormat = Boolean
 				 * .parseBoolean((String) resetMessageFormatExpr.evaluate(document,
 				 * XPathConstants.STRING));
-				 * 
+				 *
 				 * int monitoringEvents = Integer .parseInt((String)
 				 * monitoringEventsExpr.evaluate(document, XPathConstants.STRING)); String
 				 * monitoringEventsEventEnabled = (String)
@@ -175,33 +155,33 @@ public final class MsgflowParser {
 				 */
 				/*
 				 * monitoring events are enabled unless defined otherwise
-				 * 
+				 *
 				 * - monitoring events are missing - existing monitoring events are disabled
 				 */
 				/*
 				 * if (monitoringEvents == 0 || monitoringEventsEventEnabled.equals("false")) {
 				 * areMonitoringEventsEnabled = false; }
-				 * 
+				 *
 				 * XPathExpression numberOfInputTerminals =
 				 * XPathFactory.newInstance().newXPath()
 				 * .compile("count(//connections[@targetNode='" + id + "'])"); int noit =
 				 * Integer.parseInt((String) numberOfInputTerminals.evaluate(document,
 				 * XPathConstants.STRING));
-				 * 
+				 *
 				 * XPathExpression numberOfOutputTerminals =
 				 * XPathFactory.newInstance().newXPath()
 				 * .compile("count(//connections[@sourceNode='" + id + "'])"); int noot =
 				 * Integer.parseInt((String) numberOfOutputTerminals.evaluate(document,
 				 * XPathConstants.STRING));
-				 * 
+				 *
 				 * ArrayList<String> inputTerminals = new ArrayList<String>(); ArrayList<String>
 				 * outputTerminals = new ArrayList<String>();
-				 * 
+				 *
 				 * for (; noit > 0; noit--) { XPathExpression inputTerminalExpr =
 				 * XPathFactory.newInstance().newXPath() .compile("//connections[@targetNode='"
 				 * + id + "'][" + noit + "]/@targetTerminalName"); inputTerminals.add(((String)
 				 * inputTerminalExpr.evaluate(document, XPathConstants.STRING))); }
-				 * 
+				 *
 				 * for (; noot > 0; noot--) { XPathExpression outputTerminalExpr =
 				 * XPathFactory.newInstance().newXPath() .compile("//connections[@sourceNode='"
 				 * + id + "'][" + noot + "]/@sourceTerminalName"); outputTerminals.add(((String)
@@ -218,43 +198,43 @@ public final class MsgflowParser {
 				 * XPathFactory.newInstance().newXPath() .compile("//nodes[@id='" + id +
 				 * "']/@queueName"); String queueName = (String) queueNameExp.evaluate(document,
 				 * XPathConstants.STRING);
-				 * 
+				 *
 				 * properties.put("queueName", queueName); }
-				 * 
+				 *
 				 * XPathExpression txnModeExp = XPathFactory.newInstance().newXPath()
 				 * .compile("//nodes[@id='" + id + "']/@transactionMode"); String txnMode =
 				 * (String) txnModeExp.evaluate(document, XPathConstants.STRING);
-				 * 
+				 *
 				 * properties.put("transactionMode", txnMode); } else if
 				 * (type.equals("IMSRequest")) { XPathExpression shortDescriptionIMSExp =
 				 * XPathFactory.newInstance().newXPath() .compile("//nodes[@id='" + id +
 				 * "']/shortDescription/@string"); String shortDescriptionIMS = (String)
 				 * shortDescriptionIMSExp.evaluate(document, XPathConstants.STRING);
 				 * properties.put("shortDescription", shortDescriptionIMS);
-				 * 
+				 *
 				 * XPathExpression longDescriptionIMSExp = XPathFactory.newInstance().newXPath()
 				 * .compile("//nodes[@id='" + id + "']/longDescription/@string"); String
 				 * longDescriptionIMS = (String) longDescriptionIMSExp.evaluate(document,
 				 * XPathConstants.STRING); properties.put("longDescription",
 				 * longDescriptionIMS);
-				 * 
+				 *
 				 * XPathExpression useNodePropertiesExp = XPathFactory.newInstance().newXPath()
 				 * .compile("//nodes[@id='" + id + "']/@useNodeProperties"); String
 				 * useNodeProperties = (String) useNodePropertiesExp.evaluate(document,
 				 * XPathConstants.STRING); properties.put("useNodeProperties",
 				 * useNodeProperties);
-				 * 
+				 *
 				 * XPathExpression configurableServiceExp =
 				 * XPathFactory.newInstance().newXPath() .compile("//nodes[@id='" + id +
 				 * "']/@configurableService"); String configurableService = (String)
 				 * configurableServiceExp.evaluate(document, XPathConstants.STRING);
 				 * properties.put("configurableService", configurableService);
-				 * 
+				 *
 				 * XPathExpression commitModeExp = XPathFactory.newInstance().newXPath()
 				 * .compile("//nodes[@id='" + id + "']/@commitMode"); String commitMode =
 				 * (String) commitModeExp.evaluate(document, XPathConstants.STRING);
 				 * properties.put("commitMode", commitMode);
-				 * 
+				 *
 				 * } else if (type.equals("WSReply")) { XPathExpression
 				 * ignoreTransportFailuresExp = XPathFactory.newInstance().newXPath()
 				 * .compile("//nodes[@id='" + id + "']/@ignoreTransportFailures"); String
@@ -284,16 +264,16 @@ public final class MsgflowParser {
 				 * computeExpression.substring(computeExpression.indexOf("#") + 1,
 				 * computeExpression.indexOf(".Main")); properties.put("computeExpression",
 				 * computeExpression);
-				 * 
+				 *
 				 * String computeExpressionFull = (String)
 				 * computeExpressionExp.evaluate(document, XPathConstants.STRING);
 				 * properties.put("computeExpressionFull", computeExpressionFull);
-				 * 
+				 *
 				 * XPathExpression dataSourceExp = XPathFactory.newInstance().newXPath()
 				 * .compile("//nodes[@id='" + id + "']/@dataSource"); String dataSource =
 				 * (String) dataSourceExp.evaluate(document, XPathConstants.STRING);
 				 * properties.put("dataSource", dataSource);
-				 * 
+				 *
 				 * } else if (type.equals("Filter")) { XPathExpression filterExpressionExp =
 				 * XPathFactory.newInstance().newXPath() .compile("//nodes[@id='" + id +
 				 * "']/@filterExpression"); String filterExpression = (String)
@@ -317,14 +297,14 @@ public final class MsgflowParser {
 				 * outTerminalExp.evaluate(document, XPathConstants.STRING);
 				 * routeTable.add(outTerminal); } properties.put("routeTerminals", routeTable);
 				 * }
-				 * 
+				 *
 				 * if (type.equals("MQInput") || type.equals("FileInput") ||
 				 * type.equals("WSInput") || type.equals("SOAPInput")) { XPathExpression
 				 * componentLevelExp = XPathFactory.newInstance().newXPath()
 				 * .compile("//nodes[@id='" + id + "']/@componentLevel"); String componentLevel
 				 * = (String) componentLevelExp.evaluate(document, XPathConstants.STRING);
 				 * properties.put("componentLevel", componentLevel);
-				 * 
+				 *
 				 * XPathExpression additionalInstancesExp =
 				 * XPathFactory.newInstance().newXPath() .compile("//nodes[@id='" + id +
 				 * "']/@additionalInstances"); String additionalInstances = (String)
@@ -484,9 +464,9 @@ public final class MsgflowParser {
 				/**
 				 * Added the below snippet to get short and long description of the message flow
 				 */
-				XPathExpression shortDescriptionExp = XPathFactory.newInstance().newXPath()
+				final XPathExpression shortDescriptionExp = XPathFactory.newInstance().newXPath()
 						.compile("//eClassifiers/shortDescription/@string");
-				XPathExpression longDescriptionExp = XPathFactory.newInstance().newXPath()
+				final XPathExpression longDescriptionExp = XPathFactory.newInstance().newXPath()
 						.compile("//eClassifiers/longDescription/@string");
 				msgflow.setShortDescription((String) shortDescriptionExp.evaluate(document, XPathConstants.STRING));
 				msgflow.setLongDescription((String) longDescriptionExp.evaluate(document, XPathConstants.STRING));
@@ -494,36 +474,36 @@ public final class MsgflowParser {
 				/**
 				 * Added to identify all the connections for the message flow change starts
 				 */
-				XPathExpression numberOfConnections = XPathFactory.newInstance().newXPath()
+				final XPathExpression numberOfConnections = XPathFactory.newInstance().newXPath()
 						.compile("count(//connections)");
 				int noc = Integer.parseInt((String) numberOfConnections.evaluate(document, XPathConstants.STRING));
 
 				for (; noc > 0; noc--) {
 
-					XPathExpression srcNodeExp = XPathFactory.newInstance().newXPath()
+					final XPathExpression srcNodeExp = XPathFactory.newInstance().newXPath()
 							.compile("//connections[" + noc + "]/@sourceNode");
-					XPathExpression targetNodeExp = XPathFactory.newInstance().newXPath()
+					final XPathExpression targetNodeExp = XPathFactory.newInstance().newXPath()
 							.compile("//connections[" + noc + "]/@targetNode");
-					XPathExpression srcTeminalExp = XPathFactory.newInstance().newXPath()
+					final XPathExpression srcTeminalExp = XPathFactory.newInstance().newXPath()
 							.compile("//connections[" + noc + "]/@sourceTerminalName");
-					XPathExpression targetTerminalExp = XPathFactory.newInstance().newXPath()
+					final XPathExpression targetTerminalExp = XPathFactory.newInstance().newXPath()
 							.compile("//connections[" + noc + "]/@targetTerminalName");
 
-					String srcNode = (String) srcNodeExp.evaluate(document, XPathConstants.STRING);
-					String targetNode = (String) targetNodeExp.evaluate(document, XPathConstants.STRING);
-					String srcTerminal = (String) srcTeminalExp.evaluate(document, XPathConstants.STRING);
-					String targetTerminal = (String) targetTerminalExp.evaluate(document, XPathConstants.STRING);
+					final String srcNode = (String) srcNodeExp.evaluate(document, XPathConstants.STRING);
+					final String targetNode = (String) targetNodeExp.evaluate(document, XPathConstants.STRING);
+					final String srcTerminal = (String) srcTeminalExp.evaluate(document, XPathConstants.STRING);
+					final String targetTerminal = (String) targetTerminalExp.evaluate(document, XPathConstants.STRING);
 
-					XPathExpression srcNodeNameExp = XPathFactory.newInstance().newXPath()
+					final XPathExpression srcNodeNameExp = XPathFactory.newInstance().newXPath()
 							.compile("//nodes[@id='" + srcNode + "']/translation/@string");
-					XPathExpression targetNodeNameExp = XPathFactory.newInstance().newXPath()
+					final XPathExpression targetNodeNameExp = XPathFactory.newInstance().newXPath()
 							.compile("//nodes[@id='" + targetNode + "']/translation/@string");
 
-					String srcNodeName = (String) srcNodeNameExp.evaluate(document, XPathConstants.STRING);
-					String targetNodeName = (String) targetNodeNameExp.evaluate(document, XPathConstants.STRING);
+					final String srcNodeName = (String) srcNodeNameExp.evaluate(document, XPathConstants.STRING);
+					final String targetNodeName = (String) targetNodeNameExp.evaluate(document, XPathConstants.STRING);
 
-					MessageFlowConnectionImpl conection = new MessageFlowConnectionImpl(srcNode, srcNodeName, targetNode,
-							targetNodeName, srcTerminal, targetTerminal);
+					final MessageFlowConnectionImpl conection = new MessageFlowConnectionImpl(null, srcNodeName,
+							targetNode, targetNodeName, srcTerminal, targetTerminal);
 					msgflow.addConnection(conection);
 				}
 
@@ -531,29 +511,29 @@ public final class MsgflowParser {
 				 * Added to identify the comment notes and the contents of it for the message
 				 * flow
 				 */
-				XPathExpression numberOfStickyNotes = XPathFactory.newInstance().newXPath()
+				final XPathExpression numberOfStickyNotes = XPathFactory.newInstance().newXPath()
 						.compile("count(//stickyNote)");
 				int nos = Integer.parseInt((String) numberOfStickyNotes.evaluate(document, XPathConstants.STRING));
 
 				for (; nos > 0; nos--) {
-					XPathExpression associationExp = XPathFactory.newInstance().newXPath()
+					final XPathExpression associationExp = XPathFactory.newInstance().newXPath()
 							.compile("//stickyNote[" + nos + "]/@association");
-					XPathExpression commentExp = XPathFactory.newInstance().newXPath()
+					final XPathExpression commentExp = XPathFactory.newInstance().newXPath()
 							.compile("//stickyNote[" + nos + "]/body/@string");
-					XPathExpression locationExp = XPathFactory.newInstance().newXPath()
+					final XPathExpression locationExp = XPathFactory.newInstance().newXPath()
 							.compile("//stickyNote[" + nos + "]/@location");
-					String associationList = (String) associationExp.evaluate(document, XPathConstants.STRING);
-					ArrayList<String> association = new ArrayList<String>();
-					for (String nodeId : associationList.split(" ")) {
+					final String associationList = (String) associationExp.evaluate(document, XPathConstants.STRING);
+					final ArrayList<String> association = new ArrayList<>();
+					for (final String nodeId : associationList.split(" ")) {
 						association.add(nodeId);
 					}
-					String comment = (String) commentExp.evaluate(document, XPathConstants.STRING);
-					int locationX = Integer
+					final String comment = (String) commentExp.evaluate(document, XPathConstants.STRING);
+					final int locationX = Integer
 							.parseInt(((String) locationExp.evaluate(document, XPathConstants.STRING)).split(",")[0]);
-					int locationY = Integer
+					final int locationY = Integer
 							.parseInt(((String) locationExp.evaluate(document, XPathConstants.STRING)).split(",")[1]);
-					MessageFlowCommentNoteImpl msgFlowComment = new MessageFlowCommentNoteImpl(association, comment, locationX,
-							locationY);
+					final MessageFlowCommentNoteImpl msgFlowComment = new MessageFlowCommentNoteImpl(association,
+							comment, locationX, locationY);
 					msgflow.addComment(msgFlowComment);
 				}
 
@@ -563,12 +543,29 @@ public final class MsgflowParser {
 
 				LOGGER.debug("END");
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			LOGGER.error("Cannot parse msgflow", e);
 		}
 		return msgflow;
 	}
-	
 
-	
+	public MsgflowImpl parse(final File file) {
+		try {
+			return parse(createDocument(file));
+		} catch (IOException | SAXException | ParserConfigurationException e) {
+			return null;
+		}
+	}
+
+	public MsgflowImpl parse(final String source) {
+		Document document;
+		try {
+			document = createDocument(source);
+			return parse(document);
+		} catch (SAXException | IOException | ParserConfigurationException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 }

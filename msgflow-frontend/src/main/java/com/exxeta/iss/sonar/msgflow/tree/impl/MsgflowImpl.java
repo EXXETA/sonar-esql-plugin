@@ -23,7 +23,7 @@ import java.util.List;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 
-import com.exxeta.iss.sonar.msgflow.api.visitors.MsgflowVisitor;
+import com.exxeta.iss.sonar.msgflow.api.visitors.DoubleDispatchMsgflowVisitor;
 
 public class MsgflowImpl extends MsgflowTree {
 
@@ -47,7 +47,7 @@ public class MsgflowImpl extends MsgflowTree {
 	}
 
 	@Override
-	public void accept(final MsgflowVisitor visitor) {
+	public void accept(final DoubleDispatchMsgflowVisitor visitor) {
 		visitor.visitMsgflow(this);
 
 	}
@@ -80,6 +80,11 @@ public class MsgflowImpl extends MsgflowTree {
 	 */
 	public List<MessageFlowConnectionImpl> getConnections() {
 		return connections;
+	}
+
+	@Override
+	public Kind getKind() {
+		return Kind.MESSAGEFLOW;
 	}
 
 	/**

@@ -3,7 +3,7 @@ package com.exxeta.iss.sonar.msgflow.tree.impl.node.mq;
 import org.w3c.dom.Node;
 
 import com.exxeta.iss.sonar.msgflow.api.tree.node.mq.MQInputNode;
-import com.exxeta.iss.sonar.msgflow.api.visitors.MsgflowVisitor;
+import com.exxeta.iss.sonar.msgflow.api.visitors.DoubleDispatchMsgflowVisitor;
 import com.exxeta.iss.sonar.msgflow.tree.impl.AbstractMessageFlowNode;
 
 public class MQInputNodeImpl extends AbstractMessageFlowNode implements MQInputNode {
@@ -16,8 +16,13 @@ public class MQInputNodeImpl extends AbstractMessageFlowNode implements MQInputN
 	}
 
 	@Override
-	public void accept(final MsgflowVisitor visitor) {
+	public void accept(final DoubleDispatchMsgflowVisitor visitor) {
 		visitor.visitMQInputNode(this);
+	}
+
+	@Override
+	public Kind getKind() {
+		return Kind.MQ_INPUT;
 	}
 
 	@Override
