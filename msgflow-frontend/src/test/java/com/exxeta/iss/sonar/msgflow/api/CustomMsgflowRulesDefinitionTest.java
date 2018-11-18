@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.esql.api;
+package com.exxeta.iss.sonar.msgflow.api;
 
 import org.junit.Test;
 import org.sonar.api.server.rule.RulesDefinition;
@@ -23,11 +23,11 @@ import org.sonar.api.server.rule.RulesDefinition.Param;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 
-import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
+import com.exxeta.iss.sonar.msgflow.api.visitors.DoubleDispatchMsgflowVisitor;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CustomEsqlRulesDefinitionTest {
+public class CustomMsgflowRulesDefinitionTest {
 
   private static final String REPOSITORY_NAME = "Custom Rule Repository";
   private static final String REPOSITORY_KEY = "CustomRuleRepository";
@@ -37,13 +37,13 @@ public class CustomEsqlRulesDefinitionTest {
 
   @Test
   public void test() {
-    MyCustomEsqlRulesDefinition rulesDefinition = new MyCustomEsqlRulesDefinition();
+    MyCustomMsgflowRulesDefinition rulesDefinition = new MyCustomMsgflowRulesDefinition();
     RulesDefinition.Context context = new RulesDefinition.Context();
     rulesDefinition.define(context);
     RulesDefinition.Repository repository = context.repository(REPOSITORY_KEY);
 
     assertThat(repository.name()).isEqualTo(REPOSITORY_NAME);
-    assertThat(repository.language()).isEqualTo("esql");
+    assertThat(repository.language()).isEqualTo("msgflow");
     assertThat(repository.rules()).hasSize(1);
 
     RulesDefinition.Rule alertUseRule = repository.rule(RULE_KEY);
@@ -62,7 +62,7 @@ public class CustomEsqlRulesDefinitionTest {
     name = RULE_NAME,
     description = "desc",
     tags = {"bug"})
-  public class MyCustomRule extends DoubleDispatchVisitor {
+  public class MyCustomRule extends DoubleDispatchMsgflowVisitor {
     @RuleProperty(
       key = "customParam",
       description = "Custome parameter",
@@ -70,7 +70,7 @@ public class CustomEsqlRulesDefinitionTest {
     public String customParam = "value";
   }
 
-  public static class MyCustomEsqlRulesDefinition extends CustomEsqlRulesDefinition {
+  public static class MyCustomMsgflowRulesDefinition extends CustomMsgflowRulesDefinition {
 
     @Override
     public String repositoryName() {

@@ -3,19 +3,17 @@
  */
 package com.exxeta.iss.sonar.msgflow.tree.impl;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import com.exxeta.iss.sonar.msgflow.api.tree.MessageFlowCommentNote;
+import com.google.common.collect.ImmutableList;
 
-/**
- * @author Arjav Shah
- *
- */
+
 public class MessageFlowCommentNoteImpl implements MessageFlowCommentNote {
 	/**
 	 * an id of the node to which the comment note is associated with
 	 */
-	private final ArrayList<String> association;
+	private final List<String> associations;
 	/**
 	 * comment string of the comment note
 	 */
@@ -35,46 +33,35 @@ public class MessageFlowCommentNoteImpl implements MessageFlowCommentNote {
 	 * @param locationX
 	 * @param locationY
 	 */
-	public MessageFlowCommentNoteImpl(final ArrayList<String> association, final String comment, final int locationX,
+	public MessageFlowCommentNoteImpl(final List<String> associations, final String comment, final int locationX,
 			final int locationY) {
 		super();
-		this.association = association;
+		this.associations = associations;
 		this.comment = comment;
 		this.locationX = locationX;
 		this.locationY = locationY;
 	}
 
-	public String comment() {
-		return comment;
-	}
-
-	/**
-	 * This method returns the list of associated nodes for the comment note
-	 *
-	 * @return the list of associated node id
-	 */
-	public ArrayList<String> getAssociation() {
-		return association;
-	}
-
-	/**
-	 * This method returns the x axis location of the comment note
-	 *
-	 * @return the x axis location
-	 */
 	@Override
 	public int locationX() {
 		return locationX;
 	}
 
-	/**
-	 * This method returns the y axis location of the comment note
-	 *
-	 * @return the y axis location
-	 */
 	@Override
 	public int locationY() {
 		return locationY;
 	}
+
+	@Override
+	public String comment() {
+		return comment;
+	}
+
+	@Override
+	public List<String> associations() {
+		return ImmutableList.copyOf(associations);
+	}
+
+
 
 }

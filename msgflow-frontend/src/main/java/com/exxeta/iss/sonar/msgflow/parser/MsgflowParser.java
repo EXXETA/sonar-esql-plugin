@@ -19,6 +19,7 @@ package com.exxeta.iss.sonar.msgflow.parser;
 
 import static com.exxeta.iss.sonar.msgflow.parser.ParserUtils.createDocument;
 import static com.exxeta.iss.sonar.msgflow.parser.ParserUtils.parseNode;
+import static com.exxeta.iss.sonar.msgflow.parser.ParserUtils.parseStickeyNote;
 
 import java.io.File;
 import java.io.IOException;
@@ -480,7 +481,8 @@ public final class MsgflowParser {
 						.compile("count(//connections)");
 				int noc = Integer.parseInt((String) numberOfConnections.evaluate(document, XPathConstants.STRING));
 
-				for (; noc > 0; noc--) {
+				//TODO move to connectionParser
+			/*	for (; noc > 0; noc--) {
 
 					final XPathExpression srcNodeExp = XPathFactory.newInstance().newXPath()
 							.compile("//connections[" + noc + "]/@sourceNode");
@@ -507,43 +509,22 @@ public final class MsgflowParser {
 					final MessageFlowConnectionImpl conection = new MessageFlowConnectionImpl(null, srcNodeName,
 							targetNode, targetNodeName, srcTerminal, targetTerminal);
 					msgflow.addConnection(conection);
-				}
+				}*/
 
-				/**
-				 * Added to identify the comment notes and the contents of it for the message
-				 * flow
-				 */
-				final XPathExpression numberOfStickyNotes = XPathFactory.newInstance().newXPath()
-						.compile("count(//stickyNote)");
-				int nos = Integer.parseInt((String) numberOfStickyNotes.evaluate(document, XPathConstants.STRING));
-
-				for (; nos > 0; nos--) {
-					final XPathExpression associationExp = XPathFactory.newInstance().newXPath()
-							.compile("//stickyNote[" + nos + "]/@association");
-					final XPathExpression commentExp = XPathFactory.newInstance().newXPath()
-							.compile("//stickyNote[" + nos + "]/body/@string");
-					final XPathExpression locationExp = XPathFactory.newInstance().newXPath()
-							.compile("//stickyNote[" + nos + "]/@location");
-					final String associationList = (String) associationExp.evaluate(document, XPathConstants.STRING);
-					final ArrayList<String> association = new ArrayList<>();
-					for (final String nodeId : associationList.split(" ")) {
-						association.add(nodeId);
-					}
-					final String comment = (String) commentExp.evaluate(document, XPathConstants.STRING);
-					final int locationX = Integer
-							.parseInt(((String) locationExp.evaluate(document, XPathConstants.STRING)).split(",")[0]);
-					final int locationY = Integer
-							.parseInt(((String) locationExp.evaluate(document, XPathConstants.STRING)).split(",")[1]);
-					final MessageFlowCommentNoteImpl msgFlowComment = new MessageFlowCommentNoteImpl(association,
-							comment, locationX, locationY);
-					msgflow.addComment(msgFlowComment);
-				}
+				
 
 				/**
 				 * Changes ends
 				 */
 
 				LOGGER.debug("END");
+			}
+			final XPathExpression stickyNoteXPath = XPathFactory.newInstance().newXPath().compile("//stickyNote");
+			final NodeList stickeyNotes = (NodeList) stickyNoteXPath.evaluate(document, XPathConstants.NODESET);
+
+			for (int i = 0; i < stickeyNotes.getLength(); i++) {
+				final Element element = (Element) stickeyNotes.item(i);
+				msgflow.addComment(parseStickeyNote(element));
 			}
 		} catch (final Exception e) {
 			LOGGER.error("Cannot parse msgflow", e);

@@ -23,6 +23,7 @@ import java.util.List;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 
+import com.exxeta.iss.sonar.msgflow.api.tree.MessageFlowCommentNote;
 import com.exxeta.iss.sonar.msgflow.api.tree.Messageflow;
 import com.exxeta.iss.sonar.msgflow.api.visitors.DoubleDispatchMsgflowVisitor;
 
@@ -37,7 +38,7 @@ public class MsgflowImpl extends MsgflowTree implements Messageflow{
 
 	private final List<MessageFlowConnectionImpl> connections = new ArrayList<>();
 
-	private final List<MessageFlowCommentNoteImpl> comments = new ArrayList<>();
+	private final List<MessageFlowCommentNote> comments = new ArrayList<>();
 
 	private String shortDescription;
 
@@ -53,7 +54,7 @@ public class MsgflowImpl extends MsgflowTree implements Messageflow{
 
 	}
 
-	public void addComment(final MessageFlowCommentNoteImpl msgFlowComment) {
+	public void addComment(final MessageFlowCommentNote msgFlowComment) {
 		comments.add(msgFlowComment);
 	}
 
@@ -70,7 +71,7 @@ public class MsgflowImpl extends MsgflowTree implements Messageflow{
 	 *
 	 * @return a list of comment objects
 	 */
-	public List<MessageFlowCommentNoteImpl> getComments() {
+	public List<MessageFlowCommentNote> getComments() {
 		return comments;
 	}
 

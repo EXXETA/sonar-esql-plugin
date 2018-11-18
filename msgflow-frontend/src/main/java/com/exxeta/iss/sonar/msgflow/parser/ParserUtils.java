@@ -25,6 +25,8 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import com.exxeta.iss.sonar.msgflow.api.tree.MessageFlowCommentNote;
+import com.exxeta.iss.sonar.msgflow.parser.node.NodeParser;
 import com.exxeta.iss.sonar.msgflow.tree.impl.AbstractMessageFlowNode;
 
 public class ParserUtils {
@@ -120,7 +122,14 @@ public class ParserUtils {
 
 	public static AbstractMessageFlowNode parseNode(final Element element) {
 		final String type = element.getAttribute("xmi:type").split(":")[0];
-		return ParserLists.getNodeParser(type).parseMessageFlowNode(element);
+		NodeParser<?> parser = ParserLists.getNodeParser(type);
+		if (parser!=null){
+			return parser.parseMessageFlowNode(element);
+		}
+		return null;
+	}
+	public static MessageFlowCommentNote parseStickeyNote(final Element element) {
+		return new StickeyNoteParser().parse(element);
 	}
 
 	private ParserUtils() {

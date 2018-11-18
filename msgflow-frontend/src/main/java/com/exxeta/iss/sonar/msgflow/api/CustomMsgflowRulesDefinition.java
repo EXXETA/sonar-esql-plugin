@@ -40,10 +40,10 @@ public abstract class CustomMsgflowRulesDefinition implements RulesDefinition {
    */
   @Override
   public void define(RulesDefinition.Context context) {
-    RulesDefinition.NewRepository repo = context.createRepository(repositoryKey(), "esql").setName(repositoryName());
+    RulesDefinition.NewRepository repo = context.createRepository(repositoryKey(), "msgflow").setName(repositoryName());
 
     // Load metadata from check classes' annotations
-    new AnnotationBasedRulesDefinition(repo, "esql").addRuleClasses(false, ImmutableList.copyOf(checkClasses()));
+    new AnnotationBasedRulesDefinition(repo, "msgflow").addRuleClasses(false, ImmutableList.copyOf(checkClasses()));
 
     repo.done();
   }
