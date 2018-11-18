@@ -35,10 +35,12 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import com.exxeta.iss.sonar.msgflow.tree.impl.MessageFlowCommentNoteImpl;
 import com.exxeta.iss.sonar.msgflow.tree.impl.MessageFlowConnectionImpl;
 import com.exxeta.iss.sonar.msgflow.tree.impl.MsgflowImpl;
+import com.sonar.sslr.api.RecognitionException;
 
 public final class MsgflowParser {
 
@@ -562,8 +564,12 @@ public final class MsgflowParser {
 		try {
 			document = createDocument(source);
 			return parse(document);
+		} catch (SAXParseException e) {
+			throw new RecognitionException(e.getLineNumber(), e.getMessage());
 		} catch (SAXException | IOException | ParserConfigurationException e) {
 			e.printStackTrace();
+			
+			
 			return null;
 		}
 	}

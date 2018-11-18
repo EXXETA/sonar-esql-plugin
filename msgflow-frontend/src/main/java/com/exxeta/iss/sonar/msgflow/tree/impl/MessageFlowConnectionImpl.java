@@ -1,5 +1,7 @@
 package com.exxeta.iss.sonar.msgflow.tree.impl;
 
+import java.util.List;
+
 import org.w3c.dom.Node;
 
 import com.exxeta.iss.sonar.msgflow.api.tree.MessageFlowConnection;

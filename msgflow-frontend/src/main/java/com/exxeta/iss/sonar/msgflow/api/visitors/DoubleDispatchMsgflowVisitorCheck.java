@@ -5,7 +5,7 @@ import java.util.List;
 import com.exxeta.iss.sonar.msgflow.api.MsgflowCheck;
 import com.exxeta.iss.sonar.msgflow.api.tree.Tree;
 
-public abstract class MsgflowVisitorCheck extends DoubleDispatchMsgflowVisitor implements MsgflowCheck {
+public abstract class DoubleDispatchMsgflowVisitorCheck extends DoubleDispatchMsgflowVisitor implements MsgflowCheck {
 
 	private final Issues issues = new Issues(this);
 

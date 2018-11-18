@@ -23,9 +23,10 @@ import java.util.List;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 
+import com.exxeta.iss.sonar.msgflow.api.tree.Messageflow;
 import com.exxeta.iss.sonar.msgflow.api.visitors.DoubleDispatchMsgflowVisitor;
 
-public class MsgflowImpl extends MsgflowTree {
+public class MsgflowImpl extends MsgflowTree implements Messageflow{
 
 	/**
 	 * The logger for the class.

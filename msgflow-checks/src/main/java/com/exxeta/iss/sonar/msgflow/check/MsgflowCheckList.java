@@ -8,7 +8,7 @@ public class MsgflowCheckList {
 	public static final String REPOSITORY_KEY = "msgflow";
 
 	public static List<Class> getChecks() {
-		return ImmutableList.<Class>of(AggregateWithoutTimeoutCheck.class);
+		return ImmutableList.<Class>of(AggregateWithoutTimeoutCheck.class,MsgflowParsingErrorCheck.class);
 	}
 
 	private MsgflowCheckList() {

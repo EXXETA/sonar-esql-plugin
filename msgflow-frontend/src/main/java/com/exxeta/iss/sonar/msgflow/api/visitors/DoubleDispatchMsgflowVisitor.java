@@ -5,10 +5,10 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import com.exxeta.iss.sonar.msgflow.api.tree.MessageFlowConnection;
+import com.exxeta.iss.sonar.msgflow.api.tree.Messageflow;
 import com.exxeta.iss.sonar.msgflow.api.tree.Tree;
 import com.exxeta.iss.sonar.msgflow.api.tree.node.mq.MQInputNode;
 import com.exxeta.iss.sonar.msgflow.api.tree.node.routing.AggregateControlNode;
-import com.exxeta.iss.sonar.msgflow.tree.impl.MsgflowImpl;
 import com.google.common.base.Preconditions;
 
 public class DoubleDispatchMsgflowVisitor implements MsgflowVisitor {
@@ -47,7 +47,7 @@ public class DoubleDispatchMsgflowVisitor implements MsgflowVisitor {
 	public void visitMQInputNode(final MQInputNode aggregateControlNode) {
 	}
 
-	public void visitMsgflow(final MsgflowImpl msgflow) {
+	public void visitMsgflow(final Messageflow msgflow) {
 		msgflow.getMessageFlowNodes().stream().forEach(node -> node.accept(this));
 		msgflow.getConnections().stream().forEach(node -> node.accept(this));
 	}

@@ -4,6 +4,7 @@ import java.io.InterruptedIOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -31,18 +32,17 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.squidbridge.ProgressReport;
 
-import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
-import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
-import com.exxeta.iss.sonar.esql.check.CheckList;
-import com.exxeta.iss.sonar.esql.check.ParsingErrorCheck;
 import com.exxeta.iss.sonar.iib.IibPlugin;
 import com.exxeta.iss.sonar.msgflow.api.CustomMsgflowRulesDefinition;
 import com.exxeta.iss.sonar.msgflow.api.MsgflowCheck;
 import com.exxeta.iss.sonar.msgflow.api.visitors.FileIssue;
 import com.exxeta.iss.sonar.msgflow.api.visitors.Issue;
+import com.exxeta.iss.sonar.msgflow.api.visitors.IssueLocation;
 import com.exxeta.iss.sonar.msgflow.api.visitors.MsgflowVisitor;
 import com.exxeta.iss.sonar.msgflow.api.visitors.MsgflowVisitorContext;
+import com.exxeta.iss.sonar.msgflow.api.visitors.PreciseIssue;
 import com.exxeta.iss.sonar.msgflow.check.MsgflowCheckList;
+import com.exxeta.iss.sonar.msgflow.check.MsgflowParsingErrorCheck;
 import com.exxeta.iss.sonar.msgflow.parser.MsgflowParser;
 import com.exxeta.iss.sonar.msgflow.parser.MsgflowParserBuilder;
 import com.exxeta.iss.sonar.msgflow.tree.impl.MsgflowTree;
@@ -97,6 +97,20 @@ public class MsgflowSensor implements Sensor {
 			// new NoSonarVisitor(noSonarFilter),
 			// new CpdVisitor(context)
 			);
+		}
+
+	}
+
+	@VisibleForTesting
+	protected static class SonarLintProductExecutor implements ProductDependentExecutor {
+		@Override
+		public List<MsgflowVisitor> getProductDependentTreeVisitors() {
+			return Collections.emptyList();
+		}
+
+		@Override
+		public void executeCoverageSensors() {
+			// unnecessary in SonarLint context
 		}
 
 	}
@@ -181,7 +195,7 @@ public class MsgflowSensor implements Sensor {
 	private final MsgflowParser parser;
 
 	// parsingErrorRuleKey equals null if ParsingErrorCheck is not activated
-	private final RuleKey parsingErrorRuleKey = null;
+	private RuleKey parsingErrorRuleKey = null;
 
 	public MsgflowSensor(final CheckFactory checkFactory, final FileSystem fileSystem) {
 		this(checkFactory, fileSystem, null);
@@ -191,7 +205,7 @@ public class MsgflowSensor implements Sensor {
 			@Nullable final CustomMsgflowRulesDefinition[] customRulesDefinition) {
 
 		checks = MsgflowChecks.createMsgflowCheck(checkFactory)
-				.addChecks(CheckList.REPOSITORY_KEY, MsgflowCheckList.getChecks())
+				.addChecks(MsgflowCheckList.REPOSITORY_KEY, MsgflowCheckList.getChecks())
 				.addCustomChecks(customRulesDefinition);
 		this.fileSystem = fileSystem;
 		mainFilePredicate = fileSystem.predicates().and(fileSystem.predicates().hasType(InputFile.Type.MAIN),
@@ -260,10 +274,12 @@ public class MsgflowSensor implements Sensor {
 		treeVisitors.addAll(checks.visitorChecks());
 
 		for (final MsgflowVisitor check : treeVisitors) {
-			/*
-			 * if (check instanceof ParsingErrorCheck) { parsingErrorRuleKey =
-			 * checks.ruleKeyFor((MsgflowCheck) check); break; }
-			 */
+
+			if (check instanceof MsgflowParsingErrorCheck) {
+				parsingErrorRuleKey = checks.ruleKeyFor((MsgflowCheck) check);
+				break;
+			}
+
 		}
 
 		final Iterable<InputFile> inputFiles = fileSystem.inputFiles(mainFilePredicate);
@@ -284,7 +300,7 @@ public class MsgflowSensor implements Sensor {
 		if (parsingErrorRuleKey != null) {
 			final NewIssue newIssue = sensorContext.newIssue();
 
-			final NewIssueLocation primaryLocation = newIssue.newLocation().message(ParsingErrorCheck.MESSAGE)
+			final NewIssueLocation primaryLocation = newIssue.newLocation().message(MsgflowParsingErrorCheck.MESSAGE)
 					.on(inputFile).at(inputFile.selectLine(e.getLine()));
 
 			newIssue.forRule(parsingErrorRuleKey).at(primaryLocation).save();
@@ -331,6 +347,7 @@ public class MsgflowSensor implements Sensor {
 
 		saveFileIssues(sensorContext, fileIssues, inputFile);
 	}
+
 	static class AnalysisException extends RuntimeException {
 		AnalysisException(String message, Throwable cause) {
 			super(message, cause);

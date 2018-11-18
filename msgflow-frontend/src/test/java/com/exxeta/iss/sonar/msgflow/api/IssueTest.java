@@ -43,13 +43,13 @@ import org.junit.Test;
 import com.exxeta.iss.sonar.msgflow.api.visitors.DoubleDispatchMsgflowVisitor;
 import com.exxeta.iss.sonar.msgflow.api.visitors.FileIssue;
 import com.exxeta.iss.sonar.msgflow.api.visitors.IssueLocation;
-import com.exxeta.iss.sonar.msgflow.api.visitors.MsgflowVisitorCheck;
+import com.exxeta.iss.sonar.msgflow.api.visitors.DoubleDispatchMsgflowVisitorCheck;
 import com.exxeta.iss.sonar.msgflow.api.visitors.PreciseIssue;
 import com.exxeta.iss.sonar.msgflow.tree.impl.MsgflowTree;
 
 public class IssueTest {
 
-	private static final MsgflowCheck check = new MsgflowVisitorCheck() {
+	private static final MsgflowCheck check = new DoubleDispatchMsgflowVisitorCheck() {
 	};
 	private static final String MESSAGE = "message";
 	private static final MsgflowTree token = new MsgflowTree(null) {
