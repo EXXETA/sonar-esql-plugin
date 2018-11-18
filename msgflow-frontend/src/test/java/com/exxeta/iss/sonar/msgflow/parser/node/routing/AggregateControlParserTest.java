@@ -9,6 +9,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
+import com.exxeta.iss.sonar.msgflow.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.msgflow.api.tree.node.routing.AggregateControlNode;
 import com.exxeta.iss.sonar.msgflow.parser.node.NodeParserTest;
 import com.exxeta.iss.sonar.msgflow.tree.impl.node.routing.AggregateControlNodeImpl;
@@ -38,5 +39,6 @@ public class AggregateControlParserTest extends NodeParserTest<AggregateControlN
 		assertThat(node.name()).isEqualTo("Aggregate Control");
 		assertThat(node.sourceTerminals()).isNull();
 		assertThat(node.targetTerminals()).isNull();
+		assertThat(node.getKind()).isEqualTo(Kind.AGGREGATE_CONTROL);
 	}
 }

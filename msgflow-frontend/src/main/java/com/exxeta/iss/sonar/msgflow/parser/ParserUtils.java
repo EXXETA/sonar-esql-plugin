@@ -36,7 +36,8 @@ public class ParserUtils {
 
 	public static Document createDocument(final InputStream is)
 			throws SAXException, IOException, ParserConfigurationException {
-		final String lineNumAttribName = "lineNumber";
+		final String startPosAttribName = "startPos";
+		final String endPosAttribName = "endPos";
 		final SAXParserFactory factory = SAXParserFactory.newInstance();
 		final SAXParser parser = factory.newSAXParser();
 		final DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -73,6 +74,9 @@ public class ParserUtils {
 					final Element parentEl = elementStack.peek();
 					parentEl.appendChild(closedEl);
 				}
+				closedEl.setUserData(endPosAttribName,
+						String.valueOf(locator.getLineNumber()) + ":" + String.valueOf(locator.getColumnNumber()),
+						null);
 			}
 
 			@Override
@@ -89,11 +93,12 @@ public class ParserUtils {
 				for (int i = 0; i < attributes.getLength(); i++) {
 					el.setAttribute(attributes.getQName(i), attributes.getValue(i));
 				}
-				el.setUserData(lineNumAttribName,
+				el.setUserData(startPosAttribName,
 						String.valueOf(locator.getLineNumber()) + ":" + String.valueOf(locator.getColumnNumber()),
 						null);
 				elementStack.push(el);
 			}
+			
 		};
 		parser.parse(is, handler);
 		return doc;

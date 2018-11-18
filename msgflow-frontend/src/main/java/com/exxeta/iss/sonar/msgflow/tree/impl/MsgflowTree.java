@@ -14,12 +14,12 @@ public abstract class MsgflowTree implements Tree {
 
 	@Override
 	public int endColumn() {
-		return domNode == null ? -1 : Integer.parseInt(domNode.getUserData("lineNumber").toString().split(":")[1])-1;
+		return domNode == null ? -1 : Integer.parseInt(domNode.getUserData("endPos").toString().split(":")[1])-1;
 	}
 
 	@Override
 	public int endLine() {
-		return domNode == null ? -1 : Integer.parseInt(domNode.getUserData("lineNumber").toString().split(":")[0]);
+		return domNode == null ? -1 : Integer.parseInt(domNode.getUserData("endPos").toString().split(":")[0]);
 	}
 
 	public abstract Kind getKind();
@@ -38,12 +38,12 @@ public abstract class MsgflowTree implements Tree {
 
 	@Override
 	public int startColumn() {
-		return domNode == null ? -1 : Integer.parseInt(domNode.getUserData("lineNumber").toString().split(":")[1])-2;
+		return domNode == null ? -1 : Integer.parseInt(domNode.getUserData("startPos").toString().split(":")[1])-2;
 	}
 
 	@Override
 	public int startLine() {
-		return domNode == null ? -1 : Integer.parseInt(domNode.getUserData("lineNumber").toString().split(":")[0]);
+		return domNode == null ? -1 : Integer.parseInt(domNode.getUserData("startPos").toString().split(":")[0]);
 	}
 	
 }

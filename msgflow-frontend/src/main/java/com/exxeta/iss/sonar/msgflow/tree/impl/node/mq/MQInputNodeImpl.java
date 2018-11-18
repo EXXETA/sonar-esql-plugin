@@ -1,10 +1,7 @@
 package com.exxeta.iss.sonar.msgflow.tree.impl.node.mq;
 
-import java.util.List;
-
 import org.w3c.dom.Node;
 
-import com.exxeta.iss.sonar.msgflow.api.tree.MessageFlowConnection;
 import com.exxeta.iss.sonar.msgflow.api.tree.node.mq.MQInputNode;
 import com.exxeta.iss.sonar.msgflow.api.visitors.DoubleDispatchMsgflowVisitor;
 import com.exxeta.iss.sonar.msgflow.tree.impl.AbstractMessageFlowNode;
