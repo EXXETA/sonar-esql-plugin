@@ -25,8 +25,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.sonar.squidbridge.checks.CheckMessagesVerifier;
-
 import com.exxeta.iss.sonar.msgflow.api.MsgflowCheck;
 import com.exxeta.iss.sonar.msgflow.api.visitors.Issue;
 import com.exxeta.iss.sonar.msgflow.api.visitors.IssueLocation;

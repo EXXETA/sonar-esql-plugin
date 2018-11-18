@@ -22,13 +22,13 @@ import java.util.Collection;
 import java.util.List;
 
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.squidbridge.api.CheckMessage;
 
 import com.exxeta.iss.sonar.msgflow.api.MsgflowCheck;
 import com.exxeta.iss.sonar.msgflow.api.visitors.FileIssue;
 import com.exxeta.iss.sonar.msgflow.api.visitors.Issue;
 import com.exxeta.iss.sonar.msgflow.api.visitors.MsgflowVisitorContext;
 import com.exxeta.iss.sonar.msgflow.api.visitors.PreciseIssue;
+import com.exxeta.iss.sonar.msgflow.check.verifier.CheckMessage;
 
 public class MsgflowCheckTest {
 

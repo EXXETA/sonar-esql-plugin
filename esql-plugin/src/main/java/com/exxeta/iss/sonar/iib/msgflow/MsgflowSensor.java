@@ -1,6 +1,5 @@
 package com.exxeta.iss.sonar.iib.msgflow;
 
-import java.io.File;
 import java.io.InterruptedIOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,7 +30,6 @@ import org.sonar.api.rule.RuleKey;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.squidbridge.ProgressReport;
-import org.sonar.squidbridge.api.AnalysisException;
 
 import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
 import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
@@ -216,7 +214,7 @@ public class MsgflowSensor implements Sensor {
 		} catch (final Exception e) {
 			checkInterrupted(e);
 			processException(e, sensorContext, inputFile);
-			throw new AnalysisException("Unable to analyse file: " + inputFile.uri(), e);
+			LOG.error("Unable to analyse file: " + inputFile.uri(), e);
 		}
 	}
 
@@ -269,7 +267,7 @@ public class MsgflowSensor implements Sensor {
 		}
 
 		final Iterable<InputFile> inputFiles = fileSystem.inputFiles(mainFilePredicate);
-		final Collection<File> files = StreamSupport.stream(inputFiles.spliterator(), false).map(InputFile::file)
+		final Collection<String> files = StreamSupport.stream(inputFiles.spliterator(), false).map(InputFile::toString)
 				.collect(Collectors.toList());
 
 		final ProgressReport progressReport = new ProgressReport("Report about progress of ESQL analyzer",
@@ -332,5 +330,10 @@ public class MsgflowSensor implements Sensor {
 		}
 
 		saveFileIssues(sensorContext, fileIssues, inputFile);
+	}
+	static class AnalysisException extends RuntimeException {
+		AnalysisException(String message, Throwable cause) {
+			super(message, cause);
+		}
 	}
 }

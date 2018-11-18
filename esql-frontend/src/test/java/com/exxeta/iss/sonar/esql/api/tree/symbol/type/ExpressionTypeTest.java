@@ -7,7 +7,6 @@ import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.symbols.Symbol;
 import com.exxeta.iss.sonar.esql.api.symbols.Type;
-import com.exxeta.iss.sonar.esql.tree.symbols.type.PrimitiveType;
 public class ExpressionTypeTest extends TypeTest{
 
 	  @Before

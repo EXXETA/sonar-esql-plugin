@@ -60,7 +60,6 @@ import org.sonar.api.utils.log.LogTester;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.squidbridge.ProgressReport;
-import org.sonar.squidbridge.api.AnalysisException;
 
 import com.exxeta.iss.sonar.esql.api.CustomEsqlRulesDefinition;
 import com.exxeta.iss.sonar.esql.api.EsqlCheck;
@@ -182,13 +181,15 @@ public class EsqlSensorTest {
 
 	@Test
 	public void technical_error_should_add_error_to_context() {
-		thrown.expect(AnalysisException.class);
+		//thrown.expect(AnalysisException.class);
 
 		EsqlCheck check = new ExceptionRaisingCheck(new NullPointerException("NPE forcibly raised by check class"));
+		InputFile file = inputFile("file.esql");
+	    createSensor().analyseFiles(context, ImmutableList.of((TreeVisitor) check), ImmutableList.of(file), executor, progressReport);
+	    assertThat(context.allAnalysisErrors()).hasSize(1);
 
-		createSensor().analyseFiles(context, ImmutableList.of((TreeVisitor) check),
-				ImmutableList.of(inputFile("file.esql")), executor, progressReport);
-		assertThat(context.allAnalysisErrors()).hasSize(1);
+	    assertThat(logTester.logs()).contains("Unable to analyse file: " + file.uri());
+		
 	}
 
 	@Test
@@ -281,13 +282,6 @@ public class EsqlSensorTest {
 	}
 
 	@Test
-	public void exception_should_report_file_name() throws Exception {
-		EsqlCheck check = new ExceptionRaisingCheck(new IllegalStateException());
-		analyseFileWithException(check, inputFile("cpd/Person.esql"), "Person.esql");
-		assertThat(context.allAnalysisErrors()).hasSize(1);
-	}
-
-	@Test
 	public void cancelled_context_should_cancel_progress_report_and_return_with_no_exception() {
 		EsqlCheck check = new DoubleDispatchVisitorCheck() {
 		};
@@ -302,7 +296,7 @@ public class EsqlSensorTest {
 	private void analyseFileWithException(EsqlCheck check,InputFile inputFile,
 			String expectedMessageSubstring) {
 		EsqlSensor sensor = createSensor();
-		thrown.expect(AnalysisException.class);
+		thrown.expect(EsqlSensor.AnalysisException.class);
 		thrown.expectMessage(expectedMessageSubstring);
 		try {
 			sensor.analyseFiles(context, ImmutableList.of((TreeVisitor) check), ImmutableList.of(inputFile), executor,

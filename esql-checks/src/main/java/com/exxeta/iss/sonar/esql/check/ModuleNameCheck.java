@@ -17,8 +17,6 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
-import java.util.regex.Pattern;
-
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 
