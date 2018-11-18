@@ -57,7 +57,7 @@ public class CheckListTest {
 		final List<Class> checks = MsgflowCheckList.getChecks();
 
 		for (final Class cls : checks) {
-			if (!cls.getSimpleName().equals("ParsingErrorCheck")) {
+			if (!cls.getSimpleName().equals("MsgflowParsingErrorCheck")) {
 				final String testName = '/' + cls.getName().replace('.', '/') + "Test.class";
 				assertThat(getClass().getResource(testName))
 						.overridingErrorMessage("No test for " + cls.getSimpleName()).isNotNull();
