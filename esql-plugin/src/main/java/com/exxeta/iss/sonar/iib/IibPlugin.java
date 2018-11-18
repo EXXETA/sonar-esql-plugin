@@ -28,6 +28,8 @@ import com.exxeta.iss.sonar.iib.esql.EsqlProfile;
 import com.exxeta.iss.sonar.iib.esql.EsqlRulesDefinition;
 import com.exxeta.iss.sonar.iib.esql.EsqlSensor;
 import com.exxeta.iss.sonar.iib.msgflow.MsgflowLanguage;
+import com.exxeta.iss.sonar.iib.msgflow.MsgflowSensor;
+import com.exxeta.iss.sonar.msgflow.metrics.MsgflowMetrics;
 
 public class IibPlugin implements Plugin {
 
@@ -59,8 +61,8 @@ public class IibPlugin implements Plugin {
 		context.addExtensions(EsqlLanguage.class, EsqlSensor.class,
 				new EsqlRulesDefinition(context.getSonarQubeVersion()), EsqlProfile.class, EsqlMetrics.class);
 
-		context.addExtension(MsgflowLanguage.class/*, MsgflowSensor.class,
-				new MsgflowRulesDefinition(context.getSonarQubeVersion()), MsgflowProfile.class, MsgflowMetrics.class*/);
+		context.addExtensions(MsgflowLanguage.class, MsgflowSensor.class,
+				/*new MsgflowRulesDefinition(context.getSonarQubeVersion()), MsgflowProfile.class,*/ MsgflowMetrics.class);
 
 		  context.addExtensions(
 				PropertyDefinition.builder(ESQL_FILE_SUFFIXES_KEY)

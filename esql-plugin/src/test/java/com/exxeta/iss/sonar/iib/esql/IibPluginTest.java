@@ -36,7 +36,7 @@ public class IibPluginTest {
   @Test
   public void count_extensions() throws Exception {
     Plugin.Context context = setupContext(SonarRuntimeImpl.forSonarQube(Version.create(6, 7), SonarQubeSide.SERVER));
-    assertThat(context.getExtensions()).hasSize(10);
+    assertThat(context.getExtensions()).hasSize(12);
   }
 
   @Test
@@ -60,7 +60,7 @@ public class IibPluginTest {
   public void count_extensions_for_sonarlint() throws Exception {
     Plugin.Context context = setupContext(SonarRuntimeImpl.forSonarLint(Version.create(6, 7)));
 
-    assertThat(context.getExtensions()).hasSize(10);
+    assertThat(context.getExtensions()).hasSize(12);
   }
 
   private List<PropertyDefinition> properties() {

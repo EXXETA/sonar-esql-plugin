@@ -53,20 +53,23 @@ public abstract class MsgflowSubscriptionVisitor implements MsgflowVisitor {
 		if (isSubscribed) {
 			visitNode(tree);
 		}
-		// visitChildren(tree);
+		visitChildren(tree);
 		if (isSubscribed) {
 			leaveNode(tree);
 		}
 	}
 
 	private void visitChildren(final Tree tree) {
-		final MsgflowImpl msgflow = (MsgflowImpl) tree;
+		if (tree instanceof MsgflowImpl) {
 
-		for (final AbstractMessageFlowNode node : msgflow.getMessageFlowNodes()) {
-			visit(node);
-		}
-		for (final MessageFlowConnectionImpl connection : msgflow.getConnections()) {
-			visit(connection);
+			final MsgflowImpl msgflow = (MsgflowImpl) tree;
+
+			for (final AbstractMessageFlowNode node : msgflow.getMessageFlowNodes()) {
+				visit(node);
+			}
+			for (final MessageFlowConnectionImpl connection : msgflow.getConnections()) {
+				visit(connection);
+			}
 		}
 
 	}
