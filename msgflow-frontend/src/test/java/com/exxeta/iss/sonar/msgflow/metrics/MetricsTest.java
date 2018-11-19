@@ -31,7 +31,7 @@ public class MetricsTest extends MsgflowModelTest{
 	public void complexity() {
 		final String path = "src/test/resources/metrics/complexity.msgflow";
 		final Tree tree = parse(new File(path));
-		assertThat(new ComplexityVisitor().getComplexity(tree)).isEqualTo(0);
+		assertThat(new ComplexityVisitor().getComplexity(tree)).isEqualTo(1);
 	}
 
 	@Test
