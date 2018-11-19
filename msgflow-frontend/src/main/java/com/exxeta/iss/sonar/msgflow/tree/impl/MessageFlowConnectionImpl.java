@@ -1,8 +1,6 @@
 package com.exxeta.iss.sonar.msgflow.tree.impl;
 
-import java.util.List;
-
-import org.w3c.dom.Node;
+import org.w3c.dom.Element;
 
 import com.exxeta.iss.sonar.msgflow.api.tree.MessageFlowConnection;
 import com.exxeta.iss.sonar.msgflow.api.visitors.DoubleDispatchMsgflowVisitor;
@@ -19,17 +17,9 @@ public class MessageFlowConnectionImpl extends MsgflowTree implements MessageFlo
 	 */
 	private String srcNode;
 	/**
-	 * Display Name of the source node of the connection
-	 */
-	private String srcNodeName;
-	/**
 	 * a target node ID of the connection
 	 */
 	private String targetNode;
-	/**
-	 * Display Name of the target node ID of the connection
-	 */
-	private String targetNodeName;
 	/**
 	 * a source terminal of the connection
 	 */
@@ -43,12 +33,10 @@ public class MessageFlowConnectionImpl extends MsgflowTree implements MessageFlo
 		super(null);
 	}
 
-	public MessageFlowConnectionImpl(final Node srcNode, final String srcNodeName, final String targetNode,
-			final String targetNodeName, final String srcTerminal, final String targetTerminal) {
-		super(srcNode);
-		this.srcNodeName = srcNodeName;
+	public MessageFlowConnectionImpl(final Element element, final String srcNode, final String srcTerminal, final String targetNode, final String targetTerminal) {
+		super(element);
 		this.targetNode = targetNode;
-		this.targetNodeName = targetNodeName;
+		this.srcNode = srcNode;
 		this.srcTerminal = srcTerminal;
 		this.targetTerminal = targetTerminal;
 	}
@@ -69,17 +57,8 @@ public class MessageFlowConnectionImpl extends MsgflowTree implements MessageFlo
 	 *
 	 * @return a ID of the source Node.
 	 */
-	public String getSrcNode() {
+	public String srcNode() {
 		return srcNode;
-	}
-
-	/**
-	 * The method returns the Display Name of the source Node.
-	 *
-	 * @return a Display Name of the source Node.
-	 */
-	public String getSrcNodeName() {
-		return srcNodeName;
 	}
 
 	/**
@@ -87,7 +66,7 @@ public class MessageFlowConnectionImpl extends MsgflowTree implements MessageFlo
 	 *
 	 * @return a name of the source terminal.
 	 */
-	public String getSrcTerminal() {
+	public String srcTerminal() {
 		return srcTerminal;
 	}
 
@@ -96,17 +75,8 @@ public class MessageFlowConnectionImpl extends MsgflowTree implements MessageFlo
 	 *
 	 * @return a ID of the target Node.
 	 */
-	public String getTargetNode() {
+	public String targetNode() {
 		return targetNode;
-	}
-
-	/**
-	 * The method returns the Display Name of the target Node.
-	 *
-	 * @return a Display Name of the target Node.
-	 */
-	public String getTargetNodeName() {
-		return targetNodeName;
 	}
 
 	/**
@@ -114,7 +84,7 @@ public class MessageFlowConnectionImpl extends MsgflowTree implements MessageFlo
 	 *
 	 * @return a name of the target terminal.
 	 */
-	public String getTargetTerminal() {
+	public String targetTerminal() {
 		return targetTerminal;
 	}
 

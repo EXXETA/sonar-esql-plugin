@@ -26,6 +26,7 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import com.exxeta.iss.sonar.msgflow.api.tree.MessageFlowCommentNote;
+import com.exxeta.iss.sonar.msgflow.api.tree.MessageFlowConnection;
 import com.exxeta.iss.sonar.msgflow.parser.node.NodeParser;
 import com.exxeta.iss.sonar.msgflow.tree.impl.AbstractMessageFlowNode;
 
@@ -130,6 +131,10 @@ public class ParserUtils {
 	}
 	public static MessageFlowCommentNote parseStickeyNote(final Element element) {
 		return new StickeyNoteParser().parse(element);
+	}	
+	
+	public static MessageFlowConnection parseConnection(final Element element) {
+		return new ConnectionParser().parse(element);
 	}
 
 	private ParserUtils() {

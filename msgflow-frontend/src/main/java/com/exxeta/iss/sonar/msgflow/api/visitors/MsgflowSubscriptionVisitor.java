@@ -3,9 +3,9 @@ package com.exxeta.iss.sonar.msgflow.api.visitors;
 import java.util.Collection;
 import java.util.Set;
 
+import com.exxeta.iss.sonar.msgflow.api.tree.MessageFlowConnection;
 import com.exxeta.iss.sonar.msgflow.api.tree.Tree;
 import com.exxeta.iss.sonar.msgflow.tree.impl.AbstractMessageFlowNode;
-import com.exxeta.iss.sonar.msgflow.tree.impl.MessageFlowConnectionImpl;
 import com.exxeta.iss.sonar.msgflow.tree.impl.MsgflowImpl;
 import com.exxeta.iss.sonar.msgflow.tree.impl.MsgflowTree;
 import com.google.common.base.Preconditions;
@@ -67,7 +67,7 @@ public abstract class MsgflowSubscriptionVisitor implements MsgflowVisitor {
 			for (final AbstractMessageFlowNode node : msgflow.getMessageFlowNodes()) {
 				visit(node);
 			}
-			for (final MessageFlowConnectionImpl connection : msgflow.getConnections()) {
+			for (final MessageFlowConnection connection : msgflow.connections()) {
 				visit(connection);
 			}
 		}

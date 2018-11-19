@@ -53,6 +53,6 @@ public class DoubleDispatchMsgflowVisitor implements MsgflowVisitor {
 
 	public void visitMsgflow(final Messageflow msgflow) {
 		msgflow.getMessageFlowNodes().stream().forEach(node -> node.accept(this));
-		msgflow.getConnections().stream().forEach(node -> node.accept(this));
+		msgflow.connections().stream().forEach(node -> node.accept(this));
 	}
 }

@@ -18,12 +18,12 @@
 package com.exxeta.iss.sonar.msgflow.parser;
 
 import static com.exxeta.iss.sonar.msgflow.parser.ParserUtils.createDocument;
+import static com.exxeta.iss.sonar.msgflow.parser.ParserUtils.parseConnection;
 import static com.exxeta.iss.sonar.msgflow.parser.ParserUtils.parseNode;
 import static com.exxeta.iss.sonar.msgflow.parser.ParserUtils.parseStickeyNote;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathConstants;
@@ -38,8 +38,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-import com.exxeta.iss.sonar.msgflow.tree.impl.MessageFlowCommentNoteImpl;
-import com.exxeta.iss.sonar.msgflow.tree.impl.MessageFlowConnectionImpl;
 import com.exxeta.iss.sonar.msgflow.tree.impl.MsgflowImpl;
 import com.sonar.sslr.api.RecognitionException;
 
@@ -477,40 +475,7 @@ public final class MsgflowParser {
 				/**
 				 * Added to identify all the connections for the message flow change starts
 				 */
-				final XPathExpression numberOfConnections = XPathFactory.newInstance().newXPath()
-						.compile("count(//connections)");
-				int noc = Integer.parseInt((String) numberOfConnections.evaluate(document, XPathConstants.STRING));
-
-				//TODO move to connectionParser
-			/*	for (; noc > 0; noc--) {
-
-					final XPathExpression srcNodeExp = XPathFactory.newInstance().newXPath()
-							.compile("//connections[" + noc + "]/@sourceNode");
-					final XPathExpression targetNodeExp = XPathFactory.newInstance().newXPath()
-							.compile("//connections[" + noc + "]/@targetNode");
-					final XPathExpression srcTeminalExp = XPathFactory.newInstance().newXPath()
-							.compile("//connections[" + noc + "]/@sourceTerminalName");
-					final XPathExpression targetTerminalExp = XPathFactory.newInstance().newXPath()
-							.compile("//connections[" + noc + "]/@targetTerminalName");
-
-					final String srcNode = (String) srcNodeExp.evaluate(document, XPathConstants.STRING);
-					final String targetNode = (String) targetNodeExp.evaluate(document, XPathConstants.STRING);
-					final String srcTerminal = (String) srcTeminalExp.evaluate(document, XPathConstants.STRING);
-					final String targetTerminal = (String) targetTerminalExp.evaluate(document, XPathConstants.STRING);
-
-					final XPathExpression srcNodeNameExp = XPathFactory.newInstance().newXPath()
-							.compile("//nodes[@id='" + srcNode + "']/translation/@string");
-					final XPathExpression targetNodeNameExp = XPathFactory.newInstance().newXPath()
-							.compile("//nodes[@id='" + targetNode + "']/translation/@string");
-
-					final String srcNodeName = (String) srcNodeNameExp.evaluate(document, XPathConstants.STRING);
-					final String targetNodeName = (String) targetNodeNameExp.evaluate(document, XPathConstants.STRING);
-
-					final MessageFlowConnectionImpl conection = new MessageFlowConnectionImpl(null, srcNodeName,
-							targetNode, targetNodeName, srcTerminal, targetTerminal);
-					msgflow.addConnection(conection);
-				}*/
-
+				
 				
 
 				/**
@@ -526,6 +491,18 @@ public final class MsgflowParser {
 				final Element element = (Element) stickeyNotes.item(i);
 				msgflow.addComment(parseStickeyNote(element));
 			}
+			
+			
+			final XPathExpression connectionsExpression = XPathFactory.newInstance().newXPath()
+					.compile("//connections");
+			final NodeList connections = (NodeList)connectionsExpression.evaluate(document, XPathConstants.NODESET);
+
+			for ( int i=0;i< connections.getLength();i++) {
+				final Element element = (Element)connections.item(i);
+				msgflow.addConnection(parseConnection(element));
+			}
+			
+			
 		} catch (final Exception e) {
 			LOGGER.error("Cannot parse msgflow", e);
 		}

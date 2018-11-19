@@ -24,6 +24,7 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 
 import com.exxeta.iss.sonar.msgflow.api.tree.MessageFlowCommentNote;
+import com.exxeta.iss.sonar.msgflow.api.tree.MessageFlowConnection;
 import com.exxeta.iss.sonar.msgflow.api.tree.Messageflow;
 import com.exxeta.iss.sonar.msgflow.api.visitors.DoubleDispatchMsgflowVisitor;
 
@@ -36,7 +37,7 @@ public class MsgflowImpl extends MsgflowTree implements Messageflow{
 
 	private final List<AbstractMessageFlowNode> nodes = new ArrayList<>();
 
-	private final List<MessageFlowConnectionImpl> connections = new ArrayList<>();
+	private final List<MessageFlowConnection> connections = new ArrayList<>();
 
 	private final List<MessageFlowCommentNote> comments = new ArrayList<>();
 
@@ -58,7 +59,7 @@ public class MsgflowImpl extends MsgflowTree implements Messageflow{
 		comments.add(msgFlowComment);
 	}
 
-	public void addConnection(final MessageFlowConnectionImpl conection) {
+	public void addConnection(final MessageFlowConnection conection) {
 		connections.add(conection);
 	}
 
@@ -80,7 +81,7 @@ public class MsgflowImpl extends MsgflowTree implements Messageflow{
 	 *
 	 * @return a list of connections of the message flow
 	 */
-	public List<MessageFlowConnectionImpl> getConnections() {
+	public List<MessageFlowConnection> connections() {
 		return connections;
 	}
 
