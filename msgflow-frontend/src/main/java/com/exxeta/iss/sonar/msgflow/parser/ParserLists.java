@@ -8,6 +8,7 @@ import org.sonar.api.utils.log.Loggers;
 import com.exxeta.iss.sonar.msgflow.parser.node.NodeParser;
 import com.exxeta.iss.sonar.msgflow.parser.node.mq.MQInputNodeParser;
 import com.exxeta.iss.sonar.msgflow.parser.node.mq.MQOutputNodeParser;
+import com.exxeta.iss.sonar.msgflow.parser.node.mq.MQReplyNodeParser;
 import com.exxeta.iss.sonar.msgflow.parser.node.routing.AggregateControlNodeParser;
 import com.google.common.collect.ImmutableList;
 
@@ -25,7 +26,8 @@ public class ParserLists {
 	}
 
 	public static List<NodeParser<?>> getNodeParsers() {
-		return ImmutableList.<NodeParser<?>>of(new AggregateControlNodeParser(), new MQInputNodeParser(), new MQOutputNodeParser());
+		return ImmutableList.<NodeParser<?>>of(new AggregateControlNodeParser(), new MQInputNodeParser(),
+				new MQOutputNodeParser(), new MQReplyNodeParser());
 	}
 
 	private ParserLists() {

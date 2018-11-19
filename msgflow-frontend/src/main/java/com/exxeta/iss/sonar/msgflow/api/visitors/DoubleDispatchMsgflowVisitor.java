@@ -9,6 +9,7 @@ import com.exxeta.iss.sonar.msgflow.api.tree.Messageflow;
 import com.exxeta.iss.sonar.msgflow.api.tree.Tree;
 import com.exxeta.iss.sonar.msgflow.api.tree.node.mq.MQInputNode;
 import com.exxeta.iss.sonar.msgflow.api.tree.node.mq.MQOutputNode;
+import com.exxeta.iss.sonar.msgflow.api.tree.node.mq.MQReplyNode;
 import com.exxeta.iss.sonar.msgflow.api.tree.node.routing.AggregateControlNode;
 import com.google.common.base.Preconditions;
 
@@ -54,5 +55,9 @@ public class DoubleDispatchMsgflowVisitor implements MsgflowVisitor {
 	public void visitMsgflow(final Messageflow msgflow) {
 		msgflow.getMessageFlowNodes().stream().forEach(node -> node.accept(this));
 		msgflow.connections().stream().forEach(node -> node.accept(this));
+	}
+
+	public void visitMQReplyNode(MQReplyNode tree) {
+		
 	}
 }
