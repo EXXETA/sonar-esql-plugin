@@ -8,6 +8,7 @@ import com.exxeta.iss.sonar.msgflow.api.tree.MessageFlowConnection;
 import com.exxeta.iss.sonar.msgflow.api.tree.Messageflow;
 import com.exxeta.iss.sonar.msgflow.api.tree.Tree;
 import com.exxeta.iss.sonar.msgflow.api.tree.node.mq.MQInputNode;
+import com.exxeta.iss.sonar.msgflow.api.tree.node.mq.MQOutputNode;
 import com.exxeta.iss.sonar.msgflow.api.tree.node.routing.AggregateControlNode;
 import com.google.common.base.Preconditions;
 
@@ -37,14 +38,17 @@ public class DoubleDispatchMsgflowVisitor implements MsgflowVisitor {
 		scan(context.getMsgflow());
 	}
 
-	public void visitAggregateControlNode(final AggregateControlNode aggregateControlNode) {
+	public void visitAggregateControlNode(final AggregateControlNode tree) {
 	}
 
 	public void visitConnection(final MessageFlowConnection tree) {
 
 	}
 
-	public void visitMQInputNode(final MQInputNode aggregateControlNode) {
+	public void visitMQInputNode(final MQInputNode tree) {
+	}
+
+	public void visitMQOutputNode(final MQOutputNode tree) {
 	}
 
 	public void visitMsgflow(final Messageflow msgflow) {
