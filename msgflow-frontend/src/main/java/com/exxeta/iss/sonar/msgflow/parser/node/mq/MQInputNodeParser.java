@@ -20,15 +20,10 @@ public class MQInputNodeParser extends NodeParser<MQInputNodeImpl> {
 	}
 
 	@Override
-	public MQInputNodeImpl parseMessageFlowNode(final Element nodeElement) {
+	public MQInputNodeImpl internalParse(final Element nodeElement) throws XPathExpressionException {
 
-		try {
 			return new MQInputNodeImpl(nodeElement, getId(nodeElement), getName(nodeElement), getLocationX(nodeElement),
 					getLocationY(nodeElement), nodeElement.getAttribute("queueName"));
-		} catch (final XPathExpressionException e) {
-			LOGGER.error("cannot parse AggregateControlNode", e);
-			return null;
-		}
 
 	}
 

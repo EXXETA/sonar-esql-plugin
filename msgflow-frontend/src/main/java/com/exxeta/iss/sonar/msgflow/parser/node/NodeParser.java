@@ -31,6 +31,15 @@ public abstract class NodeParser<T extends AbstractMessageFlowNode> {
 
 	public abstract String getNodeType();
 
-	public abstract T parseMessageFlowNode(Element nodeElement);
+	public T parseMessageFlowNode(Element nodeElement) {
+		try {
+		return internalParse(nodeElement);
+		} catch (XPathExpressionException e){
+			LOGGER.error("Cannot parse node", e);
+			return null;
+		}
+	}
+
+	protected abstract T internalParse(Element nodeElement) throws XPathExpressionException;
 
 }

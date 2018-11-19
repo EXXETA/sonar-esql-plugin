@@ -20,16 +20,11 @@ public class AggregateControlNodeParser extends NodeParser<AggregateControlNodeI
 	}
 
 	@Override
-	public AggregateControlNodeImpl parseMessageFlowNode(final Element nodeElement) {
+	public AggregateControlNodeImpl internalParse(final Element nodeElement) throws XPathExpressionException {
 
-		try {
 			return new AggregateControlNodeImpl(nodeElement, getId(nodeElement), getName(nodeElement),
 					getLocationX(nodeElement), getLocationY(nodeElement), nodeElement.getAttribute("timeoutLocation"),
 					nodeElement.getAttribute("timeoutInterval"), nodeElement.getAttribute("aggregateName"));
-		} catch (final XPathExpressionException e) {
-			LOGGER.error("cannot parse AggregateControlNode", e);
-			return null;
-		}
 
 	}
 
