@@ -35,7 +35,8 @@ public class SubElementNameCheckTest {
 	public void test() {
 		EsqlCheck check = new SubElementNameCheck();
 		EsqlCheckVerifier.issues(check, new File("src/test/resources/SubElementName.esql"))
-		.next().atLine(5).withMessage("sub-elements should be in UpperCamel-case and elements containing simple value should be in lowercase.")
-		.next().atLine(6).withMessage("sub-elements should be in UpperCamel-case and elements containing simple value should be in lowercase.").noMore();
+				.next().atLine(5).withMessage("sub-elements should be in UpperCamel-case and elements containing simple value should be in lowercase.")
+				.next().atLine(6).withMessage("sub-elements should be in UpperCamel-case and elements containing simple value should be in lowercase.")
+				.next().atLine(9).withMessage("sub-elements should be in UpperCamel-case and elements containing simple value should be in lowercase.").noMore();
 	}
 }

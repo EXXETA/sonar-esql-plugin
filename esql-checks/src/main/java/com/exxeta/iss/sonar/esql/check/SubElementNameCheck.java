@@ -7,7 +7,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  * 
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *	 http://www.apache.org/licenses/LICENSE-2.0
  * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -17,17 +17,11 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
-import java.util.List;
-import java.util.regex.Pattern;
-
+import com.exxeta.iss.sonar.esql.api.tree.FieldReferenceTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.SetStatementTree;
 import org.sonar.check.Rule;
 
-import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
-
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
-import com.exxeta.iss.sonar.esql.api.visitors.EsqlFile;
-
-import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
 
 /**
  * This java class is created to implement the logic to check sub-elements
@@ -46,49 +40,23 @@ public class SubElementNameCheck extends DoubleDispatchVisitorCheck {
 	private static final String LOWERCASE_FORMAT = "^[a-z][a-zA-Z0-9]*$";
 
 	@Override
-	public void visitProgram(ProgramTree tree) {
-		EsqlFile file = getContext().getEsqlFile();
-		List<String> lines = CheckUtils.readLines(file);
-		int i = 0;
-		for (String line : lines) {
-			i = i + 1;
-
-			if (line.trim().startsWith("SET Environment")) {
-
-				String[] strArr1 = line.split(Pattern.quote("="));
-
-				if (strArr1.length > 0) {
-
-					String envSubElement = strArr1[0];
-					String envSubElement1 = null;
-					if (!(line.indexOf("Environment") + 12 > line.length())) {
-						if (!(line.indexOf("Environment") + 12 > envSubElement.length())) {
-							envSubElement1 = envSubElement.substring(line.indexOf("Environment") + 12, line.indexOf('='));
-						}
-						String[] strArray = (envSubElement1 == null) ? new String[] {}
-								: envSubElement1.split(Pattern.quote("."));
-
-						int strCount = 0;
-						for (String str : strArray) {
-							strCount++;
-
-							if (!str.matches(UPPERCASE_FORMAT) && (strCount != strArray.length)) {
-
-								addIssue(new LineIssue(this, i, MESSAGE));
-							}
-
-						}
-
-						String lastElement = strArray[strArray.length - 1].trim();
-						if (!lastElement.matches(LOWERCASE_FORMAT)) {
-							addIssue(new LineIssue(this, i, MESSAGE));
-						}
-
+	public void visitSetStatement(SetStatementTree tree) {
+		if (tree.variableReference() instanceof FieldReferenceTree) {
+			FieldReferenceTree fieldRef = (FieldReferenceTree) tree.variableReference();
+			if ("Environment".equalsIgnoreCase(fieldRef.pathElement().name().name().name())) {
+				int subElementsSize = fieldRef.pathElements().size();
+				for (int i = 0; i < subElementsSize - 1; i++) {
+					String subElement = fieldRef.pathElements().get(i).name().name().name();
+					if (!subElement.matches(UPPERCASE_FORMAT)) {
+						addIssue(tree, MESSAGE);
 					}
+				}
+				String lastElement = fieldRef.pathElements().get(subElementsSize - 1).name().name().name();
+				if (!lastElement.matches(LOWERCASE_FORMAT)) {
+					addIssue(tree, MESSAGE);
 				}
 
 			}
 		}
-
 	}
 }
