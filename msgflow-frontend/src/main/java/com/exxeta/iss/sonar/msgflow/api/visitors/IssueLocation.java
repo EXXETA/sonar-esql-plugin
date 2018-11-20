@@ -27,9 +27,6 @@ public class IssueLocation {
 	private final Tree lastTree;
 	private final String message;
 
-	public IssueLocation(final Tree tree) {
-		this(tree, null);
-	}
 
 	public IssueLocation(final Tree tree, @Nullable final String message) {
 		this(tree, tree, message);

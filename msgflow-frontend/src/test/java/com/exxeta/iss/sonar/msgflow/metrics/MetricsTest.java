@@ -38,7 +38,7 @@ public class MetricsTest extends MsgflowModelTest{
 	public void connections() {
 		final String path = "src/test/resources/metrics/connections.msgflow";
 		final Tree tree = parse(new File(path));
-		assertThat(new CounterVisitor(tree).getConnectionNumber()).isEqualTo(0);
+		assertThat(new CounterVisitor(tree).getConnectionNumber()).isEqualTo(2);
 	}
 
 	@Test

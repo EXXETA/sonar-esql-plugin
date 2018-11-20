@@ -27,7 +27,7 @@ import com.exxeta.iss.sonar.msgflow.api.visitors.MsgflowSubscriptionVisitor;
 
 public class CounterVisitor extends MsgflowSubscriptionVisitor {
 
-	private static final Kind[] NODES = { Kind.AGGREGATE_CONTROL };
+	private static final Kind[] NODES = { Kind.AGGREGATE_CONTROL, Kind.MQ_INPUT, Kind.MQ_OUTPUT};
 	private int nodeCounter = 0;
 	private int connectionCounter = 0;
 

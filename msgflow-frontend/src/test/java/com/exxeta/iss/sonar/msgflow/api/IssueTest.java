@@ -43,6 +43,7 @@ import org.junit.Test;
 import com.exxeta.iss.sonar.msgflow.api.visitors.DoubleDispatchMsgflowVisitor;
 import com.exxeta.iss.sonar.msgflow.api.visitors.FileIssue;
 import com.exxeta.iss.sonar.msgflow.api.visitors.IssueLocation;
+import com.exxeta.iss.sonar.msgflow.api.visitors.Issues;
 import com.exxeta.iss.sonar.msgflow.api.visitors.DoubleDispatchMsgflowVisitorCheck;
 import com.exxeta.iss.sonar.msgflow.api.visitors.PreciseIssue;
 import com.exxeta.iss.sonar.msgflow.tree.impl.MsgflowTree;
@@ -159,5 +160,17 @@ public class IssueTest {
 		assertThat(preciseIssue.secondaryLocations()).hasSize(2);
 		assertThat(preciseIssue.secondaryLocations().get(0).message()).isNull();
 		assertThat(preciseIssue.secondaryLocations().get(1).message()).isEqualTo("secondary message");
+	}
+	
+	@Test
+	public void issues() {
+		Issues i = new Issues(null);
+		assertThat (i.getList()).hasSize(0);
+		i.addIssue(null, "aaa");
+		assertThat (i.getList()).hasSize(1);
+		i.reset();
+		assertThat (i.getList()).hasSize(0);
+		
+		
 	}
 }
