@@ -45,15 +45,17 @@ public class SubElementNameCheck extends DoubleDispatchVisitorCheck {
 			FieldReferenceTree fieldRef = (FieldReferenceTree) tree.variableReference();
 			if ("Environment".equalsIgnoreCase(fieldRef.pathElement().name().name().name())) {
 				int subElementsSize = fieldRef.pathElements().size();
-				for (int i = 0; i < subElementsSize - 1; i++) {
-					String subElement = fieldRef.pathElements().get(i).name().name().name();
-					if (!subElement.matches(UPPERCASE_FORMAT)) {
+				if (subElementsSize > 0) {
+					for (int i = 0; i < subElementsSize - 1; i++) {
+						String subElement = fieldRef.pathElements().get(i).name().name().name();
+						if (!subElement.matches(UPPERCASE_FORMAT)) {
+							addIssue(tree, MESSAGE);
+						}
+					}
+					String lastElement = fieldRef.pathElements().get(subElementsSize - 1).name().name().name();
+					if (!lastElement.matches(LOWERCASE_FORMAT)) {
 						addIssue(tree, MESSAGE);
 					}
-				}
-				String lastElement = fieldRef.pathElements().get(subElementsSize - 1).name().name().name();
-				if (!lastElement.matches(LOWERCASE_FORMAT)) {
-					addIssue(tree, MESSAGE);
 				}
 
 			}
