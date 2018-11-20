@@ -46,84 +46,96 @@ import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxTrivia;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
 import com.exxeta.iss.sonar.esql.api.visitors.FileIssue;
 import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
+import com.exxeta.iss.sonar.esql.api.visitors.Issues;
 import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
 import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 
 public class IssueTest {
 
-  private static final EsqlCheck check = new DoubleDispatchVisitorCheck() { };
-  private static final String MESSAGE = "message";
-  private static final InternalSyntaxToken token = new InternalSyntaxToken(5, 1, "value", Collections.<SyntaxTrivia>emptyList(), 42, false);
+	private static final EsqlCheck check = new DoubleDispatchVisitorCheck() {
+	};
+	private static final String MESSAGE = "message";
+	private static final InternalSyntaxToken token = new InternalSyntaxToken(5, 1, "value",
+			Collections.<SyntaxTrivia>emptyList(), 42, false);
 
+	@Test
+	public void test_file_issue() throws Exception {
+		FileIssue fileIssue = new FileIssue(check, MESSAGE);
 
-  @Test
-  public void test_file_issue() throws Exception {
-    FileIssue fileIssue = new FileIssue(check, MESSAGE);
+		assertThat(fileIssue.check()).isEqualTo(check);
+		assertThat(fileIssue.cost()).isNull();
+		assertThat(fileIssue.message()).isEqualTo(MESSAGE);
 
-    assertThat(fileIssue.check()).isEqualTo(check);
-    assertThat(fileIssue.cost()).isNull();
-    assertThat(fileIssue.message()).isEqualTo(MESSAGE);
+		fileIssue.cost(42);
+		assertThat(fileIssue.cost()).isEqualTo(42);
+	}
 
-    fileIssue.cost(42);
-    assertThat(fileIssue.cost()).isEqualTo(42);
-  }
+	@Test
+	public void test_line_issue() throws Exception {
+		LineIssue lineIssue = new LineIssue(check, 42, MESSAGE);
 
-  @Test
-  public void test_line_issue() throws Exception {
-    LineIssue lineIssue = new LineIssue(check, 42, MESSAGE);
+		assertThat(lineIssue.check()).isEqualTo(check);
+		assertThat(lineIssue.cost()).isNull();
+		assertThat(lineIssue.message()).isEqualTo(MESSAGE);
+		assertThat(lineIssue.line()).isEqualTo(42);
 
-    assertThat(lineIssue.check()).isEqualTo(check);
-    assertThat(lineIssue.cost()).isNull();
-    assertThat(lineIssue.message()).isEqualTo(MESSAGE);
-    assertThat(lineIssue.line()).isEqualTo(42);
+		lineIssue.cost(42);
+		assertThat(lineIssue.cost()).isEqualTo(42);
 
-    lineIssue.cost(42);
-    assertThat(lineIssue.cost()).isEqualTo(42);
+		lineIssue = new LineIssue(check, token, MESSAGE);
+		assertThat(lineIssue.line()).isEqualTo(5);
+	}
 
-    lineIssue = new LineIssue(check, token, MESSAGE);
-    assertThat(lineIssue.line()).isEqualTo(5);
-  }
+	@Test
+	public void test_precise_issue() throws Exception {
+		IssueLocation primaryLocation = new IssueLocation(token, MESSAGE);
+		PreciseIssue preciseIssue = new PreciseIssue(check, primaryLocation);
 
-  @Test
-  public void test_precise_issue() throws Exception {
-    IssueLocation primaryLocation = new IssueLocation(token, MESSAGE);
-    PreciseIssue preciseIssue = new PreciseIssue(check, primaryLocation);
+		assertThat(preciseIssue.check()).isEqualTo(check);
+		assertThat(preciseIssue.cost()).isNull();
+		assertThat(preciseIssue.primaryLocation()).isEqualTo(primaryLocation);
+		assertThat(preciseIssue.secondaryLocations()).isEmpty();
 
-    assertThat(preciseIssue.check()).isEqualTo(check);
-    assertThat(preciseIssue.cost()).isNull();
-    assertThat(preciseIssue.primaryLocation()).isEqualTo(primaryLocation);
-    assertThat(preciseIssue.secondaryLocations()).isEmpty();
+		preciseIssue.cost(42);
+		assertThat(preciseIssue.cost()).isEqualTo(42);
 
-    preciseIssue.cost(42);
-    assertThat(preciseIssue.cost()).isEqualTo(42);
+		assertThat(primaryLocation.startLine()).isEqualTo(5);
+		assertThat(primaryLocation.endLine()).isEqualTo(5);
+		assertThat(primaryLocation.startLineOffset()).isEqualTo(1);
+		assertThat(primaryLocation.endLineOffset()).isEqualTo(6);
+		assertThat(primaryLocation.message()).isEqualTo(MESSAGE);
 
-    assertThat(primaryLocation.startLine()).isEqualTo(5);
-    assertThat(primaryLocation.endLine()).isEqualTo(5);
-    assertThat(primaryLocation.startLineOffset()).isEqualTo(1);
-    assertThat(primaryLocation.endLineOffset()).isEqualTo(6);
-    assertThat(primaryLocation.message()).isEqualTo(MESSAGE);
+		preciseIssue.secondary(token).secondary(token, "secondary message");
 
-    preciseIssue
-      .secondary(token)
-      .secondary(token, "secondary message");
+		assertThat(preciseIssue.secondaryLocations()).hasSize(2);
+		assertThat(preciseIssue.secondaryLocations().get(0).message()).isNull();
+		assertThat(preciseIssue.secondaryLocations().get(1).message()).isEqualTo("secondary message");
+	}
 
-    assertThat(preciseIssue.secondaryLocations()).hasSize(2);
-    assertThat(preciseIssue.secondaryLocations().get(0).message()).isNull();
-    assertThat(preciseIssue.secondaryLocations().get(1).message()).isEqualTo("secondary message");
-  }
+	@Test
+	public void test_long_issue_location() throws Exception {
+		InternalSyntaxToken lastToken = new InternalSyntaxToken(10, 5, "last", Collections.<SyntaxTrivia>emptyList(),
+				42, false);
 
-  @Test
-  public void test_long_issue_location() throws Exception {
-    InternalSyntaxToken lastToken = new InternalSyntaxToken(10, 5, "last", Collections.<SyntaxTrivia>emptyList(), 42, false);
+		IssueLocation issueLocation = new IssueLocation(token, lastToken, MESSAGE);
 
-    IssueLocation issueLocation = new IssueLocation(token, lastToken, MESSAGE);
+		assertThat(issueLocation.startLine()).isEqualTo(5);
+		assertThat(issueLocation.endLine()).isEqualTo(10);
+		assertThat(issueLocation.startLineOffset()).isEqualTo(1);
+		assertThat(issueLocation.endLineOffset()).isEqualTo(9);
+		assertThat(issueLocation.message()).isEqualTo(MESSAGE);
 
-    assertThat(issueLocation.startLine()).isEqualTo(5);
-    assertThat(issueLocation.endLine()).isEqualTo(10);
-    assertThat(issueLocation.startLineOffset()).isEqualTo(1);
-    assertThat(issueLocation.endLineOffset()).isEqualTo(9);
-    assertThat(issueLocation.message()).isEqualTo(MESSAGE);
+	}
 
-  }
+	@Test
+	public void issues() {
+		Issues i = new Issues(null);
+		assertThat(i.getList()).hasSize(0);
+		i.addIssue(null, "aaa");
+		assertThat(i.getList()).hasSize(1);
+		i.reset();
+		assertThat(i.getList()).hasSize(0);
+
+	}
 }
