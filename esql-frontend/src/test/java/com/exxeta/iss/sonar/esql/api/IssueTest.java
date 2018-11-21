@@ -132,7 +132,7 @@ public class IssueTest {
 	public void issues() {
 		Issues i = new Issues(null);
 		assertThat(i.getList()).hasSize(0);
-		i.addIssue(null, "aaa");
+		i.addIssue(token, "aaa");
 		assertThat(i.getList()).hasSize(1);
 		i.reset();
 		assertThat(i.getList()).hasSize(0);
