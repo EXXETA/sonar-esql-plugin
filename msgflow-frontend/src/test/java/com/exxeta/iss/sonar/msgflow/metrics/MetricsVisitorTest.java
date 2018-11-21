@@ -70,7 +70,7 @@ public class MetricsVisitorTest extends MsgflowModelTest {
   }
 
   private MetricsVisitor createMetricsVisitor() {
-    return new MetricsVisitor(context, false);
+    return new MetricsVisitor(context);
   }
 
 }

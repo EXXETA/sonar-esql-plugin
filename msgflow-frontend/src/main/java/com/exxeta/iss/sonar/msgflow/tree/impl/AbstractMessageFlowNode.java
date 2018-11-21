@@ -113,4 +113,12 @@ public abstract class AbstractMessageFlowNode extends MsgflowTree implements Mes
 		return targetTerminals;
 	}
 
+	
+	public void setSourceTerminals(List<Terminal> sourceTerminals) {
+		this.sourceTerminals = sourceTerminals;
+	}
+	
+	public void setTargetTerminals(List<Terminal> targetTerminals) {
+		this.targetTerminals = targetTerminals;
+	}
 }

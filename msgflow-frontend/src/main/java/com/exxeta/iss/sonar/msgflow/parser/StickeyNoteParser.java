@@ -7,13 +7,15 @@ import java.util.ArrayList;
 import javax.xml.xpath.XPathExpressionException;
 
 import org.sonar.api.internal.google.common.collect.Lists;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.w3c.dom.Element;
 
 import com.exxeta.iss.sonar.msgflow.api.tree.MessageFlowCommentNote;
 import com.exxeta.iss.sonar.msgflow.tree.impl.MessageFlowCommentNoteImpl;
 
 public class StickeyNoteParser {
-
+	private static final Logger LOGGER = Loggers.get(StickeyNoteParser.class);
 	public MessageFlowCommentNote parse(Element element){
 		
 		try {
@@ -27,7 +29,7 @@ public class StickeyNoteParser {
 						comment, locationX, locationY);
 				return msgFlowComment;
 		} catch (XPathExpressionException e) {
-			e.printStackTrace();
+			LOGGER.error("Cannot parse stickey note",e);
 			return null;
 		}
 	}

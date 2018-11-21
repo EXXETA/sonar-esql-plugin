@@ -525,7 +525,7 @@ public final class MsgflowParser {
 		} catch (SAXParseException e) {
 			throw new RecognitionException(e.getLineNumber(), e.getMessage());
 		} catch (SAXException | IOException | ParserConfigurationException e) {
-			e.printStackTrace();
+			LOGGER.error("Cannot parse messageflow",e);
 			
 			
 			return null;

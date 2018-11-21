@@ -26,7 +26,6 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.ce.measure.RangeDistributionBuilder;
 import org.sonar.api.measures.CoreMetrics;
-import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.measures.Metric;
 
 import com.exxeta.iss.sonar.msgflow.api.tree.Tree;
@@ -38,7 +37,6 @@ import com.google.common.collect.ImmutableSet;
 
 public class MetricsVisitor extends MsgflowSubscriptionVisitor {
 
-	private static final Number[] LIMITS_COMPLEXITY_FUNCTIONS = { 1, 2, 4, 6, 8, 10, 12, 20, 30 };
 	private static final Number[] FILES_DISTRIB_BOTTOM_LIMITS = { 0, 5, 10, 20, 30, 60, 90 };
 
 	/*
@@ -48,17 +46,12 @@ public class MetricsVisitor extends MsgflowSubscriptionVisitor {
 
 	private final SensorContext sensorContext;
 	private InputFile inputFile;
-	private final Boolean ignoreHeaderComments;
 	private Map<InputFile, Set<Integer>> projectExecutableLines;
 
-	private int moduleComplexity;
-	private int functionComplexity;
-	private RangeDistributionBuilder functionComplexityDistribution;
 	private RangeDistributionBuilder fileComplexityDistribution;
 
-	public MetricsVisitor(SensorContext context, Boolean ignoreHeaderComments) {
+	public MetricsVisitor(SensorContext context) {
 		this.sensorContext = context;
-		this.ignoreHeaderComments = ignoreHeaderComments;
 		this.projectExecutableLines = new HashMap<>();
 	}
 
@@ -80,13 +73,6 @@ public class MetricsVisitor extends MsgflowSubscriptionVisitor {
 		saveCounterMetrics(getContext());
 	}
 
-	@Override
-	public void visitNode(Tree tree) {
-		if (tree.is(Kind.MQ_INPUT)) {
-			moduleComplexity += new ComplexityVisitor().getComplexity(tree);
-
-		}
-	}
 
 	@Override
 	public void visitFile(Tree scriptTree) {
@@ -95,8 +81,6 @@ public class MetricsVisitor extends MsgflowSubscriptionVisitor {
 	}
 
 	private void init() {
-		moduleComplexity = 0;
-		functionComplexityDistribution = new RangeDistributionBuilder(LIMITS_COMPLEXITY_FUNCTIONS);
 		fileComplexityDistribution = new RangeDistributionBuilder(FILES_DISTRIB_BOTTOM_LIMITS);
 	}
 
@@ -110,7 +94,10 @@ public class MetricsVisitor extends MsgflowSubscriptionVisitor {
 		int fileComplexity = new ComplexityVisitor().getComplexity(context.getMsgflow());
 
 		saveMetricOnFile(CoreMetrics.COMPLEXITY, fileComplexity);
+		fileComplexityDistribution.add(fileComplexity);
 
+		sensorContext.<String>newMeasure().on(inputFile).forMetric(CoreMetrics.FILE_COMPLEXITY_DISTRIBUTION)
+				.withValue(fileComplexityDistribution.build()).save();
 	}
 
 	private <T extends Serializable> void saveMetricOnFile(Metric metric, T value) {

@@ -43,6 +43,7 @@ import com.exxeta.iss.sonar.msgflow.api.visitors.MsgflowVisitorContext;
 import com.exxeta.iss.sonar.msgflow.api.visitors.PreciseIssue;
 import com.exxeta.iss.sonar.msgflow.check.MsgflowCheckList;
 import com.exxeta.iss.sonar.msgflow.check.MsgflowParsingErrorCheck;
+import com.exxeta.iss.sonar.msgflow.metrics.MetricsVisitor;
 import com.exxeta.iss.sonar.msgflow.parser.MsgflowParser;
 import com.exxeta.iss.sonar.msgflow.parser.MsgflowParserBuilder;
 import com.exxeta.iss.sonar.msgflow.tree.impl.MsgflowTree;
@@ -71,7 +72,7 @@ public class MsgflowSensor implements Sensor {
 		}
 
 		private final SensorContext context;
-		// private MetricsVisitor metricsVisitor;
+		private MetricsVisitor metricsVisitor;
 
 		SonarQubeProductExecutor(final SensorContext context) {
 			this.context = context;
@@ -89,11 +90,10 @@ public class MsgflowSensor implements Sensor {
 		@Override
 		public List<MsgflowVisitor> getProductDependentTreeVisitors() {
 
-			// metricsVisitor = new MetricsVisitor(
-			// context,
-			// fileLinesContextFactory);
+			 metricsVisitor = new MetricsVisitor(
+			 context);
 			return Arrays.asList(
-			// metricsVisitor,
+			metricsVisitor
 			// new NoSonarVisitor(noSonarFilter),
 			// new CpdVisitor(context)
 			);
