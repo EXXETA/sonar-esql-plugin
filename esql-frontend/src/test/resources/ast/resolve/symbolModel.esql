@@ -7,4 +7,23 @@ END;
 CREATE PROCEDURE p1() BEGIN
 END;
 CREATE PROCEDURE p2() BEGIN
+	REPEAT
+	  SET A='B';
+	UNTIL a()
+	END REPEAT;
+	X : LOOP 
+	  IF i>= 4 THEN
+	    LEAVE X;
+	  END IF;
+	  SET i = i + 1;
+	END LOOP X;
+	
+	CASE
+	WHEN i <> 0 THEN
+    CALL handleI(i);
+  WHEN j> 1 THEN
+    CALL handleIZeroAndPositiveJ(j);
+  ELSE
+    CALL handleAllOtherCases(j);
+  END CASE;
 END;
