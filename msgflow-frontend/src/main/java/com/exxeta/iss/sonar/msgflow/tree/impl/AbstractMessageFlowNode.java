@@ -17,6 +17,7 @@
  */
 package com.exxeta.iss.sonar.msgflow.tree.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,7 +46,7 @@ public abstract class AbstractMessageFlowNode extends MsgflowTree implements Mes
 	/**
 	 * the list of custom properties of a message flow node
 	 */
-	private Map<String, Object> properties;
+	private Map<String, Object> properties = new HashMap<>();
 
 	private List<Terminal> sourceTerminals;
 
@@ -69,7 +70,7 @@ public abstract class AbstractMessageFlowNode extends MsgflowTree implements Mes
 	 *
 	 * @return the properties
 	 */
-	public Map<String, Object> getProperties() {
+	public Map<String, Object> properties() {
 		return properties;
 	}
 
@@ -120,5 +121,9 @@ public abstract class AbstractMessageFlowNode extends MsgflowTree implements Mes
 	
 	public void setTargetTerminals(List<Terminal> targetTerminals) {
 		this.targetTerminals = targetTerminals;
+	}
+	
+	public void addProperty(String name, Object value) {
+		properties.put(name, value);
 	}
 }

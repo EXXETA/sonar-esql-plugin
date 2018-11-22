@@ -14,7 +14,7 @@ import com.exxeta.iss.sonar.msgflow.api.tree.node.mq.MQInputNode;
 import com.exxeta.iss.sonar.msgflow.parser.node.NodeParserTest;
 import com.exxeta.iss.sonar.msgflow.tree.impl.node.mq.MQInputNodeImpl;
 
-public class MQInputParserTest extends NodeParserTest<MQInputNode> {
+public class MQInputNodeTest extends NodeParserTest<MQInputNode> {
 
 	@Test
 	public void test() throws IOException, SAXException, ParserConfigurationException {
@@ -36,6 +36,15 @@ public class MQInputParserTest extends NodeParserTest<MQInputNode> {
 		assertThat(node.startColumn()).isEqualTo(113);
 		assertThat(node.endLine()).isEqualTo(3);
 		assertThat(node.endColumn()).isEqualTo(14);
+		assertThat(node.id()).isEqualTo("FCMComposite_1_2");
+		assertThat(node.locationX()).isEqualTo(26);
+		assertThat(node.locationY()).isEqualTo(143);
+		
+		
+		assertThat(node.properties()).isEmpty();
+		node.addProperty("a", "b");
+		assertThat(node.properties()).isNotEmpty();
+		
 
 	}
 }
