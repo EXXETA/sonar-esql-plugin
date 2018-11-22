@@ -45,6 +45,7 @@ public class BeginEndStatementTest extends EsqlTreeModelTest<BeginEndStatementTr
 		BeginEndStatementTree tree = parse("A: BEGIN CALL A(); END A;", Kind.BEGIN_END_STATEMENT);
 
 		assertNotNull(tree.labelName1());
+		assertNotNull(tree.labelName1().name());
 		assertNotNull(tree.colon());
 		assertNotNull(tree.beginKeyword());
 		assertNull(tree.notKeyword());

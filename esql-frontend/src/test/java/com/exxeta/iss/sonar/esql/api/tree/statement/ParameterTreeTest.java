@@ -45,6 +45,7 @@ public class ParameterTreeTest extends EsqlTreeModelTest<ParameterTree> {
 		assertNull(tree.constantKeyword());
 		assertNotNull(tree.nameOrNamesapceKeyword());
 		assertNull(tree.dataType());
+		assertNull(tree.nullable());
 
 	}
 	

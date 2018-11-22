@@ -51,7 +51,7 @@ public class WhileStatementTest extends EsqlTreeModelTest<WhileStatementTree>{
 		assertEquals(tree.statements().statements().size(),1);
 		assertNotNull(tree.endKeyword());
 		assertNotNull(tree.whileKeyword2());
-		assertNotNull(tree.label());
+		assertNotNull(tree.label2());
 		assertNotNull(tree.semi());
 
 	}

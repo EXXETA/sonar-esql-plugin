@@ -53,6 +53,10 @@ public class UpdateStatementTest extends EsqlTreeModelTest<UpdateStatementTree>{
 		assertNotNull(tree.setKeyword());
 
 		assertNotNull(tree.setColumns());
+		
+		assertNotNull(tree.setColumns().get(0).columnName());
+		assertNotNull(tree.setColumns().get(0).equalSign());
+		assertNotNull(tree.setColumns().get(0).expression());
 
 		assertNull(tree.whereKeyword());
 

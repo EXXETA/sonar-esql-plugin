@@ -19,6 +19,7 @@ package com.exxeta.iss.sonar.esql.api.tree.statement;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
@@ -37,6 +38,7 @@ public class ReturnStatementTest extends EsqlTreeModelTest<ReturnStatementTree> 
 	public void modelTest() throws Exception {
 		ReturnStatementTree tree = parse("RETURN;", Kind.RETURN_STATEMENT);
 		assertNotNull(tree.returnKeyword());
+		assertNull(tree.expression());
 		
 		assertNotNull(tree.semi());
 

@@ -57,6 +57,12 @@ public class CaseStatementTest extends EsqlTreeModelTest<CaseStatementTree>{
 		assertNotNull(tree.caseKeyword());
 		assertNull(tree.mainExpression());
 		assertNotNull(tree.whenClauses());
+
+		assertNotNull(tree.whenClauses().get(0).whenKeyword());
+		assertNotNull(tree.whenClauses().get(0).expression());
+		assertNotNull(tree.whenClauses().get(0).thenKeyword());
+		assertNotNull(tree.whenClauses().get(0).statements());
+		
 		assertNotNull(tree.elseKeyword());
 		assertNotNull(tree.elseSatements());
 		assertNotNull(tree.endKeyword());
