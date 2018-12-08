@@ -79,74 +79,74 @@ public class AsbitstreamFunctionTreeImpl extends EsqlTree implements Asbitstream
 	
 	
 	@Override
-	public InternalSyntaxToken optionsSeparator() {
-		return getSeparator(0, EsqlNonReservedKeyword.OPTIONS);
-	}
-
-	@Override
-	public ExpressionTree optionsExpression() {
-		return getExpression(0, EsqlNonReservedKeyword.OPTIONS);
-	}
-
-	@Override
 	public InternalSyntaxToken encodingSeparator() {
-		return getSeparator(1, EsqlNonReservedKeyword.ENCODING);
+		return getSeparator(0, EsqlNonReservedKeyword.ENCODING);
 	}
 
 
 	@Override
 	public ExpressionTree encodingExpression() {
-		return getExpression(1, EsqlNonReservedKeyword.ENCODING);
+		return getExpression(0, EsqlNonReservedKeyword.ENCODING);
 	}
 
 
 	@Override
 	public InternalSyntaxToken ccsidSeparator() {
-		return getSeparator(2, EsqlNonReservedKeyword.CCSID);
+		return getSeparator(1, EsqlNonReservedKeyword.CCSID);
 	}
 
 
 	@Override
 	public ExpressionTree ccsidExpression() {
-		return getExpression(2, EsqlNonReservedKeyword.CCSID);
+		return getExpression(1, EsqlNonReservedKeyword.CCSID);
 	}
 
 
 	@Override
 	public InternalSyntaxToken setSeparator() {
-		return getSeparator(3, EsqlNonReservedKeyword.SET);
+		return getSeparator(2, EsqlNonReservedKeyword.SET);
 	}
 
 
 	@Override
 	public ExpressionTree setExpression() {
-		return getExpression(3, EsqlNonReservedKeyword.SET);
+		return getExpression(2, EsqlNonReservedKeyword.SET);
 	}
 
 
 	@Override
 	public InternalSyntaxToken typeSeparator() {
-		return getSeparator(4, EsqlNonReservedKeyword.TYPE);
+		return getSeparator(3, EsqlNonReservedKeyword.TYPE);
 	}
 
 
 	@Override
 	public ExpressionTree typeExpression() {
-		return getExpression(4, EsqlNonReservedKeyword.TYPE);
+		return getExpression(3, EsqlNonReservedKeyword.TYPE);
 	}
 
 
 	@Override
 	public InternalSyntaxToken formatSeparator() {
-		return getSeparator(5, EsqlNonReservedKeyword.FORMAT);
+		return getSeparator(4, EsqlNonReservedKeyword.FORMAT);
 	}
 
 
 	@Override
 	public ExpressionTree formatExpression() {
-		return getExpression(5, EsqlNonReservedKeyword.FORMAT);
+		return getExpression(4, EsqlNonReservedKeyword.FORMAT);
 	}
 
+
+	@Override
+	public InternalSyntaxToken optionsSeparator() {
+		return getSeparator(5, EsqlNonReservedKeyword.OPTIONS);
+	}
+
+	@Override
+	public ExpressionTree optionsExpression() {
+		return getExpression(5, EsqlNonReservedKeyword.OPTIONS);
+	}
 
 	public boolean isCommaSeparated() {
 		//return commaSeparated;

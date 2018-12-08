@@ -35,5 +35,7 @@ public interface CreateModuleStatementTree extends StatementTree {
 	SyntaxToken endKeyword();
 
 	SyntaxToken moduleKeyword2();
+	
+	SyntaxToken semi();
 
 }

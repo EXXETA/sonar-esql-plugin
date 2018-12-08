@@ -17,14 +17,13 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
-import java.util.List;
-
 import org.sonar.check.Rule;
 
-import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.CreateModuleStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
-import com.exxeta.iss.sonar.esql.api.visitors.EsqlFile;
 import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateRoutineTreeImpl;
 
 /**
  * This java class is created to implement the logic for checking there should be one blank line between procedure and function.
@@ -37,34 +36,23 @@ public class InsertBlankLineBetweenFuncProcCheck extends DoubleDispatchVisitorCh
 	private static final String MESSAGE = "Insert one blank line between functions and procedures.";
 
 
-  @Override
-	public void visitProgram(ProgramTree tree) {
-		EsqlFile file = getContext().getEsqlFile();
-		List<String>  lines = CheckUtils.readLines(file);
-		
-		int linecounter = 0;
-		for (String line : lines) {
-			
-			linecounter = linecounter + 1;
-			
-			
-			if(isEndStatement(line)){
-				
-			
-				if(linecounter<lines.size()){
-					String nextLine = lines.get(linecounter);
-				
-					if(!nextLine.trim().isEmpty()){
-						addIssue(new LineIssue(this, linecounter, MESSAGE));
-					}
+	
+	@Override
+	public void visitCreateModuleStatement(CreateModuleStatementTree tree) {
+		StatementTree previousStatement = null;
+		for (StatementTree statement : tree.moduleStatementsList().statements()) {
+			if (statement instanceof CreateRoutineTreeImpl && previousStatement instanceof CreateRoutineTreeImpl) {
+				if (!(previousStatement.lastToken().endLine()<statement.firstToken().line()-1)) {
+					addIssue(new LineIssue(this, previousStatement.lastToken(), MESSAGE));
 				}
 			}
-		} 
-  }
-	
-	public static boolean isEndStatement(String s) {
-		String withoutSpace = s.replace(" ", "").toUpperCase();
-		return withoutSpace.contains("END;");
+			previousStatement=statement;
+		}
+		if (previousStatement instanceof CreateRoutineTreeImpl && !(previousStatement.lastToken().endLine() < tree.endKeyword().line()-1)) {
+			addIssue(new LineIssue(this, previousStatement.lastToken(), MESSAGE));
+		}
+		
+		super.visitCreateModuleStatement(tree);
 	}
 
 }

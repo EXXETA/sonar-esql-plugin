@@ -37,11 +37,12 @@ public class CreateModuleStatementTreeImpl extends EsqlTree implements CreateMod
 	private final StatementsTree moduleStatementsList;
 	private final InternalSyntaxToken endKeyword;
 	private final InternalSyntaxToken moduleKeyword2;
+	private final InternalSyntaxToken semi;
 
 	public CreateModuleStatementTreeImpl(InternalSyntaxToken createKeyword, InternalSyntaxToken moduleType,
 			InternalSyntaxToken moduleKeyword, IdentifierTree indentifier,
 			StatementsTree moduleStatementsList, InternalSyntaxToken endKeyword,
-			InternalSyntaxToken moduleKeyword2) {
+			InternalSyntaxToken moduleKeyword2, InternalSyntaxToken semi) {
 		super();
 		this.createKeyword = createKeyword;
 		this.moduleType = moduleType;
@@ -50,6 +51,7 @@ public class CreateModuleStatementTreeImpl extends EsqlTree implements CreateMod
 		this.moduleStatementsList = moduleStatementsList;
 		this.endKeyword = endKeyword;
 		this.moduleKeyword2 = moduleKeyword2;
+		this.semi = semi;
 	}
 
 	@Override
@@ -86,6 +88,13 @@ public class CreateModuleStatementTreeImpl extends EsqlTree implements CreateMod
 	public InternalSyntaxToken moduleKeyword2() {
 		return moduleKeyword2;
 	}
+	
+	@Override
+	public InternalSyntaxToken semi() {
+		return semi;
+	}
+	
+	
 
 	@Override
 	public Kind getKind() {
@@ -95,7 +104,7 @@ public class CreateModuleStatementTreeImpl extends EsqlTree implements CreateMod
 	@Override
 	public Iterator<Tree> childrenIterator() {
 		return Iterators.concat(Iterators.forArray(createKeyword, moduleType, moduleKeyword, moduleName, moduleStatementsList),
-				Iterators.forArray(endKeyword, moduleKeyword2));
+				Iterators.forArray(endKeyword, moduleKeyword2, semi));
 	}
 
 	@Override

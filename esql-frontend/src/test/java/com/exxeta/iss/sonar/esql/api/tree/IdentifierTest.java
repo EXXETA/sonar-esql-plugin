@@ -37,6 +37,7 @@ public class IdentifierTest {
 		.matches("XML")
 		.matches("Element")
 		.matches("timestamp")
+		.matches("\"{SCHEMA_NAME_PARAMETER}.INTEGRATION.SEND_ACQ\"")
 		;
 
 	}

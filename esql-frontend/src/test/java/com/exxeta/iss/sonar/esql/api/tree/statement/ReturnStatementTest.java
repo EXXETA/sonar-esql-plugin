@@ -18,12 +18,14 @@
 package com.exxeta.iss.sonar.esql.api.tree.statement;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class ReturnStatementTest {
+public class ReturnStatementTest extends EsqlTreeModelTest<ReturnStatementTree> {
 	@Test
 	public void returnStatement(){
 		assertThat(Kind.RETURN_STATEMENT)
@@ -31,5 +33,14 @@ public class ReturnStatementTest {
 		.matches("RETURN (PriceTotal/NumItems> 42);");
 
 	}
+	@Test
+	public void modelTest() throws Exception {
+		ReturnStatementTree tree = parse("RETURN;", Kind.RETURN_STATEMENT);
+		assertNotNull(tree.returnKeyword());
+		
+		assertNotNull(tree.semi());
+
+	}
+		
 	
 }

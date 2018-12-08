@@ -18,17 +18,32 @@
 package com.exxeta.iss.sonar.esql.api.tree.statement;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class DetachStatementTest {
+public class DetachStatementTest extends EsqlTreeModelTest<DetachStatementTree>{
 	@Test
 	public void detachStatement(){
 		assertThat(Kind.DETACH_STATEMENT)
 		.matches("DETACH OutputRoot.test;");
 
+	}
+	
+
+	@Test
+	public void modelTest() throws Exception {
+		DetachStatementTree tree = parse("DETACH OutputRoot.test;", Kind.DETACH_STATEMENT);
+		assertNotNull(tree);
+		
+		assertNotNull(tree.detachKeyword());
+
+		assertNotNull(tree.fieldReference());
+
+		assertNotNull(tree.semi());
 	}
 	
 }

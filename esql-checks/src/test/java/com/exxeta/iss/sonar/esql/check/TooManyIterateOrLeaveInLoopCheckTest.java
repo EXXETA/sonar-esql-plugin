@@ -31,6 +31,7 @@ public class TooManyIterateOrLeaveInLoopCheckTest {
 		 EsqlCheckVerifier.issues(check, new File("src/test/resources/leaveIterate.esql"))
 	        .next().atLine(7).withMessage("Loops should not contain more than a single \"ITERATE\" or \"LEAVE\" statement.")
 	        .next().atLine(25).withMessage("Loops should not contain more than a single \"ITERATE\" or \"LEAVE\" statement.")
+	        .next().atLine(66).withMessage("Loops should not contain more than a single \"ITERATE\" or \"LEAVE\" statement.")
 	        .noMore();
 	  }
 }

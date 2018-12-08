@@ -20,7 +20,6 @@ package com.exxeta.iss.sonar.esql.tree.symbols;
 import java.util.Map;
 
 import com.exxeta.iss.sonar.esql.api.symbols.Symbol;
-import com.exxeta.iss.sonar.esql.api.symbols.SymbolModelBuilder;
 import com.exxeta.iss.sonar.esql.api.symbols.Usage;
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
@@ -38,7 +37,6 @@ import com.google.common.collect.SetMultimap;
  */
 public class SymbolVisitor extends DoubleDispatchVisitor {
 
-	private SymbolModelBuilder symbolModel;
 	private Scope currentScope;
 	private Map<Tree, Scope> treeScopeMap;
 	private SetMultimap<Scope, String> declaredBlockScopeNames = HashMultimap.create();
@@ -49,7 +47,6 @@ public class SymbolVisitor extends DoubleDispatchVisitor {
 
 	@Override
 	public void visitProgram(ProgramTree tree) {
-		this.symbolModel = (SymbolModelBuilder) getContext().getSymbolModel();
 		this.currentScope = null;
 
 		enterScope(tree);

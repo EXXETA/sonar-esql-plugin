@@ -38,7 +38,7 @@ import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
 @Rule(key = "UnusedVariable")
 public class UnusedVariableCheck extends DoubleDispatchVisitorCheck {
 
-	private static final String MESSAGE = "Remove the unused Variable.";
+	private static final String MESSAGE = "Remove the unused '%s' variable.";
 
 	@Override
 	public void visitProgram(ProgramTree tree) {

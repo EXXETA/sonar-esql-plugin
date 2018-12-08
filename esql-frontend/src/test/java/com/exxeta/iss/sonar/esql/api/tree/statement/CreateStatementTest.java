@@ -23,6 +23,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
@@ -157,9 +158,14 @@ public class CreateStatementTest  extends EsqlTreeModelTest<CreateStatementTreeI
 		assertNull(valuesClause.nameKeyword());
 		assertNull(valuesClause.name());
 		
+		
 		assertNotNull(valuesClause.valueKeyword());
 		assertNotNull(valuesClause.value());
 		
+		tree = parse("CREATE LASTCHILD OF OutputRoot DOMAIN('MRM') PARSE(inBitStream, inEncoding,);", Kind.CREATE_STATEMENT);
+		assertNull(tree.parseClause().formatSeparator());
+		assertNull(tree.parseClause().formatExpression());
+		assertNull(tree.parseClause().ccsidExpression());
 	}
 
 	@Test
@@ -188,6 +194,20 @@ public class CreateStatementTest  extends EsqlTreeModelTest<CreateStatementTreeI
 		
 		tree = parse("CREATE FIELD OutputRoot.JSON.Data.Item[1] IDENTITY(JSON.Object);", Kind.CREATE_STATEMENT);
 		assertNotNull(tree);
+		
+		tree = parse("CREATE LASTCHILD OF OutputRoot DOMAIN('MRM') PARSE(inBitStream ENCODING inEncoding CCSID inCCSID SET 'DP3UK14002001' TYPE 'TestCase' FORMAT 'XML1');", Kind.CREATE_STATEMENT);
+		assertNull(tree.parseClause().optionsExpression());
+		assertNull(tree.parseClause().optionsSeparator());
+		tree = parse("CREATE LASTCHILD OF OutputRoot DOMAIN('MRM') PARSE(inBitStream);", Kind.CREATE_STATEMENT);
+		assertNull(tree.parseClause().optionsExpression());
+		tree = parse("CREATE NEXTSIBLING OF targetCursor AS targetCursor REPEAT;", Kind.CREATE_STATEMENT);
+		assertNotNull(tree);
+		assertNotNull(tree.repeatClause());
+		assertNotNull(tree.repeatClause().repeatKeyword());
+		assertNull(tree.repeatClause().valueKeyword());
+		assertNull(tree.repeatClause().expression());
+		Assertions.assertThat(tree.repeatClause().getKind()).isEqualTo(Kind.REPEAT_CLAUSE);
+		
 	}
 	
 }

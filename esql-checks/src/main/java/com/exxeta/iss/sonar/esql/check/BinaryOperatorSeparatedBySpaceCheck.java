@@ -31,6 +31,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
+import static com.exxeta.iss.sonar.esql.api.tree.Tree.Kind.INDEX;
 /**
  * This Java class is created to implement the logic for all binary operators
  * should be separated from their operands by spaces.
@@ -49,7 +50,7 @@ public class BinaryOperatorSeparatedBySpaceCheck extends SubscriptionVisitorChec
 	@Override
 	public void visitNode(Tree tree) {
 		String token =((InternalSyntaxToken)tree).text();
-		if (BINARY_OPERATOR.contains(token) || SPACE_AFTER.contains(token)) {
+		if ((BINARY_OPERATOR.contains(token) || SPACE_AFTER.contains(token)) && !tree.parent().is(INDEX)) {
 			Iterator<Tree> childIterator = tree.parent().childrenStream().iterator();
 			Tree prevChild = null;
 			while (childIterator.hasNext()) {

@@ -18,5 +18,6 @@ CREATE FIELD Environment.LogData;
 			InputRoot;
 		DECLARE myInt,myInt3 INTEGER 1;
 		DECLARE myInt2, myInt4 INTEGER 1;
+		DECLARE inMsg REFERENCE TO InputRoot.XMLNSC.*:*[<];
 		RETURN TRUE;
 	END;

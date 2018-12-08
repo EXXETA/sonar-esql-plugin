@@ -20,10 +20,13 @@ package com.exxeta.iss.sonar.esql.api.tree.expression;
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
 import static org.junit.Assert.assertNotNull;
 
+import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.api.tree.symbols.type.TypableTree;
 import com.exxeta.iss.sonar.esql.parser.EsqlLegacyGrammar;
+import com.exxeta.iss.sonar.esql.tree.symbols.type.RoutineType;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
 public class UnaryExpressionTest extends EsqlTreeModelTest<UnaryExpressionTree>{
@@ -55,6 +58,9 @@ public class UnaryExpressionTest extends EsqlTreeModelTest<UnaryExpressionTree>{
 		assertNotNull(tree);
 		assertNotNull(tree.expression());
 		assertNotNull(tree.operator());
+		Assertions.assertThat(tree.types()).isEmpty();
+		((TypableTree)tree).add( RoutineType.create());
+		Assertions.assertThat(tree.types()).hasSize(1);
 	}
 	
 }
