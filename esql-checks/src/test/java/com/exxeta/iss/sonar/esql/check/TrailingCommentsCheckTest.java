@@ -16,16 +16,11 @@ import org.junit.Test;
 import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
 
 public class TrailingCommentsCheckTest {
+	TrailingCommentsCheck check = new TrailingCommentsCheck();
+	
   @Test
   public void test() {
-	  
-		 EsqlCheckVerifier.issues(new TrailingCommentsCheck(), new File("src/test/resources/trailingComments.esql"))
-		    .next().atLine(7).withMessage("Move this trailing comment on the previous empty line.")
-		    .next().atLine(12).withMessage("Move this trailing comment on the previous empty line.")
-		    .next().atLine(15).withMessage("Move this trailing comment on the previous empty line.")
-		    .next().atLine(16).withMessage("Move this trailing comment on the previous empty line.")
-		 .noMore();
-	        
+	  EsqlCheckVerifier.verify(check, new File("src/test/resources/trailingComments.esql"));
 	  }
   
   @Test
@@ -33,11 +28,11 @@ public class TrailingCommentsCheckTest {
 	  TrailingCommentsCheck check = new TrailingCommentsCheck();
 	  check.setLegalCommentPattern("");
 		 EsqlCheckVerifier.issues(check, new File("src/test/resources/trailingComments.esql"))
-		    .next().atLine(7).withMessage("Move this trailing comment on the previous empty line.")
-		    .next().atLine(12).withMessage("Move this trailing comment on the previous empty line.")
-		    .next().atLine(14).withMessage("Move this trailing comment on the previous empty line.")
+		    .next().atLine(8).withMessage("Move this trailing comment on the previous empty line.")
 		    .next().atLine(15).withMessage("Move this trailing comment on the previous empty line.")
-		    .next().atLine(16).withMessage("Move this trailing comment on the previous empty line.")
+		    .next().atLine(18).withMessage("Move this trailing comment on the previous empty line.")
+		    .next().atLine(20).withMessage("Move this trailing comment on the previous empty line.")
+		    .next().atLine(23).withMessage("Move this trailing comment on the previous empty line.")
 		 .noMore();
 	        
 
