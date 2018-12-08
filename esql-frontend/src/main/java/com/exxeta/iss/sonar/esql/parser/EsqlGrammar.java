@@ -371,7 +371,7 @@ public class EsqlGrammar {
 						b.token(EsqlNonReservedKeyword.SET), 
 						b.token(EsqlNonReservedKeyword.TYPE), 
 						b.token(EsqlNonReservedKeyword.FORMAT)
-					), b.optional(CALL_EXPRESSION())))
+					), b.optional(EXPRESSION())))
 					  )),
 				b.token(EsqlPunctuator.RPARENTHESIS)
 				

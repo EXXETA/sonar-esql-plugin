@@ -37,7 +37,8 @@ public class AsbitstreamFunctionTest extends EsqlTreeModelTest<AsbitstreamFuncti
 		.matches("ASBITSTREAM(Environment.Variables.MQRFH2.Data,,,,,,)")
 		.matches("ASBITSTREAM(Environment.Variables.MQRFH2.Data,,1208)")
 		.matches("ASBITSTREAM(Environment.Variables.MQRFH2.Data,enc,1208, set, type, format)")
-		.matches("ASBITSTREAM(Environment.Variables.MQRFH2.Data,enc)");
+		.matches("ASBITSTREAM(Environment.Variables.MQRFH2.Data,enc)")
+		.matches("ASBITSTREAM(IN_STR_ROW.IN_STR CCSID 1208 SET MESSAGESET TYPE functionName || '_IN' FORMAT 'Str')");
 	}
 	
 	@Test
