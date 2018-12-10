@@ -82,7 +82,7 @@ public final class EsqlLexer {
 
   private static final String IDENTIFIER_START = "(?:[$_" + UNICODE_LETTER + "]|\\\\" + UNICODE_ESCAPE_SEQUENCE + ")";
   private static final String IDENTIFIER_PART = "(?:" + IDENTIFIER_START + "|[" + UNICODE_COMBINING_MARK + UNICODE_DIGIT + UNICODE_CONNECTOR_PUNCTUATION + "])";
-  private static final String IDENTIFIER_PART_ESCAPED = "(?:" + IDENTIFIER_START + "|[{" + UNICODE_COMBINING_MARK + UNICODE_DIGIT + UNICODE_CONNECTOR_PUNCTUATION+ "-.:<> }]|\"\")";
+  private static final String IDENTIFIER_PART_ESCAPED = "(?:" + IDENTIFIER_START + "|[{" + UNICODE_COMBINING_MARK + UNICODE_DIGIT + UNICODE_CONNECTOR_PUNCTUATION+ "-.:<> \\[\\]}]|\"\")";
 
   public static final String IDENTIFIER = IDENTIFIER_START + IDENTIFIER_PART + "*+";
   public static final String IDENTIFIER_WITH_QUOTES ="\"(" +IDENTIFIER_PART_ESCAPED + "*+)"+"\"";
