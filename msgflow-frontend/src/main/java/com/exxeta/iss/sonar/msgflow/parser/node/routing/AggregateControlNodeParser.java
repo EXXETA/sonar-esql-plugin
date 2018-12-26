@@ -6,10 +6,10 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.w3c.dom.Element;
 
-import com.exxeta.iss.sonar.msgflow.parser.node.NodeParser;
+import com.exxeta.iss.sonar.msgflow.parser.node.AbstractNodeParser;
 import com.exxeta.iss.sonar.msgflow.tree.impl.node.routing.AggregateControlNodeImpl;
 
-public class AggregateControlNodeParser extends NodeParser<AggregateControlNodeImpl> {
+public class AggregateControlNodeParser extends AbstractNodeParser<AggregateControlNodeImpl> {
 
 	private static final String NODE_TYPE = "ComIbmAggregateControl.msgnode";
 	private static final Logger LOGGER = Loggers.get(AggregateControlNodeParser.class);

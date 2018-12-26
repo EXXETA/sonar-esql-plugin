@@ -14,7 +14,7 @@ import com.exxeta.iss.sonar.msgflow.api.tree.node.mq.MQInputNode;
 import com.exxeta.iss.sonar.msgflow.parser.node.NodeParserTest;
 import com.exxeta.iss.sonar.msgflow.tree.impl.node.mq.MQInputNodeImpl;
 
-public class MQInputNodeTest extends NodeParserTest<MQInputNode> {
+public class MQInputNodeParserTest extends NodeParserTest<MQInputNode> {
 
 	@Test
 	public void test() throws IOException, SAXException, ParserConfigurationException {

@@ -6,10 +6,10 @@ import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.w3c.dom.Element;
 
-import com.exxeta.iss.sonar.msgflow.parser.node.NodeParser;
+import com.exxeta.iss.sonar.msgflow.parser.node.AbstractNodeParser;
 import com.exxeta.iss.sonar.msgflow.tree.impl.node.mq.MQOutputNodeImpl;
 
-public class MQOutputNodeParser extends NodeParser<MQOutputNodeImpl> {
+public class MQOutputNodeParser extends AbstractNodeParser<MQOutputNodeImpl> {
 
 	private static final String NODE_TYPE = "ComIbmMQOutput.msgnode";
 	private static final Logger LOGGER = Loggers.get(MQOutputNodeParser.class);

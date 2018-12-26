@@ -11,6 +11,8 @@ import com.exxeta.iss.sonar.msgflow.api.tree.node.mq.MQInputNode;
 import com.exxeta.iss.sonar.msgflow.api.tree.node.mq.MQOutputNode;
 import com.exxeta.iss.sonar.msgflow.api.tree.node.mq.MQReplyNode;
 import com.exxeta.iss.sonar.msgflow.api.tree.node.routing.AggregateControlNode;
+import com.exxeta.iss.sonar.msgflow.api.tree.node.transformation.ComputeNode;
+import com.exxeta.iss.sonar.msgflow.tree.impl.node.transformation.ComputeNodeImpl;
 import com.google.common.base.Preconditions;
 
 public class DoubleDispatchMsgflowVisitor implements MsgflowVisitor {
@@ -59,5 +61,8 @@ public class DoubleDispatchMsgflowVisitor implements MsgflowVisitor {
 
 	public void visitMQReplyNode(MQReplyNode tree) {
 		
+	}
+
+	public void visitComputeNode(final ComputeNode tree) {
 	}
 }

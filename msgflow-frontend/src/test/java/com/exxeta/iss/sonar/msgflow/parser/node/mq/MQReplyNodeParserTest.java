@@ -14,7 +14,7 @@ import com.exxeta.iss.sonar.msgflow.api.tree.node.mq.MQReplyNode;
 import com.exxeta.iss.sonar.msgflow.parser.node.NodeParserTest;
 import com.exxeta.iss.sonar.msgflow.tree.impl.node.mq.MQReplyNodeImpl;
 
-public class MQReplyParserTest extends NodeParserTest<MQReplyNode> {
+public class MQReplyNodeParserTest extends NodeParserTest<MQReplyNode> {
 
 	@Test
 	public void test() throws IOException, SAXException, ParserConfigurationException {

@@ -14,7 +14,7 @@ import com.exxeta.iss.sonar.msgflow.api.tree.node.routing.AggregateControlNode;
 import com.exxeta.iss.sonar.msgflow.parser.node.NodeParserTest;
 import com.exxeta.iss.sonar.msgflow.tree.impl.node.routing.AggregateControlNodeImpl;
 
-public class AggregateControlParserTest extends NodeParserTest<AggregateControlNode> {
+public class AggregateControlNodeParserTest extends NodeParserTest<AggregateControlNode> {
 
 	@Test
 	public void test() throws IOException, SAXException, ParserConfigurationException {
