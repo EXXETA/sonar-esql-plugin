@@ -72,7 +72,8 @@ public class MsgflowImpl extends MsgflowTree implements Messageflow{
 	 *
 	 * @return a list of comment objects
 	 */
-	public List<MessageFlowCommentNote> getComments() {
+	@Override
+	public List<MessageFlowCommentNote> commentNotes() {
 		return comments;
 	}
 

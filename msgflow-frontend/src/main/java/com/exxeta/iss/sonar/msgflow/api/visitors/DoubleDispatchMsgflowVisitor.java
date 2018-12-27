@@ -4,7 +4,9 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import com.exxeta.iss.sonar.msgflow.api.tree.MessageFlowCommentNote;
 import com.exxeta.iss.sonar.msgflow.api.tree.MessageFlowConnection;
+import com.exxeta.iss.sonar.msgflow.api.tree.MessageFlowNode;
 import com.exxeta.iss.sonar.msgflow.api.tree.Messageflow;
 import com.exxeta.iss.sonar.msgflow.api.tree.Tree;
 import com.exxeta.iss.sonar.msgflow.api.tree.node.mq.MQInputNode;
@@ -12,7 +14,6 @@ import com.exxeta.iss.sonar.msgflow.api.tree.node.mq.MQOutputNode;
 import com.exxeta.iss.sonar.msgflow.api.tree.node.mq.MQReplyNode;
 import com.exxeta.iss.sonar.msgflow.api.tree.node.routing.AggregateControlNode;
 import com.exxeta.iss.sonar.msgflow.api.tree.node.transformation.ComputeNode;
-import com.exxeta.iss.sonar.msgflow.tree.impl.node.transformation.ComputeNodeImpl;
 import com.google.common.base.Preconditions;
 
 public class DoubleDispatchMsgflowVisitor implements MsgflowVisitor {
@@ -40,12 +41,17 @@ public class DoubleDispatchMsgflowVisitor implements MsgflowVisitor {
 		this.context = context;
 		scan(context.getMsgflow());
 	}
+	public void visitNode(final MessageFlowNode tree) {
+		tree.accept(this);
+	}
+	
+	public void visitCommentNote(final MessageFlowCommentNote tree) {
+	}
 
 	public void visitAggregateControlNode(final AggregateControlNode tree) {
 	}
 
 	public void visitConnection(final MessageFlowConnection tree) {
-
 	}
 
 	public void visitMQInputNode(final MQInputNode tree) {
@@ -55,8 +61,9 @@ public class DoubleDispatchMsgflowVisitor implements MsgflowVisitor {
 	}
 
 	public void visitMsgflow(final Messageflow msgflow) {
-		msgflow.getMessageFlowNodes().stream().forEach(node -> node.accept(this));
+		msgflow.getMessageFlowNodes().stream().forEach(node -> visitNode(node));
 		msgflow.connections().stream().forEach(node -> node.accept(this));
+		msgflow.commentNotes().stream().forEach(node -> node.accept(this));
 	}
 
 	public void visitMQReplyNode(MQReplyNode tree) {

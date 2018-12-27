@@ -10,24 +10,10 @@ import org.w3c.dom.Element;
 
 import com.exxeta.iss.sonar.msgflow.tree.impl.AbstractMessageFlowNode;
 
-public abstract class AbstractNodeParser<T extends AbstractMessageFlowNode> {
+public abstract class AbstractNodeParser<T extends AbstractMessageFlowNode> extends AbstractTreeParser<T> {
 	private static final Logger LOGGER = Loggers.get(AbstractNodeParser.class);
 
-	protected String getId(final Element nodeElement) throws XPathExpressionException {
-		return nodeElement.getAttribute("xmi:id");
-	}
-
-	protected int getLocationX(final Element nodeElement) throws XPathExpressionException {
-		return Integer.parseInt(nodeElement.getAttribute("location").split(",")[0]);
-	}
-
-	protected int getLocationY(final Element nodeElement) throws XPathExpressionException {
-		return Integer.parseInt(nodeElement.getAttribute("location").split(",")[1]);
-	}
-
-	protected String getName(final Element nodeElement) throws XPathExpressionException {
-		return getXPathString(nodeElement, "./translation/@string");
-	}
+	
 
 	public abstract String getNodeType();
 

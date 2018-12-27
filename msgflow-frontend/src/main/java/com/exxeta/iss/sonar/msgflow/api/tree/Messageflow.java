@@ -8,4 +8,5 @@ public interface Messageflow {
 
 	List<? extends AbstractMessageFlowNode> getMessageFlowNodes() ;
 	List<?extends MessageFlowConnection> connections();
+	List<MessageFlowCommentNote> commentNotes();
 }

@@ -21,7 +21,9 @@
        <nodes xmi:type="ComIbmMQReply.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_2" location="130,150" parserXmlnscBuildTreeUsingXMLSchema="true" parserXmlnscMixedContentRetainMode="all" parserXmlnscCommentsRetainMode="all" validateMaster="contentAndValue" messageDomainProperty="XMLNSC" messageSetProperty="TestHttp">
         <translation xmi:type="utility:ConstantString" string="MQ Input"/>
       </nodes>
-      
+      <nodes xmi:type="ComIbmCompute.msgnode:FCMComposite_1" xmi:id="FCMComposite_1_1" location="250,190" dataSource="ORACLEDB" computeExpression="esql://routine/#Compute_Compute.Main">
+        <translation xmi:type="utility:ConstantString" string="Compute"/>
+      </nodes>      
       <connections xmi:type="eflow:FCMConnection" xmi:id="FCMConnection_1" targetNode="FCMComposite_1_2" sourceNode="FCMComposite_1_1" sourceTerminalName="OutTerminal.failure" targetTerminalName="InTerminal.in"/>
       
     </composition>

@@ -5,11 +5,14 @@ package com.exxeta.iss.sonar.msgflow.tree.impl;
 
 import java.util.List;
 
+import org.w3c.dom.Node;
+
 import com.exxeta.iss.sonar.msgflow.api.tree.MessageFlowCommentNote;
+import com.exxeta.iss.sonar.msgflow.api.visitors.DoubleDispatchMsgflowVisitor;
 import com.google.common.collect.ImmutableList;
 
 
-public class MessageFlowCommentNoteImpl implements MessageFlowCommentNote {
+public class MessageFlowCommentNoteImpl extends MsgflowTree implements MessageFlowCommentNote {
 	/**
 	 * an id of the node to which the comment note is associated with
 	 */
@@ -33,9 +36,9 @@ public class MessageFlowCommentNoteImpl implements MessageFlowCommentNote {
 	 * @param locationX
 	 * @param locationY
 	 */
-	public MessageFlowCommentNoteImpl(final List<String> associations, final String comment, final int locationX,
+	public MessageFlowCommentNoteImpl(final Node node, final List<String> associations, final String comment, final int locationX,
 			final int locationY) {
-		super();
+		super(node);
 		this.associations = associations;
 		this.comment = comment;
 		this.locationX = locationX;
@@ -60,6 +63,17 @@ public class MessageFlowCommentNoteImpl implements MessageFlowCommentNote {
 	@Override
 	public List<String> associations() {
 		return ImmutableList.copyOf(associations);
+	}
+
+	@Override
+	public void accept(DoubleDispatchMsgflowVisitor visitor) {
+		visitor.visitCommentNote(this);
+	}
+
+	@Override
+	public Kind getKind() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 
