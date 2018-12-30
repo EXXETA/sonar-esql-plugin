@@ -91,7 +91,7 @@
 		<version.install.plugin>2.5.2</version.install.plugin>
 		<version.surefire.plugin>2.18</version.surefire.plugin>
 		<version.beanshell.plugin>1.4</version.beanshell.plugin>
-		<version.sonar-jacoco-listeners>4.14.0.11784</version.sonar-jacoco-listeners>
+		<version.jacoco.plugin>0.8.2</version.jacoco.plugin>
 
 	</properties>
 
@@ -642,26 +642,26 @@
 	<profiles>
 		<profile>
 			<id>coverage-per-test</id>
-			<dependencies>
-				<dependency>
-					<groupId>org.sonarsource.java</groupId>
-					<artifactId>sonar-jacoco-listeners</artifactId>
-					<version>${version.sonar-jacoco-listeners}</version>
-					<scope>test</scope>
-				</dependency>
-			</dependencies>
 			<build>
 				<plugins>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-surefire-plugin</artifactId>
-						<version>2.22.0</version>
-						<configuration>
-							<propertry>
-								<name>listener</name>
-								<value>org.sonar.java.jacoco.JUnitListener</value>
-							</propertry>
-						</configuration>
+						<groupId>org.jacoco</groupId>
+						<artifactId>jacoco-maven-plugin</artifactId>
+						<version>${version.jacoco.plugin}</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>prepare-agent</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>report</id>
+								<phase>test</phase>
+								<goals>
+									<goal>report</goal>
+								</goals>
+							</execution>
+						</executions>
 					</plugin>
 				</plugins>
 			</build>
