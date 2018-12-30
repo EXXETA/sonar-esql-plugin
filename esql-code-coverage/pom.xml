@@ -40,13 +40,13 @@
 		</dependency>
 
 		<!-- unit tests -->
-		<dependency>
+		<!-- dependency>
 			<groupId>org.sonarsource.sonarqube</groupId>
 			<artifactId>sonar-plugin-api</artifactId>
 			<version>${sonar.version}</version>
 			<type>test-jar</type>
 			<scope>test</scope>
-		</dependency>
+		</dependency-->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -54,7 +54,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
+			<artifactId>mockito-core</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
