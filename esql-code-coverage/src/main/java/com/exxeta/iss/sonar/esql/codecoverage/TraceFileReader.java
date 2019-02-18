@@ -96,7 +96,7 @@ public class TraceFileReader {
 					statement=statement.substring(1, statement.length()-1);
 					String schemaAndModuleName="";
 					if (function.contains(".")) {
-						schemaAndModuleName = function.substring(0, function.lastIndexOf('.')).trim();
+						schemaAndModuleName = function.trim();
 					}
 					addExecution(function, relativeLine, statement, schemaAndModuleName);
 				}
