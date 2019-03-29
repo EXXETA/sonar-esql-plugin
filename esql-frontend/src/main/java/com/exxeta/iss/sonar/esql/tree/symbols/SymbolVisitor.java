@@ -85,7 +85,7 @@ public class SymbolVisitor extends DoubleDispatchVisitor {
 	public void visitIdentifier(IdentifierTree tree) {
 		if (tree.is(Tree.Kind.IDENTIFIER_REFERENCE, Tree.Kind.PROPERTY_IDENTIFIER)) {
 			addUsageFor(tree, Usage.Kind.READ);
-			if (tree.parent().parent() instanceof PathElementTreeImpl) {
+			if (tree.parent() != null && tree.parent().parent() instanceof PathElementTreeImpl) {
 				PathElementNamespaceTreeImpl namespace = ((PathElementTreeImpl) tree.parent().parent()).namespace();
 				if (namespace != null && namespace.namespace() != null) {
 					IdentifierTree identifierTree = new IdentifierTreeImpl(Tree.Kind.PROPERTY_IDENTIFIER, (InternalSyntaxToken) namespace.namespace().identifier());
