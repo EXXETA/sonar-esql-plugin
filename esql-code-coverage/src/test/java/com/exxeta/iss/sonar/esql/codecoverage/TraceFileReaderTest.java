@@ -86,9 +86,9 @@ public class TraceFileReaderTest {
 
 		TraceFileReader reader = new TraceFileReader(new File("src/test/resources/codecoverage/trace.xml"))
 				.readTrace(visitor);
-		assertEquals(1, reader.getModuleCount());
+		assertEquals(2, reader.getModuleCount());
 		assertNull(reader.getModuleExecutionData(""));
-		assertEquals(7, reader.getModuleExecutionData(".Test_Compute").size());
+		assertEquals(5, reader.getModuleExecutionData(".Test_Compute.Main").size());
 
 	}
 	
