@@ -38,6 +38,7 @@ public class UnusedVariableCheckTest  {
 		
 		.next().atLine(11).withMessage("Remove the unused 'envRef' variable.")
 		.next().atLine(33).withMessage("Remove the unused 'inReturn' variable.")
+		.next().atLine(35).withMessage("Remove the unused 'qst' variable.")
 		.noMore();
 	
 	}	

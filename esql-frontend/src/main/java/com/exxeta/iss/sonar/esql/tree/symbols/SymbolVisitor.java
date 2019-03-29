@@ -6,9 +6,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,6 +29,10 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.CreateFunctionStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.DeclareStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
+import com.exxeta.iss.sonar.esql.tree.impl.declaration.PathElementNamespaceTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.declaration.PathElementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.expression.IdentifierTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
 
@@ -81,10 +85,17 @@ public class SymbolVisitor extends DoubleDispatchVisitor {
 	public void visitIdentifier(IdentifierTree tree) {
 		if (tree.is(Tree.Kind.IDENTIFIER_REFERENCE, Tree.Kind.PROPERTY_IDENTIFIER)) {
 			addUsageFor(tree, Usage.Kind.READ);
+			if (tree.parent().parent() instanceof PathElementTreeImpl) {
+				PathElementNamespaceTreeImpl namespace = ((PathElementTreeImpl) tree.parent().parent()).namespace();
+				if (namespace != null && namespace.namespace() != null) {
+					IdentifierTree identifierTree = new IdentifierTreeImpl(Tree.Kind.PROPERTY_IDENTIFIER, (InternalSyntaxToken) namespace.namespace().identifier());
+					addUsageFor(identifierTree, Usage.Kind.READ);
+				}
+			}
 		}
 		super.visitIdentifier(tree);
 	}
-	
+
 	@Override
 	public void visitBeginEndStatement(BeginEndStatementTree tree) {
 		if (isScopeAlreadyEntered(tree)) {
