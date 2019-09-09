@@ -28,7 +28,8 @@ import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
-import org.sonar.duplications.internal.pmd.TokensLine;
+import org.sonar.api.batch.sensor.cpd.internal.TokensLine;
+
 
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;

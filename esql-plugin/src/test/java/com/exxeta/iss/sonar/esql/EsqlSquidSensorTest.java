@@ -34,6 +34,7 @@ import org.apache.commons.lang.NotImplementedException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.sonar.api.SonarEdition;
 import org.sonar.api.SonarQubeSide;
 import org.sonar.api.SonarRuntime;
 import org.sonar.api.batch.fs.InputFile;
@@ -46,6 +47,7 @@ import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.rule.CheckFactory;
 import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
+import org.sonar.api.batch.rule.internal.NewActiveRule;
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.Issue;
@@ -79,10 +81,10 @@ import com.sonar.sslr.api.RecognitionException;
 
 public class EsqlSquidSensorTest {
 
-	private static final Version SONARLINT_DETECTABLE_VERSION = Version.create(6, 0);
-	private static final SonarRuntime SONARLINT_RUNTIME = SonarRuntimeImpl.forSonarLint(SONARLINT_DETECTABLE_VERSION);
-	private static final SonarRuntime NOSONARLINT_RUNTIME = SonarRuntimeImpl.forSonarQube(SONARLINT_DETECTABLE_VERSION,
-			SonarQubeSide.SERVER);
+	private static final Version VERSION = Version.create(7, 9);
+	private static final SonarRuntime SONARLINT_RUNTIME = SonarRuntimeImpl.forSonarLint(VERSION);
+	private static final SonarRuntime NOSONARLINT_RUNTIME = SonarRuntimeImpl.forSonarQube(VERSION,
+			SonarQubeSide.SERVER, SonarEdition.DEVELOPER);
 
 	private static final ProductDependentExecutor executor = new SonarLintProductExecutor();
 
@@ -164,7 +166,7 @@ public class EsqlSquidSensorTest {
 		String parsingErrorCheckKey = "ParsingError";
 
 		ActiveRules activeRules = (new ActiveRulesBuilder())
-				.create(RuleKey.of(CheckList.REPOSITORY_KEY, parsingErrorCheckKey)).setName("ParsingError").activate()
+				.addRule(new NewActiveRule.Builder().setName("ParsingError").setRuleKey(RuleKey.of(CheckList.REPOSITORY_KEY, parsingErrorCheckKey)).build())
 				.build();
 
 		checkFactory = new CheckFactory(activeRules);
@@ -208,7 +210,8 @@ public class EsqlSquidSensorTest {
 		inputFile("file.esql");
 
 		ActiveRules activeRules = (new ActiveRulesBuilder())
-				.create(RuleKey.of(CheckList.REPOSITORY_KEY, "MissingNewlineAtEndOfFile")).activate().build();
+				.addRule(new NewActiveRule.Builder().setRuleKey(RuleKey.of(CheckList.REPOSITORY_KEY, "MissingNewlineAtEndOfFile")).build())
+				.build();
 		checkFactory = new CheckFactory(activeRules);
 
 		createSensor().execute(context);
@@ -224,10 +227,8 @@ public class EsqlSquidSensorTest {
 		inputFile("file.esql");
 
 		ActiveRules activeRules = (new ActiveRulesBuilder())
-				.create(RuleKey.of(CheckList.REPOSITORY_KEY, "MissingNewlineAtEndOfFile"))
-				.activate()
-				.create(RuleKey.of(CheckList.REPOSITORY_KEY, "InitializeVariables"))
-				.activate()
+				.addRule(new NewActiveRule.Builder().setRuleKey(RuleKey.of(CheckList.REPOSITORY_KEY, "MissingNewlineAtEndOfFile")).build())
+				.addRule(new NewActiveRule.Builder().setRuleKey(RuleKey.of(CheckList.REPOSITORY_KEY, "InitializeVariables")).build())
 				.build();
 
 		checkFactory = new CheckFactory(activeRules);
@@ -239,7 +240,8 @@ public class EsqlSquidSensorTest {
 	@Test
 	public void custom_rule() throws Exception {
 		inputFile("file.esql");
-		ActiveRules activeRules = (new ActiveRulesBuilder()).create(RuleKey.of("customKey", "key")).activate().build();
+		ActiveRules activeRules = (new ActiveRulesBuilder())
+				.addRule(new NewActiveRule.Builder().setRuleKey(RuleKey.of("customKey", "key")).build()).build();
 		checkFactory = new CheckFactory(activeRules);
 		createSensor().execute(context);
 

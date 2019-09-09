@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
 import org.sonar.api.Plugin;
+import org.sonar.api.SonarEdition;
 import org.sonar.api.SonarQubeSide;
 import org.sonar.api.SonarRuntime;
 import org.sonar.api.config.PropertyDefinition;
@@ -33,7 +34,7 @@ public class EsqlPluginTest {
 
   @Test
   public void count_extensions_for_sonarqube_server_5_6() throws Exception {
-    Plugin.Context context = setupContext(SonarRuntimeImpl.forSonarQube(Version.create(5, 6), SonarQubeSide.SERVER));
+    Plugin.Context context = setupContext(SonarRuntimeImpl.forSonarQube(Version.create(7, 9), SonarQubeSide.SERVER, SonarEdition.COMMUNITY));
 
     assertThat(context.getExtensions()).hasSize(8);
   }
@@ -57,28 +58,28 @@ public class EsqlPluginTest {
 
   @Test
   public void count_extensions_for_sonarqube_server_6_0() throws Exception {
-    Plugin.Context context = setupContext(SonarRuntimeImpl.forSonarQube(Version.create(6, 0), SonarQubeSide.SERVER));
+    Plugin.Context context = setupContext(SonarRuntimeImpl.forSonarQube(Version.create(7, 9), SonarQubeSide.SERVER, SonarEdition.COMMUNITY));
 
     assertThat(context.getExtensions()).hasSize(8);
   }
 
   @Test
   public void count_extensions_for_sonarqube_server_6_2() throws Exception {
-    Plugin.Context context = setupContext(SonarRuntimeImpl.forSonarQube(Version.create(6, 2), SonarQubeSide.SERVER));
+    Plugin.Context context = setupContext(SonarRuntimeImpl.forSonarQube(Version.create(7, 9), SonarQubeSide.SERVER, SonarEdition.COMMUNITY));
 
     assertThat(context.getExtensions()).hasSize(8);
   }
 
   @Test
   public void count_extensions_for_sonarlint() throws Exception {
-    Plugin.Context context = setupContext(SonarRuntimeImpl.forSonarLint(Version.create(6, 0)));
+    Plugin.Context context = setupContext(SonarRuntimeImpl.forSonarLint(Version.create(7, 9)));
 
     assertThat(context.getExtensions()).hasSize(8);
   }
 
   private List<PropertyDefinition> properties() {
     List<PropertyDefinition> propertiesList = new ArrayList<>();
-    List extensions = setupContext(SonarRuntimeImpl.forSonarQube(Version.create(5, 6), SonarQubeSide.SERVER)).getExtensions();
+    List extensions = setupContext(SonarRuntimeImpl.forSonarQube(Version.create(7, 9), SonarQubeSide.SERVER, SonarEdition.COMMUNITY)).getExtensions();
 
     for (Object extension : extensions) {
       if (extension instanceof PropertyDefinition) {

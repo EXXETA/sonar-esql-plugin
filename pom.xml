@@ -49,7 +49,7 @@
 
 	<properties>
 		<sonarQubeMinVersion>6.7</sonarQubeMinVersion>
-		<version.sonar-packaging.plugin>1.17</version.sonar-packaging.plugin>
+		<version.sonar-packaging.plugin>1.18.0.372</version.sonar-packaging.plugin>
 		<jdk.min.version>1.8</jdk.min.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.min.version>3.0.5</maven.min.version>
@@ -62,7 +62,7 @@
 		<logback.version>1.0.13</logback.version>
 		<mockito.version>1.9.0</mockito.version>
 		<slf4j.version>1.7.21</slf4j.version>
-		<sonar.version>6.7</sonar.version>
+		<sonar.version>7.9</sonar.version>
 		<sonar-orchestrator.version>3.14.0.887</sonar-orchestrator.version>
 		<sonarlint.version>3.0.0.1140</sonarlint.version>
 		<sslr.version>1.22</sslr.version>
@@ -74,7 +74,7 @@
 		<version.source.plugin>2.4</version.source.plugin>
 		<version.site.plugin>3.4</version.site.plugin>
 		<version.resources.plugin>3.0.2</version.resources.plugin>
-		<version.shade.plugin>2.4.3</version.shade.plugin>
+		<version.shade.plugin>3.1.0</version.shade.plugin>
 		<version.jar.plugin>3.0.2</version.jar.plugin>
 
 
@@ -84,10 +84,10 @@
 		<version.dependency.plugin>2.9</version.dependency.plugin>
 		<version.deploy.plugin>2.8.2</version.deploy.plugin>
 		<version.enforcer.plugin>3.0.0-M1</version.enforcer.plugin>
-		<version.failsafe.plugin>2.18</version.failsafe.plugin>
+		<version.failsafe.plugin>2.22.0</version.failsafe.plugin>
 		<version.groovy.plugin>2.0</version.groovy.plugin>
 		<version.install.plugin>2.5.2</version.install.plugin>
-		<version.surefire.plugin>2.18</version.surefire.plugin>
+		<version.surefire.plugin>2.22.0</version.surefire.plugin>
 
 		<sonar.jacoco.reportPaths>${project.build.directory}/coverage-reports/jacoco-ut.exec</sonar.jacoco.reportPaths>
 
