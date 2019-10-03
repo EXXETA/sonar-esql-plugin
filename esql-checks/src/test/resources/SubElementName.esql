@@ -13,7 +13,8 @@ CREATE COMPUTE MODULE Module1
 				MQ.
 				DestinationData.
 				msgId;
-		
+        SET Environment.{abc}='ABC';
+
 		
 	END;
 
