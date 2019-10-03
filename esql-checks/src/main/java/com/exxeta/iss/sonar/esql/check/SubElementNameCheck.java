@@ -67,7 +67,7 @@ public class SubElementNameCheck extends DoubleDispatchVisitorCheck {
 
 
     private boolean matches(PathElementTree element, String format) {
-        if (element.name().name() != null && element.name().name().name() != null) {
+        if (element.name()!=null && element.name().name() != null && element.name().name().name() != null) {
             return element.name().name().name().matches(format);
         } else {
             return true;
