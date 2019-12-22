@@ -22,7 +22,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.squidbridge.api.CheckMessage;
 
 import com.exxeta.iss.sonar.esql.api.EsqlCheck;
 import com.exxeta.iss.sonar.esql.api.visitors.EsqlVisitorContext;

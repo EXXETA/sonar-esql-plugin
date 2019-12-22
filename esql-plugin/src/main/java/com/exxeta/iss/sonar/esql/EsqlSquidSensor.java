@@ -33,6 +33,7 @@ import java.util.stream.StreamSupport;
 import javax.annotation.Nullable;
 
 import org.sonar.api.SonarProduct;
+import org.sonar.api.batch.InstantiationStrategy;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
@@ -49,10 +50,10 @@ import org.sonar.api.config.Configuration;
 import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.rule.RuleKey;
+import org.sonar.api.scanner.ScannerSide;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.squidbridge.ProgressReport;
-import org.sonar.squidbridge.api.AnalysisException;
+import org.sonarsource.analyzer.commons.ProgressReport;
 
 import com.exxeta.iss.sonar.esql.api.CustomEsqlRulesDefinition;
 import com.exxeta.iss.sonar.esql.api.EsqlCheck;
@@ -81,36 +82,32 @@ import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import com.sonar.sslr.api.RecognitionException;
 import com.sonar.sslr.api.typed.ActionParser;
+import org.sonarsource.api.sonarlint.SonarLintSide;
 
-public class EsqlSquidSensor implements Sensor {
+@ScannerSide
+@InstantiationStrategy(InstantiationStrategy.PER_PROJECT)
+@SonarLintSide
+public class EsqlSquidSensor {
 
   private static final Logger LOG = Loggers.get(EsqlSquidSensor.class);
 
   private final EsqlChecks checks;
-  private final FileLinesContextFactory fileLinesContextFactory;
   private final FileSystem fileSystem;
-  private final NoSonarFilter noSonarFilter;
   private final FilePredicate mainFilePredicate;
   private final ActionParser<Tree> parser;
-  // parsingErrorRuleKey equals null if ParsingErrorCheck is not activated
-  private RuleKey parsingErrorRuleKey = null;
 
   public EsqlSquidSensor(
-    CheckFactory checkFactory, FileLinesContextFactory fileLinesContextFactory, FileSystem fileSystem, NoSonarFilter noSonarFilter) {
-    this(checkFactory, fileLinesContextFactory, fileSystem, noSonarFilter, null);
+          CheckFactory checkFactory, FileSystem fileSystem) {
+    this(checkFactory, fileSystem, null);
   }
 
   public EsqlSquidSensor(
-    CheckFactory checkFactory, FileLinesContextFactory fileLinesContextFactory, FileSystem fileSystem, NoSonarFilter noSonarFilter,
-    @Nullable CustomEsqlRulesDefinition[] customRulesDefinition
-  ) {
+          CheckFactory checkFactory, FileSystem fileSystem, @Nullable CustomEsqlRulesDefinition[] customRulesDefinition) {
 
     this.checks = EsqlChecks.createEsqlCheck(checkFactory)
       .addChecks(CheckList.REPOSITORY_KEY, CheckList.getChecks())
       .addCustomChecks(customRulesDefinition);
-    this.fileLinesContextFactory = fileLinesContextFactory;
     this.fileSystem = fileSystem;
-    this.noSonarFilter = noSonarFilter;
     this.mainFilePredicate = fileSystem.predicates().and(
       fileSystem.predicates().hasType(InputFile.Type.MAIN),
       fileSystem.predicates().hasLanguage(EsqlLanguage.KEY));
@@ -120,7 +117,7 @@ public class EsqlSquidSensor implements Sensor {
   @VisibleForTesting
   protected void analyseFiles(
     SensorContext context, List<TreeVisitor> treeVisitors, Iterable<InputFile> inputFiles,
-    ProductDependentExecutor executor, ProgressReport progressReport
+    ProgressReport progressReport
   ) {
     boolean success = false;
     try {
@@ -129,7 +126,7 @@ public class EsqlSquidSensor implements Sensor {
         if (context.isCancelled()) {
           throw new CancellationException("Analysis interrupted because the SensorContext is in cancelled state");
         }
-				analyse(context, inputFile, executor, treeVisitors);
+				analyse(context, inputFile, treeVisitors);
 		        progressReport.nextFile();
       }
       success = true;
@@ -149,21 +146,22 @@ public class EsqlSquidSensor implements Sensor {
     }
   }
 
-  private void analyse(SensorContext sensorContext, InputFile inputFile, ProductDependentExecutor executor, List<TreeVisitor> visitors) {
+  private void analyse(SensorContext sensorContext, InputFile inputFile, List<TreeVisitor> visitors) {
+    ActionParser<Tree> currentParser = this.parser;
+
     ProgramTree programTree;
 
     try {
       programTree = (ProgramTree) parser.parse(inputFile.contents());
-      scanFile(sensorContext, inputFile, executor, visitors, programTree);
+      scanFile(sensorContext, inputFile, visitors, programTree);
     } catch (RecognitionException e) {
       checkInterrupted(e);
-      LOG.error("Unable to parse file: " + inputFile.uri());
-      LOG.error(e.getMessage());
-      processRecognitionException(e, sensorContext, inputFile);
+      LOG.debug("Unable to parse file: " + inputFile.uri());
+      LOG.debug(e.getMessage());
     } catch (Exception e) {
       checkInterrupted(e);
       processException(e, sensorContext, inputFile);
-      throw new AnalysisException("Unable to analyse file: " + inputFile.uri(), e);
+      LOG.error("Unable to analyse file: " + inputFile.uri(), e);
     }
   }
 
@@ -174,27 +172,6 @@ public class EsqlSquidSensor implements Sensor {
     }
   }
 
-  private void processRecognitionException(RecognitionException e, SensorContext sensorContext, InputFile inputFile) {
-    if (parsingErrorRuleKey != null) {
-      NewIssue newIssue = sensorContext.newIssue();
-
-      NewIssueLocation primaryLocation = newIssue.newLocation()
-        .message(ParsingErrorCheck.MESSAGE)
-        .on(inputFile)
-        .at(inputFile.selectLine(e.getLine()));
-
-      newIssue
-        .forRule(parsingErrorRuleKey)
-        .at(primaryLocation)
-        .save();
-    }
-
-    sensorContext.newAnalysisError()
-      .onFile(inputFile)
-      .at(inputFile.newPointer(e.getLine(), 0))
-      .message(e.getMessage())
-      .save();
-  }
 
   private static void processException(Exception e, SensorContext sensorContext, InputFile inputFile) {
       sensorContext.newAnalysisError()
@@ -203,7 +180,7 @@ public class EsqlSquidSensor implements Sensor {
         .save();
   }
 
-  private void scanFile(SensorContext sensorContext, InputFile inputFile, ProductDependentExecutor executor, List<TreeVisitor> visitors, ProgramTree programTree) {
+  private void scanFile(SensorContext sensorContext, InputFile inputFile, List<TreeVisitor> visitors, ProgramTree programTree) {
     EsqlVisitorContext context = new EsqlVisitorContext(programTree, inputFile, sensorContext.config());
 
     List<Issue> fileIssues = new ArrayList<>();
@@ -217,7 +194,6 @@ public class EsqlSquidSensor implements Sensor {
     }
 
     saveFileIssues(sensorContext, fileIssues, inputFile);
-    executor.highlightSymbols(inputFile, context);
   }
 
   private void saveFileIssues(SensorContext sensorContext, List<Issue> fileIssues, InputFile inputFile) {
@@ -274,47 +250,21 @@ public class EsqlSquidSensor implements Sensor {
   }
 
 
-  @Override
-  public void describe(SensorDescriptor descriptor) {
-    descriptor
-      .onlyOnLanguage(EsqlLanguage.KEY)
-      .name("ESQL Squid Sensor")
-      .onlyOnFileType(Type.MAIN);
-  }
-
-  @Override
   public void execute(SensorContext context) {
-    ProductDependentExecutor executor = createProductDependentExecutor(context);
 
     List<TreeVisitor> treeVisitors = Lists.newArrayList();
-    treeVisitors.addAll(executor.getProductDependentTreeVisitors());
     treeVisitors.addAll(checks.visitorChecks());
 
-    for (TreeVisitor check : treeVisitors) {
-      if (check instanceof ParsingErrorCheck) {
-        parsingErrorRuleKey = checks.ruleKeyFor((EsqlCheck) check);
-        break;
-      }
-    }
 
     Iterable<InputFile> inputFiles = fileSystem.inputFiles(mainFilePredicate);
-    Collection<File> files = StreamSupport.stream(inputFiles.spliterator(), false)
-      .map(InputFile::file)
-      .collect(Collectors.toList());
+    Collection<String> files = StreamSupport.stream(inputFiles.spliterator(), false)
+            .map(InputFile::toString)
+            .collect(Collectors.toList());
 
-    ProgressReport progressReport = new ProgressReport("Report about progress of ESQL analyzer", TimeUnit.SECONDS.toMillis(10));
+    ProgressReport progressReport = new ProgressReport("Report about progress of Javascript analyzer", TimeUnit.SECONDS.toMillis(10));
     progressReport.start(files);
 
-    analyseFiles(context, treeVisitors, inputFiles, executor, progressReport);
-
-    executor.executeCoverageSensors();
-  }
-
-  private ProductDependentExecutor createProductDependentExecutor(SensorContext context) {
-    if (isSonarLint(context)) {
-      return new SonarLintProductExecutor();
-    }
-    return new SonarQubeProductExecutor(context, noSonarFilter, fileLinesContextFactory);
+    analyseFiles(context, treeVisitors, inputFiles, progressReport);
   }
 
   @VisibleForTesting
@@ -436,6 +386,11 @@ public class EsqlSquidSensor implements Sensor {
     }
 
     newIssue.save();
+  }
+  static class AnalysisException extends RuntimeException {
+    AnalysisException(String message, Throwable cause) {
+      super(message, cause);
+    }
   }
 
 }
