@@ -132,4 +132,15 @@ public class TraceFileReaderTest {
 
 	}
 
+	@Test
+	public void indexOutOfBounds112() throws JAXBException {
+		new TraceFileReader(new File("src/test/resources/codecoverage/tests/usertrace_112.xml")).readTrace(new ExecutionDataVisitor(){
+
+			@Override
+			public void visitModuleExecution(ModuleExecutionData data) {
+
+			}
+		});
+	}
+
 }
