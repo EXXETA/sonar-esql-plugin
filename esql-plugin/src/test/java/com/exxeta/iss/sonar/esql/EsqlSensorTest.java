@@ -69,7 +69,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class EsqlSquidSensorTest {
+public class EsqlSensorTest {
 
     @org.junit.Rule
     public final ExpectedException thrown = ExpectedException.none();
@@ -103,12 +103,12 @@ public class EsqlSquidSensorTest {
     private final ProgressReport progressReport = mock(ProgressReport.class);
     private SensorContextTester context = SensorContextTester.create(baseDir);
 
-    private EsqlSquidSensor createSensor() {
-        return new EsqlSquidSensor(checkFactory, fileLinesContextFactory, context.fileSystem(), new NoSonarFilter());
+    private EsqlSensor createSensor() {
+        return new EsqlSensor(checkFactory, fileLinesContextFactory, context.fileSystem(), new NoSonarFilter());
     }
 
-    private EsqlSquidSensor createSensorWithCustomRules() {
-        return new EsqlSquidSensor(checkFactory, fileLinesContextFactory, context.fileSystem(), new NoSonarFilter(), CUSTOM_RULES);
+    private EsqlSensor createSensorWithCustomRules() {
+        return new EsqlSensor(checkFactory, fileLinesContextFactory, context.fileSystem(), new NoSonarFilter(), CUSTOM_RULES);
     }
 
     @Before
@@ -273,7 +273,7 @@ public class EsqlSquidSensorTest {
     public void cancelled_context_should_cancel_progress_report_and_return_with_no_exception() {
         EsqlCheck check = new DoubleDispatchVisitorCheck() {
         };
-        EsqlSquidSensor sensor = createSensor();
+        EsqlSensor sensor = createSensor();
         SensorContextTester cancelledContext = SensorContextTester.create(baseDir);
         cancelledContext.setCancelled(true);
         sensor.analyseFiles(cancelledContext, ImmutableList.of((TreeVisitor) check),
@@ -283,7 +283,7 @@ public class EsqlSquidSensorTest {
 
     private void analyseFileWithException(EsqlCheck check, InputFile inputFile,
                                           String expectedMessageSubstring) {
-        EsqlSquidSensor sensor = createSensor();
+        EsqlSensor sensor = createSensor();
         thrown.expectMessage(expectedMessageSubstring);
         try {
             sensor.analyseFiles(context, ImmutableList.of((TreeVisitor) check), ImmutableList.of(inputFile),

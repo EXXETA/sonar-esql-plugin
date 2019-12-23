@@ -48,7 +48,7 @@ public class EsqlPlugin implements Plugin {
 
 	@Override
 	public void define(Context context) {
-		context.addExtensions(EsqlLanguage.class, EsqlSquidSensor.class,
+		context.addExtensions(EsqlLanguage.class, EsqlSensor.class,
 				new EsqlRulesDefinition(context.getSonarQubeVersion()), EsqlProfile.class, EsqlMetrics.class);
 
 		  context.addExtensions(

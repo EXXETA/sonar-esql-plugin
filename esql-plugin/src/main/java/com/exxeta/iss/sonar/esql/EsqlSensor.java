@@ -79,9 +79,9 @@ import java.util.stream.StreamSupport;
 
 @ScannerSide
 @InstantiationStrategy(InstantiationStrategy.PER_PROJECT)
-public class EsqlSquidSensor {
+public class EsqlSensor {
 
-    private static final Logger LOG = Loggers.get(EsqlSquidSensor.class);
+    private static final Logger LOG = Loggers.get(EsqlSensor.class);
 
     private final EsqlChecks checks;
     private final FileLinesContextFactory fileLinesContextFactory;
@@ -92,13 +92,13 @@ public class EsqlSquidSensor {
     // parsingErrorRuleKey equals null if ParsingErrorCheck is not activated
     private RuleKey parsingErrorRuleKey = null;
 
-    public EsqlSquidSensor(
+    public EsqlSensor(
             CheckFactory checkFactory, FileLinesContextFactory fileLinesContextFactory, FileSystem fileSystem, NoSonarFilter noSonarFilter) {
         this(checkFactory, fileLinesContextFactory, fileSystem, noSonarFilter, null);
     }
 
 
-    public EsqlSquidSensor(
+    public EsqlSensor(
             CheckFactory checkFactory, FileLinesContextFactory fileLinesContextFactory, FileSystem fileSystem, NoSonarFilter noSonarFilter,
             @Nullable CustomEsqlRulesDefinition[] customRulesDefinition
     ) {
