@@ -30,6 +30,7 @@ import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.RecognitionException;
 import org.apache.commons.lang.NotImplementedException;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.sonar.api.batch.fs.InputFile;
@@ -45,12 +46,15 @@ import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
 import org.sonar.api.batch.rule.internal.NewActiveRule;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.Issue;
+import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
+import org.sonar.api.measures.FileLinesContext;
+import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.utils.log.LogTester;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
-import org.sonarsource.analyzer.commons.ProgressReport;
+import org.sonar.squidbridge.ProgressReport;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -60,8 +64,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class EsqlSquidSensorTest {
 
@@ -70,6 +76,8 @@ public class EsqlSquidSensorTest {
 
     @org.junit.Rule
     public LogTester logTester = new LogTester();
+
+    private FileLinesContextFactory fileLinesContextFactory;
 
     private CheckFactory checkFactory = new CheckFactory(mock(ActiveRules.class));
 
@@ -96,11 +104,18 @@ public class EsqlSquidSensorTest {
     private SensorContextTester context = SensorContextTester.create(baseDir);
 
     private EsqlSquidSensor createSensor() {
-        return new EsqlSquidSensor(checkFactory, context.fileSystem());
+        return new EsqlSquidSensor(checkFactory, fileLinesContextFactory, context.fileSystem(), new NoSonarFilter());
     }
 
     private EsqlSquidSensor createSensorWithCustomRules() {
-        return new EsqlSquidSensor(checkFactory, context.fileSystem(), CUSTOM_RULES);
+        return new EsqlSquidSensor(checkFactory, fileLinesContextFactory, context.fileSystem(), new NoSonarFilter(), CUSTOM_RULES);
+    }
+
+    @Before
+    public void setUp() {
+        fileLinesContextFactory = mock(FileLinesContextFactory.class);
+        FileLinesContext fileLinesContext = mock(FileLinesContext.class);
+        when(fileLinesContextFactory.createFor(any(InputFile.class))).thenReturn(fileLinesContext);
     }
 
     @Test
@@ -149,6 +164,7 @@ public class EsqlSquidSensorTest {
     @Test
     public void should_add_error_to_context_but_not_fail_analysis_with_technical_error() {
         EsqlCheck check = new ExceptionRaisingCheck(new NullPointerException("NPE forcibly raised by check class"));
+
         InputFile file = inputFile("file.esql");
         createSensor().analyseFiles(context, ImmutableList.of((TreeVisitor) check),
                 ImmutableList.of(file), progressReport);
@@ -207,7 +223,7 @@ public class EsqlSquidSensorTest {
         ActiveRules activeRules = (new ActiveRulesBuilder())
                 .addRule(new NewActiveRule.Builder().setRuleKey(RuleKey.of("customKey", "key")).build()).build();
         checkFactory = new CheckFactory(activeRules);
-        createSensor().execute(context);
+        createSensorWithCustomRules().execute(context);
 
         Collection<Issue> issues = context.allIssues();
         assertThat(issues).hasSize(1);
@@ -248,8 +264,8 @@ public class EsqlSquidSensorTest {
 
     @Test
     public void exception_should_report_file_name() throws Exception {
-        EsqlCheck check = new ExceptionRaisingCheck(new IllegalStateException());
-        analyseFileWithException(check, inputFile("cpd/Person.esql"), "Person.esql");
+        EsqlCheck check = new ExceptionRaisingCheck(new IllegalStateException(new InterruptedException()));
+        analyseFileWithException(check, inputFile("cpd/Person.esql"), "Analysis cancelled");
         assertThat(context.allAnalysisErrors()).hasSize(1);
     }
 
