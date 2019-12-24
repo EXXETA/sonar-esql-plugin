@@ -61,7 +61,7 @@ public final class EsqlLexer {
   public static final String MULTI_LINE_COMMENT = "/\\*[\\s\\S]*?\\*/";
   public static final String MULTI_LINE_COMMENT_NO_LB = "/\\*[^\\n\\r]*?\\*/";
 
-  public static final String COMMENT = "(?:" + SINGLE_LINE_COMMENT + "|" + MULTI_LINE_COMMENT + ")"; 
+  public static final String COMMENT_CONTENT = "((?!/\\*)(?!\\*/)[\\s\\S])*";
 
 
   /**
