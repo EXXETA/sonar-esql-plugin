@@ -6,7 +6,7 @@ git:
   submodules: false
 install: true
 before_script:
-  - if [ ! -z "$TRAVIS_TAG" ]; then mvn versions:set -DnewVersion=$CI_COMMIT_TAG && mvn versions:commit; fi
+  - if [ ! -z "$TRAVIS_TAG" ]; then mvn versions:set -DnewVersion=$TRAVIS_TAG && mvn versions:commit; fi
 script: mvn clean install -P coverage-per-test
 matrix:
   fast_finish: true
