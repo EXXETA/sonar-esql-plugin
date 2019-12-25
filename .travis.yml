@@ -1,27 +1,29 @@
 language: java
 sudo: false
-
 jdk:
-  - openjdk9
-  
+- openjdk9
 git:
   submodules: false
-
 install: true
-script: "mvn clean install -P coverage-per-test"
+script: mvn clean install -P coverage-per-test
 matrix:
   fast_finish: true
-
 cache:
   directories:
-    - '$HOME/.m2/repository'
-    - '$HOME/maven'
-
+  - "$HOME/.m2/repository"
+  - "$HOME/maven"
 before_cache:
-  - find $HOME/.m2 -name resolver-status.properties -exec rm {} \;
-
+- find $HOME/.m2 -name resolver-status.properties -exec rm {} \;
 notifications:
   email: false
-
 after_success:
-  - bash <(curl -s https://codecov.io/bash) -t b5356ca9-9cef-4be3-a67e-013d18ebd73a
+- bash <(curl -s https://codecov.io/bash) -t b5356ca9-9cef-4be3-a67e-013d18ebd73a
+deploy:
+  provider: releases
+  api_key:
+    secure: $API_KEY
+  file:
+  - esql-plugin/target/esql-plugin-*.jar
+  skip_cleanup: true
+  on:
+    tags: true
