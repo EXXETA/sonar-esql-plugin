@@ -20,8 +20,7 @@ after_success:
 - bash <(curl -s https://codecov.io/bash) -t b5356ca9-9cef-4be3-a67e-013d18ebd73a
 deploy:
   provider: releases
-  api_key:
-    secure: $API_KEY
+  api_key: $API_KEY
   file:
   - esql-plugin/target/esql-plugin-*.jar
   skip_cleanup: true
