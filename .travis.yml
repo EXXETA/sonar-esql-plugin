@@ -5,6 +5,8 @@ jdk:
 git:
   submodules: false
 install: true
+before_script:
+  - if [ ! -z "$TRAVIS_TAG" ]; then mvn versions:set -DnewVersion=$CI_COMMIT_TAG && mvn versions:commit; fi
 script: mvn clean install -P coverage-per-test
 matrix:
   fast_finish: true
@@ -21,6 +23,7 @@ after_success:
 deploy:
   provider: releases
   api_key: $API_KEY
+  file_glob: true
   file:
   - esql-plugin/target/esql-plugin-*.jar
   skip_cleanup: true
