@@ -49,6 +49,8 @@ public class FieldReferenceTest extends EsqlTreeModelTest<FieldReferenceTree> {
 		.notMatches("a a")
 		.matches("cursor")
 		.matches("(XML.Element)NSpace1:Element1[2]")
+		.matches("\"A-Z\"")
+		.matches("\"[A-Z]\"")
 		;
 		
 

@@ -6,9 +6,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,42 +16,6 @@
  * limitations under the License.
  */
 package com.exxeta.iss.sonar.iib.esql;
-
-import java.io.InterruptedIOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
-
-import javax.annotation.Nullable;
-
-import org.sonar.api.SonarProduct;
-import org.sonar.api.batch.fs.FilePredicate;
-import org.sonar.api.batch.fs.FileSystem;
-import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.fs.InputFile.Type;
-import org.sonar.api.batch.fs.TextRange;
-import org.sonar.api.batch.rule.CheckFactory;
-import org.sonar.api.batch.sensor.Sensor;
-import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.batch.sensor.SensorDescriptor;
-import org.sonar.api.batch.sensor.issue.NewIssue;
-import org.sonar.api.batch.sensor.issue.NewIssueLocation;
-import org.sonar.api.batch.sensor.symbol.NewSymbolTable;
-import org.sonar.api.config.Configuration;
-import org.sonar.api.issue.NoSonarFilter;
-import org.sonar.api.measures.FileLinesContextFactory;
-import org.sonar.api.rule.RuleKey;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
-import org.sonar.squidbridge.ProgressReport;
 
 import com.exxeta.iss.sonar.esql.api.CustomEsqlRulesDefinition;
 import com.exxeta.iss.sonar.esql.api.EsqlCheck;
@@ -75,14 +39,51 @@ import com.exxeta.iss.sonar.esql.metrics.MetricsVisitor;
 import com.exxeta.iss.sonar.esql.metrics.NoSonarVisitor;
 import com.exxeta.iss.sonar.esql.parser.EsqlParserBuilder;
 import com.exxeta.iss.sonar.iib.IibPlugin;
+import com.exxeta.iss.sonar.iib.esql.EsqlChecks;
+import com.exxeta.iss.sonar.iib.esql.EsqlLanguage;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import com.sonar.sslr.api.RecognitionException;
 import com.sonar.sslr.api.typed.ActionParser;
+import org.sonar.api.batch.InstantiationStrategy;
+import org.sonar.api.batch.ScannerSide;
+import org.sonar.api.batch.fs.FilePredicate;
+import org.sonar.api.batch.fs.FileSystem;
+import org.sonar.api.batch.fs.InputFile;
+import org.sonar.api.batch.fs.InputFile.Type;
+import org.sonar.api.batch.fs.TextRange;
+import org.sonar.api.batch.rule.CheckFactory;
+import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.batch.sensor.SensorDescriptor;
+import org.sonar.api.batch.sensor.issue.NewIssue;
+import org.sonar.api.batch.sensor.issue.NewIssueLocation;
+import org.sonar.api.batch.sensor.symbol.NewSymbolTable;
+import org.sonar.api.config.Configuration;
+import org.sonar.api.issue.NoSonarFilter;
+import org.sonar.api.measures.FileLinesContextFactory;
+import org.sonar.api.rule.RuleKey;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
+import org.sonar.squidbridge.ProgressReport;
 
-public class EsqlSensor implements Sensor {
+import javax.annotation.Nullable;
+import java.io.InterruptedIOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+
+@ScannerSide
+@InstantiationStrategy(InstantiationStrategy.PER_PROJECT)
+public class EsqlSensor {
 
 	private static final Logger LOG = Loggers.get(EsqlSensor.class);
 
@@ -95,37 +96,42 @@ public class EsqlSensor implements Sensor {
 	// parsingErrorRuleKey equals null if ParsingErrorCheck is not activated
 	private RuleKey parsingErrorRuleKey = null;
 
-	public EsqlSensor(CheckFactory checkFactory, FileLinesContextFactory fileLinesContextFactory, FileSystem fileSystem,
-			NoSonarFilter noSonarFilter) {
+	public EsqlSensor(
+			CheckFactory checkFactory, FileLinesContextFactory fileLinesContextFactory, FileSystem fileSystem, NoSonarFilter noSonarFilter) {
 		this(checkFactory, fileLinesContextFactory, fileSystem, noSonarFilter, null);
 	}
 
-	public EsqlSensor(CheckFactory checkFactory, FileLinesContextFactory fileLinesContextFactory, FileSystem fileSystem,
-			NoSonarFilter noSonarFilter, @Nullable CustomEsqlRulesDefinition[] customRulesDefinition) {
+
+	public EsqlSensor(
+			CheckFactory checkFactory, FileLinesContextFactory fileLinesContextFactory, FileSystem fileSystem, NoSonarFilter noSonarFilter,
+			@Nullable CustomEsqlRulesDefinition[] customRulesDefinition
+	) {
 
 		this.checks = EsqlChecks.createEsqlCheck(checkFactory)
-				.addChecks(CheckList.REPOSITORY_KEY, CheckList.getChecks()).addCustomChecks(customRulesDefinition);
+				.addChecks(CheckList.REPOSITORY_KEY, CheckList.getChecks())
+				.addCustomChecks(customRulesDefinition);
 		this.fileLinesContextFactory = fileLinesContextFactory;
 		this.fileSystem = fileSystem;
 		this.noSonarFilter = noSonarFilter;
-		this.mainFilePredicate = fileSystem.predicates().and(fileSystem.predicates().hasType(InputFile.Type.MAIN),
+		this.mainFilePredicate = fileSystem.predicates().and(
+				fileSystem.predicates().hasType(InputFile.Type.MAIN),
 				fileSystem.predicates().hasLanguage(EsqlLanguage.KEY));
 		this.parser = EsqlParserBuilder.createParser();
 	}
 
 	@VisibleForTesting
-	protected void analyseFiles(SensorContext context, List<TreeVisitor> treeVisitors, Iterable<InputFile> inputFiles,
-			ProductDependentExecutor executor, ProgressReport progressReport) {
+	protected void analyseFiles(
+			SensorContext context, List<TreeVisitor> treeVisitors, Iterable<InputFile> inputFiles,
+			ProgressReport progressReport
+	) {
 		boolean success = false;
 		try {
 			for (InputFile inputFile : inputFiles) {
-				// check for cancellation of the analysis (by SonarQube or SonarLint). See
-				// SONARJS-761.
+				// check for cancellation of the analysis (by SonarQube or SonarLint). See SONARJS-761.
 				if (context.isCancelled()) {
-					throw new CancellationException(
-							"Analysis interrupted because the SensorContext is in cancelled state");
+					throw new CancellationException("Analysis interrupted because the SensorContext is in cancelled state");
 				}
-				analyse(context, inputFile, executor, treeVisitors);
+				analyse(context, inputFile, treeVisitors);
 				progressReport.nextFile();
 			}
 			success = true;
@@ -145,13 +151,12 @@ public class EsqlSensor implements Sensor {
 		}
 	}
 
-	private void analyse(SensorContext sensorContext, InputFile inputFile, ProductDependentExecutor executor,
-			List<TreeVisitor> visitors) {
+	private void analyse(SensorContext sensorContext, InputFile inputFile, List<TreeVisitor> visitors) {
 		ProgramTree programTree;
 
 		try {
 			programTree = (ProgramTree) parser.parse(inputFile.contents());
-			scanFile(sensorContext, inputFile, executor, visitors, programTree);
+			scanFile(sensorContext, inputFile, visitors, programTree);
 		} catch (RecognitionException e) {
 			checkInterrupted(e);
 			LOG.error("Unable to parse file: " + inputFile.uri());
@@ -175,22 +180,32 @@ public class EsqlSensor implements Sensor {
 		if (parsingErrorRuleKey != null) {
 			NewIssue newIssue = sensorContext.newIssue();
 
-			NewIssueLocation primaryLocation = newIssue.newLocation().message(ParsingErrorCheck.MESSAGE).on(inputFile)
+			NewIssueLocation primaryLocation = newIssue.newLocation()
+					.message(ParsingErrorCheck.MESSAGE)
+					.on(inputFile)
 					.at(inputFile.selectLine(e.getLine()));
 
-			newIssue.forRule(parsingErrorRuleKey).at(primaryLocation).save();
+			newIssue
+					.forRule(parsingErrorRuleKey)
+					.at(primaryLocation)
+					.save();
 		}
 
-		sensorContext.newAnalysisError().onFile(inputFile).at(inputFile.newPointer(e.getLine(), 0))
-				.message(e.getMessage()).save();
+		sensorContext.newAnalysisError()
+				.onFile(inputFile)
+				.at(inputFile.newPointer(e.getLine(), 0))
+				.message(e.getMessage())
+				.save();
 	}
 
 	private static void processException(Exception e, SensorContext sensorContext, InputFile inputFile) {
-		sensorContext.newAnalysisError().onFile(inputFile).message(e.getMessage()).save();
+		sensorContext.newAnalysisError()
+				.onFile(inputFile)
+				.message(e.getMessage())
+				.save();
 	}
 
-	private void scanFile(SensorContext sensorContext, InputFile inputFile, ProductDependentExecutor executor,
-			List<TreeVisitor> visitors, ProgramTree programTree) {
+	private void scanFile(SensorContext sensorContext, InputFile inputFile, List<TreeVisitor> visitors, ProgramTree programTree) {
 		EsqlVisitorContext context = new EsqlVisitorContext(programTree, inputFile, sensorContext.config());
 
 		List<Issue> fileIssues = new ArrayList<>();
@@ -204,7 +219,7 @@ public class EsqlSensor implements Sensor {
 		}
 
 		saveFileIssues(sensorContext, fileIssues, inputFile);
-		executor.highlightSymbols(inputFile, context);
+		highlightSymbols(inputFile, context, sensorContext);
 	}
 
 	private void saveFileIssues(SensorContext sensorContext, List<Issue> fileIssues, InputFile inputFile) {
@@ -220,11 +235,12 @@ public class EsqlSensor implements Sensor {
 		}
 	}
 
-	private static void savePreciseIssue(SensorContext sensorContext, InputFile inputFile, RuleKey ruleKey,
-			PreciseIssue issue) {
+	private static void savePreciseIssue(SensorContext sensorContext, InputFile inputFile, RuleKey ruleKey, PreciseIssue issue) {
 		NewIssue newIssue = sensorContext.newIssue();
 
-		newIssue.forRule(ruleKey).at(newLocation(inputFile, newIssue, issue.primaryLocation()));
+		newIssue
+				.forRule(ruleKey)
+				.at(newLocation(inputFile, newIssue, issue.primaryLocation()));
 
 		if (issue.cost() != null) {
 			newIssue.gap(issue.cost());
@@ -237,10 +253,12 @@ public class EsqlSensor implements Sensor {
 	}
 
 	private static NewIssueLocation newLocation(InputFile inputFile, NewIssue issue, IssueLocation location) {
-		TextRange range = inputFile.newRange(location.startLine(), location.startLineOffset(), location.endLine(),
-				location.endLineOffset());
+		TextRange range = inputFile.newRange(
+				location.startLine(), location.startLineOffset(), location.endLine(), location.endLineOffset());
 
-		NewIssueLocation newLocation = issue.newLocation().on(inputFile).at(range);
+		NewIssueLocation newLocation = issue.newLocation()
+				.on(inputFile)
+				.at(range);
 
 		if (location.message() != null) {
 			newLocation.message(location.message());
@@ -257,17 +275,18 @@ public class EsqlSensor implements Sensor {
 		return ruleKey;
 	}
 
-	@Override
+
 	public void describe(SensorDescriptor descriptor) {
-		descriptor.onlyOnLanguage(EsqlLanguage.KEY).name("ESQL Squid Sensor").onlyOnFileType(Type.MAIN);
+		descriptor
+				.onlyOnLanguage(EsqlLanguage.KEY)
+				.name("ESQL Squid Sensor")
+				.onlyOnFileType(Type.MAIN);
 	}
 
-	@Override
 	public void execute(SensorContext context) {
-		ProductDependentExecutor executor = createProductDependentExecutor(context);
 
 		List<TreeVisitor> treeVisitors = Lists.newArrayList();
-		treeVisitors.addAll(executor.getProductDependentTreeVisitors());
+		treeVisitors.addAll(getTreeVisitors(context));
 		treeVisitors.addAll(checks.visitorChecks());
 
 		for (TreeVisitor check : treeVisitors) {
@@ -278,132 +297,87 @@ public class EsqlSensor implements Sensor {
 		}
 
 		Iterable<InputFile> inputFiles = fileSystem.inputFiles(mainFilePredicate);
-		Collection<String> files = StreamSupport.stream(inputFiles.spliterator(), false).map(InputFile::toString)
+		Collection<String> files = StreamSupport.stream(inputFiles.spliterator(), false)
+				.map(InputFile::toString)
 				.collect(Collectors.toList());
 
-		ProgressReport progressReport = new ProgressReport("Report about progress of ESQL analyzer",
-				TimeUnit.SECONDS.toMillis(10));
+		ProgressReport progressReport = new ProgressReport("Report about progress of ESQL analyzer", TimeUnit.SECONDS.toMillis(10));
 		progressReport.start(files);
 
-		analyseFiles(context, treeVisitors, inputFiles, executor, progressReport);
+		analyseFiles(context, treeVisitors, inputFiles, progressReport);
 
-		executor.executeCoverageSensors();
+		executeCoverageSensors(context);
 	}
 
-	private ProductDependentExecutor createProductDependentExecutor(SensorContext context) {
-		if (isSonarLint(context)) {
-			return new SonarLintProductExecutor();
-		}
-		return new SonarQubeProductExecutor(context, noSonarFilter, fileLinesContextFactory);
+
+	public List<TreeVisitor> getTreeVisitors(SensorContext context) {
+		boolean ignoreHeaderComments = ignoreHeaderComments(context);
+
+		MetricsVisitor metricsVisitor = new MetricsVisitor(
+				context,
+				ignoreHeaderComments,
+				fileLinesContextFactory);
+		return Arrays.asList(
+				metricsVisitor,
+				new NoSonarVisitor(noSonarFilter, ignoreHeaderComments),
+				new HighlighterVisitor(context),
+				new CpdVisitor(context));
 	}
 
-	@VisibleForTesting
-	protected interface ProductDependentExecutor {
-		List<TreeVisitor> getProductDependentTreeVisitors();
-
-		void highlightSymbols(InputFile inputFile, TreeVisitorContext treeVisitorContext);
-
-		void executeCoverageSensors();
+	public void highlightSymbols(InputFile inputFile, TreeVisitorContext treeVisitorContext, SensorContext context) {
+		NewSymbolTable newSymbolTable = context.newSymbolTable().onFile(inputFile);
+		HighlightSymbolTableBuilder.build(newSymbolTable, treeVisitorContext);
 	}
 
-	private static class SonarQubeProductExecutor implements ProductDependentExecutor {
-		private final SensorContext context;
-		private final NoSonarFilter noSonarFilter;
-		private final FileLinesContextFactory fileLinesContextFactory;
-		private MetricsVisitor metricsVisitor;
+	public void executeCoverageSensors(SensorContext context) {
+		boolean ignoreHeaderComments = ignoreHeaderComments(context);
 
-		SonarQubeProductExecutor(SensorContext context, NoSonarFilter noSonarFilter,
-				FileLinesContextFactory fileLinesContextFactory) {
-			this.context = context;
-			this.noSonarFilter = noSonarFilter;
-			this.fileLinesContextFactory = fileLinesContextFactory;
-		}
+		MetricsVisitor metricsVisitor = new MetricsVisitor(
+				context,
+				ignoreHeaderComments,
+				fileLinesContextFactory);
 
-		@Override
-		public List<TreeVisitor> getProductDependentTreeVisitors() {
-			boolean ignoreHeaderComments = ignoreHeaderComments(context);
-
-			metricsVisitor = new MetricsVisitor(context, ignoreHeaderComments, fileLinesContextFactory);
-			return Arrays.asList(metricsVisitor, new NoSonarVisitor(noSonarFilter, ignoreHeaderComments),
-					new HighlighterVisitor(context), new CpdVisitor(context));
-		}
-
-		@Override
-		public void highlightSymbols(InputFile inputFile, TreeVisitorContext treeVisitorContext) {
-			NewSymbolTable newSymbolTable = context.newSymbolTable().onFile(inputFile);
-			HighlightSymbolTableBuilder.build(newSymbolTable, treeVisitorContext);
-		}
-
-		@Override
-		public void executeCoverageSensors() {
-			if (metricsVisitor == null) {
-				throw new IllegalStateException(
-						"Before starting coverage computation, metrics should have been calculated.");
-			}
-			executeCoverageSensors(context, metricsVisitor.executableLines());
-		}
-
-		private static void executeCoverageSensors(SensorContext context,
-				Map<InputFile, Set<Integer>> executableLines) {
-			Configuration configuration = context.config();
-
-			String[] traces = configuration.getStringArray(IibPlugin.TRACE_PATHS_PROPERTY);
-
-			(new TraceSensor()).execute(context, executableLines, traces);
-
-		}
-
+		executeCoverageSensors(context, metricsVisitor.executableLines());
 	}
 
-	@VisibleForTesting
-	protected static class SonarLintProductExecutor implements ProductDependentExecutor {
-		@Override
-		public List<TreeVisitor> getProductDependentTreeVisitors() {
-			return Collections.emptyList();
-		}
+	private static void executeCoverageSensors(SensorContext context, Map<InputFile, Set<Integer>> executableLines) {
+		Configuration configuration = context.config();
 
-		@Override
-		public void highlightSymbols(InputFile inputFile, TreeVisitorContext treeVisitorContext) {
-			// unnecessary in SonarLint context
-		}
+		String[] traces = configuration.getStringArray(IibPlugin.TRACE_PATHS_PROPERTY);
 
-		@Override
-		public void executeCoverageSensors() {
-			// unnecessary in SonarLint context
-		}
+		(new TraceSensor()).execute(context, executableLines, traces);
 
 	}
 
 	private static boolean ignoreHeaderComments(SensorContext context) {
-		return context.config().getBoolean(IibPlugin.IGNORE_HEADER_COMMENTS)
-				.orElse(IibPlugin.IGNORE_HEADER_COMMENTS_DEFAULT_VALUE);
+		return context.config().getBoolean(IibPlugin.IGNORE_HEADER_COMMENTS).orElse(IibPlugin.IGNORE_HEADER_COMMENTS_DEFAULT_VALUE);
 	}
 
-	private static boolean isSonarLint(SensorContext context) {
-		return context.runtime().getProduct() == SonarProduct.SONARLINT;
-	}
-
-	private static void saveLineIssue(SensorContext sensorContext, InputFile inputFile, RuleKey ruleKey,
-			LineIssue issue) {
+	private static void saveLineIssue(SensorContext sensorContext, InputFile inputFile, RuleKey ruleKey, LineIssue issue) {
 		NewIssue newIssue = sensorContext.newIssue();
 
-		NewIssueLocation primaryLocation = newIssue.newLocation().message(issue.message()).on(inputFile)
+		NewIssueLocation primaryLocation = newIssue.newLocation()
+				.message(issue.message())
+				.on(inputFile)
 				.at(inputFile.selectLine(issue.line()));
 
 		saveIssue(newIssue, primaryLocation, ruleKey, issue);
 	}
 
-	private static void saveFileIssue(SensorContext sensorContext, InputFile inputFile, RuleKey ruleKey,
-			FileIssue issue) {
+	private static void saveFileIssue(SensorContext sensorContext, InputFile inputFile, RuleKey ruleKey, FileIssue issue) {
 		NewIssue newIssue = sensorContext.newIssue();
 
-		NewIssueLocation primaryLocation = newIssue.newLocation().message(issue.message()).on(inputFile);
+		NewIssueLocation primaryLocation = newIssue.newLocation()
+				.message(issue.message())
+				.on(inputFile);
 
 		saveIssue(newIssue, primaryLocation, ruleKey, issue);
 	}
 
 	private static void saveIssue(NewIssue newIssue, NewIssueLocation primaryLocation, RuleKey ruleKey, Issue issue) {
-		newIssue.forRule(ruleKey).at(primaryLocation);
+		newIssue
+				.forRule(ruleKey)
+				.at(primaryLocation);
 
 		if (issue.cost() != null) {
 			newIssue.gap(issue.cost());
@@ -417,4 +391,5 @@ public class EsqlSensor implements Sensor {
 			super(message, cause);
 		}
 	}
+
 }

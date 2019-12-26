@@ -29,8 +29,11 @@ public class RowConstructorFunctionTest extends EsqlTreeModelTest<RowConstructor
 
 	@Test
 	public void rowConstructorFunction() {
+		assertThat(Kind.ALIASED_EXPRESSION)
+		.matches("'ABCDEFGHIJKLMNOPQRSTUVWXYZ' AS \"[A-Z]\"");
 		assertThat(Kind.ROW_CONSTRUCTOR_FUNCTION)
-		.matches("ROW('granary' AS bread, 'riesling' AS wine, 'stilton' AS cheese)");
+		.matches("ROW('granary' AS bread, 'riesling' AS wine, 'stilton' AS cheese)")
+		.matches("ROW('ABCDEFGHIJKLMNOPQRSTUVWXYZ' AS \"[A-Z]\")");
 		assertThat(Kind.SET_STATEMENT)
 		.matches("SET OutputRoot.XMLNS.Data = ROW('granary' AS bread, 'riesling' AS wine, 'stilton' AS cheese);");
 	}

@@ -107,7 +107,8 @@ public final class CheckList {
         TrailingCommentsCheck.class,
         CommentsCheck.class,
         DeclareCombineCheck.class,
-        BinaryOperatorSeparatedBySpaceCheck.class
+        BinaryOperatorSeparatedBySpaceCheck.class,
+        TrailingWhitespaceCheck.class
         
        
         

@@ -86,7 +86,7 @@ public class TraceFileReader {
 			UserTraceLog userTraceLog = parseTraceXml();
 			
 			for (UserTraceType trace : userTraceLog.getUserTraceOrInformation()){
-				if (trace.getFunction().endsWith("::execute")){
+				if (trace.getFunction().endsWith("::execute") && trace.getInsert().size()>2){
 					String function = trace.getInsert().get(0).getValue();
 					function =  function.substring(1, function.length()-1);
 					String relativeLine = trace.getInsert().get(1).getValue();
@@ -95,7 +95,7 @@ public class TraceFileReader {
 					statement=statement.substring(1, statement.length()-1);
 					String schemaAndModuleName="";
 					if (function.contains(".")) {
-						schemaAndModuleName = function.substring(0, function.lastIndexOf('.')).trim();
+						schemaAndModuleName = function.trim();
 					}
 					addExecution(function, relativeLine, statement, schemaAndModuleName);
 				}

@@ -30,6 +30,7 @@ import java.io.InterruptedIOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 
+import com.exxeta.iss.sonar.esql.check.CheckList;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -45,6 +46,7 @@ import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.rule.ActiveRules;
 import org.sonar.api.batch.rule.CheckFactory;
 import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
+import org.sonar.api.batch.rule.internal.NewActiveRule;
 import org.sonar.api.batch.sensor.internal.DefaultSensorDescriptor;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.Issue;
@@ -79,9 +81,6 @@ import com.sonar.sslr.api.RecognitionException;
 public class MsgflowSensorTest {
 
 	private static final Version SONARLINT_DETECTABLE_VERSION = Version.create(6, 7);
-	private static final SonarRuntime SONARLINT_RUNTIME = SonarRuntimeImpl.forSonarLint(SONARLINT_DETECTABLE_VERSION);
-	private static final SonarRuntime NOSONARLINT_RUNTIME = SonarRuntimeImpl.forSonarQube(SONARLINT_DETECTABLE_VERSION,
-			SonarQubeSide.SERVER);
 
 	private static final ProductDependentExecutor executor = new SonarLintProductExecutor();
 
@@ -161,7 +160,7 @@ public class MsgflowSensorTest {
 		String parsingErrorCheckKey = "MsgflowParsingError";
 
 		ActiveRules activeRules = (new ActiveRulesBuilder())
-				.create(RuleKey.of(MsgflowCheckList.REPOSITORY_KEY, parsingErrorCheckKey)).setName("MsgflowParsingError").activate()
+				.addRule(new NewActiveRule.Builder().setName("MsgflowParsingError").setRuleKey(RuleKey.of(MsgflowCheckList.REPOSITORY_KEY, parsingErrorCheckKey)).build())
 				.build();
 
 		checkFactory = new CheckFactory(activeRules);
@@ -207,7 +206,8 @@ public class MsgflowSensorTest {
 		inputFile("file.msgflow");
 
 		ActiveRules activeRules = (new ActiveRulesBuilder())
-				.create(RuleKey.of(MsgflowCheckList.REPOSITORY_KEY, "AggregateWithoutTimeout")).activate().build();
+				.addRule(new NewActiveRule.Builder().setRuleKey(RuleKey.of(MsgflowCheckList.REPOSITORY_KEY, "AggregateWithoutTimeout")).build())
+				.build();
 		checkFactory = new CheckFactory(activeRules);
 
 		createSensor().execute(context);
@@ -223,8 +223,7 @@ public class MsgflowSensorTest {
 		inputFile("file.msgflow");
 
 		ActiveRules activeRules = (new ActiveRulesBuilder())
-				.create(RuleKey.of(MsgflowCheckList.REPOSITORY_KEY, "AggregateWithoutTimeout"))
-				.activate()
+				.addRule(new NewActiveRule.Builder().setRuleKey(RuleKey.of(MsgflowCheckList.REPOSITORY_KEY, "AggregateWithoutTimeout")).build())
 				//TODO Add second check
 				.build();
 
@@ -237,7 +236,9 @@ public class MsgflowSensorTest {
 	@Test
 	public void custom_rule() throws Exception {
 		inputFile("file.msgflow");
-		ActiveRules activeRules = (new ActiveRulesBuilder()).create(RuleKey.of("customKey", "key")).activate().build();
+		ActiveRules activeRules = (new ActiveRulesBuilder())
+				.addRule(new NewActiveRule.Builder().setRuleKey(RuleKey.of("customKey", "key")).build()).build();
+
 		checkFactory = new CheckFactory(activeRules);
 		createSensor().execute(context);
 

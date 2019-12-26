@@ -18,7 +18,7 @@
 package com.exxeta.iss.sonar.msgflow.api;
 
 import org.sonar.api.ExtensionPoint;
-import org.sonar.api.batch.BatchSide;
+import org.sonar.api.batch.ScannerSide;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.squidbridge.annotations.AnnotationBasedRulesDefinition;
 
@@ -30,7 +30,7 @@ import com.google.common.collect.ImmutableList;
  */
 @Beta
 @ExtensionPoint
-@BatchSide
+@ScannerSide
 public abstract class CustomMsgflowRulesDefinition implements RulesDefinition {
 
   /**

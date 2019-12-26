@@ -145,3 +145,20 @@ CREATE COMPUTE MODULE "TEST_<Log> success"
 	END;
 END MODULE;
 
+CREATE COMPUTE MODULE "TEST_<Log> success"
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+	        -- Issue #106
+	        DECLARE STANDARD_CHARSET_RANGE CONSTANT ROW ROW(
+            LIST {
+                ROW('ABCDEFGHIJKLMNOPQRSTUVWXYZ' AS "[A-Z]"),
+                ROW('abcdefghijklmnopqrstuvwxyz' AS "[a-z]"),
+                ROW('АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ' AS "[А-Я]"),
+                ROW('абвгдеёжзийклмнопрстуфхцчшщъыьэюя' AS "[а-я]"),
+                ROW('0123456789' AS "[0-9]")
+            } AS ranges[]
+        );
+		RETURN TRUE;
+	END;
+END MODULE;
+

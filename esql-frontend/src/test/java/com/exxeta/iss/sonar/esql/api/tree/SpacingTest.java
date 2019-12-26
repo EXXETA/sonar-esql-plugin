@@ -44,8 +44,10 @@ public class SpacingTest extends com.exxeta.iss.sonar.esql.utils.LegacyParserTes
       .matches("-- comment \n")
 
       .as("MultiLineComment")
-      .matches("/* comment */")
-      .matches("/* comment \n */");
+            .matches("/* comment */")
+            .matches("/* /* comment */ */")
+            .matches("/* comment \n */")
+            .notMatches("/* /* comment */");
   }
 
 }
