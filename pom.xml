@@ -6,7 +6,7 @@
 
 	<groupId>com.exxeta.iss</groupId>
 	<artifactId>sonar-esql-plugin</artifactId>
-	<version>2.3.5</version>
+	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<url>http://exxeta.com</url>
 
