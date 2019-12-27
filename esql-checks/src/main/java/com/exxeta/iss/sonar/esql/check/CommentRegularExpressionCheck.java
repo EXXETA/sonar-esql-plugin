@@ -35,7 +35,6 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
 
 @Rule(  key = "CommentRegularExpression" )
-@RuleTemplate
 public class CommentRegularExpressionCheck  extends SubscriptionVisitorCheck {
 
   private static final String DEFAULT_REGULAR_EXPRESSION = "";

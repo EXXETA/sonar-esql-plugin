@@ -35,14 +35,21 @@ public class EsqlLanguageTest {
 
 	  @Test
 	  public void defaultSuffixes() {
-	    settings.setProperty(EsqlPlugin.FILE_SUFFIXES_KEY, "");
-	    assertThat(esqlLanguage.getFileSuffixes()).containsOnly(".esql");
+		  MapSettings mapSettings = new MapSettings();
+		  mapSettings.setProperty(EsqlLanguage.FILE_SUFFIXES_KEY, EsqlLanguage.FILE_SUFFIXES_DEFVALUE);
+		  EsqlLanguage esqlLanguage = new EsqlLanguage(mapSettings.asConfig());
+		  assertThat(esqlLanguage.getFileSuffixes()).containsOnly(".esql");
+
 	  }
 
 	  @Test
 	  public void customSuffixes() {
-	    settings.setProperty(EsqlPlugin.FILE_SUFFIXES_KEY, "esql");
-	    assertThat(esqlLanguage.getFileSuffixes()).containsOnly("esql");
+
+		  MapSettings mapSettings = new MapSettings();
+		  mapSettings.setProperty(EsqlLanguage.FILE_SUFFIXES_KEY, "esql");
+		  EsqlLanguage esqlLanguage = new EsqlLanguage(mapSettings.asConfig());
+		  assertThat(esqlLanguage.getFileSuffixes()).containsOnly("esql");
+
 	  }
 
 }

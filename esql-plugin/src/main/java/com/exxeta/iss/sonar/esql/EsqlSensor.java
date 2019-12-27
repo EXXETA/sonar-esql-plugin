@@ -45,13 +45,13 @@ import com.google.common.collect.Lists;
 import com.sonar.sslr.api.RecognitionException;
 import com.sonar.sslr.api.typed.ActionParser;
 import org.sonar.api.batch.InstantiationStrategy;
-import org.sonar.api.batch.ScannerSide;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.InputFile.Type;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.rule.CheckFactory;
+import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.sensor.issue.NewIssue;
@@ -61,6 +61,7 @@ import org.sonar.api.config.Configuration;
 import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.rule.RuleKey;
+import org.sonar.api.scanner.ScannerSide;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.sonar.squidbridge.ProgressReport;
@@ -79,7 +80,7 @@ import java.util.stream.StreamSupport;
 
 @ScannerSide
 @InstantiationStrategy(InstantiationStrategy.PER_PROJECT)
-public class EsqlSensor {
+public class EsqlSensor implements Sensor {
 
     private static final Logger LOG = Loggers.get(EsqlSensor.class);
 
@@ -202,6 +203,7 @@ public class EsqlSensor {
     }
 
     private void scanFile(SensorContext sensorContext, InputFile inputFile, List<TreeVisitor> visitors, ProgramTree programTree) {
+        LOG.warn("scanning file " + inputFile.filename());
         EsqlVisitorContext context = new EsqlVisitorContext(programTree, inputFile, sensorContext.config());
 
         List<Issue> fileIssues = new ArrayList<>();
@@ -271,7 +273,7 @@ public class EsqlSensor {
         return ruleKey;
     }
 
-
+    @Override
     public void describe(SensorDescriptor descriptor) {
         descriptor
                 .onlyOnLanguage(EsqlLanguage.KEY)
@@ -280,7 +282,7 @@ public class EsqlSensor {
     }
 
     public void execute(SensorContext context) {
-
+        LOG.warn("ESQL sensor execute");
         List<TreeVisitor> treeVisitors = Lists.newArrayList();
         treeVisitors.addAll(getTreeVisitors(context));
         treeVisitors.addAll(checks.visitorChecks());

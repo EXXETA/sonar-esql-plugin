@@ -36,7 +36,7 @@ public class EsqlRulesDefinitionTest {
 
   @Test
   public void test() {
-    RulesDefinition.Repository repository = buildRepository(Version.parse("5.6"));
+    RulesDefinition.Repository repository = buildRepository();
 
     assertThat(repository.name()).isEqualTo("SonarAnalyzer");
     assertThat(repository.language()).isEqualTo("esql");
@@ -47,8 +47,8 @@ public class EsqlRulesDefinitionTest {
     assertAllRuleParametersHaveDescription(repository);
   }
 
-  private RulesDefinition.Repository buildRepository(Version sonarRuntimeVersion) {
-    EsqlRulesDefinition rulesDefinition = new EsqlRulesDefinition(sonarRuntimeVersion);
+  private RulesDefinition.Repository buildRepository() {
+    EsqlRulesDefinition rulesDefinition = new EsqlRulesDefinition();
     RulesDefinition.Context context = new RulesDefinition.Context();
     rulesDefinition.define(context);
     RulesDefinition.Repository repository = context.repository("esql");
@@ -57,10 +57,10 @@ public class EsqlRulesDefinitionTest {
 
   private void assertParameterProperties(Repository repository) {
     // TooManyLinesInFunctionCheck
-    Param max = repository.rule("NestedIfDepth").param("maximumNestingLevel");
+    Param max = repository.rule("TooManyLinesInFile").param("maximum");
     assertThat(max).isNotNull();
-    assertThat(max.defaultValue()).isEqualTo("5");
-    assertThat(max.description()).isEqualTo("Allowed nesting depth");
+    assertThat(max.defaultValue()).isEqualTo("2000");
+    assertThat(max.description()).isEqualTo("the maximum authorized lines");
     assertThat(max.type()).isEqualTo(RuleParamType.INTEGER);
   }
 

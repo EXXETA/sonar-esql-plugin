@@ -33,15 +33,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class EsqlPluginTest {
 
   @Test
-  public void count_extensions_for_sonarqube_server_5_6() throws Exception {
-    Plugin.Context context = setupContext(SonarRuntimeImpl.forSonarQube(Version.create(7, 9), SonarQubeSide.SERVER, SonarEdition.COMMUNITY));
-
-    assertThat(context.getExtensions()).hasSize(8);
-  }
-
-  @Test
   public void should_contain_right_properties_number() throws Exception {
-    assertThat(properties()).hasSize(3);
+    assertThat(properties()).hasSize(4);
   }
 
   @Test
@@ -57,25 +50,13 @@ public class EsqlPluginTest {
   }
 
   @Test
-  public void count_extensions_for_sonarqube_server_6_0() throws Exception {
+  public void count_extensions() throws Exception {
     Plugin.Context context = setupContext(SonarRuntimeImpl.forSonarQube(Version.create(7, 9), SonarQubeSide.SERVER, SonarEdition.COMMUNITY));
 
-    assertThat(context.getExtensions()).hasSize(8);
+    assertThat(context.getExtensions()).hasSize(10);
   }
 
-  @Test
-  public void count_extensions_for_sonarqube_server_6_2() throws Exception {
-    Plugin.Context context = setupContext(SonarRuntimeImpl.forSonarQube(Version.create(7, 9), SonarQubeSide.SERVER, SonarEdition.COMMUNITY));
 
-    assertThat(context.getExtensions()).hasSize(8);
-  }
-
-  @Test
-  public void count_extensions_for_sonarlint() throws Exception {
-    Plugin.Context context = setupContext(SonarRuntimeImpl.forSonarLint(Version.create(7, 9)));
-
-    assertThat(context.getExtensions()).hasSize(8);
-  }
 
   private List<PropertyDefinition> properties() {
     List<PropertyDefinition> propertiesList = new ArrayList<>();
