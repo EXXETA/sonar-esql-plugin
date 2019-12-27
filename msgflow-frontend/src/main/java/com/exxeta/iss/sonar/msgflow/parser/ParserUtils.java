@@ -30,6 +30,8 @@ import com.exxeta.iss.sonar.msgflow.api.tree.MessageFlowConnection;
 import com.exxeta.iss.sonar.msgflow.parser.node.AbstractNodeParser;
 import com.exxeta.iss.sonar.msgflow.tree.impl.AbstractMessageFlowNode;
 
+import static java.nio.charset.StandardCharsets.UTF_8;
+
 public class ParserUtils {
 
 	public static Document createDocument(final File file)
@@ -111,7 +113,7 @@ public class ParserUtils {
 	public static Document createDocument(final String source)
 			throws SAXException, IOException, ParserConfigurationException {
 
-		return createDocument(IOUtils.toInputStream(source));
+		return createDocument(IOUtils.toInputStream(source, UTF_8));
 	}
 
 	public static String getXPathString(final Element nodeElement, final String xpathExpression)

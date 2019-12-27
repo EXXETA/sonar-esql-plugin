@@ -72,6 +72,7 @@
 		<sslr-squid-bridge.version>2.7.0.377</sslr-squid-bridge.version>
 		<gson.version>2.6.2</gson.version>
 		<analyzer-commons.version>1.11.0.541</analyzer-commons.version>
+		<lombok.version>1.18.10</lombok.version>
 
 		<artifactsToPublish>${project.groupId}:sonar-esql-plugin:jar</artifactsToPublish>
 
@@ -273,6 +274,13 @@
 				<artifactId>sonar-msgflow-plugin</artifactId>
 				<version>1.1.1</version>
 			</dependency>
+			<dependency>
+				<groupId>org.projectlombok</groupId>
+				<artifactId>lombok</artifactId>
+				<version>${lombok.version}</version>
+				<scope>provided</scope>
+			</dependency>
+
 
 		</dependencies>
 	</dependencyManagement>

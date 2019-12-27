@@ -1,5 +1,6 @@
 package com.exxeta.iss.sonar.msgflow.api.tree;
 
+import com.exxeta.iss.sonar.msgflow.api.tree.node.mq.MQHeaderNode;
 import com.exxeta.iss.sonar.msgflow.api.tree.node.mq.MQInputNode;
 import com.exxeta.iss.sonar.msgflow.api.tree.node.mq.MQOutputNode;
 import com.exxeta.iss.sonar.msgflow.api.tree.node.routing.AggregateControlNode;
@@ -10,7 +11,8 @@ import com.exxeta.iss.sonar.msgflow.tree.impl.MsgflowTree;
 public interface Tree {
 	public enum Kind {
 		CONNECTION(MessageFlowConnection.class), AGGREGATE_CONTROL(AggregateControlNode.class),
-		MESSAGEFLOW(MsgflowTree.class), MQ_INPUT(MQInputNode.class), MQ_OUTPUT(MQOutputNode.class), COMPUTE(ComputeNode.class);
+		MESSAGEFLOW(MsgflowTree.class), MQ_INPUT(MQInputNode.class), MQ_OUTPUT(MQOutputNode.class),
+		COMPUTE(ComputeNode.class), MQ_HEADER(MQHeaderNode.class);
 
 		Class<? extends Tree> associatedInterface;
 

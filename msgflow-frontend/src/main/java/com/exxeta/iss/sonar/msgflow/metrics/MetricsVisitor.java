@@ -48,8 +48,6 @@ public class MetricsVisitor extends MsgflowSubscriptionVisitor {
 	private InputFile inputFile;
 	private Map<InputFile, Set<Integer>> projectExecutableLines;
 
-	private RangeDistributionBuilder fileComplexityDistribution;
-
 	public MetricsVisitor(SensorContext context) {
 		this.sensorContext = context;
 		this.projectExecutableLines = new HashMap<>();
@@ -77,11 +75,6 @@ public class MetricsVisitor extends MsgflowSubscriptionVisitor {
 	@Override
 	public void visitFile(Tree scriptTree) {
 		this.inputFile = ((MsgflowFileImpl) getContext().getMsgflowFile()).inputFile();
-		init();
-	}
-
-	private void init() {
-		fileComplexityDistribution = new RangeDistributionBuilder(FILES_DISTRIB_BOTTOM_LIMITS);
 	}
 
 	private void saveCounterMetrics(MsgflowVisitorContext context) {
@@ -94,10 +87,7 @@ public class MetricsVisitor extends MsgflowSubscriptionVisitor {
 		int fileComplexity = new ComplexityVisitor().getComplexity(context.getMsgflow());
 
 		saveMetricOnFile(CoreMetrics.COMPLEXITY, fileComplexity);
-		fileComplexityDistribution.add(fileComplexity);
 
-		sensorContext.<String>newMeasure().on(inputFile).forMetric(CoreMetrics.FILE_COMPLEXITY_DISTRIBUTION)
-				.withValue(fileComplexityDistribution.build()).save();
 	}
 
 	private <T extends Serializable> void saveMetricOnFile(Metric metric, T value) {
