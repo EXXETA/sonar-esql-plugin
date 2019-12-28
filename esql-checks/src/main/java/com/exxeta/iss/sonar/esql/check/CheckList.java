@@ -63,6 +63,7 @@ public final class CheckList {
         IfConditionalAlwaysTrueOrFalseCheck.class,
         DuplicateConditionIfElseAndCaseWhensCheck.class,
         BooleanInversionCheck.class,
+        BooleanEqualityComparisonCheck.class,
         HardCodedCredentialsCheck.class,
         HardcodedIpCheck.class,
         HardcodedURICheck.class,
