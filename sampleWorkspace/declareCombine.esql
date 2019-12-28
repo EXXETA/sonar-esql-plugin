@@ -1,0 +1,65 @@
+BROKER SCHEMA generic
+CREATE COMPUTE MODULE initialize
+CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+	DECLARE fa EXTERNAL CHARACTER;	
+	DECLARE frf1 EXTERNAL CHARACTER;	--Noncompliant
+	DECLARE faultE EXTERNAL CHAR;
+	DECLARE fauE EXTERNAL CHAR;--Noncompliant
+	DECLARE faultI EXTERNAL INT;
+	DECLARE faI EXTERNAL INT;--Noncompliant
+	DECLARE faultEI EXTERNAL INTEGER;
+	DECLARE fauEI EXTERNAL INTEGER;--Noncompliant
+	DECLARE fa1 CONSTANT CHARACTER;	
+	DECLARE frf2 CONSTANT CHARACTER;	--Noncompliant
+	DECLARE faultE3 CONSTANT CHAR;
+	DECLARE fauE4 CONSTANT CHAR;--Noncompliant
+	DECLARE faultI5 CONSTANT INT;
+	DECLARE faI6 CONSTANT INT;--Noncompliant
+	DECLARE faultEI7 CONSTANT INTEGER;
+	DECLARE fauEI8 CONSTANT INTEGER;--Noncompliant
+	DECLARE soapenviro GMTTIMESTAMP;
+	DECLARE soapversion REFERENCE TO;
+	DECLARE faultReferen TIMESTAMP;
+	DECLARE soapenvir GMTTIMESTAMP;--Noncompliant
+	DECLARE soapenviron GMTTIME;
+	DECLARE faultRefere TIME;
+	DECLARE soapenvi GMTTIME;--Noncompliant
+	DECLARE soapver REFERENCE TO;--Noncompliant
+	DECLARE faultRf TIME;--Noncompliant
+	DECLARE faultRef TIMESTAMP;--Noncompliant
+	DECLARE providerCo INTEGER;
+	DECLARE providerCo INTEGER;--Noncompliant
+	DECLARE providerC BOOLEAN;
+	DECLARE providerCb BOOLEAN;--Noncompliant
+	DECLARE providerCF FLOAT;
+	DECLARE provider FLOAT;--Noncompliant
+	DECLARE providerCoun DATE;
+	DECLARE provid DATE;--Noncompliant
+	DECLARE soapenviroc CHAR;
+	DECLARE soapenvioc CHAR;--Noncompliant
+	DECLARE soapenvirb BLOB;
+	DECLARE s BLOB;--Noncompliant
+	DECLARE sb BIT;
+	DECLARE sv BIT;--Noncompliant
+	DECLARE faultF ROW;
+	DECLARE faultRfe ROW;--Noncompliant
+	DECLARE prov DECIMAL;
+	DECLARE prove DECIMAL;--Noncompliant
+	DECLARE provn NAMESPACE;
+	DECLARE proven NAMESPACE;--Noncompliant
+	DECLARE provN NAME;
+	DECLARE proveN NAME;--Noncompliant
+    RETURN TRUE;
+	END;
+	DECLARE myShared SHARED ROW;
+	DECLARE myShareS SHARED ROW;		--Noncompliant	[[secondary=+1]]
+	DECLARE myShareS2 SHARED ROW;			
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE fa EXTERNAL CHARACTER;
+	END;	
+END MODULE;	 
+	
+   	 
+	    

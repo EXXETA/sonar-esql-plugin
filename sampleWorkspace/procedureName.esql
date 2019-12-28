@@ -1,0 +1,13 @@
+CREATE COMPUTE MODULE TestFlow_Compute
+	CREATE PROCEDURE Badly_Named_Procedure() 
+	BEGIN
+	END;
+	CREATE PROCEDURE tooLongProcedureNameBecauseItHasMoreThan30characters()  RETURNS CHARACTER
+	BEGIN
+	END;
+	CREATE PROCEDURE procedureOk()
+	BEGIN
+		CALL Badly_Named_Procedure();
+		SET a = tooLongProcedureNameBecauseItHasMoreThan30characters();
+	END;
+END MODULE;

@@ -1,0 +1,27 @@
+CREATE COMPUTE MODULE Module1
+
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+
+		CREATE LASTCHILD OF OutputRoot DOMAIN 'XMLNS' NAME 'XMLNS'; --Noncompliant {{Use the XMLNSC domain instead of XMLNS.}}
+		CREATE LASTCHILD OF OutputRoot DOMAIN 'XML' NAME 'XML'; --Noncompliant {{Use the XMLNSC domain instead of XML.}}
+		CREATE LASTCHILD OF OutputRoot DOMAIN 'XMLNSC' NAME 'XMLNSC'; --Compliant
+		CREATE LASTCHILD OF OutputRoot DOMAIN ('XMLNS'); --Noncompliant  {{Use the XMLNSC domain instead of XMLNS.}}
+		CREATE LASTCHILD OF OutputRoot DOMAIN (loadDomain()); --Compliant
+		CREATE LASTCHILD OF OutputRoot NAME 'XMLNS'; --Compliant
+				
+		SET OutputRoot.XML.abc.abc='ABC'; --Noncompliant  {{Use the XMLNSC domain instead of XML.}}
+		SET OutputRoot.XMLNS.abc.abc='ABC'; --Noncompliant  {{Use the XMLNSC domain instead of XMLNS.}}
+		SET OutputRoot.XMLNSC.abc.abc='ABC'; --Compliant
+		SET OutputRoot.XMLNSC.abc.(XML.Attribute)abc='ABC'; --Noncompliant  {{Use the XMLNSC domain instead of XML.}}
+		SET OutputRoot.*='a'; --Compliant
+		SET OutputRoot.[]='a'; --Compliant
+		SET Environment.a = InputRoot.XMLNS; --Noncompliant  {{Use the XMLNSC domain instead of XMLNS.}}
+		SET OutputRoot = InputRoot; --Compliant
+		DECLARE C INTEGER SELECT COUNT(*) FROM Database.DUAL; --Compliant
+		CREATE FIELD OutputRoot.JSON.Data.Item[1] IDENTITY(JSON.Object); --Compliant
+		
+		
+	END;
+
+END MODULE;

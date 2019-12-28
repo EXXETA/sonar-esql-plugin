@@ -1,0 +1,27 @@
+CREATE COMPUTE MODULE responseTransformation
+CREATE FUNCTION main() RETURNS BOOLEAN
+BEGIN
+---------Begin comment---------
+/*---------Begin block comment---------*/
+IF oprName = 'createAccessFacilityAgreement' OR refIpSrvcOpName = '"http://com/abnamro/Services/AccessFacilityAgreement/v2/AccessFacilityAgreement/IAccessFacilityAgreementPort"' THEN
+-- Noncompliant@+1 {{Move this trailing comment on the previous empty line.}}
+                CREATE FIELD OutputRoot.SOAP.Body.soapenv:Fault.detail.ns:createAccessFacilityAgreementException; -- Create field statement.
+--                                                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^
+				DECLARE faultRef REFERENCE TO OutputRoot.SOAP.Body.soapenv:Fault.detail.ns:createAccessFacilityAgreementException;				
+				SET faultRef.ExceptionElement.description = messageTextDetail;
+ELSEIF oprName = 'updateAccessFacilityAgreement' OR refIpSrvcOpName = '"http://com/abnamro/Services/AccessFacilityAgreement/v2/AccessFacilityAgreement/IAccessFacilityAgreementPort"' THEN
+				CREATE FIELD OutputRoot.SOAP.Body.soapenv:Fault.detail.ns:updateAccessFacilityAgreementException;
+-- Noncompliant@+1 {{Move this trailing comment on the previous empty line.}}
+                DECLARE faultRef REFERENCE TO OutputRoot.SOAP.Body.soapenv:Fault.detail.ns:updateAccessFacilityAgreementException; -- Declare statement trailing comment,
+--                                                                                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+				SET faultRef.ExceptionElement.description = messageTextDetail;
+END IF; --NOSONAR	
+-- Noncompliant@+1 {{Move this trailing comment on the previous empty line.}}
+WHILE count <= providerCount DO--while statement.
+--                             ^^^^^^^^^^^^^^^^^^
+-- Noncompliant@+1 {{Move this trailing comment on the previous empty line.}}
+                SET faultRef.ExceptionElement.description = messageTextDetail; -- Set statement.
+--                                                                             ^^^^^^^^^^^^^^^^^
+END WHILE;
+END;
+END MODULE;

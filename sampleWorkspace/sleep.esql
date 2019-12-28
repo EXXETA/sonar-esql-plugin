@@ -1,0 +1,9 @@
+CREATE COMPUTE MODULE a
+
+	CREATE PROCEDURE delete()
+	BEGIN
+		DECLARE returnValue BOOLEAN; --Compliant
+		SET returnValue = SLEEP(1000); --Noncompliant {{SLEEP should not be used because it blocks the executing thread.}}
+	END;
+
+END MODULE;

@@ -1,0 +1,21 @@
+CREATE COMPUTE MODULE TestFlow_Compute
+	CREATE FUNCTION message_domain() RETURNS BOOLEAN
+	BEGIN
+		SET OutputRoot.XMLNSC.test='a'; -- Compliant
+		SET OutputRoot.MRM.test='a';  -- Compliant
+		SET OutputRoot.MLNSC.test='a';  -- Noncompliant
+		SET OutputRoot.XMLNS.test='a'; -- Compliant
+		SET OutputRoot.MQRFH2.test='a'; -- Compliant
+		SET OutputRoot.a.test='a'; -- Noncompliant
+		SET OutputRoot=InputRoot; -- Compliant
+		SET OutputRoot.[].a='a'; -- Compliant
+		SET Environment.a.b='a'; --Compliant
+		SET OutputRoot.*='a'; --Compliant
+		DECLARE refColl REFERENCE TO InputRoot.Collection.[>]; --Compliant
+		SET OutputRoot.HTTPReplyHeader."Content-Type"=contentType; --Compliant
+		CREATE FIELD OutputRoot.MQPCF; --Compliant
+		CREATE LASTCHILD OF OutputRoot DOMAIN ('SOAP'); --Compliant
+		SET a = SELECT * from Database;
+		RETURN TRUE;
+	END;
+END MODULE;
