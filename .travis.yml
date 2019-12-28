@@ -21,11 +21,22 @@ notifications:
 after_success:
 - bash <(curl -s https://codecov.io/bash) -t b5356ca9-9cef-4be3-a67e-013d18ebd73a
 deploy:
-  provider: releases
-  api_key: $API_KEY
-  file_glob: true
-  file:
-  - esql-plugin/target/esql-plugin-*.jar
-  skip_cleanup: true
-  on:
-    tags: true
+  - provider: releases
+    prerelease: true
+    api_key: $API_KEY
+    file_glob: true
+    file:
+      - esql-plugin/target/esql-plugin-*.jar
+    skip_cleanup: true
+    on:
+      tags: true
+      condition: "$TRAVIS_TAG =~ RC[0-9]+$"
+  - provider: releases
+    api_key: $API_KEY
+    file_glob: true
+    file:
+      - esql-plugin/target/esql-plugin-*.jar
+    skip_cleanup: true
+    on:
+      tags: true
+      condition: "! $TRAVIS_TAG =~ RC[0-9]+$"
