@@ -126,12 +126,6 @@ public final class CheckList {
   
  IdenticalOperandOnBinaryExpressionCheck
 
-- Unreachable code after THROW or RETURN
-
-- Unused variable
-
- - Uppercase keywords
-
 - IF/ELSEIF should be CASE
 
        
