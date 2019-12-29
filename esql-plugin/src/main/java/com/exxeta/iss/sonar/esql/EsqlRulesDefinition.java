@@ -6,9 +6,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,44 +17,30 @@
  */
 package com.exxeta.iss.sonar.esql;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.Locale;
-import java.util.Set;
-
-import javax.annotation.Nullable;
-
-import org.sonar.api.rule.RuleStatus;
-import org.sonar.api.rules.RuleType;
-import org.sonar.api.server.debt.DebtRemediationFunction;
-import org.sonar.api.server.rule.RulesDefinition;
-import org.sonar.api.utils.Version;
-import org.sonar.squidbridge.annotations.AnnotationBasedRulesDefinition;
-
 import com.exxeta.iss.sonar.esql.check.CheckList;
-import com.google.common.base.Charsets;
-import com.google.common.io.Resources;
-import com.google.gson.Gson;
+import org.sonar.api.server.rule.RulesDefinition;
 import org.sonarsource.analyzer.commons.RuleMetadataLoader;
 
 public class EsqlRulesDefinition implements RulesDefinition {
 
     private static final String METADATA_LOCATION = "org/sonar/l10n/esql/rules/esql";
 
-  @Override
-  public void define(Context context) {
-    NewRepository repository = context
-      .createRepository(CheckList.REPOSITORY_KEY, EsqlLanguage.KEY)
-      .setName(CheckList.REPOSITORY_NAME);
+    @Override
+    public void define(Context context) {
+        NewRepository repository = context
+                .createRepository(CheckList.REPOSITORY_KEY, EsqlLanguage.KEY)
+                .setName(CheckList.REPOSITORY_NAME);
 
-      RuleMetadataLoader ruleMetadataLoader = new RuleMetadataLoader(METADATA_LOCATION, EsqlProfilesDefinition.SONAR_WAY_JSON);
-      ruleMetadataLoader.addRulesByAnnotatedClass(repository, CheckList.getChecks());
+        RuleMetadataLoader ruleMetadataLoader = new RuleMetadataLoader(METADATA_LOCATION, EsqlProfilesDefinition.SONAR_WAY_JSON);
+        ruleMetadataLoader.addRulesByAnnotatedClass(repository, CheckList.getChecks());
 
-      NewRule commentRegularExpression = repository.rule("CommentRegularExpression");
-      commentRegularExpression.setTemplate(true);
+        NewRule commentRegularExpression = repository.rule("CommentRegularExpression");
+        if (commentRegularExpression != null) {
+            commentRegularExpression.setTemplate(true);
+        }
 
 
-      repository.done();
-  }
+        repository.done();
+    }
 
 }
