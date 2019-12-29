@@ -1,0 +1,56 @@
+CREATE PROCEDURE var_returned() BEGIN
+  DECLARE x INTEGER 42; -- Noncompliant {{Immediately return this expression instead of assigning it to the temporary variable "x".}}
+--                  ^^
+  return x;
+END;
+
+CREATE PROCEDURE const_returned() BEGIN
+  DECLARE x CONSTANT INTEGER 42; -- Noncompliant
+  return x;
+END;
+
+CREATE PROCEDURE code_before_declaration() BEGIN
+  CALL foo();
+  DECLARE x INTEGER 42; -- Noncompliant
+  return x;
+END;
+
+CREATE PROCEDURE code_between_declaration_and_return() BEGIN
+  DECLARE x INTEGER 42; -- OK
+  CALL foo();
+  return x;
+END;
+
+CREATE PROCEDURE return_expression() BEGIN
+  DECLARE x INTEGER 42;
+  return x + 5;
+END;
+
+CREATE PROCEDURE return_without_value() BEGIN
+  DECLARE x INTEGER 42;
+  return;
+END;
+
+CREATE PROCEDURE no_init_value() BEGIN
+  DECLARE x INTEGER;
+  return x;
+END;
+
+CREATE PROCEDURE different_variable_returned() BEGIN
+  DECLARE y INTEGER 42;
+  return x;
+END;
+
+CREATE PROCEDURE only_return() BEGIN
+  return 42;
+END;
+
+CREATE PROCEDURE two_variables_declared() BEGIN
+  DECLARE x, y INTEGER 42;
+  return x;
+END;
+
+CREATE PROCEDURE not_return_statement() BEGIN
+  DECLARE x INTEGER 42;
+  CALL foo(x);
+END;

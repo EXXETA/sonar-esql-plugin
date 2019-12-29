@@ -109,7 +109,8 @@ public final class CheckList {
         CommentsCheck.class,
         DeclareCombineCheck.class,
         BinaryOperatorSeparatedBySpaceCheck.class,
-        TrailingWhitespaceCheck.class
+        TrailingWhitespaceCheck.class,
+        ImmediatelyReturnedVariableCheck.class
         
        
         
