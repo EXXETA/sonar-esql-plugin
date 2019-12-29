@@ -39,14 +39,14 @@ import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
 @Rule(key = "HardCodedCredentials")
 public class HardCodedCredentialsCheck extends DoubleDispatchVisitorCheck {
 
-	private static final String PWD_TRANSLATION = "password|passwd|pwd|achinsinsi|adgangskode|codice|contrasena|contrasenya|contrasinal|cynfrinair|facal-faire|facalfaire|"
+	private static final String CREEDENTIAL_TRANSLATION = "password|passwd|pwd|achinsinsi|adgangskode|codice|contrasena|contrasenya|contrasinal|cynfrinair|facal-faire|facalfaire|"
 			+ "fjaleklaim|focalfaire|geslo|haslo|heslo|iphasiwedi|jelszo|kalmarsirri|katalaluan|katasandi|kennwort|kode|kupuhipa|loluszais|losen|losenord|lozinka|"
 			+ "lykilorth|mathkau|modpas|motdepasse|olelohuna|oroigbaniwole|parol|parola|parole|parool|pasahitza|pasiwedhi|passe|passord|passwort|"
 			+ "passwuert|paswoodu|phasewete|salasana|sandi|senha|sifre|sifreya|slaptazois|tenimiafina|upufaalilolilo|wachtwoord|wachtwurd|wagwoord";
 
-	private static final Pattern PASSWORD_LITERAL_PATTERN = Pattern.compile("(" + PWD_TRANSLATION + ")=\\S.",
+	private static final Pattern PASSWORD_LITERAL_PATTERN = Pattern.compile("(" + CREEDENTIAL_TRANSLATION + ")=\\S.",
 			Pattern.CASE_INSENSITIVE);
-	private static final Pattern PASSWORD_VARIABLE_PATTERN = Pattern.compile("(" + PWD_TRANSLATION + ")",
+	private static final Pattern PASSWORD_VARIABLE_PATTERN = Pattern.compile("(" + CREEDENTIAL_TRANSLATION + ")",
 			Pattern.CASE_INSENSITIVE);
 
 	@Override
