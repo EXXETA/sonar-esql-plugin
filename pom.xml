@@ -74,7 +74,7 @@
 		<version.source.plugin>2.4</version.source.plugin>
 		<version.site.plugin>3.4</version.site.plugin>
 		<version.resources.plugin>3.0.2</version.resources.plugin>
-		<version.shade.plugin>2.4.3</version.shade.plugin>
+		<version.shade.plugin>3.2.1</version.shade.plugin>
 		<version.jar.plugin>3.0.2</version.jar.plugin>
 
 
