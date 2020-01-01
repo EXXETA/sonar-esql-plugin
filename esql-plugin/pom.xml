@@ -82,6 +82,7 @@
 					<skipDependenciesPackaging>true</skipDependenciesPackaging>
 					<sonarLintSupported>false</sonarLintSupported>
 					<sonarQubeMinVersion>${sonarQubeMinVersion}</sonarQubeMinVersion>
+					<pluginKey>iibesql</pluginKey>
 				</configuration>
 			</plugin>
 
