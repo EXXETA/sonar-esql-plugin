@@ -26,6 +26,7 @@ import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxTrivia;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateFunctionStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
+import org.sonar.check.RuleProperty;
 
 /**
  * This Java class is created to check function or procedure header comments
@@ -38,6 +39,12 @@ public class RoutineCommentsCheck extends DoubleDispatchVisitorCheck{
 
 	private static final String MESSAGE = "Document this %s with all parameters and return types.";
 
+	private static final String DEFAULT_FORMAT = "[\\s\\S]*(Parameters|IN|INOUT|OUT|RETURNS):[\\s\\S]*";
+
+	@RuleProperty(key = "format",
+			description="regular expression",
+			defaultValue = "" + DEFAULT_FORMAT)
+	public String format = DEFAULT_FORMAT;
 
 	@Override
 	public void visitCreateFunctionStatement(CreateFunctionStatementTree tree) {
@@ -56,19 +63,10 @@ public class RoutineCommentsCheck extends DoubleDispatchVisitorCheck{
 		String comment = getComment(tree);
 		
 		// check comments
-		if (isEmptyComment(comment)|| !containsAny(comment,new String[]{"Parameters:","IN:","INOUT:","OUT:","RETURNS:"})){
+		if (isEmptyComment(comment)|| !comment.matches(format)){
 			addIssue(tree.firstToken(), message);
 		}
 	}	
-	
-	private boolean containsAny(String haystack, String[] needles) {
-		for (String needle : needles){
-			if (haystack.contains(needle)){
-				return true;
-			}
-		}
-		return false;
-	}
 
 	private static String getComment(Tree tree){
 		for (SyntaxTrivia syntaxTrivia : tree.firstToken().trivias()){
