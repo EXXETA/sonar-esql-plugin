@@ -13,8 +13,8 @@
 	<packaging>sonar-plugin</packaging>
 
 	<name>ESQL :: Sonar Plugin</name>
-	<description>Enables analysis of ESQL projects.</description>
-	<url>http://exxeta.com</url>
+	<description>Enables analysis of ESQL in IIB projects.</description>
+	<url>https://github.com/EXXETA/sonar-esql-plugin</url>
 
 	<scm>
 		<connection>scm:git:git@github.com:EXXETA/sonar-esql-plugin.git</connection>
