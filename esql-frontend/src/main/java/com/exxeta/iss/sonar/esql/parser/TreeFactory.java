@@ -874,8 +874,6 @@ public class TreeFactory {
 		ImmutableList.Builder<PathElementTree> elements = ImmutableList.builder();
 		ImmutableList.Builder<InternalSyntaxToken> dots = ImmutableList.builder();
 
-		// elements.add(parameterTree);
-
 		if (pathElements.isPresent()) {
 			for (Tuple<InternalSyntaxToken, PathElementTreeImpl> pair : pathElements.get()) {
 				InternalSyntaxToken dotToken = pair.first();

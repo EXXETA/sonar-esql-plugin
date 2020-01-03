@@ -22,6 +22,7 @@ CREATE COMPUTE MODULE testModule
 		END IF;
 		IF EXISTS(inVar) THEN
 			SET outupdateOrderWhenParametersReq_v1Ref.ns001:{'ele01'}.ns001:ele02 = FIELDVALUE(inVar.*:ele01.*:ele02);
+			CALL proc(inVar.*:ele01.*:ele02);
 		END IF;
 		RETURN TRUE;
 	END;
