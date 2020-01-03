@@ -110,7 +110,8 @@ public final class CheckList {
         DeclareCombineCheck.class,
         BinaryOperatorSeparatedBySpaceCheck.class,
         TrailingWhitespaceCheck.class,
-        ImmediatelyReturnedVariableCheck.class
+        ImmediatelyReturnedVariableCheck.class,
+        StringLiteralDuplicatedCheck.class
         
        
         
