@@ -37,10 +37,6 @@ public class ModuleNameCheck extends DoubleDispatchVisitorCheck {
 	public ModuleNameCheck() {
 	}
 
-	public String getFormat() {
-		return format;
-	}
-
 	@Override
 	public void visitCreateModuleStatement(CreateModuleStatementTree tree) {
 		super.visitCreateModuleStatement(tree);

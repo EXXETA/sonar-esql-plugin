@@ -37,10 +37,6 @@ public class ConstantNameCheck extends DoubleDispatchVisitorCheck {
 	public ConstantNameCheck() {
 	}
 
-	public String getFormat() {
-		return format;
-	}
-
 	@Override
 	public void visitDeclareStatement(DeclareStatementTree tree) {
 		super.visitDeclareStatement(tree);

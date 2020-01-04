@@ -42,10 +42,6 @@ public class FunctionNameCheck extends DoubleDispatchVisitorCheck {
 	public FunctionNameCheck() {
 	}
 
-	public String getFormat() {
-		return format;
-	}
-
 	@Override
 	public void visitCreateFunctionStatement(CreateFunctionStatementTree tree) {
 		super.visitCreateFunctionStatement(tree);

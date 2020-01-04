@@ -38,12 +38,6 @@ public class ProcedureNameCheck extends DoubleDispatchVisitorCheck {
 	public ProcedureNameCheck() {
 	}
 
-
-	public String getFormat() {
-		return format;
-	}
-
-
 	@Override
 	public void visitCreateProcedureStatement(CreateProcedureStatementTree tree) {
 		super.visitCreateProcedureStatement(tree);
