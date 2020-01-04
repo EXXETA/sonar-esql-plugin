@@ -203,7 +203,7 @@ public class EsqlSensor implements Sensor {
     }
 
     private void scanFile(SensorContext sensorContext, InputFile inputFile, List<TreeVisitor> visitors, ProgramTree programTree) {
-        LOG.warn("scanning file " + inputFile.filename());
+        LOG.debug("scanning file " + inputFile.filename());
         EsqlVisitorContext context = new EsqlVisitorContext(programTree, inputFile, sensorContext.config());
 
         List<Issue> fileIssues = new ArrayList<>();
