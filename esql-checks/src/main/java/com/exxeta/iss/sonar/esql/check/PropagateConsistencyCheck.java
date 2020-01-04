@@ -18,8 +18,14 @@
 package com.exxeta.iss.sonar.esql.check;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang.math.NumberUtils;
 import org.sonar.api.utils.log.Logger;
@@ -56,7 +62,7 @@ public class PropagateConsistencyCheck extends DoubleDispatchVisitorCheck {
 	public void visitCreateModuleStatement(CreateModuleStatementTree tree) {
 		String moduleName = tree.moduleName().name();
 		EsqlFile esqlFile = getContext().getEsqlFile();
-		File projectDirectory = getProjectDirectory(esqlFile);
+		Path projectDirectory = getProjectDirectory(esqlFile);
 
 		if (projectDirectory != null) {
 
@@ -74,7 +80,7 @@ public class PropagateConsistencyCheck extends DoubleDispatchVisitorCheck {
 
 	}
 
-	private File getProjectDirectory(EsqlFile esqlFile) {
+	private Path getProjectDirectory(EsqlFile esqlFile) {
 		File projectDirectory = new File(new File(esqlFile.relativePath()).getAbsolutePath());
 		if (!projectDirectory.isDirectory()){
 			projectDirectory=projectDirectory.getParentFile();
@@ -83,7 +89,7 @@ public class PropagateConsistencyCheck extends DoubleDispatchVisitorCheck {
 			LOG.info("Checking " + projectDirectory.getAbsolutePath());
 			if (new File(projectDirectory, ".project").exists()) {
 				LOG.info("Returning " + projectDirectory.getAbsolutePath());
-				return projectDirectory;
+				return projectDirectory.toPath();
 			}
 			projectDirectory = projectDirectory.getParentFile();
 		}
@@ -143,18 +149,16 @@ public class PropagateConsistencyCheck extends DoubleDispatchVisitorCheck {
 		super.visitPropagateStatement(propagateStatement);
 	}
 
-	private static List<MessageFlow> getMsgFlowFiles(File directory) {
-		ArrayList<MessageFlow> fileList = new ArrayList<>();
-		for (File tmpFile : directory.listFiles()) {
-			if (tmpFile.isDirectory()) {
-				fileList.addAll(getMsgFlowFiles(tmpFile));
-			} else {
-				if (tmpFile.getAbsolutePath().endsWith(".msgflow")) {
-					fileList.add(new MessageFlow(tmpFile.getAbsolutePath(), new MessageFlowParser()));
-				}
-			}
+	private static List<MessageFlow> getMsgFlowFiles(Path directory) {
+		try(Stream<Path> walk = Files.walk(directory)){
+			return walk.filter(Files::isRegularFile)
+					.filter(f->f.toString().endsWith(".msgflow"))
+					.map(f->new MessageFlow(f.toFile().getAbsolutePath(), new MessageFlowParser()))
+					.collect(Collectors.toList());
+		}catch (IOException e) {
+			LOG.error("Cannot list files", e);
+			return null;
 		}
-		return fileList;
 	}
 
 	private static String getTerminalName(ExpressionTree expression) {

@@ -58,7 +58,7 @@ public class TestUtils {
 			ProgramTree programTree = (ProgramTree) parser.parse(file.contents());
 			return new EsqlVisitorContext(programTree,file, new MapSettings().asConfig());
 		} catch (IOException e) {
-			throw Throwables.propagate(e);
+			throw new RuntimeException(e);
 		}
 	}
 

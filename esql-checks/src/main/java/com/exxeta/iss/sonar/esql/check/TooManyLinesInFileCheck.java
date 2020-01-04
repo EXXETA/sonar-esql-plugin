@@ -32,8 +32,6 @@ import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.google.common.collect.ImmutableSet;
 
 @Rule(key = "TooManyLinesInFile")
-@NoSqale
-@ActivatedByDefault
 public class TooManyLinesInFileCheck extends SubscriptionVisitorCheck {
 	private static final int DEFAULT = 2000;
 	private static final String MESSAGE = "File \"%s\" has %d lines, which is greater than %d authorized. Split it into smaller files.";
@@ -41,10 +39,6 @@ public class TooManyLinesInFileCheck extends SubscriptionVisitorCheck {
 			description = "the maximum authorized lines",
 			defaultValue = "" + DEFAULT)
 	public int maximum = DEFAULT;
-
-
-
-	
 
 	  @Override
 	  public void visitNode(Tree tree) {
