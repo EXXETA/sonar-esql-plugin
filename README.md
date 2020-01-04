@@ -1,5 +1,4 @@
-# sonar-esql-plugin [![Build Status](https://travis-ci.org/EXXETA/sonar-esql-plugin.svg)](https://travis-ci.org/EXXETA/sonar-esql-plugin) [![codecov](https://codecov.io/gh/EXXETA/sonar-esql-plugin/branch/develop/graph/badge.svg)](https://codecov.io/gh/EXXETA/sonar-esql-plugin)
-
+# sonar-esql-plugin [![Build Status](https://travis-ci.org/EXXETA/sonar-esql-plugin.svg)](https://travis-ci.org/EXXETA/sonar-esql-plugin) [![codecov](https://codecov.io/gh/EXXETA/sonar-esql-plugin/branch/develop/graph/badge.svg)](https://codecov.io/gh/EXXETA/sonar-esql-plugin) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=EXXETA_sonar-esql-plugin&metric=alert_status)](https://sonarcloud.io/dashboard?id=EXXETA_sonar-esql-plugin)
 
 This open source plugin can be used to analyze the ESQL-sourcecode of IBM Websphere Message Broker / IBM Integration Bus projects. 
 
