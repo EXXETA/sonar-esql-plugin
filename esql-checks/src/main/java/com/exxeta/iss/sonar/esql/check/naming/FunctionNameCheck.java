@@ -17,42 +17,41 @@
  */
 package com.exxeta.iss.sonar.esql.check.naming;
 
+import com.exxeta.iss.sonar.esql.api.tree.statement.CreateFunctionStatementTree;
+import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
+import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
+import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
 import com.exxeta.iss.sonar.esql.check.Tags;
 import org.sonar.check.Priority;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 
-import com.exxeta.iss.sonar.esql.api.tree.statement.CreateFunctionStatementTree;
-import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
-import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
-import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
-
 @Rule(key = FunctionNameCheck.CHECK_KEY, priority = Priority.MAJOR, name = "Function names should comply with a naming convention", tags = Tags.CONVENTION)
 public class FunctionNameCheck extends DoubleDispatchVisitorCheck {
-	public static final String CHECK_KEY = "FunctionName";
+    public static final String CHECK_KEY = "FunctionName";
 
-	private static final String DEFAULT_FORMAT = "^[a-z][a-zA-Z0-9]{1,30}$";
+    private static final String DEFAULT_FORMAT = "^[a-z][a-zA-Z0-9]{1,30}$";
 
-	@RuleProperty(key = "format", description = "regular expression", defaultValue = "" + DEFAULT_FORMAT)
-	public String format = DEFAULT_FORMAT;
-	
-	@RuleProperty(key="ignoreMain", description = "igonre Main function", defaultValue="TRUE", type="BOOLEAN")
-	public boolean ignoreMain = true;
+    @RuleProperty(key = "format", description = "regular expression", defaultValue = "" + DEFAULT_FORMAT)
+    public String format = DEFAULT_FORMAT;
 
-	public FunctionNameCheck() {
-	}
+    @RuleProperty(key = "ignoreMain", description = "igonre Main function", defaultValue = "TRUE", type = "BOOLEAN")
+    public boolean ignoreMain = true;
 
-	@Override
-	public void visitCreateFunctionStatement(CreateFunctionStatementTree tree) {
-		super.visitCreateFunctionStatement(tree);
-		if (!tree.identifier().name().matches(format)) {
-			if (!ignoreMain || !"Main".equalsIgnoreCase(tree.identifier().name()))
-			addIssue(
-					new PreciseIssue(this, new IssueLocation(tree.identifier(), tree.identifier(), "Rename function \""
-							+ tree.identifier().name() + "\" to match the regular expression " + format + ".")));
+    public FunctionNameCheck() {
+    }
 
-		}
+    @Override
+    public void visitCreateFunctionStatement(CreateFunctionStatementTree tree) {
+        super.visitCreateFunctionStatement(tree);
+        if (!tree.identifier().name().matches(format)) {
+            if (!ignoreMain || !"Main".equalsIgnoreCase(tree.identifier().name()))
+                addIssue(
+                        new PreciseIssue(this, new IssueLocation(tree.identifier(), tree.identifier(), "Rename function \""
+                                + tree.identifier().name() + "\" to match the regular expression " + format + ".")));
 
-	}
+        }
+
+    }
 
 }
