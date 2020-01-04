@@ -19,6 +19,11 @@ package com.exxeta.iss.sonar.esql.check;
 
 import java.util.List;
 
+import com.exxeta.iss.sonar.esql.check.naming.ConstantNameCheck;
+import com.exxeta.iss.sonar.esql.check.naming.FileNameCheck;
+import com.exxeta.iss.sonar.esql.check.naming.FunctionNameCheck;
+import com.exxeta.iss.sonar.esql.check.naming.ModuleNameCheck;
+import com.exxeta.iss.sonar.esql.check.naming.ProcedureNameCheck;
 import com.google.common.collect.ImmutableList;
 
 public final class CheckList {
