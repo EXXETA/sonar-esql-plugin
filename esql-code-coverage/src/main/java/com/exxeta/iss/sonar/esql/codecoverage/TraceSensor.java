@@ -29,9 +29,6 @@ import org.sonar.api.batch.sensor.SensorContext;
 
 public class TraceSensor {
 
-	public TraceSensor() {
-	}
-
 	public void execute(SensorContext context, Map<InputFile, Set<Integer>> executableLines,  String[] traces) {
 		
 		for (String trace : traces) {

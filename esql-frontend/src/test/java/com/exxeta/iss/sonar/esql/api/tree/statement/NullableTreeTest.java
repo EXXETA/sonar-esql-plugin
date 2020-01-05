@@ -24,12 +24,12 @@ public class NullableTreeTest extends EsqlTreeModelTest<NullableTreeImpl> {
 	public void modelTest() throws Exception {
 		NullableTreeImpl tree = parse("NOT NULL", Kind.NULLABLE);
 		assertNotNull(tree.notKeyword());
-		assertEquals(tree.notKeyword().text(), "NOT");
+		assertEquals("NOT", tree.notKeyword().text());
 
 		assertNull(tree.nullableKeyword());
 
 		assertNotNull(tree.nullKeyword());
-		assertEquals(tree.nullKeyword().text(), "NULL");
+		assertEquals("NULL", tree.nullKeyword().text());
 
 	}
 

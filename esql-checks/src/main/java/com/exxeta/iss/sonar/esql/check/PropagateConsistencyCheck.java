@@ -41,6 +41,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -63,19 +64,22 @@ public class PropagateConsistencyCheck extends DoubleDispatchVisitorCheck {
 
         if (projectDirectory != null) {
 
-            msgFlowLoop:
-            for (MessageFlow msgFlow : getMsgFlowFiles(projectDirectory)) {
-                for (MessageFlowNode node : msgFlow.getComputeNodes()) {
-                    if (((String) node.getProperties().get("computeExpression")).equals(moduleName)) {
-                        msgFlownode = node;
-                        break msgFlowLoop;
-                    }
-                }
-            }
+            msgFlownode = getMsgFlowNode(moduleName, projectDirectory);
         }
         super.visitCreateModuleStatement(tree);
         msgFlownode = null;
 
+    }
+
+    private MessageFlowNode getMsgFlowNode(String moduleName, Path projectDirectory) {
+        for (MessageFlow msgFlow : getMsgFlowFiles(projectDirectory)) {
+            for (MessageFlowNode node : msgFlow.getComputeNodes()) {
+                if (((String) node.getProperties().get("computeExpression")).equals(moduleName)) {
+                    return node;
+                }
+            }
+        }
+        return null;
     }
 
     private Path getProjectDirectory(EsqlFile esqlFile) {
@@ -155,7 +159,7 @@ public class PropagateConsistencyCheck extends DoubleDispatchVisitorCheck {
                     .collect(Collectors.toList());
         } catch (IOException e) {
             LOG.error("Cannot list files", e);
-            return null;
+            return Collections.emptyList();
         }
     }
 

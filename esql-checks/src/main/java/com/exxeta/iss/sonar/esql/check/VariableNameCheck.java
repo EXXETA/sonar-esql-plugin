@@ -36,11 +36,6 @@ public class VariableNameCheck extends DoubleDispatchVisitorCheck {
 			defaultValue = "" + DEFAULT_FORMAT)
 	public String format = DEFAULT_FORMAT;
 
-	public VariableNameCheck() {
-	}
-	public String getFormat() {
-		return format;
-	}
 	@Override
 	public void visitDeclareStatement(DeclareStatementTree tree) {
 		super.visitDeclareStatement(tree);

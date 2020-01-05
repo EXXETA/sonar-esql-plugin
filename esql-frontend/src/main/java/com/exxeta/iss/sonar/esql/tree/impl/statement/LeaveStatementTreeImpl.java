@@ -32,9 +32,9 @@ public class LeaveStatementTreeImpl extends EsqlTree implements LeaveStatementTr
 	private final  InternalSyntaxToken leaveKeyword;
 	private final LabelTreeImpl label;
 	private final InternalSyntaxToken semi;
-	public LeaveStatementTreeImpl(InternalSyntaxToken LeaveKeyword, LabelTreeImpl label, InternalSyntaxToken semi) {
+	public LeaveStatementTreeImpl(InternalSyntaxToken leaveKeyword, LabelTreeImpl label, InternalSyntaxToken semi) {
 		super();
-		this.leaveKeyword = LeaveKeyword;
+		this.leaveKeyword = leaveKeyword;
 		this.label = label;
 		this.semi = semi;
 	}

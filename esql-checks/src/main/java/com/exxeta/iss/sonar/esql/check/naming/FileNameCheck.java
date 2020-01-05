@@ -40,10 +40,6 @@ public class FileNameCheck extends SubscriptionVisitorCheck {
 			defaultValue = "" + DEFAULT_FORMAT)
 	public String format = DEFAULT_FORMAT;
 	
-	public FileNameCheck() {
-	}
-	
-	
 	@Override
 	public Set<Kind> nodesToVisit() {
 		return Collections.emptySet();

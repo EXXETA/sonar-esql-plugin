@@ -33,15 +33,6 @@ public abstract class DoubleDispatchVisitorCheck extends DoubleDispatchVisitor i
     return issues.getList();
   }
 
-  /**
-   * @deprecated see {@link EsqlCheck#addLineIssue(Tree, String)}
-   */
-  @Override
-  @Deprecated
-  public LineIssue addLineIssue(Tree tree, String message) {
-    return issues.addLineIssue(tree, message);
-  }
-
   @Override
   public PreciseIssue addIssue(Tree tree, String message) {
     return issues.addIssue(tree, message);

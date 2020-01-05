@@ -34,7 +34,7 @@ public class ElseIfWithoutElseCheck extends DoubleDispatchVisitorCheck {
 
 @Override
 public void visitIfStatement(IfStatementTree tree) {
-    if (tree.elseClause()==null&&tree.elseifClauses().size()>0) {
+    if (tree.elseClause()==null && !tree.elseifClauses().isEmpty()) {
     	ElseifClauseTree lastEleseIf = tree.elseifClauses().get(tree.elseifClauses().size()-1);
           addIssue(new PreciseIssue(this, new IssueLocation(tree.ifKeyword(), lastEleseIf.elseifKeyword(), MESSAGE)));
 

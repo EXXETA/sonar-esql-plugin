@@ -59,7 +59,7 @@ public class UserTraceType {
 
     public List<InsertType> getInsert() {
         if (insert == null) {
-            insert = new ArrayList<InsertType>();
+            insert = new ArrayList<>();
         }
         return this.insert;
     }

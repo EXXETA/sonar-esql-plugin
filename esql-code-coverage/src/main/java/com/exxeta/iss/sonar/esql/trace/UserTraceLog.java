@@ -54,7 +54,7 @@ public class UserTraceLog {
 
 	public List<UserTraceType> getUserTraceOrInformation() {
 		if (userTraceOrInformation == null) {
-			userTraceOrInformation = new ArrayList<UserTraceType>();
+			userTraceOrInformation = new ArrayList<>();
 		}
 		return this.userTraceOrInformation;
 	}

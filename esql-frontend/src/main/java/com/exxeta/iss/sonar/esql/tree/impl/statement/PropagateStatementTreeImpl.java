@@ -54,7 +54,6 @@ public class PropagateStatementTreeImpl extends EsqlTree implements PropagateSta
 		this.propagateKeyword = propagateKeyword;
 
 		this.toKeyword = toKeyword;
-		this.toKeyword = toKeyword;
 		this.targetType = targetType;
 		this.target = target;
 		this.messageSource = messageSource;

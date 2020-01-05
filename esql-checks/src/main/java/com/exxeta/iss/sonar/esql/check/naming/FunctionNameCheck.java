@@ -38,9 +38,6 @@ public class FunctionNameCheck extends DoubleDispatchVisitorCheck {
     @RuleProperty(key = "ignoreMain", description = "igonre Main function", defaultValue = "TRUE", type = "BOOLEAN")
     public boolean ignoreMain = true;
 
-    public FunctionNameCheck() {
-    }
-
     @Override
     public void visitCreateFunctionStatement(CreateFunctionStatementTree tree) {
         super.visitCreateFunctionStatement(tree);

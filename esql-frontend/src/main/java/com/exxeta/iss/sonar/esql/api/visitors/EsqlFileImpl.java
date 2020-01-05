@@ -32,6 +32,7 @@ public class EsqlFileImpl implements EsqlFile {
   }
 
   @Override
+  @Deprecated
   public String relativePath() {
     return inputFile.relativePath();
   }

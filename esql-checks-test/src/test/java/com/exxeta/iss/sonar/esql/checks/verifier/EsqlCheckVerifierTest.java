@@ -404,11 +404,6 @@ public class EsqlCheckVerifierTest {
     }
 
     @Override
-    public LineIssue addLineIssue(Tree tree, String message) {
-      throw new NotImplementedException();
-    }
-
-    @Override
     public PreciseIssue addIssue(Tree tree, String message) {
       throw new NotImplementedException();
     }

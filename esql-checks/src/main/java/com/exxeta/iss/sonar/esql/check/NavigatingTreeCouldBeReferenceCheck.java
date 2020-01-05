@@ -58,10 +58,11 @@ public class NavigatingTreeCouldBeReferenceCheck extends DoubleDispatchVisitorCh
     public void visitFieldReference(FieldReferenceTree tree) {
 
         if (tree.pathElements() != null && !tree.pathElements().isEmpty()) {
-            String asString = tree.pathElement().toString();
+            StringBuilder asString = new StringBuilder(tree.pathElement().toString());
             for (PathElementTree element : tree.pathElements()) {
-                asString += "." + element.toString();
-                occurrences.put(asString, tree);
+                asString.append(".");
+                asString.append(element.toString());
+                occurrences.put(asString.toString(), tree);
             }
         }
 

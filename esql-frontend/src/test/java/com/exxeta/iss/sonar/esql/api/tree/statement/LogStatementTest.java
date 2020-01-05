@@ -54,22 +54,22 @@ public class LogStatementTest extends EsqlTreeModelTest<LogStatementTreeImpl> {
 		assertNull(tree.fullKeyword());
 		assertNull(tree.exceptionKeyword());
 		assertNotNull(tree.severityKeyword());
-		assertEquals(tree.severityKeyword().text(), "SEVERITY");
+		assertEquals("SEVERITY", tree.severityKeyword().text());
 		assertNotNull(tree.severityExpression());
 		assertTrue(tree.severityExpression().is(Kind.NUMERIC_LITERAL));
 
 		assertNotNull(tree.catalogKeyword());
-		assertEquals(tree.catalogKeyword().text(), "CATALOG");
+		assertEquals("CATALOG", tree.catalogKeyword().text());
 		assertNotNull(tree.catalogExpression());
 		assertTrue(tree.catalogExpression().is(Kind.STRING_LITERAL));
 
 		assertNotNull(tree.messageKeyword());
-		assertEquals(tree.messageKeyword().text(), "MESSAGE");
+		assertEquals("MESSAGE", tree.messageKeyword().text());
 		assertNotNull(tree.messageExpression());
 		assertTrue(tree.messageExpression().is(Kind.NUMERIC_LITERAL));
 
 		assertNotNull(tree.valuesKeyword());
-		assertEquals(tree.valuesKeyword().text(), "VALUES");
+		assertEquals("VALUES", tree.valuesKeyword().text());
 		assertNotNull(tree.valueExpressions());
 
 		assertNotNull(tree.semi());

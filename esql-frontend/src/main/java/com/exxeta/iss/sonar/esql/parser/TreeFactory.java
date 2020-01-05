@@ -1798,7 +1798,9 @@ public class TreeFactory {
 			Optional<Tuple<InternalSyntaxToken, ExpressionTree>> catalog,
 			Optional<Tuple<InternalSyntaxToken, ExpressionTree>> message,
 			Optional<Tuple<InternalSyntaxToken, ParameterListTreeImpl>> values, InternalSyntaxToken semi) {
-		InternalSyntaxToken eventKeyword, userKeyword, traceKeyword;
+		InternalSyntaxToken eventKeyword;
+		InternalSyntaxToken userKeyword;
+		InternalSyntaxToken traceKeyword;
 		if (logType instanceof Tuple) {
 			Tuple<InternalSyntaxToken, InternalSyntaxToken> t = (Tuple) logType;
 			userKeyword = t.first();

@@ -34,12 +34,6 @@ public abstract class SubscriptionVisitorCheck extends SubscriptionVisitor imple
   }
 
   @Override
-  @Deprecated
-  public LineIssue addLineIssue(Tree tree, String message) {
-    return issues.addLineIssue(tree, message);
-  }
-
-  @Override
   public PreciseIssue addIssue(Tree tree, String message) {
     return issues.addIssue(tree, message);
   }

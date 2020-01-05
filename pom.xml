@@ -92,11 +92,6 @@
 
 	</properties>
 
-	<prerequisites>
-		<maven>${maven.min.version}</maven>
-	</prerequisites>
-
-
 	<dependencyManagement>
 		<dependencies>
 

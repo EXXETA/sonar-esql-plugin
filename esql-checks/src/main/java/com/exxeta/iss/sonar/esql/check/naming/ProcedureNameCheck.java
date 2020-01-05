@@ -35,9 +35,6 @@ public class ProcedureNameCheck extends DoubleDispatchVisitorCheck {
 			defaultValue = "" + DEFAULT_FORMAT)
 	public String format = DEFAULT_FORMAT;
 
-	public ProcedureNameCheck() {
-	}
-
 	@Override
 	public void visitCreateProcedureStatement(CreateProcedureStatementTree tree) {
 		super.visitCreateProcedureStatement(tree);

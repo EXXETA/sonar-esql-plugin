@@ -34,9 +34,6 @@ public class ConstantNameCheck extends DoubleDispatchVisitorCheck {
 	@RuleProperty(key = "format", description = "regular expression", defaultValue = "" + DEFAULT_FORMAT)
 	public String format = DEFAULT_FORMAT;
 
-	public ConstantNameCheck() {
-	}
-
 	@Override
 	public void visitDeclareStatement(DeclareStatementTree tree) {
 		super.visitDeclareStatement(tree);
