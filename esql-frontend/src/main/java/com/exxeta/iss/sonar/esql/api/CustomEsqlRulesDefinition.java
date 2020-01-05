@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +18,7 @@
 package com.exxeta.iss.sonar.esql.api;
 
 import org.sonar.api.ExtensionPoint;
-import org.sonar.api.batch.BatchSide;
+import org.sonar.api.batch.ScannerSide;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.squidbridge.annotations.AnnotationBasedRulesDefinition;
 
@@ -30,7 +30,8 @@ import com.google.common.collect.ImmutableList;
  */
 @Beta
 @ExtensionPoint
-@BatchSide
+@ScannerSide
+@Deprecated
 public abstract class CustomEsqlRulesDefinition implements RulesDefinition {
 
   /**

@@ -1,0 +1,90 @@
+CREATE COMPUTE MODULE ProcessCardAccount
+
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE i INTEGER;
+		SET i = 0;
+		X : REPEAT
+		  SET i = i + 1;
+		
+		  -- Some statements 1
+		
+		  IF i IN(2, 3) THEN
+		    ITERATE X;
+		  END IF;
+
+		  IF i IN(2, 3) THEN
+		    ITERATE X;
+		  END IF;
+		
+		  -- Some statements 2
+		
+		UNTIL
+		  i >= 4
+		END REPEAT X;
+		X : REPEAT
+		  SET i = i + 1;
+		
+		  -- Some statements 1
+		
+		  IF i IN(2, 3) THEN
+		    LEAVE X;
+		  END IF;
+
+		  IF i IN(2, 3) THEN
+		    LEAVE X;
+		  END IF;
+		
+		  -- Some statements 2
+		
+		UNTIL
+		  i >= 4
+		END REPEAT X;
+	END;
+
+	CREATE PROCEDURE Main2()
+	B: BEGIN
+	  DECLARE i INTEGER;
+	  SET i = 1;
+      X : WHILE i <= 3 DO
+ 
+        SET i = i + 1;
+        LEAVE X;
+      END WHILE X;
+      
+      SET i = 1;
+      Y : LOOP 
+        IF i>= 4 THEN
+          LEAVE Y;
+        END IF;
+      SET i = i + 1;
+      END LOOP Y;
+
+
+	END B;
+CREATE PROCEDURE Main3()
+	BEGIN
+	  DECLARE i INTEGER;
+	  SET i = 1;
+      WHILE i <= 3 DO
+ 
+        SET i = i + 1;
+        LEAVE X;
+      END WHILE;
+      
+      SET i = 1;
+      LOOP 
+        IF i>= 4 THEN
+          LEAVE Y;
+        END IF;
+      SET i = i + 1;
+      END LOOP;
+		REPEAT
+		  SET i = i + 1;
+		
+		UNTIL
+		  i >= 4
+		END REPEAT;
+
+	END;
+END MODULE;

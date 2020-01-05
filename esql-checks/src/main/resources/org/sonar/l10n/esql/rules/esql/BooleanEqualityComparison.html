@@ -1,0 +1,16 @@
+<p>Boolean literals should be avoided in comparison expressions <code>=</code> and <code><></code> to improve code readability.</p>
+<p>This rule also reports on redundant boolean operations.</p>
+<h2>Noncompliant Code Example</h2>
+<pre>
+
+
+IF someValue = TRUE THEN /* ... */ END IF;
+IF someValue <> TRUE THEN /* ... */ END IF;
+doSomething(NOT FALSE);
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+IF someValue THEN /* ... */ END IF;
+IF NOT someBooleanValue THEN /* ... */ END IF;
+doSomething(TRUE);
+</pre>

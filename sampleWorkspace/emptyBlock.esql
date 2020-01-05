@@ -1,0 +1,63 @@
+CREATE COMPUTE MODULE ProcessCardAccount
+
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE end BOOLEAN TRUE;
+		IF FALSE THEN
+			IF FALSE THEN
+				IF FALSE THEN
+					IF FALSE THEN
+						SET OutputRoot=InputRoot;
+					END IF;
+				ELSEIF A = B THEN
+					IF TRUE THEN
+						SET OutputRoot=InputRoot;
+					END IF;
+				ELSEIF A = B THEN
+				ELSEIF FALSE THEN
+				ELSEIF end THEN
+				END IF;
+			END IF;
+		ELSE
+		END IF;
+		IF FALSE THEN
+		ELSEIF A = B THEN
+		ELSE
+		END IF;
+		FOR source AS Environment.SourceData.Folder[] DO END FOR;
+		FOR source AS Environment.SourceData.Folder[] DO 
+		  --empty is ok
+		END FOR;
+		LOOP  
+
+		END LOOP;
+		REPEAT  
+		UNTIL  i>= 3 END REPEAT;
+		CASE
+		WHEN versionRef>= 1 THEN
+			SET Environment.Fault.faultcode='soapenv:Client';
+		WHEN versionRef<1.2 THEN
+		SET Environment.Fault.faultcode='soapenv:Sender';
+		END CASE;
+		CASE
+		WHEN versionRef>= 1 THEN
+			SET Environment.Fault.faultcode='soapenv:Client';
+		ELSE
+		SET Environment.Fault.faultcode='soapenv:Sender';
+		END CASE;
+		WHILE ( I < CARDINALITY (InputRoot.MRM.A.B.C[])) DO
+			SET I = I + 1;
+			
+		END WHILE;		
+	END;
+
+	CREATE FUNCTION Main2() RETURNS BOOLEAN
+	BEGIN
+	END;
+	
+	CREATE FUNCTION Main3() RETURNS BOOLEAN
+	BEGIN
+	  --Empty blocks with comments are ok.
+	END;
+
+END MODULE;

@@ -26,10 +26,14 @@ CrEATE COMPUTE MODULE responseTransformation
 		SET refEnv.serviceOperationName = InputRoot.SOAP.Context.operation;
 		SET refEnv.operationId = EVAL(Environment.LogData.serviceOperationName);
 	END;
-	
+
 	CREATE PROCEDURE B()
 	BEGIN
 	  DECLARE inputRef REFERENCE TO InputRoot;
 	  DECLARE inReturn REFERENCE TO inputRef.a;
+
+	  DECLARE qst NAMESPACE 'http://www.ww.ru/types/QST';
+      DECLARE qsp NAMESPACE  'http://www.ww.ru/types/QSP';
+      SET OutputRoot.XMLNSC.qsp:Request = '';
 	END;
 END MOdULE;

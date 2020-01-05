@@ -1,0 +1,28 @@
+BROKER SCHEMA A;
+CREATE COMPUTE MODULE testModule
+
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		SET OutputRoot=InputRoot;	SET OutputRoot=InputRoot;
+		SET OutputRoot=InputRoot;	SET OutputRoot=InputRoot; SET OutputRoot=InputRoot;
+		IF oprName = 'createAccessFacilityAgreement' OR refIpSrvcOpName = '"http://com/abnamro/Services/AccessFacilityAgreement/v2/AccessFacilityAgreement/IAccessFacilityAgreementPort"' THEN
+				CREATE FIELD OutputRoot.SOAP.Body.soapenv:Fault.detail.ns:createAccessFacilityAgreementException; DECLARE faultRef REFERENCE TO OutputRoot.SOAP.Body.soapenv:Fault.detail.ns:createAccessFacilityAgreementException;				
+				SET faultRef.ExceptionElement.description = messageTextDetail;
+		ELSEIF oprName = 'updateAccessFacilityAgreement' OR refIpSrvcOpName = '"http://com/abnamro/Services/AccessFacilityAgreement/v2/AccessFacilityAgreement/IAccessFacilityAgreementPort"' THEN
+				CREATE FIELD OutputRoot.SOAP.Body.soapenv:Fault.detail.ns:updateAccessFacilityAgreementException; DECLARE faultRef REFERENCE TO OutputRoot.SOAP.Body.soapenv:Fault.detail.ns:updateAccessFacilityAgreementException;				
+				SET faultRef.ExceptionElement.description = messageTextDetail;
+		END IF;	
+		
+	END;
+	
+	CREATE FUNCTION Main() RETURNS BOOLEAN	BEGIN
+
+	  DECLARE EXIT HANDLER FOR SQLSTATE VALUE 'U11222'  BEGIN	
+	    SET OutputRoot.XMLNSC.Top.WHILE.mySQLCODE = SQLCODE;
+	  END;
+
+  		THROW USER EXCEPTION VALUES( -1, 'U11222', 42, 'error text' );
+          
+	END;
+
+END MODULE;

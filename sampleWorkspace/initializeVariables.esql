@@ -1,0 +1,13 @@
+CREATE COMPUTE MODULE ProcessCardAccount
+
+	DECLARE deployEnvironment EXTERNAL CHARACTER 'Dev'; --Compliant
+	DECLARE integrationEnvironment EXTERNAL CHARACTER; --Noncompliant
+	
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		DECLARE myInt INTEGER 1; --Compliant
+		DECLARE myInt2 INTEGER; --Noncompliant
+		
+	END;
+
+END MODULE;

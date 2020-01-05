@@ -1,0 +1,8 @@
+CREATE COMPUTE MODULE ProcessCardAccount
+
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+	CREATE FIELD OutputRoot.JSON.Data.item.featureList IDENTITY (JSON.Array)featureList;
+	END;
+
+END MODULE;

@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -63,6 +63,7 @@ public final class CheckList {
         IfConditionalAlwaysTrueOrFalseCheck.class,
         DuplicateConditionIfElseAndCaseWhensCheck.class,
         BooleanInversionCheck.class,
+        BooleanEqualityComparisonCheck.class,
         HardCodedCredentialsCheck.class,
         HardcodedIpCheck.class,
         HardcodedURICheck.class,
@@ -108,7 +109,8 @@ public final class CheckList {
         CommentsCheck.class,
         DeclareCombineCheck.class,
         BinaryOperatorSeparatedBySpaceCheck.class,
-        TrailingWhitespaceCheck.class
+        TrailingWhitespaceCheck.class,
+        ImmediatelyReturnedVariableCheck.class
         
        
         
@@ -125,12 +127,6 @@ public final class CheckList {
 - SOAP version should be 1.2 or 1.1
   
  IdenticalOperandOnBinaryExpressionCheck
-
-- Unreachable code after THROW or RETURN
-
-- Unused variable
-
- - Uppercase keywords
 
 - IF/ELSEIF should be CASE
 

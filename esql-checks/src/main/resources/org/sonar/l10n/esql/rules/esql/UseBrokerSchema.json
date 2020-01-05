@@ -1,0 +1,15 @@
+{
+  "title": "BROKER SCHEMA should should be used",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "1h"
+  },
+  "tags": [
+    "brain-overload"
+  ],
+  "defaultSeverity": "Major",
+  "sqKey": "UseBrokerSchema",
+  "scope": "All"
+}

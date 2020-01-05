@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,11 +17,8 @@
  */
 package com.exxeta.iss.sonar.esql.tree;
 
-import org.sonar.squidbridge.CommentAnalyser;
+public class EsqlCommentAnalyser {
 
-public class EsqlCommentAnalyser extends CommentAnalyser {
-
-  @Override
   public boolean isBlank(String line) {
     for (int i = 0; i < line.length(); i++) {
       if (Character.isLetterOrDigit(line.charAt(i))) {
@@ -31,7 +28,6 @@ public class EsqlCommentAnalyser extends CommentAnalyser {
     return true;
   }
 
-  @Override
   public String getContents(String comment) {
     if (comment.startsWith("--")) {
       return comment.substring(2);

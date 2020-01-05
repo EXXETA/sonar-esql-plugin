@@ -19,7 +19,7 @@ This open source plugin can be used to analyze the ESQL-sourcecode of IBM Websph
 
 ## Requirements
 
-- SonarQube 6.7
+- SonarQube 7.9
 
 
 ## Contributing
@@ -32,6 +32,7 @@ This open source plugin can be used to analyze the ESQL-sourcecode of IBM Websph
 
 ## History
 
+- 3.0.0 - Bugfixes, upgrade to sonar SonarQube 7.9
 - 2.3.0 - Additional rules, upgrade to SonarQube 6.7, copy paste detector
 - 2.2.0 - Code coverage analysis
 - 2.1.0 - A few bugfixes and a lot more checks/rules
@@ -43,7 +44,7 @@ This open source plugin can be used to analyze the ESQL-sourcecode of IBM Websph
 
 ## Credits
 
-- EXXETA AG
+- [EXXETA AG](http://exxeta.com)
 - See [Contributors](https://www.github.com/EXXETA/sonar-esql-plugin/graphs/contributors)
 
 ## License

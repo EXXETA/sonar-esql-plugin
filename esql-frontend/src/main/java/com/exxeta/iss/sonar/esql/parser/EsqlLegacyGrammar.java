@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -53,7 +53,7 @@ import static com.exxeta.iss.sonar.esql.lexer.EsqlTokenType.IDENTIFIER;
 
 public enum EsqlLegacyGrammar implements GrammarRuleKey {
 	EOF, PROGRAM, EOS, LITERAL, BOOLEAN_LITERAL, NULL_LITERAL, NUMERIC_LITERAL, HEX_LITERAL, 
-	STRING_LITERAL, SPACING, IDENTIFIER_NAME, IDENTIFIER_NAME_WO_QUOTES, IDENTIFIER_NAME_WITH_QUOTES
+	STRING_LITERAL, SPACING, COMMENT, SINGLE_LINE_COMMENT, MULTI_LINE_COMMENT, IDENTIFIER_NAME, IDENTIFIER_NAME_WO_QUOTES, IDENTIFIER_NAME_WITH_QUOTES
 	, DATE_LITERAL, TIME_LITERAL, TIMESTAMP_LITERAL, 
 	 SPACING_NO_LINE_BREAK_NOT_FOLLOWED_BY_LINE_BREAK, SPACING_NO_LB, NEXT_NOT_LB, 
 	SPACING_NOT_SKIPPED, LINE_TERMINATOR_SEQUENCE, EOS_NO_LB, LETTER_OR_DIGIT, reservedKeyword, 
@@ -86,9 +86,17 @@ public enum EsqlLegacyGrammar implements GrammarRuleKey {
 		b.rule(SPACING_NO_LINE_BREAK_NOT_FOLLOWED_BY_LINE_BREAK).is(SPACING_NO_LB, NEXT_NOT_LB);
 
 		b.rule(SPACING).is(b.skippedTrivia(b.regexp("[" + EsqlLexer.LINE_TERMINATOR + EsqlLexer.WHITESPACE + "]*+")),
-				b.zeroOrMore(b.commentTrivia(b.regexp(EsqlLexer.COMMENT)),
+				b.zeroOrMore(COMMENT,
 						b.skippedTrivia(b.regexp("[" + EsqlLexer.LINE_TERMINATOR + EsqlLexer.WHITESPACE + "]*+"))))
 				.skip();
+		b.rule(COMMENT).is(b.commentTrivia(b.firstOf(
+				SINGLE_LINE_COMMENT,
+				MULTI_LINE_COMMENT
+		)));
+		b.rule(SINGLE_LINE_COMMENT).is (b.regexp(EsqlLexer.SINGLE_LINE_COMMENT));
+		b.rule(MULTI_LINE_COMMENT).is (b.regexp("/\\*"),
+				b.optional(b.regexp(EsqlLexer.COMMENT_CONTENT)), b.optional(MULTI_LINE_COMMENT), b.optional(b.regexp(EsqlLexer.COMMENT_CONTENT)),
+				b.regexp("\\*/"));
 		b.rule(SPACING_NOT_SKIPPED).is(SPACING);
 
 		b.rule(SPACING_NO_LB).is(b.zeroOrMore(b.firstOf(b.skippedTrivia(b.regexp("[" + EsqlLexer.WHITESPACE + "]++")),

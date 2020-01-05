@@ -1,0 +1,16 @@
+{
+  "title": "\"non reserved words\" should not be used as identifiers",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "lock-in",
+    "pitfall"
+  ],
+  "defaultSeverity": "Blocker",
+  "sqKey": "NonReservedWords",
+  "scope": "Main"
+}

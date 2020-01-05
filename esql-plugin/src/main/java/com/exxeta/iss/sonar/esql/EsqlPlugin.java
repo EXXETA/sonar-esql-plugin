@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,32 +30,34 @@ public class EsqlPlugin implements Plugin {
 	private static final String ESQL_CATEGORY = "Esql";
 
 	// Global ESQL constants
-	public static final String FALSE = "false";
-
-	public static final String FILE_SUFFIXES_KEY = "sonar.esql.file.suffixes";
-	public static final String FILE_SUFFIXES_DEFVALUE = ".esql";
-
 	public static final String PROPERTY_PREFIX = "sonar.esql";
-	public static final String TEST_FRAMEWORK_KEY = PROPERTY_PREFIX + ".testframework";
-	public static final String TEST_FRAMEWORK_DEFAULT = "";
 
 	public static final String IGNORE_HEADER_COMMENTS = PROPERTY_PREFIX + ".ignoreHeaderComments";
 	public static final Boolean IGNORE_HEADER_COMMENTS_DEFAULT_VALUE = true;
 
-	
+	public static final String ESQL_EXCLUSIONS_KEY = PROPERTY_PREFIX + ".exclusions";
+	public static final String ESQL_EXCLUSIONS_DEFAULT_VALUE = "";
+
 	public static final String TRACE_PATHS_PROPERTY = "sonar.esql.trace.reportPaths";
 	public static final String TRACE_PATHS_DEFAULT_VALUE = "target/iibTrace";
+	public static final String FILE_SUFFIXES_NAME = "File Suffixes";
+	public static final String FILE_SUFFIXES_DESCRIPTION = "List of suffixes for files to analyze.";
 
 	@Override
 	public void define(Context context) {
-		context.addExtensions(EsqlLanguage.class, EsqlSquidSensor.class,
-				new EsqlRulesDefinition(context.getSonarQubeVersion()), EsqlProfile.class, EsqlMetrics.class);
+		context.addExtensions(
+				EsqlLanguage.class,
+				EsqlSensor.class,
+				EsqlExclusionsFileFilter.class,
+				EsqlRulesDefinition.class,
+				EsqlProfilesDefinition.class,
+				EsqlMetrics.class);
 
 		  context.addExtensions(
-			PropertyDefinition.builder(FILE_SUFFIXES_KEY)
-			        .defaultValue(FILE_SUFFIXES_DEFVALUE)
-			        .name("File Suffixes")
-			        .description("List of suffixes for files to analyze.")
+			PropertyDefinition.builder(EsqlLanguage.FILE_SUFFIXES_KEY)
+			        .defaultValue(EsqlLanguage.FILE_SUFFIXES_DEFVALUE)
+			        .name(FILE_SUFFIXES_NAME)
+			        .description(FILE_SUFFIXES_DESCRIPTION)
 			        .subCategory(GENERAL)
 			        .category(ESQL_CATEGORY)
 			        .multiValues(true)
@@ -66,20 +68,31 @@ public class EsqlPlugin implements Plugin {
 	        .defaultValue(EsqlPlugin.IGNORE_HEADER_COMMENTS_DEFAULT_VALUE.toString())
 	        .name("Ignore header comments")
 	        .description("True to not count file header comments in comment metrics.")
-	        .onQualifiers(Qualifiers.MODULE, Qualifiers.PROJECT)
+	        .onQualifiers(Qualifiers.PROJECT)
 	        .subCategory(GENERAL)
 	        .category(ESQL_CATEGORY)
 	        .type(PropertyType.BOOLEAN)
 	        .build(),
+
 	       PropertyDefinition.builder(TRACE_PATHS_PROPERTY)
 			      .defaultValue(TRACE_PATHS_DEFAULT_VALUE)
 			      .category("Esql")
 			      .subCategory("Trace")
 			      .name("IIB trace file")
 			      .description("Path to the IIB trace files containing coverage data. The path may be absolute or relative to the project base directory.")
-			      .onQualifiers(Qualifiers.PROJECT, Qualifiers.MODULE)
+			      .onQualifiers(Qualifiers.PROJECT)
 			      .multiValues(true)
-			      .build()
+			      .build(),
+
+		  PropertyDefinition.builder(EsqlPlugin.ESQL_EXCLUSIONS_KEY)
+				  .defaultValue(ESQL_EXCLUSIONS_DEFAULT_VALUE)
+				  .name("ESQL Exclusions")
+				  .description("List of file path patterns to be excluded from analysis of ESQL files.")
+				  .onQualifiers(Qualifiers.PROJECT)
+				  .subCategory(GENERAL)
+				  .multiValues(true)
+				  .category(ESQL_CATEGORY)
+				  .build()
 			);
 
 	}

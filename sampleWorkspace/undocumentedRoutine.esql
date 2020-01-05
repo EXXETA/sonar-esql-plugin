@@ -1,0 +1,49 @@
+CREATE COMPUTE MODULE Module1
+
+	CREATE FUNCTION Main() RETURNS BOOLEAN --Noncompliant
+	BEGIN
+		DECLARE myInt INTEGER 1;
+		DECLARE myInt2 INTEGER;
+		
+	END;
+
+	--This comment is irrelevant.
+	/*
+	*
+	*
+	*/
+	CREATE FUNCTION Main2() RETURNS BOOLEAN --Noncompliant
+	BEGIN
+		DECLARE myInt INTEGER 1;
+		DECLARE myInt2 INTEGER;
+		
+	END;
+
+	/*
+	* This comment explains the functionality of this function.
+	*/
+	CREATE FUNCTION Main3() RETURNS BOOLEAN --Compliant
+	BEGIN
+		DECLARE myInt INTEGER 1;
+		DECLARE myInt2 INTEGER;
+		
+	END;
+	
+	
+	CREATE PROCEDURE ABC() --Noncompliant
+	BEGIN
+		SET OutputRoot.XMLNSC.A.B='ABC';
+	END;
+
+	
+	/*
+	* This comment explains the functionality of this procedure.
+	*/
+	CREATE PROCEDURE ABC() --Compliant
+	BEGIN
+		SET OutputRoot.XMLNSC.A.B='ABC';
+	END;
+
+
+END MODULE;
+

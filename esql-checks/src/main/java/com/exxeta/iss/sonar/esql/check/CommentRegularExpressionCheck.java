@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,7 +35,6 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
 
 @Rule(  key = "CommentRegularExpression" )
-@RuleTemplate
 public class CommentRegularExpressionCheck  extends SubscriptionVisitorCheck {
 
   private static final String DEFAULT_REGULAR_EXPRESSION = "";
