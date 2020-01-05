@@ -1,14 +1,14 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,21 +22,22 @@ import java.net.URI;
 
 public interface EsqlFile {
 
-	  /**
-	   * @deprecated use {@link EsqlFile#fileName()} or {@link EsqlFile#uri()}
-	   */
-  String relativePath();
+    /**
+     * @deprecated use {@link EsqlFile#fileName()} or {@link EsqlFile#uri()}
+     */
+    @Deprecated
+    String relativePath();
 
-  /**
-   * File name with extension
-   */
-  String fileName();
+    /**
+     * File name with extension
+     */
+    String fileName();
 
-  String contents() throws IOException;
-  
-  /**
-   * Identifier of the file. The only guarantee is that it is unique in the project.
-   * You should not assume it is a file:// URI.
-   */
-  URI uri();
+    String contents() throws IOException;
+
+    /**
+     * Identifier of the file. The only guarantee is that it is unique in the project.
+     * You should not assume it is a file:// URI.
+     */
+    URI uri();
 }

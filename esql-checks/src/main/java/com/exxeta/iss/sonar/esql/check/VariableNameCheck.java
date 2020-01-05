@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,11 +36,6 @@ public class VariableNameCheck extends DoubleDispatchVisitorCheck {
 			defaultValue = "" + DEFAULT_FORMAT)
 	public String format = DEFAULT_FORMAT;
 
-	public VariableNameCheck() {
-	}
-	public String getFormat() {
-		return format;
-	}
 	@Override
 	public void visitDeclareStatement(DeclareStatementTree tree) {
 		super.visitDeclareStatement(tree);

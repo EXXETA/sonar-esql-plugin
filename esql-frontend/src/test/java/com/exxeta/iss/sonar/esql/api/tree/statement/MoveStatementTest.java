@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,15 +49,15 @@ public class MoveStatementTest extends EsqlTreeModelTest<MoveStatementTreeImpl>{
 	public void modelTest() throws Exception{
 		MoveStatementTreeImpl tree = parse("MOVE cursor FIRSTCHILD TYPE Name NAME 'Field1';", Kind.MOVE_STATEMENT);
 		assertNotNull(tree.moveKeyword());
-		assertEquals(tree.moveKeyword().text(),"MOVE");
+		assertEquals("MOVE", tree.moveKeyword().text());
 		assertNotNull(tree.target());
-		assertEquals(tree.target().text(), "cursor");
+		assertEquals("cursor", tree.target().text());
 		assertNull(tree.toKeyword());
 		assertNull(tree.sourceFieldReference());
 		assertNotNull(tree.qualifier());
 		assertNotNull(tree.nameClauses());
 		assertNotNull(tree.semi());
-		assertEquals(tree.semi().text(), ";");
+		assertEquals(";", tree.semi().text());
 		NameClausesTreeImpl nameClauses = tree.nameClauses();
 		assertNotNull(nameClauses.typeKeyword());
 		assertNotNull(nameClauses.typeExpression());

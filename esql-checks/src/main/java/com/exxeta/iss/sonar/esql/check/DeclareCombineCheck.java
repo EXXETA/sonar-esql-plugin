@@ -88,9 +88,6 @@ public class DeclareCombineCheck extends DoubleDispatchVisitorCheck  {
 
 	private void addIssue(List<DeclareStatementTree> declareStatements) {
 
-//	    for (int i = 1; i < declareStatements.size(); i++) {
-//	    	addIssue(declareStatements.get(i), MESSAGE);
-//	    }
 	    PreciseIssue issue = addIssue(declareStatements.get(1), MESSAGE);
 
 	    for (int i = 2; i < declareStatements.size(); i++) {

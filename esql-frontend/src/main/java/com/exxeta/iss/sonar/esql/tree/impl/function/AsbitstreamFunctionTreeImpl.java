@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -149,7 +149,6 @@ public class AsbitstreamFunctionTreeImpl extends EsqlTree implements Asbitstream
 	}
 
 	public boolean isCommaSeparated() {
-		//return commaSeparated;
 		return parameters!=null && !parameters.isEmpty() && parameters.get(0).first().is(EsqlPunctuator.COMMA);
 	}
 

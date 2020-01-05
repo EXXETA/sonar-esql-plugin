@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -42,13 +42,13 @@ public class InsertBlankLineBetweenFuncProcCheck extends DoubleDispatchVisitorCh
 		StatementTree previousStatement = null;
 		for (StatementTree statement : tree.moduleStatementsList().statements()) {
 			if (statement instanceof CreateRoutineTreeImpl && previousStatement instanceof CreateRoutineTreeImpl) {
-				if (!(previousStatement.lastToken().endLine()<statement.firstToken().line()-1)) {
+				if ((previousStatement.lastToken().endLine()>=statement.firstToken().line()-1)) {
 					addIssue(new LineIssue(this, previousStatement.lastToken(), MESSAGE));
 				}
 			}
 			previousStatement=statement;
 		}
-		if (previousStatement instanceof CreateRoutineTreeImpl && !(previousStatement.lastToken().endLine() < tree.endKeyword().line()-1)) {
+		if (previousStatement instanceof CreateRoutineTreeImpl && (previousStatement.lastToken().endLine() >= tree.endKeyword().line()-1)) {
 			addIssue(new LineIssue(this, previousStatement.lastToken(), MESSAGE));
 		}
 		

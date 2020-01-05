@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,15 +31,6 @@ public abstract class DoubleDispatchVisitorCheck extends DoubleDispatchVisitor i
     issues.reset();
     scanTree(context);
     return issues.getList();
-  }
-
-  /**
-   * @deprecated see {@link EsqlCheck#addLineIssue(Tree, String)}
-   */
-  @Override
-  @Deprecated
-  public LineIssue addLineIssue(Tree tree, String message) {
-    return issues.addLineIssue(tree, message);
   }
 
   @Override

@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -41,11 +41,6 @@ public class MetricsVisitor extends SubscriptionVisitor {
 
 	private static final Number[] LIMITS_COMPLEXITY_FUNCTIONS = { 1, 2, 4, 6, 8, 10, 12, 20, 30 };
 	private static final Number[] FILES_DISTRIB_BOTTOM_LIMITS = { 0, 5, 10, 20, 30, 60, 90 };
-
-	/*
-	 * private static final Kind[] CLASS_NODES = { Kind.CLASS_DECLARATION,
-	 * Kind.CLASS_EXPRESSION };
-	 */
 
 	private final SensorContext sensorContext;
 	private InputFile inputFile;

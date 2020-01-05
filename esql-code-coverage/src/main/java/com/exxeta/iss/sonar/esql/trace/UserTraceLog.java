@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -54,7 +54,7 @@ public class UserTraceLog {
 
 	public List<UserTraceType> getUserTraceOrInformation() {
 		if (userTraceOrInformation == null) {
-			userTraceOrInformation = new ArrayList<UserTraceType>();
+			userTraceOrInformation = new ArrayList<>();
 		}
 		return this.userTraceOrInformation;
 	}

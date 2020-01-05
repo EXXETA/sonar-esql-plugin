@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,7 +48,7 @@ public class WhileStatementTest extends EsqlTreeModelTest<WhileStatementTree>{
 		assertNotNull(tree.condition());
 		assertNotNull(tree.doKeyword());
 		assertNotNull(tree.statements());
-		assertEquals(tree.statements().statements().size(),1);
+		assertEquals(1, tree.statements().statements().size());
 		assertNotNull(tree.endKeyword());
 		assertNotNull(tree.whileKeyword2());
 		assertNotNull(tree.label2());

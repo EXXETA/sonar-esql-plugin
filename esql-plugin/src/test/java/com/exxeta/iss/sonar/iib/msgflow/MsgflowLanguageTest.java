@@ -38,13 +38,13 @@ public class MsgflowLanguageTest {
 
 	  @Test
 	  public void defaultSuffixes() {
-	    settings.setProperty(IibPlugin.MSGFLOW_FILE_SUFFIXES_KEY, "");
+	    settings.setProperty(msgflowLanguage.FILE_SUFFIXES_KEY, "");
 	    assertThat(msgflowLanguage.getFileSuffixes()).containsOnly(".msgflow", ".subflow");
 	  }
 
 	  @Test
 	  public void customSuffixes() {
-	    settings.setProperty(IibPlugin.MSGFLOW_FILE_SUFFIXES_KEY, "abc");
+	    settings.setProperty(msgflowLanguage.FILE_SUFFIXES_KEY, "abc");
 	    assertThat(msgflowLanguage.getFileSuffixes()).containsOnly("abc");
 	  }
 

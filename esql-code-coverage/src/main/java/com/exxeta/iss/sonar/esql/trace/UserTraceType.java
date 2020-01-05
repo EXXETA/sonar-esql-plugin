@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -59,7 +59,7 @@ public class UserTraceType {
 
     public List<InsertType> getInsert() {
         if (insert == null) {
-            insert = new ArrayList<InsertType>();
+            insert = new ArrayList<>();
         }
         return this.insert;
     }

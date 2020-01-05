@@ -1,0 +1,48 @@
+CREATE COMPUTE MODULE ProcessCardAccount
+
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		CASE size
+		  WHEN minimum + 0 THEN
+		    SET description = 'small';
+		  WHEN minimum + 0 THEN
+		    SET description = 'medium';        
+		  ELSE
+		    SET description = 'unknown';
+		    CALL handleError();
+		END CASE;
+		
+		CASE size
+		  WHEN minimum + 0 THEN
+		    SET description = 'small';
+		  WHEN minimum + 1 THEN
+		    SET description = 'medium';        
+		  WHEN minimum + 1 THEN
+		    SET description = 'large';
+		    CALL handleLargeObject();
+		  ELSE
+		    SET description = 'unknown';
+		    CALL handleError();
+		END CASE;
+
+		CASE size
+		  WHEN minimum + 0 THEN
+		    SET description = 'small';
+		  WHEN minimum + 0 THEN
+		    SET description = 'medium';        
+		END CASE;
+		
+		SET description = CASE size
+			WHEN minimum + 0 THEN 'small'
+			WHEN minimum + 1 THEN 'medium'
+		END;
+
+		SET description = CASE size
+			WHEN minimum + 0 THEN 'small'
+			WHEN minimum + 1 THEN 'medium'
+			ELSE 'unknown'
+		END;
+
+	END;
+
+END MODULE;

@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -91,16 +91,16 @@ public class CreateStatementTest  extends EsqlTreeModelTest<CreateStatementTreeI
 		CreateStatementTreeImpl tree = parse("CREATE LASTCHILD OF OutputRoot DOMAIN('MRM') PARSE(inBitStream, inEncoding, inCCSID, 'DP3UK14002001', 'TestCase', 'XML1', options);", Kind.CREATE_STATEMENT);
 		assertNotNull(tree);
 		assertNotNull(tree.createKeyword());
-		assertEquals(tree.createKeyword().text(), "CREATE");
+		assertEquals("CREATE", tree.createKeyword().text());
 		assertNotNull(tree.qualifierName());
-		assertEquals(tree.qualifierName().text(), "LASTCHILD");
+		assertEquals("LASTCHILD", tree.qualifierName().text());
 		assertNotNull(tree.qualifierOfKeyword());
-		assertEquals(tree.qualifierOfKeyword().text(), "OF");
+		assertEquals("OF", tree.qualifierOfKeyword().text());
 		assertNotNull(tree.target());
 		assertNull(tree.asKeyword());
 		assertNull(tree.aliasFieldReference());
 		assertNotNull(tree.domainKeyword());
-		assertEquals(tree.domainKeyword().text(), "DOMAIN");
+		assertEquals("DOMAIN", tree.domainKeyword().text());
 		assertNotNull(tree.domainExpression());
 		assertTrue(tree.domainExpression().is(Kind.PARENTHESISED_EXPRESSION));
 		assertNull(tree.repeatClause());
@@ -108,15 +108,15 @@ public class CreateStatementTest  extends EsqlTreeModelTest<CreateStatementTreeI
 		assertNull(tree.fromClause());
 		assertNotNull(tree.parseClause());
 		assertNotNull(tree.semi());
-		assertEquals(tree.semi().text(), ";");
+		assertEquals(";", tree.semi().text());
 		
 		//ParseClause
 		ParseClauseTreeImpl parseClause = tree.parseClause();
 		assertNotNull(parseClause);
 		assertNotNull(parseClause.parseKeyword());
-		assertEquals(parseClause.parseKeyword().text(), "PARSE");
+		assertEquals("PARSE", parseClause.parseKeyword().text());
 		assertNotNull(parseClause.openingParenthesis());
-		assertEquals(parseClause.openingParenthesis().text(), "(");
+		assertEquals("(", parseClause.openingParenthesis().text());
 		
 		assertNotNull(parseClause.expression());
 		assertNotNull(parseClause.optionsSeparator());
@@ -134,7 +134,7 @@ public class CreateStatementTest  extends EsqlTreeModelTest<CreateStatementTreeI
 		
 		
 		assertNotNull(parseClause.closingParenthesis());
-		assertEquals(parseClause.closingParenthesis().text(), ")");
+		assertEquals(")", parseClause.closingParenthesis().text());
 
 		assertTrue(parseClause.isCommaSeparated());
 		
@@ -174,9 +174,9 @@ public class CreateStatementTest  extends EsqlTreeModelTest<CreateStatementTreeI
 		ParseClauseTreeImpl parseClause = tree.parseClause();
 		assertNotNull(parseClause);
 		assertNotNull(parseClause.parseKeyword());
-		assertEquals(parseClause.parseKeyword().text(), "PARSE");
+		assertEquals("PARSE", parseClause.parseKeyword().text());
 		assertNotNull(parseClause.openingParenthesis());
-		assertEquals(parseClause.openingParenthesis().text(), "(");
+		assertEquals("(", parseClause.openingParenthesis().text());
 		
 		assertNotNull(parseClause.expression());
 		assertNotNull(parseClause.optionsSeparator());

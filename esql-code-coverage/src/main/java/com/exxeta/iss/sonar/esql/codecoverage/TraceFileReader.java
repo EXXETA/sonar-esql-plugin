@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -111,8 +111,7 @@ public class TraceFileReader {
 		JAXBContext jc = JAXBContext.newInstance(UserTraceLog.class);
 
 		Unmarshaller unmarshaller = jc.createUnmarshaller();
-		UserTraceLog userTraceLog =(UserTraceLog) unmarshaller.unmarshal(traceFile);
-		return userTraceLog;
+		return (UserTraceLog) unmarshaller.unmarshal(traceFile);
 	}
 
 	private void readLine(String line) {

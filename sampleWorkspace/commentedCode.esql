@@ -1,0 +1,39 @@
+CREATE COMPUTE MODULE ProcessCardAccount
+
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		-- SET OutputRoot=InputRoot;
+		DECLARE end BOOLEAN TRUE;
+		IF FALSE THEN --Non compliant
+			SET OutputRoot=InputRoot;
+		--ELSE
+		--	SET OutputRoot=InputRoot;
+		END IF;
+		IF FALSE THEN --Non compliant
+			SET OutputRoot=InputRoot;
+		--ELSEIF TRUE THEN
+		--	SET OutputRoot=InputRoot;
+		END IF;
+		
+		-- Move RetryCountDown to environment
+		CASE size
+		  WHEN minimum + 0 THEN
+		    SET description = 'small';
+		  --WHEN minimum + 0 THEN
+		  --  SET description = 'medium';        
+		  ELSE
+		    SET description = 'unknown';
+		    CALL handleError();
+		END CASE;
+		--something
+		
+		--different
+		
+	END;
+
+
+	--END;
+
+
+
+END MODULE;

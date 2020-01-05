@@ -1,0 +1,63 @@
+CREATE FILTER MODULE Flow1_Filter
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		SET OutputRoot.XMLNSC.Response.details.person.age = '20';
+		RETURN FALSE;
+	END;
+END MODULE;
+
+CREATE COMPUTE MODULE Flow2_Compute
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		SET OutputRoot.XMLNSC.Response.details.person.age = '20';
+		IF A > B THEN
+			RETURN TRUE;
+		ELSE
+			THROW USER EXCEPTION;
+		END IF;
+	END;
+END MODULE;
+
+CREATE FILTER MODULE Flow3_Filter
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		SET OutputRoot.XMLNSC.Response.details.person.age = '20';
+		RETURN TRUE;
+	END;
+END MODULE;
+
+CREATE FILTER MODULE Flow3_Filter
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		SET OutputRoot.XMLNSC.Response.details.person.age = '20';
+		THROW USER EXCEPTION;
+	END;
+END MODULE;
+
+CREATE FILTER MODULE Flow4_Filter
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		SET OutputRoot.XMLNSC.Response.details.person.age = '20';
+		IF A > B THEN
+			RETURN TRUE;
+		ELSE
+			RETURN FALSE;
+		END IF;
+	END;
+END MODULE;
+
+CREATE FILTER MODULE Flow5_Filter
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		SET OutputRoot.XMLNSC.Response.details.person.age = '20';
+		RETURN getResult();
+	END;
+END MODULE;
+
+CREATE FILTER MODULE Flow6_Filter
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		SET OutputRoot.XMLNSC.Response.details.person.age = '20';
+	END;
+END MODULE;
+

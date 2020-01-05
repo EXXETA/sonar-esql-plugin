@@ -49,6 +49,14 @@
 		<url>https://github.com/EXXETA/sonar-esql-plugin</url>
 		<connection>scm:git:git@github.com:EXXETA/sonar-esql-plugin.git</connection>
 	</scm>
+	<issueManagement>
+		<system>Github</system>
+		<url>https://github.com/EXXETA/sonar-esql-plugin/issues</url>
+	</issueManagement>
+	<ciManagement>
+		<system>Travis</system>
+		<url>https://travis-ci.org/EXXETA/sonar-esql-plugin</url>
+	</ciManagement>
 
 	<properties>
 		<sonarQubeMinVersion>7.9</sonarQubeMinVersion>
@@ -76,6 +84,7 @@
 
 		<artifactsToPublish>${project.groupId}:sonar-esql-plugin:jar</artifactsToPublish>
 
+
 		<version.source.plugin>3.1.0</version.source.plugin>
 		<version.site.plugin>3.7.1</version.site.plugin>
 		<version.resources.plugin>3.1.0</version.resources.plugin>
@@ -96,14 +105,7 @@
 		<version.beanshell.plugin>1.4</version.beanshell.plugin>
 		<version.jacoco.plugin>0.8.2</version.jacoco.plugin>
 
-		<sonar.jacoco.reportPaths>${project.build.directory}/coverage-reports/jacoco-ut.exec</sonar.jacoco.reportPaths>
-
 	</properties>
-
-	<prerequisites>
-		<maven>${maven.min.version}</maven>
-	</prerequisites>
-
 
 	<dependencyManagement>
 		<dependencies>

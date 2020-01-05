@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -105,9 +105,7 @@ public abstract class AbstractAnalyzer implements ExecutionDataVisitor {
 						+ Integer.parseInt(lineExecution.getRelativeLine());
 				InputFile file = offsetCache.get(lineExecution.getFunction()).getFile();
 
-				if (executedLines.get(file) == null) {
-					executedLines.put(file, new HashSet<>());
-				}
+				executedLines.computeIfAbsent(file, k -> new HashSet<>());
 
 				executedLines.get(file).add(line);
 			} else {

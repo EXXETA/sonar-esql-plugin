@@ -2,6 +2,7 @@ package com.exxeta.iss.sonar.msgflow.parser;
 
 import java.util.List;
 
+import com.exxeta.iss.sonar.msgflow.parser.node.mq.MQHeaderNodeParser;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 
@@ -28,7 +29,8 @@ public class ParserLists {
 
 	public static List<AbstractNodeParser<?>> getNodeParsers() {
 		return ImmutableList.<AbstractNodeParser<?>>of(new AggregateControlNodeParser(), new MQInputNodeParser(),
-				new MQOutputNodeParser(), new MQReplyNodeParser(), new ComputeNodeParser());
+				new MQOutputNodeParser(), new MQReplyNodeParser(), new ComputeNodeParser(),
+				new MQHeaderNodeParser());
 	}
 
 	private ParserLists() {

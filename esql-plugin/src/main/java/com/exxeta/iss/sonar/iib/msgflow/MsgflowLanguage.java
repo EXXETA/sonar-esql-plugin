@@ -26,6 +26,8 @@ import com.exxeta.iss.sonar.iib.IibPlugin;
 public class MsgflowLanguage extends AbstractLanguage {
 
 	public static final String KEY = "msgflow";
+	public static final String FILE_SUFFIXES_KEY = "sonar.msgflow.file.suffixes";
+	public static final String FILE_SUFFIXES_DEFVALUE = ".msgflow,.subflow";
 
 	private  Configuration configuration;
 
@@ -36,9 +38,9 @@ public class MsgflowLanguage extends AbstractLanguage {
 
 	@Override
 	public String[] getFileSuffixes() {
-		String[] suffixes = configuration.getStringArray(IibPlugin.MSGFLOW_FILE_SUFFIXES_KEY);
+		String[] suffixes = configuration.getStringArray(FILE_SUFFIXES_KEY);
 		if (suffixes == null || suffixes.length == 0) {
-			suffixes = StringUtils.split(IibPlugin.MSGFLOW_FILE_SUFFIXES_DEFVALUE, ",");
+			suffixes = StringUtils.split(FILE_SUFFIXES_DEFVALUE, ",");
 		}
 		return suffixes;
 	}

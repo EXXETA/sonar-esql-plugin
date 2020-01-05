@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -53,7 +53,6 @@ public class PropagateStatementTreeImpl extends EsqlTree implements PropagateSta
 			ControlsTreeImpl controls, InternalSyntaxToken semi) {
 		this.propagateKeyword = propagateKeyword;
 
-		this.toKeyword = toKeyword;
 		this.toKeyword = toKeyword;
 		this.targetType = targetType;
 		this.target = target;

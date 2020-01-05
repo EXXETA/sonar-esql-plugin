@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,6 +26,8 @@ import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
 import com.exxeta.iss.sonar.esql.api.visitors.TreeVisitor;
 import com.exxeta.iss.sonar.esql.api.visitors.TreeVisitorContext;
 import com.exxeta.iss.sonar.esql.check.CheckList;
+import com.exxeta.iss.sonar.iib.esql.EsqlLanguage;
+import com.exxeta.iss.sonar.iib.esql.EsqlSensor;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.RecognitionException;
@@ -69,7 +71,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class EsqlSensorTest {
+public class
+EsqlSensorTest {
 
 	@org.junit.Rule
 	public final ExpectedException thrown = ExpectedException.none();
@@ -324,11 +327,6 @@ public class EsqlSensorTest {
 		@Override
 		public TreeVisitorContext getContext() {
 			return null;
-		}
-
-		@Override
-		public LineIssue addLineIssue(Tree tree, String message) {
-			throw new NotImplementedException();
 		}
 
 		@Override

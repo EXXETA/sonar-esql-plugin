@@ -1,0 +1,15 @@
+{
+  "title": "\"PROPAGATE TO LABEL\" should not be used",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "1h"
+  },
+  "tags": [
+    "bad-practice"
+  ],
+  "defaultSeverity": "Minor",
+  "sqKey": "PropagateToLabel",
+  "scope": "Main"
+}
