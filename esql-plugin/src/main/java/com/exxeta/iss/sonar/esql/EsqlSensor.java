@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -203,7 +203,7 @@ public class EsqlSensor implements Sensor {
     }
 
     private void scanFile(SensorContext sensorContext, InputFile inputFile, List<TreeVisitor> visitors, ProgramTree programTree) {
-        LOG.warn("scanning file " + inputFile.filename());
+        LOG.debug("scanning file " + inputFile.filename());
         EsqlVisitorContext context = new EsqlVisitorContext(programTree, inputFile, sensorContext.config());
 
         List<Issue> fileIssues = new ArrayList<>();

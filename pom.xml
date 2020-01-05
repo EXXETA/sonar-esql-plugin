@@ -46,6 +46,14 @@
 		<url>https://github.com/EXXETA/sonar-esql-plugin</url>
 		<connection>scm:git:git@github.com:EXXETA/sonar-esql-plugin.git</connection>
 	</scm>
+	<issueManagement>
+		<system>Github</system>
+		<url>https://github.com/EXXETA/sonar-esql-plugin/issues</url>
+	</issueManagement>
+	<ciManagement>
+		<system>Travis</system>
+		<url>https://travis-ci.org/EXXETA/sonar-esql-plugin</url>
+	</ciManagement>
 
 	<properties>
 		<sonarQubeMinVersion>7.9</sonarQubeMinVersion>
@@ -71,6 +79,7 @@
 		<analyzer-commons.version>1.11.0.541</analyzer-commons.version>
 
 		<artifactsToPublish>${project.groupId}:sonar-esql-plugin:jar</artifactsToPublish>
+
 
 		<version.source.plugin>3.1.0</version.source.plugin>
 		<version.site.plugin>3.7.1</version.site.plugin>
