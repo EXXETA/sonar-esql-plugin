@@ -20,8 +20,6 @@ package com.exxeta.iss.sonar.iib.esql;
 import org.sonar.api.config.Configuration;
 import org.sonar.api.resources.AbstractLanguage;
 
-import com.exxeta.iss.sonar.iib.IibPlugin;
-
 public class EsqlLanguage extends AbstractLanguage {
 
 	public static final String KEY = "esql";
