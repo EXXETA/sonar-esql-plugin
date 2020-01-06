@@ -6,11 +6,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Stack;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
+import javax.xml.stream.XMLInputFactory;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
@@ -44,8 +46,12 @@ public class ParserUtils {
 		final String startPosAttribName = "startPos";
 		final String endPosAttribName = "endPos";
 		final SAXParserFactory factory = SAXParserFactory.newInstance();
+		factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+
 		final SAXParser parser = factory.newSAXParser();
 		final DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+		docBuilderFactory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+
 		final DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
 		final Document doc = docBuilder.newDocument();
 
