@@ -1,14 +1,14 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,7 +20,6 @@ package com.exxeta.iss.sonar.esql.tree.symbols;
 import java.util.Map;
 
 import com.exxeta.iss.sonar.esql.api.symbols.Symbol;
-import com.exxeta.iss.sonar.esql.api.symbols.SymbolModelBuilder;
 import com.exxeta.iss.sonar.esql.api.symbols.Usage;
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
@@ -30,17 +29,18 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.CreateFunctionStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.DeclareStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
+import com.exxeta.iss.sonar.esql.tree.impl.declaration.PathElementNamespaceTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.declaration.PathElementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.expression.IdentifierTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
 
 /**
- * This visitor creates new symbols for not hoisted variables (like class name)
- * and implicitly declared variables (declared without keyword). Also it creates
- * usages for all known symbols.
+ * This visitor creates usages for all known symbols.
  */
 public class SymbolVisitor extends DoubleDispatchVisitor {
 
-	private SymbolModelBuilder symbolModel;
 	private Scope currentScope;
 	private Map<Tree, Scope> treeScopeMap;
 	private SetMultimap<Scope, String> declaredBlockScopeNames = HashMultimap.create();
@@ -51,7 +51,6 @@ public class SymbolVisitor extends DoubleDispatchVisitor {
 
 	@Override
 	public void visitProgram(ProgramTree tree) {
-		this.symbolModel = (SymbolModelBuilder) getContext().getSymbolModel();
 		this.currentScope = null;
 
 		enterScope(tree);
@@ -79,13 +78,22 @@ public class SymbolVisitor extends DoubleDispatchVisitor {
 			scan(identifier);
 			declaredBlockScopeNames.put(currentScope, identifier.name());
 		}
+		super.visitDeclareStatement(tree);
 	}
 
 	@Override
 	public void visitIdentifier(IdentifierTree tree) {
-		if (tree.is(Tree.Kind.IDENTIFIER_REFERENCE)) {
+		if (tree.is(Tree.Kind.IDENTIFIER_REFERENCE, Tree.Kind.PROPERTY_IDENTIFIER)) {
 			addUsageFor(tree, Usage.Kind.READ);
+			if (tree.parent() != null && tree.parent().parent() instanceof PathElementTreeImpl) {
+				PathElementNamespaceTreeImpl namespace = ((PathElementTreeImpl) tree.parent().parent()).namespace();
+				if (namespace != null && namespace.namespace() != null) {
+					IdentifierTree identifierTree = new IdentifierTreeImpl(Tree.Kind.PROPERTY_IDENTIFIER, (InternalSyntaxToken) namespace.namespace().identifier());
+					addUsageFor(identifierTree, Usage.Kind.READ);
+				}
+			}
 		}
+		super.visitIdentifier(tree);
 	}
 
 	@Override
@@ -133,14 +141,6 @@ public class SymbolVisitor extends DoubleDispatchVisitor {
 
 	private boolean isScopeAlreadyEntered(BeginEndStatementTree tree) {
 		return !treeScopeMap.containsKey(tree);
-	}
-
-	private Scope getFunctionScope() {
-		Scope scope = currentScope;
-		while (scope.isBlock()) {
-			scope = scope.outer();
-		}
-		return scope;
 	}
 
 }

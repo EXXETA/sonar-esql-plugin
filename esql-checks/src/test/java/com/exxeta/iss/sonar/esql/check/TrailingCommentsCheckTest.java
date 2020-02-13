@@ -16,17 +16,27 @@ import org.junit.Test;
 import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
 
 public class TrailingCommentsCheckTest {
+	TrailingCommentsCheck check = new TrailingCommentsCheck();
+	
   @Test
   public void test() {
-		
-		 EsqlCheckVerifier.issues(new TrailingCommentsCheck(), new File("src/test/resources/trailingComments.esql"))
-		    .next().atLine(7).withMessage("The line contains both code and comments. Trailing comments are discouraged.")
-		    .next().atLine(12).withMessage("The line contains both code and comments. Trailing comments are discouraged.")
-		    .next().atLine(15).withMessage("The line contains both code and comments. Trailing comments are discouraged.")
-		    .next().atLine(16).withMessage("The line contains both code and comments. Trailing comments are discouraged.")
+	  EsqlCheckVerifier.verify(check, new File("src/test/resources/trailingComments.esql"));
+	  }
+  
+  @Test
+  public void withoutPattern(){
+	  TrailingCommentsCheck check = new TrailingCommentsCheck();
+	  check.setLegalCommentPattern("");
+		 EsqlCheckVerifier.issues(check, new File("src/test/resources/trailingComments.esql"))
+		    .next().atLine(8).withMessage("Move this trailing comment on the previous empty line.")
+		    .next().atLine(15).withMessage("Move this trailing comment on the previous empty line.")
+		    .next().atLine(18).withMessage("Move this trailing comment on the previous empty line.")
+		    .next().atLine(20).withMessage("Move this trailing comment on the previous empty line.")
+		    .next().atLine(23).withMessage("Move this trailing comment on the previous empty line.")
 		 .noMore();
 	        
-	  }
+
+  }
    
     
   }

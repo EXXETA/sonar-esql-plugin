@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,7 +29,7 @@ import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
 import com.google.common.collect.ImmutableList;
 
 /**
- * @author C50679
+ * @author Sapna Singh
  *
  */
 @Rule(key = "FilterNodeModifyMessage")
@@ -53,7 +53,7 @@ public class FilterNodeModifyMessageCheck extends DoubleDispatchVisitorCheck {
 	public void visitSetStatement(SetStatementTree tree) {
 		if (this.insideFilterModule && tree.variableReference() instanceof FieldReferenceTree) {
 			FieldReferenceTree fieldReference = (FieldReferenceTree) tree.variableReference();
-			if (rootElements.contains(fieldReference.pathElement().name().name().text())) {
+			if (rootElements.contains(fieldReference.pathElement().name().name().name())) {
 				addIssue(new LineIssue(this, tree, MESSAGE));
 			}
 

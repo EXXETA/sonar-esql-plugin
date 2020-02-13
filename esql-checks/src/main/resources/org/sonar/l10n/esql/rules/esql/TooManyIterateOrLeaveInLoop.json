@@ -1,0 +1,16 @@
+{
+  "title": "Loops should not contain more than a single \"ITERATE\" or \"LEAVE\" statement",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Linear",
+    "linearDesc": "per extra [\"iterate\"|\"ITERATE\" or \"leave\"|\"LEAVE\"] statement",
+    "linearFactor": "20min"
+  },
+  "tags": [
+    "brain-overload"
+  ],
+  "defaultSeverity": "Minor",
+  "sqKey": "TooManyIterateOrLeaveInLoop",
+  "scope": "All"
+}

@@ -1,0 +1,48 @@
+BROKER SCHEMA serviceOperations
+DECLARE soapenv NAMESPACE 'http://schemas.xmlsoap.org/soap/envelope/';
+DECLARE ns NAMESPACE 'http://com/abnamro/Services/AccessFacilityAgreement/v2/' ;
+CREATE PROCEDURE createAccessFacilityAgreement_request(IN inRef REFERENCE, IN outRef REFERENCE)
+BEGIN
+-- Single Line Comment
+	SET outRef.Properties.MessageSet='A0071546_input.xsd';
+	SET outRef.Properties.MessageType='BROKERMESSAGETOBB';
+	SET outRef.Properties.CodedCharSetId = 500;
+	SET outRef.Properties.Encoding = 785;
+	/* Block Comment
+	please check
+	it.*/
+	DECLARE inputRef REFERENCE TO inRef.Body.ns:createAccessFacilityAgreement.requestParameters;
+	CREATE LASTCHILD OF outRef DOMAIN 'DFDL';
+	CREATE FIELD outRef.DFDL.BROKERMESSAGETOBB;
+	DECLARE outputRef REFERENCE TO outRef.DFDL.BROKERMESSAGETOBB;
+	SET outputRef.LL_VELD = '32154';
+	SET outputRef.ZZ_VELD = +0;
+	IF inputRef.classificationValueId = '1'  THEN
+		SET outputRef.IMS_TRANSAKT_KODE ='MU360T01';
+	ELSEIF inputRef.classificationValueId = '0' THEN
+		SET outputRef.IMS_TRANSAKT_KODE ='MU326T01';
+	ELSEIF inputRef.classificationValueId = TRUE THEN
+		SET outputRef.IMS_TRANSAKT_KODE ='MU360T01';	
+	ELSEIF inputRef.classificationValueId = FALSE THEN
+		SET outputRef.IMS_TRANSAKT_KODE ='MU326T01';
+	END IF;
+	SET outputRef.SERVICE_INPUT_GROUP.BS_USERID = '';
+	SET outputRef.SERVICE_INPUT_GROUP.BS_PROCESS_ID = '';
+	SET outputRef.SERVICE_INPUT_GROUP.BS_CHANNEL_ID = '';
+	SET outputRef.SERVICE_INPUT_GROUP.BS_APPLICATION_ID = '';
+	SET outputRef.SERVICE_INPUT_GROUP.BS_SESSION_ID = '';
+	SET outputRef.SERVICE_INPUT_GROUP.BS_LANGUAGE_CODE = '';
+	SET outputRef.SERVICE_INPUT_GROUP.BS_LANGUAGE_COUNTRY_CODE = '';
+	SET outputRef.SERVICE_INPUT_GROUP.BS_ISSUE_ID = '';
+	SET outputRef.SERVICE_INPUT_GROUP.BS_VIEW.BS_VIEW_NR = 0;
+	SET outputRef.SERVICE_INPUT_GROUP.BS_MPP_BMP = '';
+	SET outputRef.SERVICE_INPUT_GROUP.BS_RESERVED = '';
+	SET outputRef.BROKER_VERSIE_BERICHT_NAAR_BB = '';
+	SET outputRef.MO_BROKER_SUPPLIER_ID = '';
+	SET outputRef.MO_SERVICE_CALL_ID = '';
+	SET outputRef.MO_BROKER_PROCESS_ID ='';
+	SET outputRef.BROKER_DESTINATION_TRANSACTIE ='';
+	DECLARE bcno CHARACTER;
+	DECLARE modid CHARACTER;
+	DECLARE verid CHARACTER;
+END;

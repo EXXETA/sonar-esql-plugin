@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -65,14 +65,14 @@ public class FunctionProcedureLengthCheck extends DoubleDispatchVisitorCheck {
 	}
 
 	private void checkRoutineLength(RoutineDeclarationTree routineDeclarationTree) {
-		if (routineDeclarationTree.routineBody()!=null && routineDeclarationTree.routineBody().statement() instanceof BeginEndStatementTree){
+		if (routineDeclarationTree.routineBody().statement() instanceof BeginEndStatementTree){
 			
 		 BeginEndStatementTree body = (BeginEndStatementTree) routineDeclarationTree.routineBody().statement();
 		 
 		 int nbLines = new LineVisitor(body).getLinesOfCodeNumber();
 		    if (nbLines > maximumMethodProcedureLength) {
 		      String message = String.format(MESSAGE, nbLines, maximumMethodProcedureLength);
-		      IssueLocation primaryLocation = new IssueLocation(routineDeclarationTree, message);
+		      IssueLocation primaryLocation = new IssueLocation(routineDeclarationTree.firstToken(), message);
 		      addIssue(new PreciseIssue(this, primaryLocation));
 		    }
 		}

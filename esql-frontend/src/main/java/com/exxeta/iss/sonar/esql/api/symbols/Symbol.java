@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -122,11 +122,11 @@ public class Symbol {
   }
 
   /**
-   * @return true if symbol created with var, let or const keywords or implicitly
+   * @return true if symbol created with CREATE
    */
- /* public boolean isVariable() {
-    return kind == Kind.LET_VARIABLE || kind == Kind.CONST_VARIABLE || kind == Kind.VARIABLE;
-  }*/
+  public boolean isVariable() {
+    return kind == Kind.CONST_VARIABLE || kind == Kind.VARIABLE;
+  }
 
   @Override
   public String toString() {

@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,85 +17,61 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.Set;
+import java.util.Collection;
 
 import org.sonar.check.Rule;
 
+import com.exxeta.iss.sonar.esql.api.symbols.Symbol;
+import com.exxeta.iss.sonar.esql.api.symbols.SymbolModel;
+import com.exxeta.iss.sonar.esql.api.symbols.Usage;
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.DeclareStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
-import com.exxeta.iss.sonar.esql.api.visitors.EsqlFile;
-import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
 
 /**
- * This Java class is created to implement the logic to find all the unused variables.
+ * This Java class is created to implement the logic to find all the unused
+ * variables.
+ * 
  * @author Sapna Singh
+ * @author Thomas Pohl
  *
  */
 @Rule(key = "UnusedVariable")
 public class UnusedVariableCheck extends DoubleDispatchVisitorCheck {
-	
-	private static final String MESSAGE = "Remove the unused Variable.";
 
-	private Set<String> calledRoutines = new HashSet<>();
-	private List<String> variables = new ArrayList<>();
-	private HashMap<String, DeclareStatementTree> declaredVariable = new HashMap<>();
-	
-	@Override
-	public void visitDeclareStatement(DeclareStatementTree tree) {
-		
-		for (int i = 0; i < tree.nameList().size(); i++) {
-		declaredVariable.put(tree.nameList().get(i).name(), tree);
-		
-		variables.add(tree.nameList().get(i).name());
-		}
-		super.visitDeclareStatement(tree);
-	}
-	
+	private static final String MESSAGE = "Remove the unused '%s' variable.";
+
 	@Override
 	public void visitProgram(ProgramTree tree) {
-		
-		//calledRoutines.clear();
-		//declaredVariable.clear();
 		super.visitProgram(tree);
-		
-		
-		
-		EsqlFile file = getContext().getEsqlFile();
-		List<String> lines = CheckUtils.readLines(file);
-		for (String line : lines) {
-			
-		    String upperCaseTheLine = line.toUpperCase();
-		    
-			for (String Vars : variables) {
-				
-				if(line.contains(Vars) && !upperCaseTheLine.contains("DECLARE")){
-					calledRoutines.add(Vars);	
-				}
-				
-		}
-			
-	}
-		for (String variable : calledRoutines) {
-			declaredVariable.remove(variable);
-		}
-		for (Entry<String, DeclareStatementTree> variable : declaredVariable.entrySet()) {
-			String Variabl =variable.getKey();
-			
-			addIssue(variable.getValue(), "Check Variable \"" + Variabl + "\". " + MESSAGE);
-		}
-		
-		
-		
-		
-}
+		SymbolModel symbolModel = getContext().getSymbolModel();
+		for (Symbol symbol : symbolModel.getSymbols()) {
 
-	
-	
-	
+			Collection<Usage> usages = symbol.usages();
+			if (noUsages(usages) && symbol.isVariable() && !symbol.scope().isGlobal()) {
+				raiseIssuesOnDeclarations(symbol, String.format(MESSAGE, symbol.name()));
+			}
+		}
+	}
+
+	private void raiseIssuesOnDeclarations(Symbol symbol, String message) {
+		for (Usage usage : symbol.usages()) {
+			if (usage.isDeclaration()) {
+				addIssue(usage.identifierTree(), message);
+			}
+		}
+	}
+
+	private static boolean noUsages(Collection<Usage> usages) {
+		return usages.isEmpty() || usagesAreInitializations(usages);
+	}
+
+	private static boolean usagesAreInitializations(Collection<Usage> usages) {
+		for (Usage usage : usages) {
+			if (!usage.isDeclaration()) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 }

@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,27 +35,31 @@ public class ParameterTreeImpl extends EsqlTree implements ParameterTree {
 	private InternalSyntaxToken constantKeyword;
 	private InternalSyntaxToken nameOrNamesapceKeyword;
 	private DataTypeTreeImpl dataType;
+	private NullableTreeImpl nullable;
 
-	public ParameterTreeImpl(InternalSyntaxToken directionIndicator, IdentifierTree identifier) {
+	public ParameterTreeImpl(InternalSyntaxToken directionIndicator, IdentifierTree identifier, NullableTreeImpl nullable) {
 		this.directionIndicator = directionIndicator;
 		this.identifier = identifier;
+		this.nullable = nullable;
 
 	}
 
-	public ParameterTreeImpl(InternalSyntaxToken directionIndicator, IdentifierTree identifier, InternalSyntaxToken nameOrNamesapceKeyword) {
+	public ParameterTreeImpl(InternalSyntaxToken directionIndicator, IdentifierTree identifier, InternalSyntaxToken nameOrNamesapceKeyword, NullableTreeImpl nullable) {
 		this.directionIndicator = directionIndicator;
 		this.identifier=identifier;
 		this.nameOrNamesapceKeyword = nameOrNamesapceKeyword;
+		this.nullable = nullable;
 				
 	}
 
 	public ParameterTreeImpl(InternalSyntaxToken directionIndicator, IdentifierTree identifier,
-			InternalSyntaxToken constantKeyword, DataTypeTreeImpl dataType) {
+			InternalSyntaxToken constantKeyword, DataTypeTreeImpl dataType, NullableTreeImpl nullable) {
 		this.directionIndicator = directionIndicator;
 		this.identifier = identifier;
 		this.nameOrNamesapceKeyword = null;
 		this.constantKeyword = constantKeyword;
 		this.dataType = dataType;
+		this.nullable = nullable;
 	}
 
 	
@@ -84,6 +88,11 @@ public class ParameterTreeImpl extends EsqlTree implements ParameterTree {
 	public DataTypeTreeImpl dataType() {
 		return dataType;
 	}
+	
+	@Override
+	public NullableTreeImpl nullable() {
+		return nullable;
+	}
 
 	@Override
 	public void accept(DoubleDispatchVisitor visitor) {
@@ -98,7 +107,7 @@ public class ParameterTreeImpl extends EsqlTree implements ParameterTree {
 
 	@Override
 	public Iterator<Tree> childrenIterator() {
-		return Iterators.forArray(directionIndicator, identifier, constantKeyword, nameOrNamesapceKeyword, dataType);
+		return Iterators.forArray(directionIndicator, identifier, constantKeyword, nameOrNamesapceKeyword, dataType, nullable);
 	}
 
 }

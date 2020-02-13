@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,8 +33,8 @@ public class BlankLineBeforeCommentsCheckTest {
 	public void test() {
 		EsqlCheck check = new BlankLineBeforeCommentsCheck();
 		EsqlCheckVerifier.issues(check, new File("src/test/resources/BlankLineBeforeComments.esql"))
-		.next().atLine(4).withMessage("Insert one blank line before a block or single-line comment.")
-		.next().atLine(16).withMessage("Insert one blank line before a block or single-line comment.")
+		.next().atLine(4).withMessage("Insert one blank line before this block or single-line comment.")
+		.next().atLine(16).withMessage("Insert one blank line before this block or single-line comment.")
 		.noMore();
 	}
 

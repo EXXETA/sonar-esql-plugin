@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -130,6 +130,18 @@ public class TraceFileReaderTest {
 		assertThat(insert.getType()).isEqualTo("string");
 		assertThat(insert.getValue()).isEqualTo("'default'");
 
+	}
+
+	@Test
+	public void indexOutOfBounds112() throws JAXBException {
+		TraceFileReader trace = new TraceFileReader(new File("src/test/resources/codecoverage/tests/usertrace_112.xml")).readTrace(new ExecutionDataVisitor() {
+
+			@Override
+			public void visitModuleExecution(ModuleExecutionData data) {
+
+			}
+		});
+		assertThat(trace).isNotNull();
 	}
 
 }

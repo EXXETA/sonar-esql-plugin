@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,6 +30,7 @@ public class CardinalityInLoopCheckTest {
 		.next().atLine(5).withMessage("Avoid using CARDINALITY in loops.")
 		.next().atLine(18).withMessage("Avoid using CARDINALITY in loops.")
 		.next().atLine(25).withMessage("Avoid using CARDINALITY in loops.")
+		.next().atLine(33).withMessage("Avoid using CARDINALITY in loops.")
 			.noMore();
 	}
 }

@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,12 +30,12 @@ public class VariablesSubtreeCheck extends DoubleDispatchVisitorCheck{
 	public void visitSetStatement(SetStatementTree tree) {
 		if (tree.variableReference() instanceof FieldReferenceTree){
 			FieldReferenceTree fieldRef = (FieldReferenceTree)tree.variableReference();
-			if ("Environment".equalsIgnoreCase(fieldRef.pathElement().name().name().text()) ){
+			if ("Environment".equalsIgnoreCase(fieldRef.pathElement().name().name().name()) ){
 				
 				if (fieldRef.pathElements().isEmpty()
 					|| fieldRef.pathElements().get(0).name()==null 
 					|| fieldRef.pathElements().get(0).name().name()==null 
-					|| !"Variables".equalsIgnoreCase(fieldRef.pathElements().get(0).name().name().text())){
+					|| !"Variables".equalsIgnoreCase(fieldRef.pathElements().get(0).name().name().name())){
 
 					addIssue(tree, "Environment vaiables should be written to the Variables-subtree.");
 					

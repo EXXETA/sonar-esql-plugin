@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,6 +27,7 @@ public interface PassthruFunctionTree extends MiscellaneousFunctionTree{
 	SyntaxToken passthruKeyword();
 	SyntaxToken openingParenthesis();
 	ExpressionTree expression();
+	SyntaxToken comma();
 	SyntaxToken toKeyword();
 	FieldReferenceTree databaseReference();
 	SyntaxToken valuesKeyword();

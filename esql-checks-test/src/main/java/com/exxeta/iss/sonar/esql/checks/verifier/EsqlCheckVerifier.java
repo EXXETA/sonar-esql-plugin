@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,7 +26,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.squidbridge.checks.CheckMessagesVerifier;
 
 import com.exxeta.iss.sonar.esql.api.EsqlCheck;
 import com.exxeta.iss.sonar.esql.api.visitors.EsqlVisitorContext;
@@ -63,11 +62,11 @@ public class EsqlCheckVerifier {
 	 * source file where you expect an issue. For example:
 	 * 
 	 * <pre>
-	 * var x = 1; -- Noncompliant {{A message for this line.}}
+	 * SET x = 1; -- Noncompliant {{A message for this line.}}
 	 *
-	 * function foo() { -- Noncompliant [[effortToFix=2]] [[secondary=+0,+1]]
-	 * 					-- [[sc=5;ec=6;el=+0]]
-	 * }
+	 * function foo() BEGIN -- Noncompliant [[effortToFix=2]] [[secondary=+0,+1]]
+	 * 					    -- [[sc=5;ec=6;el=+0]]
+	 * END
 	 * </pre>
 	 * 
 	 * How to write these comments:

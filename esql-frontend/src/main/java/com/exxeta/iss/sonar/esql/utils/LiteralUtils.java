@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +18,8 @@
 package com.exxeta.iss.sonar.esql.utils;
 
 public class LiteralUtils {
+	private LiteralUtils(){}
+
 	public static String trimQuotes(String value) {
 		return value.substring(1, value.length() - 1);
 	}

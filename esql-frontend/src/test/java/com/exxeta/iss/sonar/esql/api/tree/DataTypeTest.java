@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,6 +35,8 @@ public class DataTypeTest {
 			.matches("INTERVAL YEAR TO MONTH")
 			.matches("INTERVAL DAY TO HOUR")
 			.matches("INTERVAL MINUTE TO SECOND")
+			.matches("INTERVAL MONTH")
+			.matches("REFERENCE")
 			.notMatches("STRING");
 		
 	}

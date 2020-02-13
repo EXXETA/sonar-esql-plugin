@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,8 +31,9 @@ public class CommentedCodeCheckTest {
 		 .next().atLine(5).withMessage("Remove this commented out code.")
 		 .next().atLine(9).withMessage("Remove this commented out code.")
 		 .next().atLine(14).withMessage("Remove this commented out code.")
+		 .next().atLine(18).withMessage("Remove this commented out code.")
 		 .next().atLine(22).withMessage("Remove this commented out code.")
-		 .next().atLine(32).withMessage("Remove this commented out code.")
+		 .next().atLine(35).withMessage("Remove this commented out code.")
 		 .noMore();
 	}
 }

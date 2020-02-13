@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,8 +17,6 @@
  */
 package com.exxeta.iss.sonar.esql.api.tree.statement;
 
-import java.util.List;
-
 import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 
@@ -32,10 +30,12 @@ public interface CreateModuleStatementTree extends StatementTree {
 
 	IdentifierTree moduleName();
 
-	List<StatementTree> moduleStatementsList();
+	StatementsTree moduleStatementsList();
 
 	SyntaxToken endKeyword();
 
 	SyntaxToken moduleKeyword2();
+	
+	SyntaxToken semi();
 
 }

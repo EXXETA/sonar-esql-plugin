@@ -1,0 +1,24 @@
+CREATE COMPUTE MODULE ProcessCardAccount
+
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+
+		IF var = false THEN SET a=0; END IF;        -- Noncompliant [[sc=12;ec=17]] {{Remove the literal "false" boolean value.}}
+	    IF var = true THEN SET a=0; END IF;         -- Noncompliant {{Remove the literal "true" boolean value.}}
+	    IF var <> false THEN SET a=0; END IF;       -- Noncompliant {{Remove the literal "false" boolean value.}}
+	    IF var <> true THEN SET a=0; END IF;        -- Noncompliant {{Remove the literal "true" boolean value.}}
+	    IF false = var THEN SET a=0; END IF;        -- Noncompliant {{Remove the literal "false" boolean value.}}
+	    IF true = var THEN SET a=0; END IF;         -- Noncompliant {{Remove the literal "true" boolean value.}}
+	    IF false <> var THEN SET a=0; END IF;       -- Noncompliant {{Remove the literal "false" boolean value.}}
+	    IF true <> var THEN SET a=0; END IF;        -- Noncompliant {{Remove the literal "true" boolean value.}}
+	    IF NOT true THEN SET a=0; END IF;           -- Noncompliant {{Remove the literal "true" boolean value.}}
+	    IF NOT false THEN SET a=0; END IF;          -- Noncompliant {{Remove the literal "false" boolean value.}}
+	    IF false AND foo() THEN SET a=0; END IF;    -- Noncompliant {{Remove the literal "false" boolean value.}}
+	    IF foo() OR true THEN SET a=0; END IF;      -- Noncompliant {{Remove the literal "true" boolean value.}}
+	
+	    SET var = foo(true);                         -- Compliant
+	    IF NOT foo THEN SET a=0; END IF;             -- Compliant
+	    IF foo() AND bar() THEN SET a=0; END IF;     -- Compliant
+	END;
+
+END MODULE;

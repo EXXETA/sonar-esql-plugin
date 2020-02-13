@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -56,15 +56,30 @@ public abstract class EsqlTreeModelTest<T extends Tree> {
 	 *
 	 * @param s
 	 *            the string to parse
+	 * @param rule
+	 *            the rule used to parse the string
 	 * @param descendantToReturn
 	 *            the node kind to seek in the generated tree
 	 * @return the node found for the given kind, null if not found.
 	 */
 	@SuppressWarnings("unchecked")
-	protected <T extends Tree> T parse(String s, Kind descendantToReturn) throws Exception {
-		Tree node = getParser(descendantToReturn).parse(s);
+	protected T parse(String s, GrammarRuleKey rule, Kind descendantToReturn) throws Exception {
+		Tree node = getParser(rule).parse(s);
 		checkFullFidelity(node, s);
 		return (T) getFirstDescendant((EsqlTree) node, descendantToReturn);
+	}
+	
+	/**
+	 * Parse the given string and return the first descendant of the given kind.
+	 *
+	 * @param s
+	 *            the string to parse
+	 * @param descendantToReturn
+	 *            the node kind to seek in the generated tree
+	 * @return the node found for the given kind, null if not found.
+	 */
+	protected T parse(String s, Kind descendantToReturn) throws Exception {
+		return parse(s, descendantToReturn, descendantToReturn);
 	}
 
 	protected SymbolModelImpl symbolModel(InputFile file) {

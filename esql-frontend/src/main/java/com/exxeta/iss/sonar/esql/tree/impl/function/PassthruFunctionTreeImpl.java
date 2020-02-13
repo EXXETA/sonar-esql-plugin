@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,6 +37,7 @@ public class PassthruFunctionTreeImpl extends EsqlTree implements PassthruFuncti
 	private InternalSyntaxToken passthruKeyword;
 	private InternalSyntaxToken openingParenthesis;
 	private ExpressionTree expression;
+	private InternalSyntaxToken comma;
 	private InternalSyntaxToken toKeyword;
 	private FieldReferenceTreeImpl databaseReference;
 	private InternalSyntaxToken valuesKeyword;
@@ -44,25 +45,27 @@ public class PassthruFunctionTreeImpl extends EsqlTree implements PassthruFuncti
 	private SeparatedList<ExpressionTree> argumentList;
 	private InternalSyntaxToken closingParenthesis;
 
-	public PassthruFunctionTreeImpl(SeparatedList<ExpressionTree> argumentList) {
+	public PassthruFunctionTreeImpl(InternalSyntaxToken comma, SeparatedList<ExpressionTree> argumentList) {
+		this.comma = comma;
 		this.argumentList = argumentList;
 	}
 
-	public PassthruFunctionTreeImpl(ExpressionTree expression, InternalSyntaxToken toKeyword,
-			FieldReferenceTreeImpl databaseReference, InternalSyntaxToken valuesKeyword, ParameterListTreeImpl values) {
+	public PassthruFunctionTreeImpl(InternalSyntaxToken toKeyword, FieldReferenceTreeImpl databaseReference,
+			InternalSyntaxToken valuesKeyword, ParameterListTreeImpl values) {
 		super();
-		this.expression = expression;
 		this.toKeyword = toKeyword;
 		this.databaseReference = databaseReference;
 		this.valuesKeyword = valuesKeyword;
 		this.values = values;
-		this.argumentList = new SeparatedList<>(Collections.<ExpressionTree>emptyList(), Collections.<InternalSyntaxToken>emptyList());
+		this.argumentList = new SeparatedList<>(Collections.<ExpressionTree>emptyList(),
+				Collections.<InternalSyntaxToken>emptyList());
 	}
 
 	public void finish(InternalSyntaxToken passthruKeyword, InternalSyntaxToken openingParenthesis,
-			InternalSyntaxToken closingParenthesis) {
+			ExpressionTree expression, InternalSyntaxToken closingParenthesis) {
 		this.passthruKeyword = passthruKeyword;
 		this.openingParenthesis = openingParenthesis;
+		this.expression=expression;
 		this.closingParenthesis = closingParenthesis;
 	}
 
@@ -79,6 +82,11 @@ public class PassthruFunctionTreeImpl extends EsqlTree implements PassthruFuncti
 	@Override
 	public ExpressionTree expression() {
 		return expression;
+	}
+
+	@Override
+	public InternalSyntaxToken comma() {
+		return comma;
 	}
 
 	@Override
@@ -124,7 +132,7 @@ public class PassthruFunctionTreeImpl extends EsqlTree implements PassthruFuncti
 	@Override
 	public Iterator<Tree> childrenIterator() {
 		return Iterators.concat(
-				Iterators.forArray(passthruKeyword, openingParenthesis, expression, toKeyword, databaseReference,
+				Iterators.forArray(passthruKeyword, openingParenthesis, expression, comma, toKeyword, databaseReference,
 						valuesKeyword, values),
 				argumentList.elementsAndSeparators(Functions.<ExpressionTree>identity()),
 				Iterators.singletonIterator(closingParenthesis));

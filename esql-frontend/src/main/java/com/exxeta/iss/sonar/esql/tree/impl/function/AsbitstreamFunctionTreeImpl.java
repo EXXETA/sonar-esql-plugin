@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,10 +17,9 @@
  */
 package com.exxeta.iss.sonar.esql.tree.impl.function;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import com.google.common.collect.Iterators;
 
 import com.exxeta.iss.sonar.esql.api.EsqlNonReservedKeyword;
 import com.exxeta.iss.sonar.esql.api.tree.AsbitstreamFunctionTree;
@@ -39,22 +38,9 @@ public class AsbitstreamFunctionTreeImpl extends EsqlTree implements Asbitstream
 	private InternalSyntaxToken openingParenthesis;
 	private FieldReferenceTreeImpl fieldReference;
 
-	private InternalSyntaxToken optionsSeparator;
-	private ExpressionTree optionsExpression;
-	private InternalSyntaxToken encodingSeparator;
-	private ExpressionTree encodingExpression;
-	private InternalSyntaxToken ccsidSeparator;
-	private ExpressionTree ccsidExpression;
-	private InternalSyntaxToken setSeparator;
-	private ExpressionTree setExpression;
-	private InternalSyntaxToken typeSeparator;
-	private ExpressionTree typeExpression;
-	private InternalSyntaxToken formatSeparator;
-	private ExpressionTree formatExpression;
+	private List<Tuple<InternalSyntaxToken, Optional<ExpressionTree>>> parameters;
 
 	private InternalSyntaxToken closingParenthesis;
-
-	private boolean commaSeparated;
 
 	
 	public AsbitstreamFunctionTreeImpl(InternalSyntaxToken asbitstreamKeyword, InternalSyntaxToken openingParenthesis,
@@ -65,62 +51,7 @@ public class AsbitstreamFunctionTreeImpl extends EsqlTree implements Asbitstream
 		this.asbitstreamKeyword = asbitstreamKeyword;
 		this.openingParenthesis = openingParenthesis;
 		this.fieldReference = fieldReference;
-
-		if (parameters != null) {
-			commaSeparated = parameters.get(0).first().is(EsqlPunctuator.COMMA);
-			if (commaSeparated) {
-				optionsSeparator = parameters.get(0).first();
-				optionsExpression = parameters.get(0).second().isPresent()?parameters.get(0).second().get():null;
-				if (parameters.size()>1){
-					encodingSeparator = parameters.get(1).first();
-					encodingExpression = parameters.get(1).second().isPresent()?parameters.get(1).second().get():null;
-				}
-				if (parameters.size()>2){
-					ccsidSeparator = parameters.get(2).first();
-					ccsidExpression = parameters.get(2).second().isPresent()?parameters.get(2).second().get():null;
-				}
-				if (parameters.size()>3){
-					setSeparator = parameters.get(3).first();
-					setExpression = parameters.get(3).second().isPresent()?parameters.get(3).second().get():null;
-				}
-				if (parameters.size()>4){
-					typeSeparator = parameters.get(4).first();
-					typeExpression = parameters.get(4).second().isPresent()?parameters.get(4).second().get():null;
-				}
-				if (parameters.size()>5){
-					formatSeparator = parameters.get(5).first();
-					formatExpression = parameters.get(5).second().isPresent()?parameters.get(5).second().get():null;
-				}
-			} else {
-				for (Tuple<InternalSyntaxToken, Optional<ExpressionTree>> tuple : parameters) {
-					if (tuple.first().is(EsqlNonReservedKeyword.OPTIONS)){
-						optionsSeparator = tuple.first();
-						optionsExpression = tuple.second().get();
-					}
-					if (tuple.first().is(EsqlNonReservedKeyword.ENCODING)){
-						encodingSeparator = tuple.first();
-						encodingExpression = tuple.second().get();
-					}
-					if (tuple.first().is(EsqlNonReservedKeyword.CCSID)){
-						ccsidSeparator = tuple.first();
-						ccsidExpression = tuple.second().get();
-					}
-					if (tuple.first().is(EsqlNonReservedKeyword.SET)){
-						setSeparator = tuple.first();
-						setExpression = tuple.second().get();
-					}
-					if (tuple.first().is(EsqlNonReservedKeyword.TYPE)){
-						typeSeparator = tuple.first();
-						typeExpression = tuple.second().get();
-					}
-					if (tuple.first().is(EsqlNonReservedKeyword.FORMAT)){
-						formatSeparator = tuple.first();
-						formatExpression = tuple.second().get();
-					}
-				}
-			}
-		}
-
+		this.parameters = parameters;
 		this.closingParenthesis = closingParenthesis;
 	}
 
@@ -148,81 +79,115 @@ public class AsbitstreamFunctionTreeImpl extends EsqlTree implements Asbitstream
 	
 	
 	@Override
-	public InternalSyntaxToken optionsSeparator() {
-		return optionsSeparator;
-	}
-
-
-	@Override
-	public ExpressionTree optionsExpression() {
-		return optionsExpression;
-	}
-
-
-	@Override
 	public InternalSyntaxToken encodingSeparator() {
-		return encodingSeparator;
+		return getSeparator(0, EsqlNonReservedKeyword.ENCODING);
 	}
 
 
 	@Override
 	public ExpressionTree encodingExpression() {
-		return encodingExpression;
+		return getExpression(0, EsqlNonReservedKeyword.ENCODING);
 	}
 
 
 	@Override
 	public InternalSyntaxToken ccsidSeparator() {
-		return ccsidSeparator;
+		return getSeparator(1, EsqlNonReservedKeyword.CCSID);
 	}
 
 
 	@Override
 	public ExpressionTree ccsidExpression() {
-		return ccsidExpression;
+		return getExpression(1, EsqlNonReservedKeyword.CCSID);
 	}
 
 
 	@Override
 	public InternalSyntaxToken setSeparator() {
-		return setSeparator;
+		return getSeparator(2, EsqlNonReservedKeyword.SET);
 	}
 
 
 	@Override
 	public ExpressionTree setExpression() {
-		return setExpression;
+		return getExpression(2, EsqlNonReservedKeyword.SET);
 	}
 
 
 	@Override
 	public InternalSyntaxToken typeSeparator() {
-		return typeSeparator;
+		return getSeparator(3, EsqlNonReservedKeyword.TYPE);
 	}
 
 
 	@Override
 	public ExpressionTree typeExpression() {
-		return typeExpression;
+		return getExpression(3, EsqlNonReservedKeyword.TYPE);
 	}
 
 
 	@Override
 	public InternalSyntaxToken formatSeparator() {
-		return formatSeparator;
+		return getSeparator(4, EsqlNonReservedKeyword.FORMAT);
 	}
 
 
 	@Override
 	public ExpressionTree formatExpression() {
-		return formatExpression;
+		return getExpression(4, EsqlNonReservedKeyword.FORMAT);
 	}
 
+
+	@Override
+	public InternalSyntaxToken optionsSeparator() {
+		return getSeparator(5, EsqlNonReservedKeyword.OPTIONS);
+	}
+
+	@Override
+	public ExpressionTree optionsExpression() {
+		return getExpression(5, EsqlNonReservedKeyword.OPTIONS);
+	}
 
 	public boolean isCommaSeparated() {
-		return commaSeparated;
+		return parameters!=null && !parameters.isEmpty() && parameters.get(0).first().is(EsqlPunctuator.COMMA);
 	}
 
+	private InternalSyntaxToken getSeparator(int position, EsqlNonReservedKeyword keyword) {
+		if (isCommaSeparated()){
+			if (parameters.size()>position){
+				return parameters.get(position).first();
+			} else {
+				return null;
+			}
+		} else {
+			for (Tuple<InternalSyntaxToken, Optional<ExpressionTree>> tuple : parameters){
+				if (tuple.first().is(keyword)){
+					return tuple.first();
+				}
+			}
+			return null;
+		}		
+	}
+	private ExpressionTree getExpression(int position, EsqlNonReservedKeyword keyword) {
+		if (isCommaSeparated()){
+			if (parameters.size()>position){
+				if (parameters.get(position).second().isPresent()){
+					return parameters.get(position).second().get();
+				} else {
+					return null;
+				}
+			} else {
+				return null;
+			}
+		} else {
+			for (Tuple<InternalSyntaxToken, Optional<ExpressionTree>> tuple : parameters){
+				if (tuple.first().is(keyword) && tuple.second().isPresent()){
+					return tuple.second().get();
+				}
+			}
+			return null;
+		}		
+	}
 
 	@Override
 	public void accept(DoubleDispatchVisitor visitor) {
@@ -235,16 +200,26 @@ public class AsbitstreamFunctionTreeImpl extends EsqlTree implements Asbitstream
 		return Kind.ASBITSTREAM_FUNCTION;
 	}
 
+	
+	
 	@Override
 	public Iterator<Tree> childrenIterator() {
-		return Iterators.forArray(asbitstreamKeyword, openingParenthesis, fieldReference,
-				optionsSeparator, optionsExpression,
-				encodingSeparator, encodingExpression,
-				ccsidSeparator, ccsidExpression,
-				setSeparator, setExpression,
-				typeSeparator, typeExpression,
-				formatSeparator, formatExpression,
-				closingParenthesis);
+
+		ArrayList<Tree> children = new ArrayList<>();
+		children.add(asbitstreamKeyword);
+		children.add(openingParenthesis);
+		children.add(fieldReference);
+		if (parameters != null) {
+			for (Tuple<InternalSyntaxToken, Optional<ExpressionTree>> parameter : parameters) {
+				children.add(parameter.first());
+				if (parameter.second().isPresent()) {
+					children.add(parameter.second().get());
+				}
+			}
+		}
+		children.add(closingParenthesis);
+		return children.iterator();
+		
 	}
 
 }

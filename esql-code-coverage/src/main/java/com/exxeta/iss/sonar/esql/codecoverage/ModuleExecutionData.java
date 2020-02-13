@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +18,7 @@
 package com.exxeta.iss.sonar.esql.codecoverage;
 
 import java.util.HashSet;
+import java.util.Set;
 
 public class ModuleExecutionData {
 	private final String schemaAndModuleName;
@@ -40,7 +41,7 @@ public class ModuleExecutionData {
 		return lineExecutions.size();
 	}
 	
-	public HashSet<LineExecutionData> getLineExecutions() {
+	public Set<LineExecutionData> getLineExecutions() {
 		return lineExecutions;
 	}
 }

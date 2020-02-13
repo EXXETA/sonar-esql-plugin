@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.Objects;
 import java.util.Spliterator;
 import java.util.Spliterators;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -124,5 +125,10 @@ public abstract class EsqlTree implements Tree {
 
 	public Tree parent() {
 		return parent;
+	}
+
+	@Override
+	public String toString(){
+		return childrenStream().filter(Objects::nonNull).map(Tree::toString).collect(Collectors.joining());
 	}
 }

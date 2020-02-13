@@ -1,0 +1,23 @@
+CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+DECLARE versionRef REFERENCE TO InputRoot.SOAP.Context.SOAP_Version;
+		CASE
+		WHEN versionRef>= 1 THEN
+			SET Environment.Fault.faultcode='soapenv:Client';
+		WHEN versionRef<1.2 THEN
+		SET Environment.Fault.faultcode='soapenv:Sender';
+		END CASE;
+CREATE FIELD Environment.LogData;
+		DECLARE refEnv REFERENCE TO Environment.LogData;
+		SET refEnv.serviceOperationName=InputRoot.SOAP.Context.operation;
+		SET refEnv.operationId = EVAL(Environment.LogData.serviceOperationName);
+		SET refEnv.serviceName = InputRoot.SOAP.Context.service;
+		SET refEnv.interfaceId = InputRoot.SOAP.Header.ns:Info.consumerId;
+		SET refEnv.serviceVersion = SUBSTRING(SUBSTRING(SUBSTRING(InputRoot.SOAP.Context.portTypeNamespace AFTER InputRoot.SOAP.Context.service) AFTER '/')BEFORE '/');
+		SET OutputRoot =
+			InputRoot;
+		DECLARE myInt,myInt3 INTEGER 1;
+		DECLARE myInt2, myInt4 INTEGER 1;
+		DECLARE inMsg REFERENCE TO InputRoot.XMLNSC.*:*[<];
+		RETURN TRUE;
+	END;

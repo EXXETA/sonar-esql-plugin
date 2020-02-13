@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -89,7 +89,7 @@ public class IsExpressionTreeImpl extends EsqlTree implements IsExpressionTree, 
 
 	@Override
 	public Kind getKind() {
-		return Kind.IN_EXPRESSION;
+		return Kind.IS_EXPRESSION;
 	}
 
 	@Override

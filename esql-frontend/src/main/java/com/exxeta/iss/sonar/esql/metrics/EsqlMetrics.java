@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,8 +34,12 @@ public class EsqlMetrics implements Metrics {
 	public static final Metric<Integer> MODULES = new Metric.Builder(MODULES_KEY, "Modules", Metric.ValueType.INT)
 			.setDescription("Modules").setDirection(Metric.DIRECTION_WORST).setQualitative(false)
 			.setDomain(CoreMetrics.DOMAIN_SIZE).create();
+	public static final String MODULE_COMPLEXITY_KEY = "moduleComplexity";
+	public static final Metric<Integer> MODULE_COMPLEXITY = new Metric.Builder(MODULE_COMPLEXITY_KEY, "Module Complexity", Metric.ValueType.INT)
+			.setDescription("Module Complexity").setDirection(Metric.DIRECTION_WORST).setQualitative(false)
+			.setDomain(CoreMetrics.DOMAIN_SIZE).create();
 	
-	private static final List<Metric> metrics = Lists.newArrayList(PROCEDURES, MODULES);
+	private static final List<Metric> metrics = Lists.newArrayList(PROCEDURES, MODULES, MODULE_COMPLEXITY);
 	@Override
 	public List<Metric> getMetrics() {
 		return metrics;

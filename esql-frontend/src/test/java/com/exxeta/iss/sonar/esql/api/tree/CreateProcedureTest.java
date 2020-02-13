@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,6 +28,7 @@ import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ResultSetTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ReturnTypeTree;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.ExternalRoutineBodyTreeImpl;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
 
@@ -50,7 +51,7 @@ public class CreateProcedureTest extends EsqlTreeModelTest<CreateProcedureStatem
 		CreateProcedureStatementTree tree = parse("CREATE PROCEDURE myProc1 (IN P1 INT, OUT P2 INT) LANGUAGE DATABASE DYNAMIC RESULT SETS 2 EXTERNAL NAME \"myschema.myproc1\";", Kind.CREATE_PROCEDURE_STATEMENT);
 		assertNotNull(tree);
 		assertNotNull(tree.createKeyword());
-		assertEquals(tree.createKeyword().text(),"CREATE");
+		assertEquals("CREATE", tree.createKeyword().text());
 		assertNotNull(tree.routineType());
 		assertNotNull(tree.identifier());
 		assertNotNull(tree.identifier().name());
@@ -86,6 +87,17 @@ public class CreateProcedureTest extends EsqlTreeModelTest<CreateProcedureStatem
 
 		tree = parse("CREATE PROCEDURE a () RETURNS CHAR BEGIN END;", Kind.CREATE_PROCEDURE_STATEMENT);
 		tree = parse("CREATE PROCEDURE a () RETURNS CHAR NULLABLE BEGIN END;", Kind.CREATE_PROCEDURE_STATEMENT);
+		tree = parse("CREATE PROCEDURE a () RETURNS INTEGER\n" + 
+				" LANGUAGE JAVA\n" + 
+				" EXTERNAL NAME \"com.ibm.broker.test.MyClass.myMethod1\";", Kind.CREATE_PROCEDURE_STATEMENT);
+		assertNotNull(tree.routineBody());
+		ExternalRoutineBodyTreeImpl externalRoutineBody = tree.routineBody().externalRoutineBody();
+		assertNotNull(externalRoutineBody);
+		assertNotNull(externalRoutineBody.externalKeyword());
+		assertNotNull(externalRoutineBody.nameKeyword());
+		assertNotNull(externalRoutineBody.externalRoutineName());
+		assertNotNull(externalRoutineBody.semi());
+		
 
 	}
 	

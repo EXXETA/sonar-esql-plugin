@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,12 +40,6 @@ public class ElseifClauseTreeImpl extends EsqlTree implements ElseifClauseTree {
 		    this.condition=condition;
 		    this.thenKeyword=thenToken;
 		    this.statements = statements;
-
-		  }
-
-	  public ElseifClauseTreeImpl(InternalSyntaxToken elseifKeyword) {
-		    this.elseifKeyword = elseifKeyword;
-		    this.statements = null;
 
 		  }
 

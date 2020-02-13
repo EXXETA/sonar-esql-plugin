@@ -1,19 +1,39 @@
 BROKER SCHEMA generic
 PATH serviceOperations;
+
+DECLARE ABC CONSTANT CHARACTER 'ABC';
+
 CrEATE COMPUTE MODULE responseTransformation
 	CReATE FUNCTION Main() RETURNS BOOLEAN
 	BEGIN
 	    DECLARE inRef REFERENCE TO InputRoot.SOAP.Body;
 		DECLARE outRef REFERENCE TO OutputRoot.SOAP.Body;
 		DECLARE envRef REFERENCE TO Environment.LogData.serviceOperationName;
-   CASE
+   		CASE
 		WHEN abf = 'createAccessFacilityAgreement' THEN
-		DECLARE inRef REFERENCE TO InputLocalEnvironment.DFDL.BROKERMESSAGEFROMBB;
-		CALL createAccessFacilityAgreement_response(inRef,outRef,Environment);
-          WHEN abf = 'updateAccessFacilityAgreement' THEN
+			DECLARE inRef REFERENCE TO InputLocalEnvironment.DFDL.BROKERMESSAGEFROMBB;
+			CALL createAccessFacilityAgreement_response(inRef,outRef,Environment);
+        WHEN abf = 'updateAccessFacilityAgreement' THEN
 			DECLARE inRef REFERENCE TO InputLocalEnvironment.DFDL.BROKERMESSAGEFROMBB;
 			CALL updateAccessFacilityAgreement_response(inRef,outRef,Environment);
 		END CASE;
-RETURN TRUE;
-END;
+	RETURN TRUE;
+	END;
+
+	CREATE FUNCTION A() RETURNS BOOLEAN
+	BEGIN
+		DECLARE refEnv REFERENCE TO Environment.LogData;
+		SET refEnv.serviceOperationName = InputRoot.SOAP.Context.operation;
+		SET refEnv.operationId = EVAL(Environment.LogData.serviceOperationName);
+	END;
+
+	CREATE PROCEDURE B()
+	BEGIN
+	  DECLARE inputRef REFERENCE TO InputRoot;
+	  DECLARE inReturn REFERENCE TO inputRef.a;
+
+	  DECLARE qst NAMESPACE 'http://www.ww.ru/types/QST';
+      DECLARE qsp NAMESPACE  'http://www.ww.ru/types/QSP';
+      SET OutputRoot.XMLNSC.qsp:Request = '';
+	END;
 END MOdULE;

@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,6 +31,7 @@ public class TooManyIterateOrLeaveInLoopCheckTest {
 		 EsqlCheckVerifier.issues(check, new File("src/test/resources/leaveIterate.esql"))
 	        .next().atLine(7).withMessage("Loops should not contain more than a single \"ITERATE\" or \"LEAVE\" statement.")
 	        .next().atLine(25).withMessage("Loops should not contain more than a single \"ITERATE\" or \"LEAVE\" statement.")
+	        .next().atLine(66).withMessage("Loops should not contain more than a single \"ITERATE\" or \"LEAVE\" statement.")
 	        .noMore();
 	  }
 }

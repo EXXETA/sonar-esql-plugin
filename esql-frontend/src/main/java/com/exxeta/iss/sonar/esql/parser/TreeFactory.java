@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -127,6 +127,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.LoopStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.MessageSourceTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.MoveStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.NameClausesTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.NullableTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ParameterTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ParseClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.PassthruStatementTreeImpl;
@@ -873,8 +874,6 @@ public class TreeFactory {
 		ImmutableList.Builder<PathElementTree> elements = ImmutableList.builder();
 		ImmutableList.Builder<InternalSyntaxToken> dots = ImmutableList.builder();
 
-		// elements.add(parameterTree);
-
 		if (pathElements.isPresent()) {
 			for (Tuple<InternalSyntaxToken, PathElementTreeImpl> pair : pathElements.get()) {
 				InternalSyntaxToken dotToken = pair.first();
@@ -1044,22 +1043,31 @@ public class TreeFactory {
 	}
 
 	public ParameterTreeImpl parameter(Optional<InternalSyntaxToken> directionIndicator, IdentifierTree identifier,
-			Optional<Object> optional) {
+			Optional<Object> optional, Optional<NullableTreeImpl> nullable) {
 		if (optional.isPresent()) {
 			if (optional.get() instanceof Tuple) {
 				Tuple<Optional<InternalSyntaxToken>, DataTypeTreeImpl> t = (Tuple) optional.get();
 				return new ParameterTreeImpl(directionIndicator.isPresent() ? directionIndicator.get() : null,
-						identifier, t.first().isPresent() ? t.first().get() : null, t.second());
+						identifier, t.first().isPresent() ? t.first().get() : null, t.second(), nullable.isPresent()?nullable.get():null);
 			} else {
 				return new ParameterTreeImpl(directionIndicator.isPresent() ? directionIndicator.get() : null,
-						identifier, (InternalSyntaxToken) optional.get());
+						identifier, (InternalSyntaxToken) optional.get(), nullable.isPresent()?nullable.get():null);
 			}
 
 		} else {
-			return new ParameterTreeImpl(directionIndicator.isPresent() ? directionIndicator.get() : null, identifier);
+			return new ParameterTreeImpl(directionIndicator.isPresent() ? directionIndicator.get() : null, identifier, nullable.isPresent()?nullable.get():null);
 
 		}
 	}
+	public NullableTreeImpl nullable(Object object){
+		if (object instanceof Tuple){
+			Tuple<InternalSyntaxToken, InternalSyntaxToken> tuple = (Tuple) object;
+			return new NullableTreeImpl(tuple.first(),tuple.second());
+		} else {
+			return new NullableTreeImpl((InternalSyntaxToken) object);
+		}
+	}
+	
 
 	public ReturnTypeTreeImpl returnType(InternalSyntaxToken returnsToken, DataTypeTreeImpl dataType,
 			Optional<Object> nullIndicator) {
@@ -1079,11 +1087,11 @@ public class TreeFactory {
 
 	public CreateModuleStatementTreeImpl createModuleStatement(InternalSyntaxToken createKeyword,
 			InternalSyntaxToken moduleType, InternalSyntaxToken moduleKeyword, IdentifierTree indentifier,
-			Optional<List<StatementTree>> optional, InternalSyntaxToken endKeyword, InternalSyntaxToken moduleKeyword2,
+			Optional<List<StatementTree>> statements, InternalSyntaxToken endKeyword, InternalSyntaxToken moduleKeyword2,
 			InternalSyntaxToken semi) {
-		List<StatementTree> moduleStatementsList = optionalList(optional);
+		
 		return new CreateModuleStatementTreeImpl(createKeyword, moduleType, moduleKeyword, indentifier,
-				moduleStatementsList, endKeyword, moduleKeyword2);
+				statements(statements), endKeyword, moduleKeyword2, semi);
 	}
 
 	public ResultSetTreeImpl resultSet(InternalSyntaxToken dynamicKeyword, InternalSyntaxToken resultKeyword,
@@ -1208,10 +1216,6 @@ public class TreeFactory {
 	}
 	
 
-	public LiteralTreeImpl listLiteral(InternalSyntaxToken listToken) {
-		return new LiteralTreeImpl(Kind.LIST_LITERAL, listToken);
-	}
-
 	public LiteralTreeImpl timeLiteral(InternalSyntaxToken timeToken) {
 		return new LiteralTreeImpl(Kind.TIME_LITERAL, timeToken);
 	}
@@ -1222,10 +1226,6 @@ public class TreeFactory {
 
 	public LiteralTreeImpl dateLiteral(InternalSyntaxToken dateToken) {
 		return new LiteralTreeImpl(Kind.DATE_LITERAL, dateToken);
-	}
-
-	public LiteralTreeImpl arrayLiteral(InternalSyntaxToken arrayToken) {
-		return new LiteralTreeImpl(Kind.ARRAY_LITERAL, arrayToken);
 	}
 
 	public LiteralTreeImpl intervalLiteral(InternalSyntaxToken intervalToken) {
@@ -1263,15 +1263,10 @@ public class TreeFactory {
 		return new IntervalExpressionTreeImpl(openParenToken, additiveExpression, closeParenToken, intervalQualifier);
 	}
 
-	public FieldReferenceTreeImpl fieldReference(Object first,
+	public FieldReferenceTreeImpl fieldReference(PathElementTree first,
 			Optional<List<Tuple<InternalSyntaxToken, PathElementTreeImpl>>> zeroOrMore) {
-		if (first instanceof ExpressionTree) {
-			return new FieldReferenceTreeImpl((ExpressionTree) first, pathElementList(zeroOrMore));
-		} else if (first instanceof PathElementTree) {
-			return new FieldReferenceTreeImpl((PathElementTree) first, pathElementList(zeroOrMore));
-		} else {
-			return new FieldReferenceTreeImpl((InternalSyntaxToken) first, pathElementList(zeroOrMore));
-		}
+		return new FieldReferenceTreeImpl((PathElementTree) first, pathElementList(zeroOrMore));
+		
 	}
 
 	public NamespaceTreeImpl namespace(InternalSyntaxToken identifier) {
@@ -1307,8 +1302,11 @@ public class TreeFactory {
 		return pathElement;
 	}
 	
-	public PathElementTreeImpl pathElement(IndexTreeImpl index) {
+	public PathElementTreeImpl pathElement(Optional<PathElementTypeTreeImpl> type, IndexTreeImpl index) {
 		PathElementTreeImpl pathElement = new PathElementTreeImpl();
+		if (type.isPresent()){
+			pathElement.type(type.get());
+		}
 		pathElement.index(index);
 		return pathElement;
 	}
@@ -1342,8 +1340,10 @@ public class TreeFactory {
 
 	public PathElementNameTreeImpl pathElementName(Object name){
 		if (name instanceof Triple) {
-			Triple<InternalSyntaxToken, ExpressionTree, InternalSyntaxToken> triple = (Triple) name;
-			return new PathElementNameTreeImpl(triple.first(), triple.second(), triple.third());
+			Triple<InternalSyntaxToken, Optional<ExpressionTree>, InternalSyntaxToken> triple = (Triple) name;
+			return new PathElementNameTreeImpl(triple.first(), triple.second().isPresent()?triple.second().get():null, triple.third());
+		} else if(name instanceof IdentifierTreeImpl)  {
+			return new PathElementNameTreeImpl((IdentifierTreeImpl)name);
 		} else {
 			return new PathElementNameTreeImpl((InternalSyntaxToken) name);
 		}
@@ -1606,7 +1606,7 @@ public class TreeFactory {
 				value.isPresent() ? value.get().second() : null);
 	}
 
-	public ValuesClauseTreeImpl valuesClause(Optional<Tuple<InternalSyntaxToken, FieldReferenceTreeImpl>> identity,
+	public ValuesClauseTreeImpl valuesClause(Optional<Tuple<InternalSyntaxToken, PathElementTree>> identity,
 			Optional<Tuple<InternalSyntaxToken, ExpressionTree>> type,
 			Optional<Tuple<InternalSyntaxToken, ExpressionTree>> namespace,
 			Optional<Tuple<InternalSyntaxToken, ExpressionTree>> name,
@@ -1692,7 +1692,8 @@ public class TreeFactory {
 				> t2 = (Triple)params;
 
 				if (t2.second().isPresent() && t2.second().get().second() instanceof InternalSyntaxToken){
-					return new NameClausesTreeImpl(t2.first().isPresent()?t2.first().get().first():null, t2.first().isPresent()?t2.first().get().second():null, 
+					return new NameClausesTreeImpl(
+							t2.first().isPresent()?t2.first().get().first():null, t2.first().isPresent()?t2.first().get().second():null, 
 							t2.second().get().first(), null, (InternalSyntaxToken)t2.second().get().second(), 
 							t2.third().isPresent()?t2.third().get().first():null, t2.third().isPresent()?t2.third().get().second():null, 
 							null, null, null, null, null);
@@ -1797,7 +1798,9 @@ public class TreeFactory {
 			Optional<Tuple<InternalSyntaxToken, ExpressionTree>> catalog,
 			Optional<Tuple<InternalSyntaxToken, ExpressionTree>> message,
 			Optional<Tuple<InternalSyntaxToken, ParameterListTreeImpl>> values, InternalSyntaxToken semi) {
-		InternalSyntaxToken eventKeyword, userKeyword, traceKeyword;
+		InternalSyntaxToken eventKeyword;
+		InternalSyntaxToken userKeyword;
+		InternalSyntaxToken traceKeyword;
 		if (logType instanceof Tuple) {
 			Tuple<InternalSyntaxToken, InternalSyntaxToken> t = (Tuple) logType;
 			userKeyword = t.first();
@@ -2045,21 +2048,21 @@ public class TreeFactory {
 		return new RowConstructorFunctionTreeImpl(rowKeyword, openingParenthesis, aliasedExpressionList(aliasedExpression, rest), closingParenthesis);
 	}
 
-	public PassthruFunctionTreeImpl passthruOldSyntax(SeparatedList<ExpressionTree> argumentList) {
-		return new PassthruFunctionTreeImpl(argumentList);
+	public PassthruFunctionTreeImpl passthruOldSyntax(InternalSyntaxToken comma, SeparatedList<ExpressionTree> argumentList) {
+		return new PassthruFunctionTreeImpl(comma, argumentList);
 	}
 
-	public PassthruFunctionTreeImpl passthruNewSyntax(ExpressionTree expression,
+	public PassthruFunctionTreeImpl passthruNewSyntax(
 			Optional<Tuple<InternalSyntaxToken, FieldReferenceTreeImpl>> toClause,
 			Optional<Tuple<InternalSyntaxToken, ParameterListTreeImpl>> valuesClause) {
 		
-		return new PassthruFunctionTreeImpl(expression, toClause.isPresent()?toClause.get().first():null,toClause.isPresent()?toClause.get().second():null,valuesClause.isPresent()?valuesClause.get().first():null,valuesClause.isPresent()?valuesClause.get().second():null);
+		return new PassthruFunctionTreeImpl(toClause.isPresent()?toClause.get().first():null,toClause.isPresent()?toClause.get().second():null,valuesClause.isPresent()?valuesClause.get().first():null,valuesClause.isPresent()?valuesClause.get().second():null);
 	}
 
 	public PassthruFunctionTreeImpl finishPassthruFunction(InternalSyntaxToken passthruKeyword, InternalSyntaxToken openingParenthesis,
-			PassthruFunctionTreeImpl tree, InternalSyntaxToken closingParenthesis) {
+			ExpressionTree expression, PassthruFunctionTreeImpl tree, InternalSyntaxToken closingParenthesis) {
 		
-		tree.finish(passthruKeyword, openingParenthesis, closingParenthesis);
+		tree.finish(passthruKeyword, openingParenthesis, expression, closingParenthesis);
 		return tree;
 	}
 

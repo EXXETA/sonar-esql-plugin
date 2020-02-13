@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,8 +32,9 @@ public class FilterNodeModifyMessageCheckTest {
 	@Test
 	public void test() {
 		EsqlCheck check = new FilterNodeModifyMessageCheck();
-		EsqlCheckVerifier.issues(check, new File("src/test/resources/FilterNodeModifyMessage.esql")).next().atLine(4)
-				.withMessage("The filter node cannot modify the message").noMore();
+		EsqlCheckVerifier.issues(check, new File("src/test/resources/FilterNodeModifyMessage.esql"))
+			.next().atLine(4).withMessage("The filter node cannot modify the message")
+			.noMore();
 	}
 
 }

@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +17,12 @@
  */
 package com.exxeta.iss.sonar.esql.checks.verifier;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+import javax.annotation.Nullable;
+
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
@@ -24,10 +30,7 @@ import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxTrivia;
 import com.exxeta.iss.sonar.esql.api.visitors.EsqlVisitorContext;
 import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitorCheck;
 import com.google.common.base.Splitter;
-import com.google.common.collect.ImmutableList;
-import java.util.ArrayList;
-import java.util.List;
-import javax.annotation.Nullable;
+import com.google.common.collect.ImmutableSet;
 
 class ExpectedIssuesParser extends SubscriptionVisitorCheck {
 
@@ -43,8 +46,8 @@ class ExpectedIssuesParser extends SubscriptionVisitorCheck {
   }
 
   @Override
-  public List<Kind> nodesToVisit() {
-    return ImmutableList.of(Kind.TOKEN);
+  public Set<Kind> nodesToVisit() {
+    return ImmutableSet.of(Kind.TOKEN);
   }
 
   @Override
@@ -61,7 +64,7 @@ class ExpectedIssuesParser extends SubscriptionVisitorCheck {
 
         if (paramsAndMessage.startsWith("@+")) {
           String[] spaceSplit = paramsAndMessage.split("[\\s\\[{]", 2);
-          issueLine += Integer.valueOf(spaceSplit[0].substring(2));
+          issueLine += Integer.parseInt(spaceSplit[0].substring(2));
           paramsAndMessage = spaceSplit.length > 1 ? spaceSplit[1] : "";
         }
 
@@ -131,13 +134,13 @@ class ExpectedIssuesParser extends SubscriptionVisitorCheck {
       String value = param.substring(equalIndex + 1);
 
       if ("effortToFix".equalsIgnoreCase(name)) {
-        issue.effortToFix(Integer.valueOf(value));
+        issue.effortToFix(Integer.parseInt(value));
 
       } else if ("sc".equalsIgnoreCase(name)) {
-        issue.startColumn(Integer.valueOf(value));
+        issue.startColumn(Integer.parseInt(value));
 
       } else if ("ec".equalsIgnoreCase(name)) {
-        issue.endColumn(Integer.valueOf(value));
+        issue.endColumn(Integer.parseInt(value));
 
       } else if ("el".equalsIgnoreCase(name)) {
         issue.endLine(lineValue(issue.line(), value));
@@ -174,12 +177,12 @@ class ExpectedIssuesParser extends SubscriptionVisitorCheck {
 
   private static int lineValue(int baseLine, String shift) {
     if (shift.startsWith("+")) {
-      return baseLine + Integer.valueOf(shift.substring(1));
+      return baseLine + Integer.parseInt(shift.substring(1));
     }
     if (shift.startsWith("-")) {
-      return baseLine - Integer.valueOf(shift.substring(1));
+      return baseLine - Integer.parseInt(shift.substring(1));
     }
-    return Integer.valueOf(shift);
+    return Integer.parseInt(shift);
   }
 
 

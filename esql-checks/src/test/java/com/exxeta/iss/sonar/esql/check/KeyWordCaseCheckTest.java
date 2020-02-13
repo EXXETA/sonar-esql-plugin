@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,8 +33,9 @@ public class KeyWordCaseCheckTest {
 	public void test() {
 		EsqlCheck check = new KeyWordCaseCheck();
 		EsqlCheckVerifier.issues(check, new File("src/test/resources/KeyWordCaseCheck.esql"))
-		.next().atLine(6).withMessage("This keyword should be in uppercase.")
-		.next().atLine(25).withMessage("This keyword should be in uppercase.")
+		.next().atLine(7).withMessage("This keyword should be in uppercase.")
+		.next().atLine(22).withMessage("This keyword should be in uppercase.")
+		.next().atLine(32).withMessage("This keyword should be in uppercase.")
 		.noMore();
 	}
 }

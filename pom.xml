@@ -5,7 +5,7 @@
 
 	<groupId>com.exxeta.iss</groupId>
 	<artifactId>sonar-esql-plugin</artifactId>
-	<version>2.3.0-SNAPSHOT</version>
+	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<url>http://exxeta.com</url>
 
@@ -46,57 +46,60 @@
 		<url>https://github.com/EXXETA/sonar-esql-plugin</url>
 		<connection>scm:git:git@github.com:EXXETA/sonar-esql-plugin.git</connection>
 	</scm>
+	<issueManagement>
+		<system>Github</system>
+		<url>https://github.com/EXXETA/sonar-esql-plugin/issues</url>
+	</issueManagement>
+	<ciManagement>
+		<system>Travis</system>
+		<url>https://travis-ci.org/EXXETA/sonar-esql-plugin</url>
+	</ciManagement>
 
 	<properties>
-		<sonarQubeMinVersion>6.7</sonarQubeMinVersion>
-		<version.sonar-packaging.plugin>1.17</version.sonar-packaging.plugin>
-		<jdk.min.version>1.8</jdk.min.version>
+		<sonarQubeMinVersion>7.9</sonarQubeMinVersion>
+		<version.sonar-packaging.plugin>1.18.0.372</version.sonar-packaging.plugin><!--check-->
+		<jdk.min.version>1.8</jdk.min.version><!--check-->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.min.version>3.0.5</maven.min.version>
+		<maven.min.version>3.0.5</maven.min.version><!--check-->
 
 		<assertj.version>3.5.2</assertj.version>
 		<commons-io.version>2.5</commons-io.version>
 		<commons-lang.version>2.6</commons-lang.version>
-		<guava.version>19.0</guava.version>
-		<junit.version>4.10</junit.version>
+		<guava.version>28.0-jre</guava.version>
+		<junit.version>4.12</junit.version>
 		<logback.version>1.0.13</logback.version>
-		<mockito.version>1.9.0</mockito.version>
+		<mockito.version>2.21.0</mockito.version>
 		<slf4j.version>1.7.21</slf4j.version>
-		<sonar.version>6.7</sonar.version>
-		<sonar-orchestrator.version>3.14.0.887</sonar-orchestrator.version>
-		<sonarlint.version>3.0.0.1140</sonarlint.version>
-		<sslr.version>1.22</sslr.version>
-		<sslr-squid-bridge.version>2.6.1</sslr-squid-bridge.version>
+		<sonar.version>7.9</sonar.version>
+		<sonar-orchestrator.version>3.26.0.2111</sonar-orchestrator.version>
+		<sonarlint.version>4.3.1.2486</sonarlint.version>
+		<sslr.version>1.23</sslr.version>
+		<sslr-squid-bridge.version>2.7.0.377</sslr-squid-bridge.version>
 		<gson.version>2.6.2</gson.version>
+		<analyzer-commons.version>1.11.0.541</analyzer-commons.version>
 
 		<artifactsToPublish>${project.groupId}:sonar-esql-plugin:jar</artifactsToPublish>
 
-		<version.source.plugin>2.4</version.source.plugin>
-		<version.site.plugin>3.4</version.site.plugin>
-		<version.resources.plugin>2.7</version.resources.plugin>
-		<version.shade.plugin>2.4.3</version.shade.plugin>
-		<version.jar.plugin>2.6</version.jar.plugin>
+
+		<version.source.plugin>3.1.0</version.source.plugin>
+		<version.site.plugin>3.7.1</version.site.plugin>
+		<version.resources.plugin>3.1.0</version.resources.plugin>
+		<version.shade.plugin>3.2.1</version.shade.plugin>
+		<version.jar.plugin>3.1.2</version.jar.plugin>
 
 
 		<version.buildnumber.plugin>1.4</version.buildnumber.plugin>
-		<version.clean.plugin>3.0.0</version.clean.plugin>
-		<version.compiler.plugin>3.5.1</version.compiler.plugin>
-		<version.dependency.plugin>2.9</version.dependency.plugin>
+		<version.clean.plugin>3.1.0</version.clean.plugin>
+		<version.compiler.plugin>3.8.1</version.compiler.plugin>
+		<version.dependency.plugin>3.1.1</version.dependency.plugin>
 		<version.deploy.plugin>2.8.2</version.deploy.plugin>
-		<version.enforcer.plugin>1.4.1</version.enforcer.plugin>
-		<version.failsafe.plugin>2.18</version.failsafe.plugin>
+		<version.enforcer.plugin>3.0.0-M1</version.enforcer.plugin>
+		<version.failsafe.plugin>2.22.2</version.failsafe.plugin>
 		<version.groovy.plugin>2.0</version.groovy.plugin>
-		<version.install.plugin>2.5.2</version.install.plugin>
-		<version.surefire.plugin>2.18</version.surefire.plugin>
-
-		<sonar.jacoco.reportPaths>${project.build.directory}/coverage-reports/jacoco-ut.exec</sonar.jacoco.reportPaths>
+		<version.install.plugin>3.0.0-M1</version.install.plugin>
+		<version.surefire.plugin>2.22.2</version.surefire.plugin>
 
 	</properties>
-
-	<prerequisites>
-		<maven>${maven.min.version}</maven>
-	</prerequisites>
-
 
 	<dependencyManagement>
 		<dependencies>
@@ -126,6 +129,11 @@
 				<groupId>org.sonarsource.sslr</groupId>
 				<artifactId>sslr-core</artifactId>
 				<version>${sslr.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.sonarsource.analyzer-commons</groupId>
+				<artifactId>sonar-analyzer-commons</artifactId>
+				<version>${analyzer-commons.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.sonarsource.sslr-squid-bridge</groupId>
@@ -193,7 +201,7 @@
 			</dependency>
 			<dependency>
 				<groupId>org.mockito</groupId>
-				<artifactId>mockito-all</artifactId>
+				<artifactId>mockito-core</artifactId>
 				<version>${mockito.version}</version>
 				<scope>test</scope>
 			</dependency>
@@ -239,13 +247,6 @@
 				<groupId>org.sonarsource.sonarqube</groupId>
 				<artifactId>sonar-plugin-api</artifactId>
 				<version>${sonar.version}</version>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.sonarsource.esql</groupId>
-				<artifactId>sonar-esql-plugin</artifactId>
-				<type>sonar-plugin</type>
-				<version>${project.version}</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
@@ -657,7 +658,7 @@
 					<plugin>
 						<groupId>org.jacoco</groupId>
 						<artifactId>jacoco-maven-plugin</artifactId>
-						<version>0.7.9</version>
+						<version>0.8.2</version>
 						<executions>
 							<!-- Prepares the property pointing to the JaCoCo runtime agent which 
 								is passed as VM argument when Maven the Surefire plugin is executed. -->
@@ -667,9 +668,7 @@
 									<goal>prepare-agent</goal>
 								</goals>
 								<configuration>
-									<!-- Sets the path to the file which contains the execution data. -->
-									<destFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</destFile>
-									<!-- Sets the name of the property containing the settings for JaCoCo 
+									<!-- Sets the name of the property containing the settings for JaCoCo
 										runtime agent. -->
 									<propertyName>surefireArgLine</propertyName>
 								</configuration>
@@ -682,12 +681,6 @@
 								<goals>
 									<goal>report</goal>
 								</goals>
-								<configuration>
-									<!-- Sets the path to the file which contains the execution data. -->
-									<dataFile>${project.build.directory}/coverage-reports/jacoco-ut.exec</dataFile>
-									<!-- Sets the output directory for the code coverage report. -->
-									<outputDirectory>${project.reporting.outputDirectory}/jacoco-ut</outputDirectory>
-								</configuration>
 							</execution>
 						</executions>
 					</plugin>

@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,7 +48,7 @@ public class HardcodedIpCheck extends DoubleDispatchVisitorCheck {
 	
 	private static boolean areAllBelow256(Iterable<String> numbersAsStrings) {
 	    for (String numberAsString : numbersAsStrings) {
-	      if (Integer.valueOf(numberAsString) > 255) {
+	      if (Integer.parseInt(numberAsString) > 255) {
 	        return false;
 	      }
 	    }

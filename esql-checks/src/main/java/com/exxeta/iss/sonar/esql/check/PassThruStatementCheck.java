@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,59 +17,62 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
 import org.sonar.check.Rule;
-import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
-import com.exxeta.iss.sonar.esql.api.tree.statement.PassthruStatementTree;
-import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
+
+import com.exxeta.iss.sonar.esql.api.tree.Tree;
+import com.exxeta.iss.sonar.esql.tree.expression.LiteralTree;
 
 /**
- * This java class is created to implement the logic to check the PassThru Statement.
- * When PASSTHRU statement is used in ESQL,Use parameter markers '?'
+ * This java class is created to implement the logic to check the PassThru
+ * Statement. When PASSTHRU statement is used in ESQL,Use parameter markers '?'
+ * 
  * @author Sapna Singh
  *
  */
 
-@Rule(key="PassThruStatement")
-public class PassThruStatementCheck extends  DoubleDispatchVisitorCheck {
-	
+@Rule(key = "PassThruStatement")
+public class PassThruStatementCheck extends AbstractPassthruCheck {
+
 	private static final String MESSAGE = "Use parameter markers '?' when using the PASSTHRU statement in ESQL";
 	
-	
 	@Override
-	public void visitPassthruStatement(PassthruStatementTree tree){
-		if (!checkQuery(tree)){
-			addIssue(tree,MESSAGE);
-			
+	protected void checkLiterals(Tree tree, List<LiteralTree> literals) {
+		
+		StringBuilder query =new StringBuilder();
+		for (LiteralTree literal:literals){
+			query.append(literal.value());
 		}
-	}
-		
-		
-		public static boolean checkQuery(PassthruStatementTree exp){
-			boolean isQueryWhereComplient = false;
-			ExpressionTree query = exp.expression();
-			String queryString = query.toString().toUpperCase();
-			if (queryString.trim().contains("WHERE")){
-				String whereClause = queryString.substring(queryString.indexOf("WHERE"));
-				whereClause = CheckUtils.removeQuotedContent(whereClause);
-				whereClause = whereClause.replaceAll(" ", "");
-				
-				if(whereClause.contains("GROUPBY")){
-					whereClause = whereClause.substring(0,whereClause.indexOf("GROUPBY"));
-				}else if(whereClause.contains("ORDERBY")){
-					whereClause = whereClause.substring(0,whereClause.indexOf("ORDERBY"));
-				}
-				
-				if(CheckUtils.countCharacters(whereClause, "=")!=CheckUtils.countCharacters(whereClause, "\\?")){
-					isQueryWhereComplient = false;
-				}else{
-					isQueryWhereComplient = true;
-				}
-			}else{
+
+		boolean isQueryWhereComplient = false;
+		String queryString = query.toString().toUpperCase();
+		if (queryString.trim().contains("WHERE")) {
+			String whereClause = queryString.substring(queryString.indexOf("WHERE"));
+			whereClause = CheckUtils.removeQuotedContent(whereClause);
+			whereClause = whereClause.replace(" ", "");
+
+			if (whereClause.contains("GROUPBY")) {
+				whereClause = whereClause.substring(0, whereClause.indexOf("GROUPBY"));
+			} else if (whereClause.contains("ORDERBY")) {
+				whereClause = whereClause.substring(0, whereClause.indexOf("ORDERBY"));
+			}
+
+			if (StringUtils.countMatches(whereClause, "=") != StringUtils.countMatches(whereClause, "?")) {
+				isQueryWhereComplient = false;
+			} else {
 				isQueryWhereComplient = true;
 			}
-			return isQueryWhereComplient;
+
+		} else {
+			isQueryWhereComplient = true;
+		}
+		if (!isQueryWhereComplient){
+			addIssue(tree, MESSAGE);
+		}
+
 		
 	}
-	
 
 }

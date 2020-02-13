@@ -1,0 +1,20 @@
+CREATE PROCEDURE bool()
+	BEGIN
+
+IF NOT TRUE THEN END IF; -- Noncompliant {{Simplify this unnecessary boolean operation.}}
+IF NOT FALSE THEN END IF; -- Noncompliant
+
+IF a = FALSE THEN END IF;        -- Noncompliant {{Refactor the code to avoid using this boolean literal.}}
+--     ^^^^^
+IF a = TRUE THEN END IF;         -- Noncompliant
+IF a <> false THEN END IF;       -- Noncompliant {{Refactor the code to avoid using this boolean literal.}}
+IF a <> TRUE THEN END IF;        -- Noncompliant
+IF TRUE = a THEN END IF;         -- Noncompliant
+IF FALSE = a THEN END IF;        -- Noncompliant
+IF TRUE <> a THEN END IF;        -- Noncompliant
+IF FALSE <> a THEN END IF;       -- Noncompliant
+IF a = foo(true) THEN END IF;    -- OK
+IF NOT (TRUE) THEN END IF;       -- Noncompliant
+IF a = (FALSE) THEN END IF;      -- Noncompliant
+
+	END;

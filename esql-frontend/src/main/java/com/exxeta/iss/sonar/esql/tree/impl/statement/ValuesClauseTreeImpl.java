@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,19 +19,19 @@ package com.exxeta.iss.sonar.esql.tree.impl.statement;
 
 import java.util.Iterator;
 
+import com.exxeta.iss.sonar.esql.api.tree.PathElementTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ValuesClauseTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
-import com.exxeta.iss.sonar.esql.tree.impl.declaration.FieldReferenceTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.google.common.collect.Iterators;
 
 public class ValuesClauseTreeImpl extends EsqlTree implements ValuesClauseTree {
 
 	private InternalSyntaxToken identityKeyword;
-	private FieldReferenceTreeImpl identity;
+	private PathElementTree identity;
 	private InternalSyntaxToken typeKeyword;
 	private ExpressionTree type;
 	private InternalSyntaxToken namespaceKeyword;
@@ -41,7 +41,7 @@ public class ValuesClauseTreeImpl extends EsqlTree implements ValuesClauseTree {
 	private InternalSyntaxToken valueKeyword;
 	private ExpressionTree value;
 
-	public ValuesClauseTreeImpl(InternalSyntaxToken identityKeyword, FieldReferenceTreeImpl identity,
+	public ValuesClauseTreeImpl(InternalSyntaxToken identityKeyword, PathElementTree identity,
 			InternalSyntaxToken typeKeyword, ExpressionTree type, InternalSyntaxToken namespaceKeyword,
 			ExpressionTree namespace, InternalSyntaxToken nameKeyword, ExpressionTree name,
 			InternalSyntaxToken valueKeyword, ExpressionTree value) {
@@ -64,7 +64,7 @@ public class ValuesClauseTreeImpl extends EsqlTree implements ValuesClauseTree {
 	}
 
 	@Override
-	public FieldReferenceTreeImpl identity() {
+	public PathElementTree identity() {
 		return identity;
 	}
 

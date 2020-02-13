@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,24 +17,23 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
-import java.util.List;
 import java.util.Set;
 
 import org.sonar.check.Rule;
 
 import com.exxeta.iss.sonar.esql.api.EsqlNonReservedKeyword;
 import com.exxeta.iss.sonar.esql.api.tree.PathElementNameTree;
+import com.exxeta.iss.sonar.esql.api.tree.SchemaNameTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.api.tree.expression.IdentifierTree;
 import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitorCheck;
 import com.exxeta.iss.sonar.esql.lexer.EsqlReservedKeyword;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 /**
- * This Java Class Is created to ensure that all the keywords in esql file
- * should be in UPPER CASE
+ * This check ensures that all the keywords in ESQL files are in UPPER CASE
  * 
  * @author sapna singh
  *
@@ -47,8 +46,8 @@ public class KeyWordCaseCheck extends SubscriptionVisitorCheck {
 	private static final String MESSAGE = "This keyword should be in uppercase.";
 
 	@Override
-	public List<Kind> nodesToVisit() {
-		return ImmutableList.of(Tree.Kind.TOKEN);
+	public Set<Kind> nodesToVisit() {
+		return ImmutableSet.of(Tree.Kind.TOKEN);
 	}
 
 	@Override
@@ -57,7 +56,9 @@ public class KeyWordCaseCheck extends SubscriptionVisitorCheck {
 		String upperCase = value.toUpperCase();
 		if (!value.equals(upperCase)
 				&& (reservedKeywords.contains(upperCase) || nonReservedKeywords.contains(upperCase))
-				&& !(tree.parent() instanceof PathElementNameTree)) {
+				&& !(tree.parent().parent() instanceof PathElementNameTree)
+				&& !(tree.parent() instanceof IdentifierTree)
+				&& !(tree.parent() instanceof SchemaNameTree)) {
 			addIssue(tree, MESSAGE);
 		}
 		super.visitNode(tree);

@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,9 +29,6 @@ import org.sonar.api.batch.sensor.SensorContext;
 
 public class TraceSensor {
 
-	public TraceSensor() {
-	}
-
 	public void execute(SensorContext context, Map<InputFile, Set<Integer>> executableLines,  String[] traces) {
 		
 		for (String trace : traces) {
@@ -51,7 +48,7 @@ public class TraceSensor {
 
 
 
-	class UnitTestsAnalyzer extends AbstractAnalyzer {
+	static class UnitTestsAnalyzer extends AbstractAnalyzer {
 		private final File trace;
 		
 

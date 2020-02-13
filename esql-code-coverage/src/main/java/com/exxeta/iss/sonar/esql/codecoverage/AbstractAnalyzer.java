@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,6 @@ import static com.exxeta.iss.sonar.esql.codecoverage.CodeCoverageExtension.LOG;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -33,17 +32,14 @@ import org.sonar.api.batch.fs.FilePredicates;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
-import org.sonar.api.batch.sensor.coverage.CoverageType;
 import org.sonar.api.batch.sensor.coverage.NewCoverage;
-
-import com.google.common.io.Files;
 
 public abstract class AbstractAnalyzer implements ExecutionDataVisitor {
 
-	private Pattern pathPattern = Pattern.compile("(?i)\\s*BROKER\\s+SCHEMA\\s+([\\w\\.]+)\\s+PATH.*");
-	private Pattern modulePattern = Pattern.compile("(?i)\\s*CREATE\\s+(COMPUTE|FILTER|DATABASE)\\s+MODULE\\s+(.+)");
-	private Pattern routinePattern = Pattern.compile("(?i)\\s*CREATE\\s+(FUNCTION|PROCEDURE)\\s+([\\w]+)\\W+.*");
-	private Pattern endModulePattern = Pattern.compile("(?i)\\s*END\\s+MODULE;.*");
+	final Pattern pathPattern = Pattern.compile("(?i)\\s*BROKER\\s+SCHEMA\\s+([\\w\\.]+).*");
+	final Pattern modulePattern = Pattern.compile("(?i)\\s*CREATE\\s+(COMPUTE|FILTER|DATABASE)\\s+MODULE\\s+(.+)");
+	final Pattern routinePattern = Pattern.compile("(?i)\\s*CREATE\\s+(FUNCTION|PROCEDURE)\\s+([\\w]+)\\W+.*");
+	final Pattern endModulePattern = Pattern.compile("(?i)\\s*END\\s+MODULE;.*");
 
 	private HashMap<String, CodePosition> offsetCache = null;
 	private HashMap<InputFile, HashSet<Integer>> executedLines = new HashMap<>();
@@ -68,31 +64,31 @@ public abstract class AbstractAnalyzer implements ExecutionDataVisitor {
 
 		// Create new coverages for all InputFiles
 		for (InputFile file : files) {
-			NewCoverage coverage = context.newCoverage().onFile(file).ofType(CoverageType.UNIT);
+			NewCoverage coverage = context.newCoverage().onFile(file);
 			Set<Integer> fileExecutableLines = executableLines.get(file);
 			Set<Integer> fileExecutedLines = executedLines.get(file);
 			if (fileExecutableLines != null && fileExecutedLines == null) {
-				LOG.info("File has not been executed " + file.absolutePath());
+				LOG.info("File has not been executed " + file.uri());
 				for (int line : fileExecutableLines) {
 					coverage.lineHits(line, 0);
 					coverage.conditions(line, 1, 0);
 				}
 				coverage.save();
 			} else if (fileExecutableLines == null) {
-				LOG.warn("File has not been parsed " + file.absolutePath());
+				LOG.warn("File has not been parsed " + file.uri());
 			} else {
-				String lineHits = "";
+				StringBuilder lineHits = new StringBuilder();
 				for (int line : fileExecutableLines) {
 					if (fileExecutedLines.contains(line)) {
 						coverage.lineHits(line, 1);
 						coverage.conditions(line, 1, 1);
-						lineHits+=" "+line;
+						lineHits.append(" "+line);
 					} else {
 						coverage.lineHits(line, 0);
 						coverage.conditions(line, 1, 0);
 					}
 				}
-					LOG.info("Saving execution data found for " + file.absolutePath()+lineHits);
+					LOG.info("Saving execution data found for " + file.uri()+lineHits);
 				coverage.save();
 			}
 		}
@@ -109,9 +105,7 @@ public abstract class AbstractAnalyzer implements ExecutionDataVisitor {
 						+ Integer.parseInt(lineExecution.getRelativeLine());
 				InputFile file = offsetCache.get(lineExecution.getFunction()).getFile();
 
-				if (executedLines.get(file) == null) {
-					executedLines.put(file, new HashSet<>());
-				}
+				executedLines.computeIfAbsent(file, k -> new HashSet<>());
 
 				executedLines.get(file).add(line);
 			} else {
@@ -132,7 +126,7 @@ public abstract class AbstractAnalyzer implements ExecutionDataVisitor {
 		String moduleName = "";
 		String routineName = "";
 		try {
-			String contents = Files.toString(file.file(), Charset.defaultCharset());
+			String contents = file.contents();
 			int lineNumber = 0;
 			for (String line : contents.split("\\r?\\n")) {
 				lineNumber++;

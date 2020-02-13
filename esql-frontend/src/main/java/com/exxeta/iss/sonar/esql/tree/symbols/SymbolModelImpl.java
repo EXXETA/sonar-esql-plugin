@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,7 +25,6 @@ import java.util.Set;
 import javax.annotation.Nullable;
 
 import org.sonar.api.config.Configuration;
-import org.sonar.api.config.Settings;
 
 import com.exxeta.iss.sonar.esql.api.symbols.Symbol;
 import com.exxeta.iss.sonar.esql.api.symbols.Symbol.Kind;
@@ -33,7 +32,6 @@ import com.exxeta.iss.sonar.esql.api.symbols.SymbolModel;
 import com.exxeta.iss.sonar.esql.api.symbols.SymbolModelBuilder;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.visitors.TreeVisitorContext;
-import com.exxeta.iss.sonar.esql.tree.symbols.SymbolVisitor;
 import com.exxeta.iss.sonar.esql.tree.symbols.type.TypeVisitor;
 
 public class SymbolModelImpl implements SymbolModel, SymbolModelBuilder {
@@ -89,17 +87,6 @@ public class SymbolModelImpl implements SymbolModel, SymbolModelBuilder {
 	    return symbol;
 	  }
 
-	  @Override
-	  public Symbol declareBuiltInSymbol(String name, Symbol.Kind kind, Scope scope) {
-	    Symbol symbol = scope.getSymbol(name);
-	    if (symbol == null) {
-	      symbol = new Symbol(name, kind, scope);
-	      symbol.setBuiltIn(true);
-	      scope.addSymbol(symbol);
-	      symbols.add(symbol);
-	    }
-	    return symbol;
-	  }
 
 	  /**
 	   * Returns all symbols in script

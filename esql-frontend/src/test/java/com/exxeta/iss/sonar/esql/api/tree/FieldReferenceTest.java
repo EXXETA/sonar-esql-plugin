@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,6 +48,9 @@ public class FieldReferenceTest extends EsqlTreeModelTest<FieldReferenceTree> {
 		.matches("PRICE")
 		.notMatches("a a")
 		.matches("cursor")
+		.matches("(XML.Element)NSpace1:Element1[2]")
+		.matches("\"A-Z\"")
+		.matches("\"[A-Z]\"")
 		;
 		
 
@@ -62,13 +65,19 @@ public class FieldReferenceTest extends EsqlTreeModelTest<FieldReferenceTree> {
 			.matches("a.b[]")
 			.matches("a.b[].c")
 			.notMatches("")
-			.matches("Body.Invoice.Purchases.\"Item\"[]");
+			.matches("Body.Invoice.Purchases.\"Item\"[]")
+			.matches("MyVar.ns:{CCCC}")
+			.matches("MyVar.{'Content-'}")
+			.matches("MyVar.{getName()}")
+			.matches("MyVar.{'Content-' ||'Type'}")
+			.matches("(XML.Element)NSpace1:Element1[2]")
+			;
 		
 	}
 	
 	@Test
 	public void model() throws Exception{
-		FieldReferenceTree tree = parse("(XML.Element)NSpace1:Element1[<2].{nsexp()}:{nameexp()}.*:abc.:aaa", Kind.FIELD_REFERENCE);
+		FieldReferenceTree tree = parse("(XML.Element)NSpace1:Element1[<2].{nsexp()}:{nameexp()}.*:abc.:aaa.*", Kind.FIELD_REFERENCE);
 		assertNotNull(tree);
 		assertNotNull(tree.pathElement());
 		PathElementTree firstElement = tree.pathElement();
@@ -99,6 +108,7 @@ public class FieldReferenceTest extends EsqlTreeModelTest<FieldReferenceTree> {
 		assertNotNull(index.direction());
 		assertNotNull(index.index());
 		assertNotNull(index.closeBracket());
+		assertNotNull(tree.pathElements().get(3).name().star());
 	}
 	
 }

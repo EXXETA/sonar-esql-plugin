@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,7 +34,7 @@ public class ElseIfWithoutElseCheck extends DoubleDispatchVisitorCheck {
 
 @Override
 public void visitIfStatement(IfStatementTree tree) {
-    if (tree.elseClause()==null&&tree.elseifClauses().size()>0) {
+    if (tree.elseClause()==null && !tree.elseifClauses().isEmpty()) {
     	ElseifClauseTree lastEleseIf = tree.elseifClauses().get(tree.elseifClauses().size()-1);
           addIssue(new PreciseIssue(this, new IssueLocation(tree.ifKeyword(), lastEleseIf.elseifKeyword(), MESSAGE)));
 

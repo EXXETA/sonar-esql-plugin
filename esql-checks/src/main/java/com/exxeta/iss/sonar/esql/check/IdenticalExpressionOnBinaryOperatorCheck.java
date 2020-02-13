@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,7 +31,7 @@ public class IdenticalExpressionOnBinaryOperatorCheck extends DoubleDispatchVisi
 	 
 	 @Override
 	  public void visitBinaryExpression(BinaryExpressionTree tree) {
-	    if (!tree.is(Kind.MULTIPLY, Kind.PLUS)
+	    if (!tree.is(Kind.MULTIPLY, Kind.PLUS, Kind.CONCAT)
 	      && SyntacticEquivalence.areEquivalent(tree.leftOperand(), tree.rightOperand()) ) {
 
 	      String message = String.format(MESSAGE, tree.operator().text());

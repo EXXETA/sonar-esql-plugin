@@ -16,3 +16,6 @@ esql-frontend/.project
 .settings/
 .classpath
 .project
+.idea
+*.iml
+sampleWorkspace/.scannerwork

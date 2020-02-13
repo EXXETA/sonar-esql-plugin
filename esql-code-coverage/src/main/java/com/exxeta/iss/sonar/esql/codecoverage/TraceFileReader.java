@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -74,8 +74,7 @@ public class TraceFileReader {
 		}
 
 		// Iterate over the moduleCache and the visitor
-		for (String moduleName : moduleCache.keySet()){
-			ModuleExecutionData data = moduleCache.get(moduleName);
+		for (ModuleExecutionData data : moduleCache.values()){
 			executionDataVisitor.visitModuleExecution(data);
 		}
 		
@@ -87,7 +86,7 @@ public class TraceFileReader {
 			UserTraceLog userTraceLog = parseTraceXml();
 			
 			for (UserTraceType trace : userTraceLog.getUserTraceOrInformation()){
-				if (trace.getFunction().endsWith("::execute")){
+				if (trace.getFunction().endsWith("::execute") && trace.getInsert().size()>2){
 					String function = trace.getInsert().get(0).getValue();
 					function =  function.substring(1, function.length()-1);
 					String relativeLine = trace.getInsert().get(1).getValue();
@@ -112,8 +111,7 @@ public class TraceFileReader {
 		JAXBContext jc = JAXBContext.newInstance(UserTraceLog.class);
 
 		Unmarshaller unmarshaller = jc.createUnmarshaller();
-		UserTraceLog userTraceLog =(UserTraceLog) unmarshaller.unmarshal(traceFile);
-		return userTraceLog;
+		return (UserTraceLog) unmarshaller.unmarshal(traceFile);
 	}
 
 	private void readLine(String line) {
@@ -121,13 +119,17 @@ public class TraceFileReader {
 		if (matcher.matches()) {
 			String function = matcher.group(1).trim();
 			String relativeLine = matcher.group(2).trim();
-			String statement = line.substring(line.indexOf("''") + 2, line.lastIndexOf("''", line.indexOf(" at ")))
-					.trim();
-			String schemaAndModuleName = "";
-			if (function.contains(".")) {
-				schemaAndModuleName = function.substring(0, function.lastIndexOf('.')).trim();
+			int statementBegin = line.indexOf("''") + 2;
+			int statementEnd = line.lastIndexOf("''", line.indexOf(" at "));
+			if (statementEnd > statementBegin){
+				String statement = line.substring(statementBegin, statementEnd)
+						.trim();
+				String schemaAndModuleName = "";
+				if (function.contains(".")) {
+					schemaAndModuleName = function.substring(0, function.lastIndexOf('.')).trim();
+				}
+				addExecution(function, relativeLine, statement, schemaAndModuleName);
 			}
-			addExecution(function, relativeLine, statement, schemaAndModuleName);
 		}
 	}
 

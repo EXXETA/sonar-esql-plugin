@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +17,7 @@
  */
 package com.exxeta.iss.sonar.esql.highlighter;
 
-import java.util.List;
+import java.util.Set;
 
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.SensorContext;
@@ -34,7 +34,7 @@ import com.exxeta.iss.sonar.esql.api.visitors.SubscriptionVisitor;
 import com.exxeta.iss.sonar.esql.lexer.EsqlReservedKeyword;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.LiteralTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
 public class HighlighterVisitor extends SubscriptionVisitor {
 
@@ -46,8 +46,8 @@ public class HighlighterVisitor extends SubscriptionVisitor {
 	}
 
 	@Override
-	public List<Kind> nodesToVisit() {
-		return ImmutableList.<Kind>builder().add(Kind.NUMERIC_LITERAL, Kind.STRING_LITERAL, Kind.TOKEN).build();
+	public Set<Kind> nodesToVisit() {
+		return ImmutableSet.<Kind>builder().add(Kind.NUMERIC_LITERAL, Kind.STRING_LITERAL, Kind.TOKEN).build();
 	}
 
 	@Override

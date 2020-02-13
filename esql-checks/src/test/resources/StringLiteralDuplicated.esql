@@ -1,0 +1,22 @@
+DECLARE aaa CONSTANT CHAR 'AAAAAA';
+
+CREATE COMPUTE MODULE Module1
+
+	CREATE FUNCTION Main() RETURNS BOOLEAN
+	BEGIN
+		SET Environment.Variables.startVar.xyz ='AAAABC'; --Noncompliant [[secondary=+0,+1,+2,+3,+4,+5]]
+		SET Environment.Variables.Flag ='AAAABC';
+		CALL proc('AAAABC');
+		CALL proc2('AAAABC');
+		CALL proc3('AAAABC');
+		SET b=func('AAAABC');
+
+        DECLARE bbb CHAR 'AAAAAA'; --Noncompliant [[secondary=+1,+2,+3,+4]]
+		SET Environment.Variables.startVar.xyz ='AAAAAA';
+		SET Environment.Variables.Flag ='AAAAAA';
+		CALL proc('AAAAAA');
+		SET b=func('AAAAAA');
+
+	END;
+
+END MODULE;

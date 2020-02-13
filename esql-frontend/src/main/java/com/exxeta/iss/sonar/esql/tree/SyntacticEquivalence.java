@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -101,12 +101,14 @@ public final class SyntacticEquivalence {
   }
   
   
-  public static ExpressionTree skipParentheses(ExpressionTree tree) {
-	    if (tree.is(Tree.Kind.PARENTHESISED_EXPRESSION)) {
-	      return skipParentheses(((ParenthesisedExpressionTree) tree).expression());
-	    } else {
-	    	return tree;
-	    }
-	  }
+	public static ExpressionTree skipParentheses(ExpressionTree tree) {
+		if (tree == null) {
+			return null;
+		} else if (tree.is(Tree.Kind.PARENTHESISED_EXPRESSION)) {
+			return skipParentheses(((ParenthesisedExpressionTree) tree).expression());
+		} else {
+			return tree;
+		}
+	}
 
 }

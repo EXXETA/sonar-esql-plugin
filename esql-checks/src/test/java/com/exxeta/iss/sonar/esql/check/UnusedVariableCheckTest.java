@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2018 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,14 +17,11 @@
  */
 package com.exxeta.iss.sonar.esql.check;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
 
 import org.junit.Test;
 
 import com.exxeta.iss.sonar.esql.api.EsqlCheck;
-
 import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
 
 
@@ -39,7 +36,10 @@ public class UnusedVariableCheckTest  {
 		EsqlCheck check = new UnusedVariableCheck();
 		EsqlCheckVerifier.issues(check, new File("src/test/resources/UnusedVariable.esql"))
 		
-		.next().atLine(8).withMessage("Check Variable \"envRef\". Remove the unused Variable.").noMore();;
+		.next().atLine(11).withMessage("Remove the unused 'envRef' variable.")
+		.next().atLine(33).withMessage("Remove the unused 'inReturn' variable.")
+		.next().atLine(35).withMessage("Remove the unused 'qst' variable.")
+		.noMore();
 	
 	}	
 
