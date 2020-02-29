@@ -51,7 +51,7 @@ public class CreateProcedureTest extends EsqlTreeModelTest<CreateProcedureStatem
 		CreateProcedureStatementTree tree = parse("CREATE PROCEDURE myProc1 (IN P1 INT, OUT P2 INT) LANGUAGE DATABASE DYNAMIC RESULT SETS 2 EXTERNAL NAME \"myschema.myproc1\";", Kind.CREATE_PROCEDURE_STATEMENT);
 		assertNotNull(tree);
 		assertNotNull(tree.createKeyword());
-		assertEquals(tree.createKeyword().text(),"CREATE");
+		assertEquals("CREATE", tree.createKeyword().text());
 		assertNotNull(tree.routineType());
 		assertNotNull(tree.identifier());
 		assertNotNull(tree.identifier().name());

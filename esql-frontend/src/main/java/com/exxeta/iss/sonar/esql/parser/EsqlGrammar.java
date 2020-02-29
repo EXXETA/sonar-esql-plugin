@@ -513,14 +513,6 @@ public class EsqlGrammar {
 						b.firstOf(f.newTuple43(b.optional(b.token(EsqlNonReservedKeyword.CONSTANT)),  DATA_TYPE()),b.token(EsqlNonReservedKeyword.NAMESPACE), b.token(EsqlNonReservedKeyword.NAME)),
 						b.optional(EXPRESSION()), b.token(EsqlLegacyGrammar.EOS)
 				));
-
-		// rule(declareStatement).is("DECLARE", NAME,
-		// b.zeroOrMore(b.sequence(",", NAME)),
-		// b.optional(b.firstOf("SHARED", "EXTERNAL")),
-		// b.firstOf(b.sequence(b.optional("CONSTANT"), b.firstOf(dateLiteral,
-		// timeLiteral, dataType)),
-		// "NAMESPACE", "NAME"),
-		// b.optional(expression));
 	}
 
 	public IfStatementTreeImpl IF_STATEMENT() {

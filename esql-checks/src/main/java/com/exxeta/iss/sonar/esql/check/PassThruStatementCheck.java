@@ -51,7 +51,7 @@ public class PassThruStatementCheck extends AbstractPassthruCheck {
 		if (queryString.trim().contains("WHERE")) {
 			String whereClause = queryString.substring(queryString.indexOf("WHERE"));
 			whereClause = CheckUtils.removeQuotedContent(whereClause);
-			whereClause = whereClause.replaceAll(" ", "");
+			whereClause = whereClause.replace(" ", "");
 
 			if (whereClause.contains("GROUPBY")) {
 				whereClause = whereClause.substring(0, whereClause.indexOf("GROUPBY"));

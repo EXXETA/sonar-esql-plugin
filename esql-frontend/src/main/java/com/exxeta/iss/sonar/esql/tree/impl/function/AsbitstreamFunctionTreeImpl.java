@@ -149,7 +149,6 @@ public class AsbitstreamFunctionTreeImpl extends EsqlTree implements Asbitstream
 	}
 
 	public boolean isCommaSeparated() {
-		//return commaSeparated;
 		return parameters!=null && !parameters.isEmpty() && parameters.get(0).first().is(EsqlPunctuator.COMMA);
 	}
 

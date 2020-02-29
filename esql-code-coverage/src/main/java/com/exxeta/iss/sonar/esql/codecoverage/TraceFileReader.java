@@ -111,8 +111,7 @@ public class TraceFileReader {
 		JAXBContext jc = JAXBContext.newInstance(UserTraceLog.class);
 
 		Unmarshaller unmarshaller = jc.createUnmarshaller();
-		UserTraceLog userTraceLog =(UserTraceLog) unmarshaller.unmarshal(traceFile);
-		return userTraceLog;
+		return (UserTraceLog) unmarshaller.unmarshal(traceFile);
 	}
 
 	private void readLine(String line) {

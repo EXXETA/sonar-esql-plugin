@@ -105,9 +105,7 @@ public abstract class AbstractAnalyzer implements ExecutionDataVisitor {
 						+ Integer.parseInt(lineExecution.getRelativeLine());
 				InputFile file = offsetCache.get(lineExecution.getFunction()).getFile();
 
-				if (executedLines.get(file) == null) {
-					executedLines.put(file, new HashSet<>());
-				}
+				executedLines.computeIfAbsent(file, k -> new HashSet<>());
 
 				executedLines.get(file).add(line);
 			} else {

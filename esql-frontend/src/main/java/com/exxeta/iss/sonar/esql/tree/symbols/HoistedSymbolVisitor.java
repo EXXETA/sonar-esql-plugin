@@ -6,9 +6,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,8 +16,6 @@
  * limitations under the License.
  */
 package com.exxeta.iss.sonar.esql.tree.symbols;
-
-import java.util.Map;
 
 import com.exxeta.iss.sonar.esql.api.symbols.Symbol;
 import com.exxeta.iss.sonar.esql.api.symbols.SymbolModelBuilder;
@@ -36,153 +34,156 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.RepeatStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
 
+import java.util.Map;
+
 public class HoistedSymbolVisitor extends DoubleDispatchVisitor {
 
-	private SymbolModelBuilder symbolModel;
-	private Scope currentScope;
-	private Map<Tree, Scope> treeScopeMap;
+    private SymbolModelBuilder symbolModel;
+    private Scope currentScope;
+    private Map<Tree, Scope> treeScopeMap;
 
-	public HoistedSymbolVisitor(Map<Tree, Scope> treeScopeMap) {
-		this.treeScopeMap = treeScopeMap;
-	}
+    public HoistedSymbolVisitor(Map<Tree, Scope> treeScopeMap) {
+        this.treeScopeMap = treeScopeMap;
+    }
 
-	@Override
-	public void visitProgram(ProgramTree tree) {
-		this.symbolModel = (SymbolModelBuilder) getContext().getSymbolModel();
+    @Override
+    public void visitProgram(ProgramTree tree) {
+        this.symbolModel = (SymbolModelBuilder) getContext().getSymbolModel();
 
-		enterScope(tree);
+        enterScope(tree);
 
-		super.visitProgram(tree);
+        super.visitProgram(tree);
 
-		leaveScope();
-	}
+        leaveScope();
+    }
 
-	@Override
-	public void visitBeginEndStatement(BeginEndStatementTree tree) {
-		if (!treeScopeMap.containsKey(tree)) {
-			super.visitBeginEndStatement(tree);
+    @Override
+    public void visitBeginEndStatement(BeginEndStatementTree tree) {
+        if (!treeScopeMap.containsKey(tree)) {
+            super.visitBeginEndStatement(tree);
 
-		} else {
-			enterScope(tree);
-			super.visitBeginEndStatement(tree);
-			leaveScope();
-		}
-	
-	}
+        } else {
+            enterScope(tree);
+            super.visitBeginEndStatement(tree);
+            leaveScope();
+        }
 
-	@Override
-	public void visitCreateFunctionStatement(CreateFunctionStatementTree tree) {
-		symbolModel.declareSymbol(tree.identifier().name(), Symbol.Kind.FUNCTION, getFunctionScope())
-				.addUsage(tree.identifier(), Usage.Kind.DECLARATION);
+    }
 
-		enterScope(tree);
+    @Override
+    public void visitCreateFunctionStatement(CreateFunctionStatementTree tree) {
+        symbolModel.declareSymbol(tree.identifier().name(), Symbol.Kind.FUNCTION, getFunctionScope())
+                .addUsage(tree.identifier(), Usage.Kind.DECLARATION);
 
-		declareParameters(tree.parameterList());
+        enterScope(tree);
 
-		super.visitCreateFunctionStatement(tree);
+        declareParameters(tree.parameterList());
 
-		leaveScope();
+        super.visitCreateFunctionStatement(tree);
 
-	}
+        leaveScope();
 
-	@Override
-	public void visitCreateProcedureStatement(CreateProcedureStatementTree tree) {
-		symbolModel.declareSymbol(tree.identifier().name(), Symbol.Kind.PROCEDURE, getFunctionScope())
-				.addUsage(tree.identifier(), Usage.Kind.DECLARATION);
+    }
 
-		enterScope(tree);
+    @Override
+    public void visitCreateProcedureStatement(CreateProcedureStatementTree tree) {
+        symbolModel.declareSymbol(tree.identifier().name(), Symbol.Kind.PROCEDURE, getFunctionScope())
+                .addUsage(tree.identifier(), Usage.Kind.DECLARATION);
 
-		declareParameters(tree.parameterList());
+        enterScope(tree);
 
-		super.visitCreateProcedureStatement(tree);
+        declareParameters(tree.parameterList());
 
-		leaveScope();
+        super.visitCreateProcedureStatement(tree);
 
-	}
-	
-	
+        leaveScope();
 
-	@Override
-	public void visitRepeatStatement(RepeatStatementTree tree) {
-		scan(tree.condition());
-		enterScope(tree);
-		super.visitRepeatStatement(tree);
-		leaveScope();
-	}
+    }
 
-	@Override
-	public void visitLoopStatement(LoopStatementTree tree) {
-		enterScope(tree);
-		super.visitLoopStatement(tree);
-		leaveScope();
-	}
-	@Override
-	public void visitCaseStatement(CaseStatementTree tree) {
-		scan(tree.mainExpression());
-		enterScope(tree);
-		super.visitCaseStatement(tree);
-		leaveScope();
-	}
 
-	@Override
-	public void visitDeclareStatement(DeclareStatementTree tree) {
-		addUsages(tree);
-		super.visitDeclareStatement(tree);
-	}
+    @Override
+    public void visitRepeatStatement(RepeatStatementTree tree) {
+        scan(tree.condition());
+        enterScope(tree);
+        super.visitRepeatStatement(tree);
+        leaveScope();
+    }
 
-	private void addUsages(DeclareStatementTree tree) {
-		Scope scope = getFunctionScope();
+    @Override
+    public void visitLoopStatement(LoopStatementTree tree) {
+        enterScope(tree);
+        super.visitLoopStatement(tree);
+        leaveScope();
+    }
 
-		for (IdentifierTree bindingElement : tree.nameList()) {
-			Symbol.Kind variableKind = getVariableKind(tree);
+    @Override
+    public void visitCaseStatement(CaseStatementTree tree) {
+        scan(tree.mainExpression());
+        enterScope(tree);
+        super.visitCaseStatement(tree);
+        leaveScope();
+    }
 
-			if (tree.initialValueExpression() != null) {
-				symbolModel.declareSymbol(bindingElement.name(), variableKind, scope).addUsage(bindingElement,
-						Usage.Kind.DECLARATION_WRITE);
-			} else
-				symbolModel.declareSymbol(bindingElement.name(), variableKind, scope).addUsage(bindingElement,
-						Usage.Kind.DECLARATION);
-		}
-	}
+    @Override
+    public void visitDeclareStatement(DeclareStatementTree tree) {
+        addUsages(tree);
+        super.visitDeclareStatement(tree);
+    }
 
-	private void declareParameters(SeparatedList<ParameterTree> identifiers) {
-		for (ParameterTree identifier : identifiers) {
-			symbolModel.declareSymbol(identifier.identifier().name(), Symbol.Kind.PARAMETER, currentScope)
-					.addUsage(identifier.identifier(), Usage.Kind.LEXICAL_DECLARATION);
-		}
-	}
+    private void addUsages(DeclareStatementTree tree) {
+        Scope scope = getFunctionScope();
 
-	private Scope getFunctionScope() {
-		Scope scope = currentScope;
-		while (scope.isBlock()) {
-			scope = scope.outer();
-		}
-		return scope;
-	}
+        for (IdentifierTree bindingElement : tree.nameList()) {
+            Symbol.Kind variableKind = getVariableKind(tree);
 
-	private static Symbol.Kind getVariableKind(DeclareStatementTree declaration) {
-		if (declaration.isExternal()) {
-			return Symbol.Kind.EXTERNAL_VARIABLE;
+            if (tree.initialValueExpression() != null) {
+                symbolModel.declareSymbol(bindingElement.name(), variableKind, scope).addUsage(bindingElement,
+                        Usage.Kind.DECLARATION_WRITE);
+            } else {
+                symbolModel.declareSymbol(bindingElement.name(), variableKind, scope).addUsage(bindingElement,
+                        Usage.Kind.DECLARATION);
+            }
+        }
+    }
 
-		} else if (declaration.isConstant()) {
-			return Symbol.Kind.CONST_VARIABLE;
+    private void declareParameters(SeparatedList<ParameterTree> identifiers) {
+        for (ParameterTree identifier : identifiers) {
+            symbolModel.declareSymbol(identifier.identifier().name(), Symbol.Kind.PARAMETER, currentScope)
+                    .addUsage(identifier.identifier(), Usage.Kind.LEXICAL_DECLARATION);
+        }
+    }
 
-		} else {
-			return Symbol.Kind.VARIABLE;
-		}
-	}
+    private Scope getFunctionScope() {
+        Scope scope = currentScope;
+        while (scope.isBlock()) {
+            scope = scope.outer();
+        }
+        return scope;
+    }
 
-	private void enterScope(Tree tree) {
-		currentScope = treeScopeMap.get(tree);
-		if (currentScope == null) {
-			throw new IllegalStateException("No scope found for the tree");
-		}
-	}
+    private static Symbol.Kind getVariableKind(DeclareStatementTree declaration) {
+        if (declaration.isExternal()) {
+            return Symbol.Kind.EXTERNAL_VARIABLE;
 
-	private void leaveScope() {
-		if (currentScope != null) {
-			currentScope = currentScope.outer();
-		}
-	}
+        } else if (declaration.isConstant()) {
+            return Symbol.Kind.CONST_VARIABLE;
+
+        } else {
+            return Symbol.Kind.VARIABLE;
+        }
+    }
+
+    private void enterScope(Tree tree) {
+        currentScope = treeScopeMap.get(tree);
+        if (currentScope == null) {
+            throw new IllegalStateException("No scope found for the tree");
+        }
+    }
+
+    private void leaveScope() {
+        if (currentScope != null) {
+            currentScope = currentScope.outer();
+        }
+    }
 
 }

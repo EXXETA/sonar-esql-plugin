@@ -40,8 +40,8 @@ public class LineExecutionDataTest {
 		assertTrue("f".equals(a.getFunction()));
 		assertTrue("1".equals(a.getRelativeLine()));
 		assertTrue("s".equals(a.getStatement()));
-		assertEquals(a.hashCode(),129447);
-		assertEquals(new LineExecutionData(null, null, null).hashCode(), 29791);
+		assertEquals(129447, a.hashCode());
+		assertEquals(29791, new LineExecutionData(null, null, null).hashCode());
 		assertFalse(a.equals(""));
 		assertFalse(a.equals(new LineExecutionData(null, "", "")));
 		assertFalse(a.equals(new LineExecutionData("f", null, "")));

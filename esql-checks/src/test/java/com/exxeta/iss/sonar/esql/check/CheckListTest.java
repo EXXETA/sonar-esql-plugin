@@ -38,7 +38,7 @@ public class CheckListTest {
 	public void count() {
 		int count = 0;
 		List<File> files = (List<File>) FileUtils.listFiles(new File("src/main/java/com/exxeta/iss/sonar/esql/check/"),
-				new String[] { "java" }, false);
+				new String[] { "java" }, true);
 		for (File file : files) {
 			 String name = file.getName();
 		      if (name.endsWith("Check.java") && !name.startsWith("Abstract")) {

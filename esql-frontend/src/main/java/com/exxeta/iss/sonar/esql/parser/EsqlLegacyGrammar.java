@@ -183,36 +183,37 @@ public enum EsqlLegacyGrammar implements GrammarRuleKey {
 	private static void keywords(LexerlessGrammarBuilder b) {
 		b.rule(LETTER_OR_DIGIT).is(b.regexp("\\p{javaJavaIdentifierPart}"));
 		b.rule(keyword).is(b.firstOf(nonReservedKeyword, reservedKeyword));
-		{
-			// RESERVED
-			Object[] rest = new Object[EsqlReservedKeyword.values().length];
-			int i = 0;
-			for (EsqlReservedKeyword tokenType : EsqlReservedKeyword.values()) {
-				b.rule(tokenType).is(SPACING, b.regexp("(?i)" + tokenType.getValue()), b.nextNot(LETTER_OR_DIGIT));
-				rest[i++] = b.regexp("(?i)" + tokenType.getValue());
-			}
+		reservedKeywords(b);
+		nonReservedKeywords(b);
 
-			Object[] rest2 = new Object[rest.length - 2];
-			System.arraycopy(rest, 2, rest2, 0, rest2.length);
-			b.rule(reservedKeyword).is(
-					b.firstOf(EsqlReservedKeyword.keywordValues()[0], EsqlReservedKeyword.keywordValues()[1], rest),
-					b.nextNot(LETTER_OR_DIGIT));
+	}
+
+	private static void nonReservedKeywords(LexerlessGrammarBuilder b) {
+		Object[] rest = new Object[EsqlNonReservedKeyword.values().length];
+		int i = 0;
+		for (EsqlNonReservedKeyword tokenType : EsqlNonReservedKeyword.values()) {
+			b.rule(tokenType).is(SPACING, b.regexp("(?i)" + tokenType.getValue()), b.nextNot(LETTER_OR_DIGIT));
+			rest[i++] = b.regexp("(?i)" + tokenType.getValue());
+		}
+		Object[] rest2 = new Object[rest.length - 2];
+		System.arraycopy(rest, 2, rest2, 0, rest2.length);
+		b.rule(nonReservedKeyword).is(b.firstOf(EsqlNonReservedKeyword.keywordValues()[0],
+				EsqlNonReservedKeyword.keywordValues()[1], rest), b.nextNot(LETTER_OR_DIGIT));
+	}
+
+	private static void reservedKeywords(LexerlessGrammarBuilder b) {
+		Object[] rest = new Object[EsqlReservedKeyword.values().length];
+		int i = 0;
+		for (EsqlReservedKeyword tokenType : EsqlReservedKeyword.values()) {
+			b.rule(tokenType).is(SPACING, b.regexp("(?i)" + tokenType.getValue()), b.nextNot(LETTER_OR_DIGIT));
+			rest[i++] = b.regexp("(?i)" + tokenType.getValue());
 		}
 
-		{
-			// NON RESERVED
-			Object[] rest = new Object[EsqlNonReservedKeyword.values().length];
-			int i = 0;
-			for (EsqlNonReservedKeyword tokenType : EsqlNonReservedKeyword.values()) {
-				b.rule(tokenType).is(SPACING, b.regexp("(?i)" + tokenType.getValue()), b.nextNot(LETTER_OR_DIGIT));
-				rest[i++] = b.regexp("(?i)" + tokenType.getValue());
-			}
-			Object[] rest2 = new Object[rest.length - 2];
-			System.arraycopy(rest, 2, rest2, 0, rest2.length);
-			b.rule(nonReservedKeyword).is(b.firstOf(EsqlNonReservedKeyword.keywordValues()[0],
-					EsqlNonReservedKeyword.keywordValues()[1], rest), b.nextNot(LETTER_OR_DIGIT));
-		}
-
+		Object[] rest2 = new Object[rest.length - 2];
+		System.arraycopy(rest, 2, rest2, 0, rest2.length);
+		b.rule(reservedKeyword).is(
+				b.firstOf(EsqlReservedKeyword.keywordValues()[0], EsqlReservedKeyword.keywordValues()[1], rest),
+				b.nextNot(LETTER_OR_DIGIT));
 	}
 
 	public static LexerlessGrammar createGrammar() {

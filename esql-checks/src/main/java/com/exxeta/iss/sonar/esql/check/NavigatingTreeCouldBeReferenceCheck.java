@@ -6,9 +6,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,140 +18,91 @@
 package com.exxeta.iss.sonar.esql.check;
 
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.Set;
-
+import com.exxeta.iss.sonar.esql.api.tree.FieldReferenceTree;
+import com.exxeta.iss.sonar.esql.api.tree.PathElementTree;
+import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
+import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
+import com.exxeta.iss.sonar.esql.api.visitors.IssueLocation;
+import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
+import org.apache.commons.lang.StringUtils;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 
-import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
-import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
-import com.exxeta.iss.sonar.esql.api.visitors.EsqlFile;
-import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
- * This java class is created to implement the logic for reference check, Navigating message tree could be replaced by a reference. 
- * @author Sapna  singh
+ * This java class is created to implement the logic for reference check, Navigating message tree could be replaced by a reference.
  *
+ * @author Sapna  singh
  */
 @Rule(key = "NavigatingTreeCouldBeReference")
-public class NavigatingTreeCouldBeReferenceCheck extends DoubleDispatchVisitorCheck{
-	
-	private static final String MESSAGE = "Navigating message tree could be replaced by a reference.";
-	
-	private static final int DEFAULT_THRESHOLD = 3;
-	 @RuleProperty(
-			    key = "NavigatingTreeCouldBeReference",
-			    description = "Navigating message tree could be replaced by a reference.",
-			    defaultValue = "" + DEFAULT_THRESHOLD)
-	 public int threshold = DEFAULT_THRESHOLD;
-	
-	
-	
-	@Override
-	public void visitProgram(ProgramTree tree) {
-		
-		EsqlFile file = getContext().getEsqlFile();
-		List<String> lines = CheckUtils.readLines(file);
-		
-		
-		
-		HashSet<Integer> violatingLinesWithPossibleReference = new HashSet<>();
-        int startingLine = 0;
-        
-        
-         processSingleModuleForReferences( startingLine, lines, violatingLinesWithPossibleReference);
-        
-       
-        Set<Integer> linesNumbers = new HashSet<>();
-        Iterator<Integer> iterator1 = violatingLinesWithPossibleReference.iterator();
-        do
-        {
-            if(!iterator1.hasNext())
-                break;
-           
-            Integer lineNumber = iterator1.next();
-            if(linesNumbers.add(lineNumber))
-            {
-            	addIssue(new LineIssue(this, lineNumber,   MESSAGE ));
-            }
-        } while(true);
-    
-	}    
-        
-        private void processSingleModuleForReferences(  int startingLine, List<String> moduleLines, HashSet<Integer> violatingLinesWithPossibleReference)
-        {
-            HashMap<String, Integer> allKeys = new HashMap<>();
-            Iterator<String> iterator = moduleLines.iterator();
-            
-            do
-            {
-                if(!iterator.hasNext())
-                    break;
-                String line = iterator.next();
-              
-                line = line.trim();
-                String removeQuotedComment = CheckUtils.removeQuotedContentByChar(line, '\'');
-                if(removeQuotedComment.toUpperCase().trim().startsWith("SET "))
-                {
-                    removeQuotedComment = removeQuotedComment.substring(4);
-                    if(removeQuotedComment.trim().endsWith(";"))
-                        removeQuotedComment = removeQuotedComment.substring(0, removeQuotedComment.length() - 1);
-                    int equalsPos = removeQuotedComment.indexOf('=');
-                    if(equalsPos > 0) {
-                    	String endLine = null;
-                        String startLine = removeQuotedComment.substring(0, equalsPos).trim();
-                        if (!(equalsPos + 1  > removeQuotedComment.length())){
-                            endLine = removeQuotedComment.substring(equalsPos + 1).trim();
-                        }
-                        Set<String> keyValuesAll = new HashSet<>();
-                        Set<String> keyValuesStart = CheckUtils.buildKeys(startLine);
-                        Set<String> keyValuesEnd = new HashSet<>();
-                        if (endLine!=null){
-                            CheckUtils.buildKeys(endLine);
-                        }
+public class NavigatingTreeCouldBeReferenceCheck extends DoubleDispatchVisitorCheck {
 
-                        keyValuesStart.addAll(keyValuesEnd);
-                        for(Iterator<String> iterator1 = keyValuesStart.iterator(); iterator1.hasNext();) {
-                            String key = iterator1.next();
-                            if (!key.contains("OutputLocalEnvironment") && !key.contains("InputLocalEnvironment")) {
-                                    keyValuesAll.add(key);
-                                } 
-                            }
+    private static final String MESSAGE = "Navigating message tree could be replaced by a reference.";
 
-                        Iterator<String> iterator2 = keyValuesAll.iterator();
-                        while(iterator2.hasNext()) 
-                        {
-                            String key = iterator2.next();
-                            if(key == null || key.length() == 0)
-                                throw new RuntimeException((new StringBuilder()).append("Key is empty: ").append(key).append(" for line:").append(line).toString());
-                            Integer count = allKeys.get(key);
-                            if(count == null)
-                                allKeys.put(key, 1);
-                            else
-                                allKeys.put(key, count.intValue() + 1);
-                        }
-                    }
-                }
-            } while(true);
-            Iterator<Entry<String, Integer>> entrySetIterator = allKeys.entrySet().iterator();
-          
-            while (entrySetIterator.hasNext())
-            {
-                Entry<String, Integer> entry = entrySetIterator.next();
-                Integer count = entry.getValue();
-                if(count.intValue() > threshold )
-                {
-                    Integer lineNumber = CheckUtils.findLineInText(moduleLines, entry.getKey());
-                    if(lineNumber != null){
-	                    Integer absLine = Integer.valueOf(lineNumber.intValue() + startingLine);
-	                    violatingLinesWithPossibleReference.add(absLine);
-                    }
-                }
+    private static final int DEFAULT_THRESHOLD = 3;
+    @RuleProperty(
+            key = "NavigatingTreeCouldBeReference",
+            description = "Navigating message tree could be replaced by a reference.",
+            defaultValue = "" + DEFAULT_THRESHOLD)
+    public int threshold = DEFAULT_THRESHOLD;
+
+    private final Multimap<String, FieldReferenceTree> occurrences = ArrayListMultimap.create();
+
+    @Override
+    public void visitFieldReference(FieldReferenceTree tree) {
+
+        if (tree.pathElements() != null && !tree.pathElements().isEmpty()) {
+            StringBuilder asString = new StringBuilder(tree.pathElement().toString());
+            for (PathElementTree element : tree.pathElements()) {
+                asString.append(".");
+                asString.append(element.toString());
+                occurrences.put(asString.toString(), tree);
             }
         }
-	}
+
+        super.visitFieldReference(tree);
+    }
+
+    @Override
+    public void visitProgram(ProgramTree tree) {
+
+        occurrences.clear();
+
+        super.visitProgram(tree);
+
+        List<String> sortedKeys = occurrences.keySet().stream()
+                .sorted((k1, k2) -> StringUtils.countMatches(k2, ".") - StringUtils.countMatches(k1, "."))
+                .collect(Collectors.toList());
+
+        ArrayList<String> issueKeys = new ArrayList<>();
+
+        for (String entry : sortedKeys) {
+            Collection<FieldReferenceTree> fieldReferenceTrees = occurrences.get(entry);
+            if (fieldReferenceTrees.size() > threshold) {
+                boolean alreadyIssued = false;
+                for (String issueKey : issueKeys) {
+                    if (issueKey.startsWith(entry + ".")) {
+                        alreadyIssued = true;
+                    }
+                }
+                if (!alreadyIssued) {
+                    PreciseIssue issue = new PreciseIssue(this,
+                            new IssueLocation(fieldReferenceTrees.iterator().next(), MESSAGE));
+                    fieldReferenceTrees.forEach(element -> issue.secondary(new IssueLocation(element)));
+                    addIssue(issue);
+                    issueKeys.add(entry);
+                }
+            }
+
+        }
+
+    }
+
+
+}

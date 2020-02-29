@@ -32,5 +32,5 @@ public class LoopWithoutLeaveCheck extends DoubleDispatchVisitorCheck {
 			addIssue(tree, "\"LOOP\"-statements without \"LEAVE\" will never terminate.");
 			
 		}
-	};
+	}
 }

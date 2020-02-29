@@ -18,6 +18,8 @@
 package com.exxeta.iss.sonar.esql.utils;
 
 public class LiteralUtils {
+	private LiteralUtils(){}
+
 	public static String trimQuotes(String value) {
 		return value.substring(1, value.length() - 1);
 	}

@@ -42,13 +42,13 @@ public class InsertBlankLineBetweenFuncProcCheck extends DoubleDispatchVisitorCh
 		StatementTree previousStatement = null;
 		for (StatementTree statement : tree.moduleStatementsList().statements()) {
 			if (statement instanceof CreateRoutineTreeImpl && previousStatement instanceof CreateRoutineTreeImpl) {
-				if (!(previousStatement.lastToken().endLine()<statement.firstToken().line()-1)) {
+				if ((previousStatement.lastToken().endLine()>=statement.firstToken().line()-1)) {
 					addIssue(new LineIssue(this, previousStatement.lastToken(), MESSAGE));
 				}
 			}
 			previousStatement=statement;
 		}
-		if (previousStatement instanceof CreateRoutineTreeImpl && !(previousStatement.lastToken().endLine() < tree.endKeyword().line()-1)) {
+		if (previousStatement instanceof CreateRoutineTreeImpl && (previousStatement.lastToken().endLine() >= tree.endKeyword().line()-1)) {
 			addIssue(new LineIssue(this, previousStatement.lastToken(), MESSAGE));
 		}
 		

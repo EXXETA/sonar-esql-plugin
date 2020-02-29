@@ -29,19 +29,19 @@ import com.exxeta.iss.sonar.esql.tree.impl.declaration.FieldReferenceTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 
 public class AliasedFieldReferenceTreeImpl extends EsqlTree implements AliasedFieldReferenceTree{
-	private FieldReferenceTreeImpl fieldRefernce;
+	private FieldReferenceTreeImpl fieldReference;
 	private InternalSyntaxToken asKeyword;
 	private InternalSyntaxToken alias;
-	public AliasedFieldReferenceTreeImpl(FieldReferenceTreeImpl fieldRefernce, InternalSyntaxToken asKeyword,
+	public AliasedFieldReferenceTreeImpl(FieldReferenceTreeImpl fieldReference, InternalSyntaxToken asKeyword,
 			InternalSyntaxToken alias) {
 		super();
-		this.fieldRefernce = fieldRefernce;
+		this.fieldReference = fieldReference;
 		this.asKeyword = asKeyword;
 		this.alias = alias;
 	}
 	@Override
 	public FieldReferenceTreeImpl fieldRefernce() {
-		return fieldRefernce;
+		return fieldReference;
 	}
 	@Override
 	public InternalSyntaxToken asKeyword() {
@@ -61,7 +61,7 @@ public class AliasedFieldReferenceTreeImpl extends EsqlTree implements AliasedFi
 	}
 	@Override
 	public Iterator<Tree> childrenIterator() {
-		return Iterators.forArray(fieldRefernce, asKeyword, alias);
+		return Iterators.forArray(fieldReference, asKeyword, alias);
 	}
 	
 	

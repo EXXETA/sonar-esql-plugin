@@ -36,11 +36,7 @@ public class EsqlExclusionsFileFilter implements InputFileFilter {
 
     @Override
     public boolean accept(InputFile inputFile) {
-        if (isExcludedWithProperty(inputFile, EsqlPlugin.ESQL_EXCLUSIONS_KEY)) {
-            return false;
-        }
-
-        return true;
+        return !isExcludedWithProperty(inputFile, EsqlPlugin.ESQL_EXCLUSIONS_KEY);
     }
 
     private boolean isExcludedWithProperty(InputFile inputFile, String property) {

@@ -874,8 +874,6 @@ public class TreeFactory {
 		ImmutableList.Builder<PathElementTree> elements = ImmutableList.builder();
 		ImmutableList.Builder<InternalSyntaxToken> dots = ImmutableList.builder();
 
-		// elements.add(parameterTree);
-
 		if (pathElements.isPresent()) {
 			for (Tuple<InternalSyntaxToken, PathElementTreeImpl> pair : pathElements.get()) {
 				InternalSyntaxToken dotToken = pair.first();
@@ -1800,7 +1798,9 @@ public class TreeFactory {
 			Optional<Tuple<InternalSyntaxToken, ExpressionTree>> catalog,
 			Optional<Tuple<InternalSyntaxToken, ExpressionTree>> message,
 			Optional<Tuple<InternalSyntaxToken, ParameterListTreeImpl>> values, InternalSyntaxToken semi) {
-		InternalSyntaxToken eventKeyword, userKeyword, traceKeyword;
+		InternalSyntaxToken eventKeyword;
+		InternalSyntaxToken userKeyword;
+		InternalSyntaxToken traceKeyword;
 		if (logType instanceof Tuple) {
 			Tuple<InternalSyntaxToken, InternalSyntaxToken> t = (Tuple) logType;
 			userKeyword = t.first();

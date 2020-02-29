@@ -18,6 +18,7 @@
 package com.exxeta.iss.sonar.esql.codecoverage;
 
 import java.util.HashSet;
+import java.util.Set;
 
 public class ModuleExecutionData {
 	private final String schemaAndModuleName;
@@ -40,7 +41,7 @@ public class ModuleExecutionData {
 		return lineExecutions.size();
 	}
 	
-	public HashSet<LineExecutionData> getLineExecutions() {
+	public Set<LineExecutionData> getLineExecutions() {
 		return lineExecutions;
 	}
 }

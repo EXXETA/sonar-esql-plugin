@@ -21,7 +21,6 @@ import java.util.List;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.visitors.Issue;
-import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
 import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
 import com.exxeta.iss.sonar.esql.api.visitors.TreeVisitorContext;
 import com.google.common.annotations.Beta;
@@ -31,12 +30,6 @@ import com.google.common.annotations.Beta;
  */
 @Beta
 public interface EsqlCheck {
-
-	/**
-	 * @deprecated use use {@link EsqlCheck#addIssue(Issue)}
-	 */
-	@Deprecated
-	LineIssue addLineIssue(Tree tree, String message);
 
 	PreciseIssue addIssue(Tree tree, String message);
 

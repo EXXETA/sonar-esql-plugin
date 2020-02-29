@@ -328,11 +328,6 @@ EsqlSensorTest {
         }
 
         @Override
-        public LineIssue addLineIssue(Tree tree, String message) {
-            throw new NotImplementedException();
-        }
-
-        @Override
         public void visitProgram(ProgramTree tree) {
             throw exception;
         }

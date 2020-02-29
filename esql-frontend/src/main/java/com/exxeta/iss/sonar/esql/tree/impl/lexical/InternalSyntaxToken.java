@@ -82,15 +82,6 @@ public class InternalSyntaxToken extends EsqlTree implements SyntaxToken {
 	    return trivias;
 	  }
 
-	  /**
-	   * @deprecated Use {@link SyntaxToken#line()} instead.
-	   */
-	  @Deprecated
-	  @Override
-	  public int getLine() {
-	    return line();
-	  }
-
 	  @Override
 	  public int line() {
 	    return line;
