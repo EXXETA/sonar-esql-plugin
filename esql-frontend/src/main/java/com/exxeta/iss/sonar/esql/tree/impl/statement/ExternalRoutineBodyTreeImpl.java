@@ -32,14 +32,19 @@ public class ExternalRoutineBodyTreeImpl extends EsqlTree implements ExternalRou
 	private final InternalSyntaxToken externalKeyword;
 	private final InternalSyntaxToken nameKeyword;
 	private final InternalSyntaxToken externalRoutineName;
+	private final JavaClassloaderServiceTreeImpl javaClassloaderService;
 	private final InternalSyntaxToken semi;
 
-	public ExternalRoutineBodyTreeImpl(InternalSyntaxToken externalKeyword, InternalSyntaxToken nameKeyword, InternalSyntaxToken externalRoutineName, InternalSyntaxToken semi) {
+	public ExternalRoutineBodyTreeImpl(InternalSyntaxToken externalKeyword, InternalSyntaxToken nameKeyword,
+									   InternalSyntaxToken externalRoutineName,
+									   JavaClassloaderServiceTreeImpl javaClassloaderService, InternalSyntaxToken semi) {
 		this.externalKeyword = externalKeyword;
 		this.nameKeyword = nameKeyword;
 		this.externalRoutineName = externalRoutineName;
+		this.javaClassloaderService = javaClassloaderService;
 		this.semi=semi;
 	}
+
 
 	@Override
 	public SyntaxToken externalKeyword() {
@@ -55,7 +60,12 @@ public class ExternalRoutineBodyTreeImpl extends EsqlTree implements ExternalRou
 	public InternalSyntaxToken externalRoutineName() {
 		return externalRoutineName;
 	}
-	
+
+	@Override
+	public JavaClassloaderServiceTreeImpl getJavaClassloaderService() {
+		return javaClassloaderService;
+	}
+
 	@Override
 	public InternalSyntaxToken semi() {
 		return semi;
@@ -68,7 +78,7 @@ public class ExternalRoutineBodyTreeImpl extends EsqlTree implements ExternalRou
 
 	@Override
 	public Iterator<Tree> childrenIterator() {
-		return Iterators.forArray(externalKeyword, nameKeyword, externalRoutineName, semi);
+		return Iterators.forArray(externalKeyword, nameKeyword, externalRoutineName, javaClassloaderService, semi);
 	}
 
 	@Override

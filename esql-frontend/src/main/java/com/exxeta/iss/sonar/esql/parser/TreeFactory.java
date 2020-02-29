@@ -38,6 +38,7 @@ import com.exxeta.iss.sonar.esql.api.tree.function.AliasedExpressionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.AliasedFieldReferenceTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.FunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ElseifClauseTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.JavaClassloaderServiceTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.NameClausesTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ParameterTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.SetColumnTree;
@@ -119,6 +120,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.FromClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.IfStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.InsertStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.IterateStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.JavaClassloaderServiceTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.LabelTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.LanguageTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.LeaveStatementTreeImpl;
@@ -277,7 +279,7 @@ public class TreeFactory {
 		}
 	}
 
-	public static class Tuple<T, U> {
+    public static class Tuple<T, U> {
 
 		private final T first;
 		private final U second;
@@ -1030,8 +1032,11 @@ public class TreeFactory {
 	}
 
 	public ExternalRoutineBodyTreeImpl externalRoutineBody(InternalSyntaxToken externalKeyword,
-			InternalSyntaxToken nameKeyword, InternalSyntaxToken externalRoutineName, InternalSyntaxToken semiToken) {
-		return new ExternalRoutineBodyTreeImpl(externalKeyword, nameKeyword, externalRoutineName, semiToken);
+			InternalSyntaxToken nameKeyword, InternalSyntaxToken externalRoutineName,
+			Optional<JavaClassloaderServiceTreeImpl> classloader,
+			InternalSyntaxToken semiToken) {
+		return new ExternalRoutineBodyTreeImpl(externalKeyword, nameKeyword, externalRoutineName,
+				/*classloader.isPresent() ? classloader.get() : */null, semiToken);
 	}
 
 	public RoutineBodyTreeImpl routineBody(Tree firstOf) {
@@ -2091,4 +2096,7 @@ public class TreeFactory {
 	}
 
 
+	public JavaClassloaderServiceTreeImpl javaClassLoaderService(InternalSyntaxToken classloaderKeyword, InternalSyntaxToken classLoaderConfigurableServiceName) {
+		return new JavaClassloaderServiceTreeImpl(classloaderKeyword,classLoaderConfigurableServiceName);
+	}
 }

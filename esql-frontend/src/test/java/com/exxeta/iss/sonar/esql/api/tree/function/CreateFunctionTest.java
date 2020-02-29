@@ -35,7 +35,8 @@ public class CreateFunctionTest extends EsqlTreeModelTest<CreateFunctionStatemen
 	@Test
 	public void createProcedureStatement(){
 		assertThat(Kind.CREATE_FUNCTION_STATEMENT)
-		.matches("CREATE FUNCTION  myProc1( IN P1 INTEGER, OUT P2 INTEGER, INOUT P3 INTEGER ) RETURNS INTEGER LANGUAGE JAVA EXTERNAL NAME \"com.ibm.broker.test.MyClass.myMethod1\";")
+				.matches("CREATE FUNCTION  myProc1( IN P1 INTEGER, OUT P2 INTEGER, INOUT P3 INTEGER ) RETURNS INTEGER LANGUAGE JAVA EXTERNAL NAME \"com.ibm.broker.test.MyClass.myMethod1\";")
+				.matches("CREATE FUNCTION  myProc1( IN P1 INTEGER, OUT P2 INTEGER, INOUT P3 INTEGER ) RETURNS INTEGER LANGUAGE JAVA EXTERNAL NAME \"com.ibm.broker.test.MyClass.myMethod1\" CLASSLOADER \"{My_Java_SharedLib}\";")
 		.matches("CREATE FUNCTION  \"A\"( ) SET a=1;")
 		;
 		
