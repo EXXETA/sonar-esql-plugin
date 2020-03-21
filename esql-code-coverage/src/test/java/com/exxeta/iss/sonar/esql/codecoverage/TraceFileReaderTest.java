@@ -23,8 +23,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.io.File;
-
-import javax.xml.bind.JAXBException;
+import java.io.IOException;
 
 import org.junit.Test;
 
@@ -99,7 +98,7 @@ public class TraceFileReaderTest {
 	}
 
 	@Test
-	public void jaxBTest() throws JAXBException {
+	public void parserTest() throws Exception {
 		assertThat(new UserTraceLog().getUserTraceOrInformation()).isNotNull();
 		UserTraceLog trace = new TraceFileReader(new File("src/test/resources/codecoverage/trace.xml")).parseTraceXml();
 		assertThat(trace.getBufferSize()).isEqualTo(0);
@@ -109,7 +108,7 @@ public class TraceFileReaderTest {
 		assertThat(trace.getTraceLevel()).isEqualTo("none");
 		assertThat(trace.getUserTraceFilter()).isEqualTo("debugTrace");
 		assertThat(trace.getUuid()).isEqualTo("UserTraceLog");
-		assertThat(trace.getUserTraceOrInformation()).hasSize(75);
+		assertThat(trace.getUserTraceOrInformation()).hasSize(76);
 		assertThat(new UserTraceType().getInsert()).isNotNull();
 		UserTraceType trace1 = trace.getUserTraceOrInformation().get(0);
 		assertThat(trace1.getCatalog()).isEqualTo("BIPmsgs");
@@ -133,7 +132,7 @@ public class TraceFileReaderTest {
 	}
 
 	@Test
-	public void indexOutOfBounds112() throws JAXBException {
+	public void indexOutOfBounds112() throws IOException {
 		TraceFileReader trace = new TraceFileReader(new File("src/test/resources/codecoverage/tests/usertrace_112.xml")).readTrace(new ExecutionDataVisitor() {
 
 			@Override
