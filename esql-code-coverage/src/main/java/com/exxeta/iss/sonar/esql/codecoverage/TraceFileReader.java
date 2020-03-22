@@ -118,6 +118,7 @@ public class TraceFileReader {
 
 
         SAXParserFactory factory = SAXParserFactory.newInstance();
+        factory.setNamespaceAware(true);
         factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
         SAXParser parser = factory.newSAXParser();
         parser.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, ""); // Compliant
