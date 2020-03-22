@@ -332,9 +332,9 @@ public class EsqlSensor implements Sensor {
     //Removed re-initialization of metriccvisitor as executable lines were empty
       if (metricsVisitor == null) {
 	  	LOG.debug("metricVisitor null");
-	  }
-
-        executeCoverageSensors(context, metricsVisitor.executableLines());
+      } else {
+         executeCoverageSensors(context, metricsVisitor.executableLines());
+      }
     }
 
     private static void executeCoverageSensors(SensorContext context, Map<InputFile, Set<Integer>> executableLines) {
