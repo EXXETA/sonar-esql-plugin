@@ -23,6 +23,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
@@ -44,14 +45,14 @@ public class TraceFileReader {
 
     private Pattern pattern;
 
-    private static final String PATTERN = ".* at \\('(.*)', '(\\w+)\\.\\w+'\\).*";
+    private static final String PATTERN_REGEX = ".* at \\('(.*)', '(\\w+)\\.\\w+'\\).*";
 
     //Contains the executionData per module
     private HashMap<String, ModuleExecutionData> moduleCache = new HashMap<>();
 
     public TraceFileReader(File traceFile) {
 
-        pattern = Pattern.compile(PATTERN);
+        pattern = Pattern.compile(PATTERN_REGEX);
         this.traceFile = traceFile;
     }
 
@@ -116,11 +117,12 @@ public class TraceFileReader {
         TraceParser traceParser = new TraceParser();
 
 
-        SAXParserFactory spf = SAXParserFactory.newInstance();
-        spf.setNamespaceAware(true);
-
-        SAXParser saxParser = spf.newSAXParser();
-        XMLReader xmlReader = saxParser.getXMLReader();
+        SAXParserFactory factory = SAXParserFactory.newInstance();
+        factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+        SAXParser parser = factory.newSAXParser();
+        parser.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, ""); // Compliant
+        parser.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, ""); // compliantA
+        XMLReader xmlReader = parser.getXMLReader();
         xmlReader.setContentHandler(traceParser);
         xmlReader.parse(new InputSource(new FileInputStream(traceFile)));
 
