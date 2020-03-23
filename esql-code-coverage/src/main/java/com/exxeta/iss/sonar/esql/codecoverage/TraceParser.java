@@ -21,6 +21,8 @@ package com.exxeta.iss.sonar.esql.codecoverage;
 import com.exxeta.iss.sonar.esql.trace.InsertType;
 import com.exxeta.iss.sonar.esql.trace.UserTraceLog;
 import com.exxeta.iss.sonar.esql.trace.UserTraceType;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -31,6 +33,7 @@ import java.beans.PropertyDescriptor;
 
 public class TraceParser extends DefaultHandler {
 
+    public static final Logger LOG = Loggers.get(TraceParser.class.getName());
     private UserTraceLog result = null;
 
     private UserTraceType userTraceType;
@@ -62,6 +65,8 @@ public class TraceParser extends DefaultHandler {
                 userTraceType.getInsert().add(insertType);
                 mapAttributes(attributes, insertType);
                 break;
+            default:
+                LOG.warn("unsupported trace tag " + localName);
         }
 
     }
@@ -74,6 +79,8 @@ public class TraceParser extends DefaultHandler {
                 userTraceType = null;
             case "Insert":
                 insertType = null;
+            default:
+                LOG.warn("unsupported trace tag " + localName);
         }
     }
 
@@ -82,25 +89,25 @@ public class TraceParser extends DefaultHandler {
             BeanInfo beanInfo = Introspector.getBeanInfo(obj.getClass());
             for (int i = 0; i < attributes.getLength(); i++) {
                 String localName = attributes.getLocalName(i);
-                for (PropertyDescriptor pd : beanInfo.getPropertyDescriptors()){
-                    if (pd.getWriteMethod()!=null && pd.getName().equals(localName)){
+                for (PropertyDescriptor pd : beanInfo.getPropertyDescriptors()) {
+                    if (pd.getWriteMethod() != null && pd.getName().equals(localName)) {
                         if (pd.getPropertyType() == String.class) {
                             pd.getWriteMethod().invoke(obj, attributes.getValue(i));
-                        } else if (pd.getPropertyType()==Integer.class){
+                        } else if (pd.getPropertyType() == Integer.class) {
                             pd.getWriteMethod().invoke(obj, Integer.parseInt(attributes.getValue(i)));
                         }
                     }
                 }
             }
         } catch (Exception e) {
-            System.err.println("Cannot map attribute");
+            LOG.error("Cannot map attribute");
         }
     }
 
     @Override
     public void characters(char[] ch, int start, int length) throws SAXException {
         if (insertType != null) {
-            if (insertType.getValue()!=null){
+            if (insertType.getValue() != null) {
                 insertType.setValue(insertType.getValue() + new String(ch, start, length));
             } else {
                 insertType.setValue(new String(ch, start, length));
