@@ -21,6 +21,7 @@ package com.exxeta.iss.sonar.esql.codecoverage;
 import com.exxeta.iss.sonar.esql.trace.InsertType;
 import com.exxeta.iss.sonar.esql.trace.UserTraceLog;
 import com.exxeta.iss.sonar.esql.trace.UserTraceType;
+import lombok.extern.slf4j.Slf4j;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 import org.xml.sax.Attributes;
@@ -31,6 +32,7 @@ import java.beans.BeanInfo;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 
+@Slf4j
 public class TraceParser extends DefaultHandler {
 
     public static final Logger LOG = Loggers.get(TraceParser.class.getName());
@@ -62,8 +64,12 @@ public class TraceParser extends DefaultHandler {
                 break;
             case "Insert":
                 insertType = new InsertType();
-                userTraceType.getInsert().add(insertType);
-                mapAttributes(attributes, insertType);
+                if (userTraceType==null){
+                    log.warn("Ignoring Insert element before first UserTraceType element");
+                } else {
+                    userTraceType.getInsert().add(insertType);
+                    mapAttributes(attributes, insertType);
+                }
                 break;
             default:
                 LOG.warn("unsupported trace tag " + localName);
