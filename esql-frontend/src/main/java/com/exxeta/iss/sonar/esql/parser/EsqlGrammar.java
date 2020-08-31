@@ -42,6 +42,7 @@ import com.exxeta.iss.sonar.esql.api.tree.function.MiscellaneousFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.NumericFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.function.StringManipulationFunctionTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree;
+import com.exxeta.iss.sonar.esql.api.tree.statement.JavaClassloaderServiceTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.StatementTree;
 import com.exxeta.iss.sonar.esql.lexer.EsqlPunctuator;
 import com.exxeta.iss.sonar.esql.lexer.EsqlReservedKeyword;
@@ -110,6 +111,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.FromClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.IfStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.InsertStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.IterateStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.JavaClassloaderServiceTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.LabelTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.LanguageTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.LeaveStatementTreeImpl;
@@ -248,8 +250,15 @@ public class EsqlGrammar {
 		return b.<ExternalRoutineBodyTreeImpl>nonterminal(Kind.EXTERNAL_ROUTINE_BODY)
 				.is(f.externalRoutineBody(b.token(EsqlNonReservedKeyword.EXTERNAL),
 						b.token(EsqlNonReservedKeyword.NAME), b.token(EsqlLegacyGrammar.IDENTIFIER_NAME_WITH_QUOTES),
+						b.optional(JAVA_CLASSLOADER_SERVICE()),
 						b.token(EsqlLegacyGrammar.EOS)
 						));
+	}
+
+	public JavaClassloaderServiceTreeImpl JAVA_CLASSLOADER_SERVICE() {
+		return b.<JavaClassloaderServiceTreeImpl>nonterminal(Kind.JAVA_CLASSLOADER_SERVICE)
+				.is(f.javaClassLoaderService(b.token(EsqlNonReservedKeyword.CLASSLOADER),
+						b.token(EsqlLegacyGrammar.IDENTIFIER_NAME_WITH_QUOTES)));
 	}
 
 	public CreateProcedureStatementTree CREATE_PROCEDURE_STATEMENT() {

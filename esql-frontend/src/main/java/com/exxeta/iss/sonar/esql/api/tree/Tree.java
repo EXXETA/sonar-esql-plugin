@@ -19,6 +19,7 @@ package com.exxeta.iss.sonar.esql.api.tree;
 
 import java.util.stream.Stream;
 
+import com.exxeta.iss.sonar.esql.api.tree.statement.JavaClassloaderServiceTree;
 import org.sonar.sslr.grammar.GrammarRuleKey;
 
 import com.exxeta.iss.sonar.esql.api.tree.expression.BetweenExpressionTree;
@@ -264,7 +265,8 @@ public interface Tree {
 		PROPERTY_IDENTIFIER(IdentifierTree.class), 
 		VARIABLE_REFERENCE(VariableReferenceTree.class), 
 		LIST_CONSTRUCTOR_FUNCTION(ListConstructorFunctionTree.class),
-		NULLABLE(NullableTree.class);
+		NULLABLE(NullableTree.class),
+		JAVA_CLASSLOADER_SERVICE(JavaClassloaderServiceTree.class);
 
 		final Class<? extends Tree> associatedInterface;
 

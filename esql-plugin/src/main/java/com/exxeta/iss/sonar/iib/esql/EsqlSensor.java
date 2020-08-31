@@ -96,6 +96,7 @@ public class EsqlSensor implements Sensor {
     private final ActionParser<Tree> parser;
     // parsingErrorRuleKey equals null if ParsingErrorCheck is not activated
     private RuleKey parsingErrorRuleKey = null;
+	private MetricsVisitor metricsVisitor = null;
 
     public EsqlSensor(
             CheckFactory checkFactory, FileLinesContextFactory fileLinesContextFactory, FileSystem fileSystem, NoSonarFilter noSonarFilter) {
@@ -138,7 +139,7 @@ public class EsqlSensor implements Sensor {
             success = true;
         } catch (CancellationException e) {
             // do not propagate the exception
-            LOG.debug(e.toString(), e);
+            LOG.debug("Error while file analysis in code coverage" + e.toString(), e);
         } finally {
             stopProgressReport(progressReport, success);
         }
@@ -315,7 +316,7 @@ public class EsqlSensor implements Sensor {
     public List<TreeVisitor> getTreeVisitors(SensorContext context) {
         boolean ignoreHeaderComments = ignoreHeaderComments(context);
 
-        MetricsVisitor metricsVisitor = new MetricsVisitor(
+        metricsVisitor = new MetricsVisitor(
                 context,
                 ignoreHeaderComments,
                 fileLinesContextFactory);
@@ -332,14 +333,12 @@ public class EsqlSensor implements Sensor {
     }
 
     public void executeCoverageSensors(SensorContext context) {
-        boolean ignoreHeaderComments = ignoreHeaderComments(context);
-
-        MetricsVisitor metricsVisitor = new MetricsVisitor(
-                context,
-                ignoreHeaderComments,
-                fileLinesContextFactory);
-
-        executeCoverageSensors(context, metricsVisitor.executableLines());
+    //Removed re-initialization of metriccvisitor as executable lines were empty
+      if (metricsVisitor == null) {
+	  	LOG.debug("metricVisitor null");
+      } else {
+         executeCoverageSensors(context, metricsVisitor.executableLines());
+      }
     }
 
     private static void executeCoverageSensors(SensorContext context, Map<InputFile, Set<Integer>> executableLines) {

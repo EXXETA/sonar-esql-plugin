@@ -1,5 +1,5 @@
-/target/
-/bin/
+target/
+bin/
 esql-plugin/.settings/
 esql-frontend/.settings/
 esql-checks/.settings/

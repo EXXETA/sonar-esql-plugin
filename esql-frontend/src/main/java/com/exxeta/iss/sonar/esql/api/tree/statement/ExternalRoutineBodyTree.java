@@ -25,6 +25,7 @@ public interface ExternalRoutineBodyTree extends Tree{
 	SyntaxToken externalKeyword();
 	SyntaxToken nameKeyword();
 	SyntaxToken externalRoutineName();
+	JavaClassloaderServiceTree getJavaClassloaderService();
 	SyntaxToken semi();
 
 }

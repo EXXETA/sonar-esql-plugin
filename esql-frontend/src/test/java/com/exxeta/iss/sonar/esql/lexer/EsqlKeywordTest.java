@@ -36,7 +36,7 @@ public class EsqlKeywordTest {
 
 	  @Test
 	  public void esqlNonReservedKeyword() {
-	    assertThat(EsqlNonReservedKeyword.values().length).isEqualTo(212);
+	    assertThat(EsqlNonReservedKeyword.values().length).isEqualTo(213);
 	    assertThat(EsqlNonReservedKeyword.keywordValues().length).isEqualTo(EsqlNonReservedKeyword.values().length);
 
 	    for (EsqlNonReservedKeyword keyword : EsqlNonReservedKeyword.values()) {

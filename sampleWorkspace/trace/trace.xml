@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <UserTraceLog uuid="UserTraceLog" userTraceLevel="none" traceLevel="none" userTraceFilter="debugTrace" traceFilter="none" fileSize="20480000" bufferSize="0" fileMode="safe">
-<Insert type="string">&apos;default&apos;</Insert>
 <UserTrace timestamp="2017-09-15 04:28:04.403125" thread="9328" function="ImbConfigurationManager::evaluate" type="ComIbmConfigurationManager" name="ConfigurationManager" label="ConfigurationManager" text="&apos;Configuration changed successfully and committed to persistent store&apos;" catalog="BIPmsgs" number="4040" file="F:\build\S1000_slot1\S1000_P\src\DataFlowEngine\Configuration\ImbConfigurationManager.cpp" line="956">
 <Insert type="string">&apos;default&apos;</Insert>
 <Insert type="string">&apos;3e243ae7-6b29-4ce8-b525-4e58a2edcbb6&apos;</Insert>

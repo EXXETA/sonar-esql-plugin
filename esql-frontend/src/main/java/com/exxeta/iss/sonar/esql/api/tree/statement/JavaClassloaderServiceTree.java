@@ -15,25 +15,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.exxeta.iss.sonar.esql.trace;
 
-import lombok.Data;
+package com.exxeta.iss.sonar.esql.api.tree.statement;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.exxeta.iss.sonar.esql.api.tree.Tree;
+import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
 
-@Data
-public class UserTraceLog {
+public interface JavaClassloaderServiceTree extends Tree {
+    SyntaxToken classloaderKeyword();
 
-
-    protected List<UserTraceType> userTraceOrInformation = new ArrayList<>();
-    protected String uuid;
-    protected String userTraceLevel;
-    protected String traceLevel;
-    protected String userTraceFilter;
-    protected String traceFilter;
-    protected Integer fileSize;
-    protected Integer bufferSize;
-    protected String fileMode;
-
+    SyntaxToken classLoaderConfigurableServiceName();
 }
