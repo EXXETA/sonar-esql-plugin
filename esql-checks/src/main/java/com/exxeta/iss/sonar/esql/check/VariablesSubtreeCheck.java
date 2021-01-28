@@ -37,7 +37,7 @@ public class VariablesSubtreeCheck extends DoubleDispatchVisitorCheck{
 					|| fieldRef.pathElements().get(0).name().name()==null 
 					|| !"Variables".equalsIgnoreCase(fieldRef.pathElements().get(0).name().name().name())){
 
-					addIssue(tree, "Environment vaiables should be written to the Variables-subtree.");
+					addIssue(tree, "Environment variables should be written to the Variables-subtree.");
 					
 				}
 				
