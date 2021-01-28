@@ -33,10 +33,10 @@ import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
  * @author Sapna Singh
  *
  */
-@Rule(key = "ProcessInvokingItself")
-public class ProcessInvokingItselfCheck extends DoubleDispatchVisitorCheck {
+@Rule(key = "Recursion")
+public class RecursionCheck extends DoubleDispatchVisitorCheck {
 
-	private static final String MESSAGE = "process invoking itself.";
+	private static final String MESSAGE = "routine invoking itself.";
 	private String routineName;
 
 	@Override

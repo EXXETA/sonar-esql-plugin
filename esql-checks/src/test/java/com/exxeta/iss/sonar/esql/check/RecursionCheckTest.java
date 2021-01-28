@@ -28,15 +28,15 @@ import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
  * @author C50679
  *
  */
-public class ProcessInvokingItselfCheckTest {
+public class RecursionCheckTest {
 
 	@Test
 	public void test() {
-		EsqlCheck check = new ProcessInvokingItselfCheck();
-		EsqlCheckVerifier.issues(check, new File("src/test/resources/ProcessInvokingItself.esql"))
-		.next().atLine(7).withMessage("process invoking itself.")
-		.next().atLine(15).withMessage("process invoking itself.")
-		.next().atLine(23).withMessage("process invoking itself.")
+		EsqlCheck check = new RecursionCheck();
+		EsqlCheckVerifier.issues(check, new File("src/test/resources/Recursion.esql"))
+		.next().atLine(7).withMessage("routine invoking itself.")
+		.next().atLine(15).withMessage("routine invoking itself.")
+		.next().atLine(23).withMessage("routine invoking itself.")
 		.noMore();
 	}
 }

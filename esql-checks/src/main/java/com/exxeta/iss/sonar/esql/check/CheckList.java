@@ -101,7 +101,7 @@ public final class CheckList {
         NavigatingTreeCouldBeReferenceCheck.class,
         UnusedVariableCheck.class,
         DeprecatedMethodCheck.class,
-        ProcessInvokingItselfCheck.class,
+        RecursionCheck.class,
         InsertBlankLineBetweenFuncProcCheck.class,
         BlankLineBeforeCommentsCheck.class,
         RoutineCommentsCheck.class,
