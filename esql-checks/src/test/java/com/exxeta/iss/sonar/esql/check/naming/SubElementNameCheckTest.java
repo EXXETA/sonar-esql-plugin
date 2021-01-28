@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-package com.exxeta.iss.sonar.esql.check;
+package com.exxeta.iss.sonar.esql.check.naming;
 
 import java.io.File;
 
