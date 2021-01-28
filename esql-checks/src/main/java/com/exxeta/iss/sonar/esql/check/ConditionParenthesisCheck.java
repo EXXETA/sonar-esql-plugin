@@ -17,9 +17,9 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.IfStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.WhileStatementTree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
 
-@Rule(key ="ConditionBraces")
-public class ConditionBracesCheck extends DoubleDispatchVisitorCheck  {
-	public static final String MESSAGE = "Use braces for conditions as it gives more readability to code.";
+@Rule(key ="ConditionParenthesis")
+public class ConditionParenthesisCheck extends DoubleDispatchVisitorCheck  {
+	public static final String MESSAGE = "Use parenthesis for conditions as it gives more readability to code.";
 
 	@Override
 	public void visitIfStatement(IfStatementTree tree) 
@@ -55,4 +55,3 @@ public class ConditionBracesCheck extends DoubleDispatchVisitorCheck  {
 
 	
 
-	

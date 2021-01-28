@@ -24,6 +24,8 @@ import com.exxeta.iss.sonar.esql.check.naming.FileNameCheck;
 import com.exxeta.iss.sonar.esql.check.naming.FunctionNameCheck;
 import com.exxeta.iss.sonar.esql.check.naming.ModuleNameCheck;
 import com.exxeta.iss.sonar.esql.check.naming.ProcedureNameCheck;
+import com.exxeta.iss.sonar.esql.check.naming.SubElementNameCheck;
+import com.exxeta.iss.sonar.esql.check.naming.VariableNameCheck;
 import com.google.common.collect.ImmutableList;
 
 public final class CheckList {
@@ -109,7 +111,7 @@ public final class CheckList {
 		UnreachableCodeCheck.class, 
 		CommentedCodeCheck.class,
 		SelfAssignmentCheck.class,
-        ConditionBracesCheck.class,
+        ConditionParenthesisCheck.class,
         TrailingCommentsCheck.class,
         CommentsCheck.class,
         DeclareCombineCheck.class,
