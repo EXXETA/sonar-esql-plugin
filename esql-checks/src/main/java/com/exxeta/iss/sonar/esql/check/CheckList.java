@@ -106,6 +106,7 @@ public final class CheckList {
             UndocumentedRoutineCheck.class,
             UnknownMessageDomainCheck.class,
             UnreachableCodeCheck.class,
+            UnusedParameterCheck.class,
             UnusedRoutineCheck.class,
             UnusedVariableCheck.class,
             UseBrokerSchemaCheck.class,
