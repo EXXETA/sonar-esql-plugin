@@ -11,7 +11,7 @@
 
 
 	<name>Esql Plugin</name>
-	<description>Sonar plugin to analyse ESQL-code (for IBM WebSphere Message Broker)</description>
+	<description>Sonar plugin to analyse ESQL-code (for IBM App Connect Enterprise)</description>
 
 	<organization>
 		<name>EXXETA AG</name>
