@@ -1,0 +1,18 @@
+<p>This rule applies wheneverparameters are declared but not used. </p>
+
+<p>Unused parameters should be removed.</p>
+
+<h2>Noncompliant Code Example</h2>
+<pre>
+	CREATE FUNCTION B(abc CHAR) RETURNS BOOLEAN --Noncompliant
+	BEGIN
+	  RETURN TRUE;
+	END;
+</pre>
+<h2>Compliant Solution</h2>
+<pre>
+	CREATE FUNCTION A(abc BOOLEAN) RETURNS BOOLEAN --OK
+	BEGIN
+	  RETURN abc;
+	END;
+</pre>

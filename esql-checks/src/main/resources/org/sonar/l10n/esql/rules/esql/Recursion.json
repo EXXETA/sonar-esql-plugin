@@ -1,0 +1,14 @@
+{
+  "title": "Routine invoking itself.",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "45min"
+  },
+  "tags": [
+    "readability"
+    
+ ],
+  "defaultSeverity": "Major"
+}

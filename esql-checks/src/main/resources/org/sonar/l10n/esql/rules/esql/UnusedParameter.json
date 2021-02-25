@@ -1,14 +1,15 @@
 {
-  "title": "Process invoking itself.",
+  "title": "Unused Variable should be removed",
   "type": "CODE_SMELL",
   "status": "ready",
   "remediation": {
     "func": "Constant\/Issue",
-    "constantCost": "15min"
+    "constantCost": "5min"
   },
   "tags": [
-    "readability"
-    
- ],
+    "misra",
+    "cert",
+    "unused"
+  ],
   "defaultSeverity": "Major"
 }

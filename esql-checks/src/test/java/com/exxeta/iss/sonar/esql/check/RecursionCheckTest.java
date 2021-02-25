@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.exxeta.iss.sonar.esql.check;
 
 import java.io.File;
@@ -26,17 +25,18 @@ import com.exxeta.iss.sonar.esql.api.EsqlCheck;
 import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
 
 /**
- * @author Sapna Singh
+ * @author C50679
  *
  */
-public class SubElementNameCheckTest {
-	
+public class RecursionCheckTest {
+
 	@Test
 	public void test() {
-		EsqlCheck check = new SubElementNameCheck();
-		EsqlCheckVerifier.issues(check, new File("src/test/resources/SubElementName.esql"))
-				.next().atLine(5).withMessage("sub-elements should be in UpperCamel-case and elements containing simple value should be in lowercase.")
-				.next().atLine(6).withMessage("sub-elements should be in UpperCamel-case and elements containing simple value should be in lowercase.")
-				.next().atLine(9).withMessage("sub-elements should be in UpperCamel-case and elements containing simple value should be in lowercase.").noMore();
+		EsqlCheck check = new RecursionCheck();
+		EsqlCheckVerifier.issues(check, new File("src/test/resources/Recursion.esql"))
+		.next().atLine(7).withMessage("routine invoking itself.")
+		.next().atLine(15).withMessage("routine invoking itself.")
+		.next().atLine(23).withMessage("routine invoking itself.")
+		.noMore();
 	}
 }

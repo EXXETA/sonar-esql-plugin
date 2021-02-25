@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -57,7 +57,7 @@ public class Usage {
 	}
 
 	public boolean isDeclaration() {
-		return kind == Kind.DECLARATION_WRITE || kind == Kind.DECLARATION;
+		return kind == Kind.DECLARATION_WRITE || kind == Kind.DECLARATION || kind == Kind.LEXICAL_DECLARATION;
 	}
 
 	public boolean isWrite() {
