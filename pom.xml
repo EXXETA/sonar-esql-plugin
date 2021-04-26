@@ -63,7 +63,7 @@
 		<maven.min.version>3.0.5</maven.min.version><!--check-->
 
 		<assertj.version>3.19.0</assertj.version>
-		<commons-io.version>2.5</commons-io.version>
+		<commons-io.version>2.7</commons-io.version>
 		<commons-lang.version>2.6</commons-lang.version>
 		<guava.version>28.0-jre</guava.version>
 		<junit.version>4.13.1</junit.version>
