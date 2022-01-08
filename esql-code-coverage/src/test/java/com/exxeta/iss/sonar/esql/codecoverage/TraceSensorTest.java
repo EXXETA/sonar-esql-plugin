@@ -29,7 +29,7 @@ import org.sonar.api.notifications.AnalysisWarnings;
 
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
