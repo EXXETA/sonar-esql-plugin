@@ -19,22 +19,22 @@ package com.exxeta.iss.sonar.esql;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.config.internal.MapSettings;
 
-public class EsqlLanguageTest {
+class EsqlLanguageTest {
 	  private MapSettings settings;
 	  private EsqlLanguage esqlLanguage;
 
-	  @Before
-	  public void setUp() {
+	  @BeforeEach
+	  void setUp() {
 	    settings = new MapSettings();
 	    esqlLanguage = new EsqlLanguage(settings.asConfig());
 	  }
 
 	  @Test
-	  public void defaultSuffixes() {
+	  void defaultSuffixes() {
 		  MapSettings mapSettings = new MapSettings();
 		  mapSettings.setProperty(EsqlLanguage.FILE_SUFFIXES_KEY, EsqlLanguage.FILE_SUFFIXES_DEFVALUE);
 		  EsqlLanguage esqlLanguage = new EsqlLanguage(mapSettings.asConfig());
@@ -43,7 +43,7 @@ public class EsqlLanguageTest {
 	  }
 
 	  @Test
-	  public void customSuffixes() {
+	  void customSuffixes() {
 
 		  MapSettings mapSettings = new MapSettings();
 		  mapSettings.setProperty(EsqlLanguage.FILE_SUFFIXES_KEY, "esql");

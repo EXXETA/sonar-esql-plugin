@@ -19,14 +19,14 @@ package com.exxeta.iss.sonar.esql.api.tree.expression;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 
-public class ExpressionTest {
+class ExpressionTest {
 
 	@Test
-	public void expression() {
+	void expression() {
 		assertThat(Kind.EXPRESSION)
 		.matches("b")
 		.matches("b.c")

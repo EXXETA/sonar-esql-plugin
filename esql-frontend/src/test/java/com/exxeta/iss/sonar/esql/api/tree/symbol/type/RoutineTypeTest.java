@@ -19,27 +19,27 @@ package com.exxeta.iss.sonar.esql.api.tree.symbol.type;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.symbols.Symbol;
 import com.exxeta.iss.sonar.esql.api.symbols.Type;
 
-public class RoutineTypeTest extends TypeTest {
+class RoutineTypeTest extends TypeTest {
 
-  @Before
-  public void setUp() throws Exception {
+  @BeforeEach
+  void setUp() throws Exception {
     super.setUp("routineType.esql");
   }
 
   @Test
-  public void function_declaration() {
+  void function_declaration() {
     Symbol f1 = getSymbol("f1");
     assertThat(f1.types().containsOnlyAndUnique(Type.Kind.FUNCTION)).isTrue();
   }
 
   @Test
-  public void procedure_declaration() {
+  void procedure_declaration() {
     Symbol proc1 = getSymbol("proc1");
     assertThat(proc1.types().containsOnlyAndUnique(Type.Kind.PROCEDURE)).isTrue();
 
@@ -47,7 +47,7 @@ public class RoutineTypeTest extends TypeTest {
 
  
   @Test
-  public void parameter_types() {
+  void parameter_types() {
     Symbol p1 = getSymbol("p1");
     assertThat(p1.types().containsOnlyAndUnique(Type.Kind.NUMBER)).isTrue();
 

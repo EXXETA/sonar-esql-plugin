@@ -1,10 +1,10 @@
 package com.exxeta.iss.sonar.esql.api.tree.declaration;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.BrokerSchemaStatementTree;
 import com.exxeta.iss.sonar.esql.api.tree.FieldReferenceTree;
@@ -17,11 +17,11 @@ import com.exxeta.iss.sonar.esql.api.tree.SchemaNameTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class BrokerSchemaStatementTreeTest extends EsqlTreeModelTest<BrokerSchemaStatementTree>{
+class BrokerSchemaStatementTreeTest extends EsqlTreeModelTest<BrokerSchemaStatementTree>{
 
 	
 	@Test
-	public void fielReference() {
+	void fielReference() {
 		assertThat(Kind.BROKER_SCHEMA_STATEMENT)
 		.matches("BROKER SCHEMA a.a")
 		.matches("BROKER SCHEMA a")
@@ -30,7 +30,7 @@ public class BrokerSchemaStatementTreeTest extends EsqlTreeModelTest<BrokerSchem
 	}
 	
 	@Test
-	public void model() throws Exception{
+	void model() throws Exception{
 		BrokerSchemaStatementTree tree = parse("BROKER SCHEMA a.a", Kind.BROKER_SCHEMA_STATEMENT);
 		assertNotNull(tree);
 		assertNotNull(tree.brokerKeyword());

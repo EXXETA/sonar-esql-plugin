@@ -18,8 +18,8 @@
 package com.exxeta.iss.sonar.esql;
 
 import com.exxeta.iss.sonar.esql.check.CheckList;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition.BuiltInQualityProfile;
 import org.sonar.check.Rule;
@@ -33,17 +33,17 @@ import static com.exxeta.iss.sonar.esql.EsqlProfilesDefinition.SONAR_WAY;
 import static com.exxeta.iss.sonar.esql.EsqlProfilesDefinition.SONAR_WAY_JSON;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class EsqlProfilesDefinitionTest {
+class EsqlProfilesDefinitionTest {
 
     private BuiltInQualityProfilesDefinition.Context context = new BuiltInQualityProfilesDefinition.Context();
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         new EsqlProfilesDefinition().define(context);
     }
 
     @Test
-    public void sonar_way_esql() {
+    void sonar_way_esql() {
         BuiltInQualityProfile profile = context.profile(EsqlLanguage.KEY, SONAR_WAY);
 
         assertThat(profile.language()).isEqualTo(EsqlLanguage.KEY);
@@ -53,7 +53,7 @@ public class EsqlProfilesDefinitionTest {
     }
 
     @Test
-    public void no_legacy_Key_in_profile_json() {
+    void no_legacy_Key_in_profile_json() {
         Set<String> allKeys = CheckList.getChecks().stream().map(c -> {
             Annotation ruleAnnotation = c.getAnnotation(Rule.class);
             return ((Rule) ruleAnnotation).key();

@@ -6,9 +6,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,11 +28,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.UUID;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.sonar.api.batch.fs.InputFile.Type;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
@@ -46,106 +46,106 @@ import com.exxeta.iss.sonar.esql.api.visitors.TreeVisitorContext;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 import com.google.common.base.Charsets;
 
-public class HighlighterVisitorTest extends EsqlTreeModelTest<ProgramTree> {
+class HighlighterVisitorTest extends EsqlTreeModelTest<ProgramTree> {
 
-	private static final Charset CHARSET = Charsets.UTF_8;
+    private static final Charset CHARSET = Charsets.UTF_8;
 
-	private HighlighterVisitor highlighterVisitor;
+    private HighlighterVisitor highlighterVisitor;
 
-	private TreeVisitorContext visitorContext;
-	private SensorContextTester sensorContext;
-	private DefaultInputFile inputFile;
+    private TreeVisitorContext visitorContext;
+    private SensorContextTester sensorContext;
+    private DefaultInputFile inputFile;
 
-	@Rule
-	public TemporaryFolder tempFolder = new TemporaryFolder();
+    @TempDir
+    File tempFolder;
 
-	@Before
-	public void setUp() throws IOException {
-		sensorContext = SensorContextTester.create(tempFolder.getRoot());
-		visitorContext = mock(TreeVisitorContext.class);
-		highlighterVisitor = new HighlighterVisitor(sensorContext);
-	}
+    @BeforeEach
+    void setUp() throws IOException {
+        sensorContext = SensorContextTester.create(tempFolder);
+        visitorContext = mock(TreeVisitorContext.class);
+        highlighterVisitor = new HighlighterVisitor(sensorContext);
+    }
 
-	private void initFile(String text) throws IOException {
-		File file = tempFolder.newFile();
-		inputFile = new TestInputFileBuilder("moduleKey", file.getName())
-				.setLanguage("esql")
-				.setType(Type.MAIN)
-				.setCharset(CHARSET)
-				.initMetadata(text)
-				.build();
+    private void initFile(String text) throws IOException {
+        File file = new File(tempFolder, "temp-" + UUID.randomUUID());
+        inputFile = new TestInputFileBuilder("moduleKey", file.getName())
+                .setLanguage("esql")
+                .setType(Type.MAIN)
+                .setCharset(CHARSET)
+                .initMetadata(text)
+                .build();
 
-		when(visitorContext.getEsqlFile()).thenReturn(new EsqlFileImpl(inputFile));
-	}
+        when(visitorContext.getEsqlFile()).thenReturn(new EsqlFileImpl(inputFile));
+    }
 
-	private void highlight(String string) throws Exception {
-		initFile(string);
-		Tree tree = parse(string);
-		when(visitorContext.getTopTree()).thenReturn((ProgramTree) tree);
-		highlighterVisitor.scanTree(visitorContext);
-	}
+    private void highlight(String string) throws Exception {
+        initFile(string);
+        Tree tree = parse(string);
+        when(visitorContext.getTopTree()).thenReturn((ProgramTree) tree);
+        highlighterVisitor.scanTree(visitorContext);
+    }
 
-	private void assertHighlighting(int column, int length, TypeOfText type) {
-		assertHighlighting(1, column, length, type);
-	}
+    private void assertHighlighting(int column, int length, TypeOfText type) {
+        assertHighlighting(1, column, length, type);
+    }
 
-	private void assertHighlighting(int line, int column, int length, TypeOfText type) {
-		for (int i = column; i < column + length; i++) {
-			List<TypeOfText> typeOfTexts = sensorContext.highlightingTypeAt("moduleKey:" + inputFile.relativePath(),
-					line, i);
-			assertThat(typeOfTexts).hasSize(1);
-			assertThat(typeOfTexts.get(0)).isEqualTo(type);
-		}
-	}
+    private void assertHighlighting(int line, int column, int length, TypeOfText type) {
+        for (int i = column; i < column + length; i++) {
+            List<TypeOfText> typeOfTexts = sensorContext.highlightingTypeAt("moduleKey:" + inputFile.relativePath(),
+                    line, i);
+            assertThat(typeOfTexts).hasSize(1);
+            assertThat(typeOfTexts.get(0)).isEqualTo(type);
+        }
+    }
 
-	@Test
-	public void empty_input() throws Exception {
-		highlight("");
-		assertThat(sensorContext.highlightingTypeAt("moduleKey:" + inputFile.relativePath(), 1, 0)).isEmpty();
-	}
+    @Test
+    void empty_input() throws Exception {
+        highlight("");
+        assertThat(sensorContext.highlightingTypeAt("moduleKey:" + inputFile.relativePath(), 1, 0)).isEmpty();
+    }
 
-	@Test
-	public void multiline_comment() throws Exception {
-		highlight("/*\nComment\n*/ ");
-		assertHighlighting(1, 0, 2, COMMENT);
-		assertHighlighting(2, 0, 7, COMMENT);
-		assertHighlighting(3, 0, 2, COMMENT);
-	}
+    @Test
+    void multiline_comment() throws Exception {
+        highlight("/*\nComment\n*/ ");
+        assertHighlighting(1, 0, 2, COMMENT);
+        assertHighlighting(2, 0, 7, COMMENT);
+        assertHighlighting(3, 0, 2, COMMENT);
+    }
 
-	@Test
-	public void single_line_comment() throws Exception {
-		highlight("  --Comment ");
-		assertHighlighting(2, 10, COMMENT);
-	}
+    @Test
+    void single_line_comment() throws Exception {
+        highlight("  --Comment ");
+        assertHighlighting(2, 10, COMMENT);
+    }
 
-	@Test
-	public void javadoc_comment() throws Exception {
-		highlight("  /**Comment*/ ");
-		assertHighlighting(2, 12, TypeOfText.STRUCTURED_COMMENT);
-	}
+    @Test
+    void javadoc_comment() throws Exception {
+        highlight("  /**Comment*/ ");
+        assertHighlighting(2, 12, TypeOfText.STRUCTURED_COMMENT);
+    }
 
-	@Test
-	public void numbers() throws Exception {
-		highlight("CREATE FUNCTION a() SET x = 1;");
-		assertHighlighting(28, 1, TypeOfText.CONSTANT);
-	}
+    @Test
+    void numbers() throws Exception {
+        highlight("CREATE FUNCTION a() SET x = 1;");
+        assertHighlighting(28, 1, TypeOfText.CONSTANT);
+    }
 
-	@Test
-	public void string() throws Exception {
-		highlight("CREATE FUNCTION a() SET x = 'a';");
-		assertHighlighting(28, 3, STRING);
-	}
+    @Test
+    void string() throws Exception {
+        highlight("CREATE FUNCTION a() SET x = 'a';");
+        assertHighlighting(28, 3, STRING);
+    }
 
-	@Test
-	public void keyword() throws Exception {
-		highlight("CREATE FUNCTION a() SET x = 0;");
-		assertHighlighting(20, 3, KEYWORD);
-	}
+    @Test
+    void keyword() throws Exception {
+        highlight("CREATE FUNCTION a() SET x = 0;");
+        assertHighlighting(20, 3, KEYWORD);
+    }
 
-	@Test
-	public void byte_order_mark() throws Exception {
-		highlight("\uFEFFDECLARE a CHAR;  --");
-		assertHighlighting(0, 7, KEYWORD);
-	}
+    @Test
+    void byte_order_mark() throws Exception {
+        highlight("\uFEFFDECLARE a CHAR;  --");
+        assertHighlighting(0, 7, KEYWORD);
+    }
 
 }

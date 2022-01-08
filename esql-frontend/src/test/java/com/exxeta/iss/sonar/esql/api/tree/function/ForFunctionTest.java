@@ -18,24 +18,24 @@
 package com.exxeta.iss.sonar.esql.api.tree.function;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class ForFunctionTest extends EsqlTreeModelTest<ForFunctionTree>{
+class ForFunctionTest extends EsqlTreeModelTest<ForFunctionTree>{
 
 	@Test
-	public void forFunction() {
+	void forFunction() {
 		assertThat(Kind.FOR_FUNCTION)
 			.matches("FOR ALL Body.Invoice.Purchases.\"Item\"[] AS I (I.Quantity <= 50)")
 			.matches("FOR ALL Body.Invoice.Purchases.\"Item\"[] (Quantity <= 50)");
 	}
 
 	@Test
-	public void modelTest() throws Exception{
+	void modelTest() throws Exception{
 		ForFunctionTree tree = parse("FOR ALL Body.Invoice.Purchases.\"Item\"[] AS I (I.Quantity <= 50)", Kind.FOR_FUNCTION);
 		
 		assertNotNull(tree);

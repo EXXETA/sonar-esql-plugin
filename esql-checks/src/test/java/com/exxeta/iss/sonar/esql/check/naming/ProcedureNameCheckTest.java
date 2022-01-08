@@ -20,13 +20,13 @@ package com.exxeta.iss.sonar.esql.check.naming;
 import java.io.File;
 
 import com.exxeta.iss.sonar.esql.check.naming.ProcedureNameCheck;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
 
-public class ProcedureNameCheckTest {
+class ProcedureNameCheckTest {
 	@Test
-	public void test() throws Exception {
+	void test() throws Exception {
 		ProcedureNameCheck check = new ProcedureNameCheck();
 		
 		

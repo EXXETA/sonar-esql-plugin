@@ -18,22 +18,22 @@
 package com.exxeta.iss.sonar.esql.api.tree.statement;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class ResignalStatementTest extends EsqlTreeModelTest<ResignalStatementTree> {
+class ResignalStatementTest extends EsqlTreeModelTest<ResignalStatementTree> {
 	@Test
-	public void resignalStatement(){
+	void resignalStatement(){
 		assertThat(Kind.RESIGNAL_STATEMENT)
 		.matches("RESIGNAL;");
 
 	}
 	@Test
-	public void modelTest() throws Exception {
+	void modelTest() throws Exception {
 		ResignalStatementTree tree = parse("RESIGNAL;", Kind.RESIGNAL_STATEMENT);
 		assertNotNull(tree.resignalKeyword());
 		

@@ -17,13 +17,13 @@
  */
 package com.exxeta.iss.sonar.esql.codecoverage;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CodeCoverageExtensionTest {
+class CodeCoverageExtensionTest {
 	@Test
-	  public void testExtensions() {
+	  void testExtensions() {
 	    assertThat(CodeCoverageExtension.getExtensions().size()).isEqualTo(1);
 	  }
 }

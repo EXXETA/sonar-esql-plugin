@@ -17,7 +17,7 @@
  */
 package com.exxeta.iss.sonar.esql.utils;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.sonar.sslr.grammar.LexerlessGrammarBuilder;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -33,7 +33,7 @@ public class LegacyParserTest {
 
   protected LexerlessGrammar g;
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     LexerlessGrammarBuilder b = EsqlLegacyGrammar.createGrammarBuilder();
     // Only called to completed the grammar

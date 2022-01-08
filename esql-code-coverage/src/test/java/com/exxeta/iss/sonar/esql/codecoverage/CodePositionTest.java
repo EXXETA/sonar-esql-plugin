@@ -17,13 +17,13 @@
  */
 package com.exxeta.iss.sonar.esql.codecoverage;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.InputFile.Type;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
@@ -31,10 +31,10 @@ import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 
 import com.google.common.base.Charsets;
 
-public class CodePositionTest {
+class CodePositionTest {
 
 	@Test
-	public void test(){
+	void test(){
 		InputFile file1 = inputFile("file1.esql");  
 		InputFile file2 = inputFile("file2.esql");  
 		CodePosition cp1 = new CodePosition(file1, 1);

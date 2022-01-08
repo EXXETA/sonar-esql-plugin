@@ -18,17 +18,17 @@
 package com.exxeta.iss.sonar.esql.api.tree.function;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class RowConstructorFunctionTest extends EsqlTreeModelTest<RowConstructorFunctionTree>{
+class RowConstructorFunctionTest extends EsqlTreeModelTest<RowConstructorFunctionTree>{
 
 	@Test
-	public void rowConstructorFunction() {
+	void rowConstructorFunction() {
 		assertThat(Kind.ALIASED_EXPRESSION)
 		.matches("'ABCDEFGHIJKLMNOPQRSTUVWXYZ' AS \"[A-Z]\"");
 		assertThat(Kind.ROW_CONSTRUCTOR_FUNCTION)
@@ -39,7 +39,7 @@ public class RowConstructorFunctionTest extends EsqlTreeModelTest<RowConstructor
 	}
 	
 	@Test
-	public void modelTest() throws Exception{
+	void modelTest() throws Exception{
 		RowConstructorFunctionTree tree = parse ("ROW('granary' AS bread, 'riesling' AS wine, 'stilton' AS cheese)", Kind.ROW_CONSTRUCTOR_FUNCTION);
 		assertNotNull(tree.rowKeyword());
 		assertNotNull(tree.openingParenthesis());

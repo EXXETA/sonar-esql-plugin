@@ -19,7 +19,7 @@ package com.exxeta.iss.sonar.esql.api.visitors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
@@ -28,16 +28,16 @@ import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxTrivia;
 import com.exxeta.iss.sonar.esql.parser.EsqlParserBuilder;
 import com.sonar.sslr.api.typed.ActionParser;
 
-public class DoubleDispatchVisitorTest {
+class DoubleDispatchVisitorTest {
 
 	@Test
-	public void test_visit_token() throws Exception {
+	void test_visit_token() throws Exception {
 		assertNumberOfVisitedTokens("DECLARE a, b CONSTANT CHAR 'A';", 9);
 		assertNumberOfVisitedTokens("DECLARE a CONSTANT CHAR 'A';", 7);
 	}
 
 	@Test
-	public void test_visit_comment() throws Exception {
+	void test_visit_comment() throws Exception {
 		assertNumberOfVisitedComments("-- comment1 \n DECLARE a CONSTANT CHAR 'A';-- comment2 \n/*comment3*/", 3);
 	}
 

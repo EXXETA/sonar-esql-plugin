@@ -18,20 +18,20 @@
 package com.exxeta.iss.sonar.esql.api.tree.statement;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.statement.UpdateStatementTree;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class UpdateStatementTest extends EsqlTreeModelTest<UpdateStatementTree>{
+class UpdateStatementTest extends EsqlTreeModelTest<UpdateStatementTree>{
 
 
 	@Test
-	public void updateStatement(){
+	void updateStatement(){
 		assertThat(Kind.UPDATE_STATEMENT)
 		.matches("UPDATE Database.StockPrices AS SP SET PRICE = InputBody.Message.StockPrice WHERE SP.COMPANY = InputBody.Message.Company;")
 		.matches("UPDATE Database.StockPrices AS SP SET PRICE = InputBody.Message.StockPrice, B = 1;");
@@ -39,7 +39,7 @@ public class UpdateStatementTest extends EsqlTreeModelTest<UpdateStatementTree>{
 	}
 	
 	@Test
-	public void modelTest() throws Exception{
+	void modelTest() throws Exception{
 		UpdateStatementTree tree = parse("UPDATE Database.StockPrices AS SP SET PRICE = InputBody.Message.StockPrice, B = 1;", Kind.UPDATE_STATEMENT);
 		
 		assertNotNull(tree.updateKeyword());

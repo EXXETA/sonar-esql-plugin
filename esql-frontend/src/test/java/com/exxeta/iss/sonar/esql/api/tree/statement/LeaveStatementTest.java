@@ -18,25 +18,25 @@
 package com.exxeta.iss.sonar.esql.api.tree.statement;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class LeaveStatementTest  extends EsqlTreeModelTest<LeaveStatementTree> {
+class LeaveStatementTest  extends EsqlTreeModelTest<LeaveStatementTree> {
 
 
 	@Test
-	public void leaveStatement(){
+	void leaveStatement(){
 		assertThat(Kind.LEAVE_STATEMENT)
 		.matches("LEAVE A;");
 
 	}
 	
 	@Test
-	public void modelTest() throws Exception {
+	void modelTest() throws Exception {
 		LeaveStatementTree tree = parse("LEAVE A;", Kind.LEAVE_STATEMENT);
 		assertNotNull(tree.leaveKeyword());
 

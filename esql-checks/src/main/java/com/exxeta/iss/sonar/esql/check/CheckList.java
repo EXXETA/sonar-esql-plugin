@@ -39,8 +39,8 @@ public final class CheckList {
   private CheckList() {
   }
 
-  public static List<Class> getChecks() {
-    return ImmutableList.<Class> of(
+  public static List<Class<?>> getChecks() {
+    return ImmutableList.<Class<?>> of(
             BinaryOperatorSeparatedBySpaceCheck.class,
             BlankLineBeforeCommentsCheck.class,
             BooleanEqualityComparisonCheck.class,

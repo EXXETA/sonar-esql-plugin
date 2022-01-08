@@ -18,22 +18,22 @@
 package com.exxeta.iss.sonar.esql.api.tree.function;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateFunctionStatementTree;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
 
-public class CreateFunctionTest extends EsqlTreeModelTest<CreateFunctionStatementTree>{
+class CreateFunctionTest extends EsqlTreeModelTest<CreateFunctionStatementTree>{
 
 	
 	@Test
-	public void createProcedureStatement(){
+	void createProcedureStatement(){
 		assertThat(Kind.CREATE_FUNCTION_STATEMENT)
 				.matches("CREATE FUNCTION  myProc1( IN P1 INTEGER, OUT P2 INTEGER, INOUT P3 INTEGER ) RETURNS INTEGER LANGUAGE JAVA EXTERNAL NAME \"com.ibm.broker.test.MyClass.myMethod1\";")
 				.matches("CREATE FUNCTION  myProc1( IN P1 INTEGER, OUT P2 INTEGER, INOUT P3 INTEGER ) RETURNS INTEGER LANGUAGE JAVA EXTERNAL NAME \"com.ibm.broker.test.MyClass.myMethod1\" CLASSLOADER \"{My_Java_SharedLib}\";")
@@ -43,7 +43,7 @@ public class CreateFunctionTest extends EsqlTreeModelTest<CreateFunctionStatemen
 	}
 
 	@Test
-	public void modelTest() throws Exception{
+	void modelTest() throws Exception{
 		CreateFunctionStatementTree tree = parse("CREATE FUNCTION  myProc1( IN P1 INTEGER, OUT P2 INTEGER, INOUT P3 INTEGER ) RETURNS INTEGER LANGUAGE JAVA EXTERNAL NAME \"com.ibm.broker.test.MyClass.myMethod1\";", Kind.CREATE_FUNCTION_STATEMENT);
 		assertNotNull(tree);
 		assertNotNull(tree.createKeyword());

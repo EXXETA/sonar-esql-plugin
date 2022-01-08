@@ -18,20 +18,20 @@
 package com.exxeta.iss.sonar.esql.api.tree.statement;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.MoveStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.NameClausesTreeImpl;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class MoveStatementTest extends EsqlTreeModelTest<MoveStatementTreeImpl>{
+class MoveStatementTest extends EsqlTreeModelTest<MoveStatementTreeImpl>{
 	@Test
-	public void moveStatement(){
+	void moveStatement(){
 		
 		assertThat(Kind.MOVE_STATEMENT)
 		.matches("MOVE sourceCursor NEXTSIBLING;")
@@ -46,7 +46,7 @@ public class MoveStatementTest extends EsqlTreeModelTest<MoveStatementTreeImpl>{
 	}
 	
 	@Test
-	public void modelTest() throws Exception{
+	void modelTest() throws Exception{
 		MoveStatementTreeImpl tree = parse("MOVE cursor FIRSTCHILD TYPE Name NAME 'Field1';", Kind.MOVE_STATEMENT);
 		assertNotNull(tree.moveKeyword());
 		assertEquals("MOVE", tree.moveKeyword().text());

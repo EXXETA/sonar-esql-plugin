@@ -28,9 +28,9 @@
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Lesser General License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
+ * You should have received a copy of the GNU Lesser General License
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
@@ -40,7 +40,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Collections;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxTrivia;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
@@ -50,7 +50,7 @@ import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
 import com.exxeta.iss.sonar.esql.api.visitors.PreciseIssue;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 
-public class IssueTest {
+class IssueTest {
 
   private static final EsqlCheck check = new DoubleDispatchVisitorCheck() { };
   private static final String MESSAGE = "message";
@@ -58,7 +58,7 @@ public class IssueTest {
 
 
   @Test
-  public void test_file_issue() throws Exception {
+  void test_file_issue() throws Exception {
     FileIssue fileIssue = new FileIssue(check, MESSAGE);
 
     assertThat(fileIssue.check()).isEqualTo(check);
@@ -70,7 +70,7 @@ public class IssueTest {
   }
 
   @Test
-  public void test_line_issue() throws Exception {
+  void test_line_issue() throws Exception {
     LineIssue lineIssue = new LineIssue(check, 42, MESSAGE);
 
     assertThat(lineIssue.check()).isEqualTo(check);
@@ -86,7 +86,7 @@ public class IssueTest {
   }
 
   @Test
-  public void test_precise_issue() throws Exception {
+  void test_precise_issue() throws Exception {
     IssueLocation primaryLocation = new IssueLocation(token, MESSAGE);
     PreciseIssue preciseIssue = new PreciseIssue(check, primaryLocation);
 
@@ -114,7 +114,7 @@ public class IssueTest {
   }
 
   @Test
-  public void test_long_issue_location() throws Exception {
+  void test_long_issue_location() throws Exception {
     InternalSyntaxToken lastToken = new InternalSyntaxToken(10, 5, "last", Collections.<SyntaxTrivia>emptyList(), 42, false);
 
     IssueLocation issueLocation = new IssueLocation(token, lastToken, MESSAGE);

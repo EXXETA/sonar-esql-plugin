@@ -18,24 +18,24 @@
 package com.exxeta.iss.sonar.esql.api.tree.function;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class TheFunctionTest extends EsqlTreeModelTest<TheFunctionTree> {
+class TheFunctionTest extends EsqlTreeModelTest<TheFunctionTree> {
 
 	@Test
-	public void theFunction() {
+	void theFunction() {
 		assertThat(Kind.THE_FUNCTION)
 			.notMatches("THE(")
 			.matches("THE (getList())");
 	}
 
 	@Test
-	public void modelTest() throws Exception {
+	void modelTest() throws Exception {
 		TheFunctionTree tree = parse("THE (getList())", Kind.THE_FUNCTION);
 		
 		assertNotNull(tree);

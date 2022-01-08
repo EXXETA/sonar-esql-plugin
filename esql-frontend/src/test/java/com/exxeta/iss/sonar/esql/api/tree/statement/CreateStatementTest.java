@@ -18,13 +18,13 @@
 package com.exxeta.iss.sonar.esql.api.tree.statement;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateStatementTreeImpl;
@@ -34,22 +34,22 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.ValuesClauseTreeImpl;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
 
-public class CreateStatementTest  extends EsqlTreeModelTest<CreateStatementTreeImpl>{
+class CreateStatementTest  extends EsqlTreeModelTest<CreateStatementTreeImpl>{
 	@Test
-	public void domainClause(){
+	void domainClause(){
 		assertThat(Kind.REPEAT_CLAUSE)
 		.matches("REPEAT");
 	}	
 	
 	@Test
-	public void valueClause(){
+	void valueClause(){
 		assertThat(Kind.VALUES_CLAUSE)
 		.matches("VALUE 'Element 2 Value'")
 		.matches("IDENTITY(JSON.Object)");
 	}
 	
 	@Test
-	public void createStatement(){
+	void createStatement(){
 		assertThat(Kind.CREATE_STATEMENT)
 		.matches("CREATE FIELD OutputRoot.XMLNS.Data;")
 		.matches("CREATE LASTCHILD OF OutputRoot.XMLNS.TestCase.Root IDENTITY (XML.Element)NSpace1:Element1[2] VALUE 'Element 2 Value';")
@@ -64,7 +64,7 @@ public class CreateStatementTest  extends EsqlTreeModelTest<CreateStatementTreeI
 	}
 	
 	@Test
-	public void parseClause(){
+	void parseClause(){
 		assertThat(Kind.PARSE_CLAUSE)
 		.matches("PARSE(inBitStream, inEncoding, inCCSID, 'DP3UK14002001', 'TestCase', 'XML1', options)")
 		.matches("PARSE(inBitStream, inEncoding, inCCSID,,,, options)")
@@ -73,21 +73,21 @@ public class CreateStatementTest  extends EsqlTreeModelTest<CreateStatementTreeI
 		;
 	}
 	@Test
-	public void fromClause(){
+	void fromClause(){
 		assertThat(Kind.FROM_CLAUSE)
 		.matches("FROM InputRoot.A")
 		;
 	}
 	
 	@Test
-	public void valuesClause(){
+	void valuesClause(){
 		assertThat(Kind.VALUES_CLAUSE)
 		.matches("TYPE Name  NAMESPACE n NAME 'abc'")
 		;
 	}
 	
 	@Test
-	public void modelTest() throws Exception {
+	void modelTest() throws Exception {
 		CreateStatementTreeImpl tree = parse("CREATE LASTCHILD OF OutputRoot DOMAIN('MRM') PARSE(inBitStream, inEncoding, inCCSID, 'DP3UK14002001', 'TestCase', 'XML1', options);", Kind.CREATE_STATEMENT);
 		assertNotNull(tree);
 		assertNotNull(tree.createKeyword());
@@ -169,7 +169,7 @@ public class CreateStatementTest  extends EsqlTreeModelTest<CreateStatementTreeI
 	}
 
 	@Test
-	public void modelTest2() throws Exception {
+	void modelTest2() throws Exception {
 		CreateStatementTreeImpl tree = parse("CREATE LASTCHILD OF OutputRoot DOMAIN('MRM') PARSE(inBitStream ENCODING inEncoding CCSID inCCSID SET 'DP3UK14002001' TYPE 'TestCase' FORMAT 'XML1' OPTIONS options);", Kind.CREATE_STATEMENT);
 		ParseClauseTreeImpl parseClause = tree.parseClause();
 		assertNotNull(parseClause);

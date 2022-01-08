@@ -19,18 +19,18 @@ package com.exxeta.iss.sonar.esql.api.tree.function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.function.PassthruFunctionTree;
 import  com.exxeta.iss.sonar.esql.utils.Assertions;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class PassthruFunctionTest extends EsqlTreeModelTest<PassthruFunctionTree>{
+class PassthruFunctionTest extends EsqlTreeModelTest<PassthruFunctionTree>{
 
 
 	@Test
-	public void passthruStatement(){
+	void passthruStatement(){
 		Assertions.assertThat(Kind.PASSTHRU_FUNCTION)
 		.matches("PASSTHRU('SELECT R.* FROM Schema1.Table1 AS R WHERE R.Name = ? OR R.Name =            ? ORDER BY Name'   TO Database.DSN1   VALUES ('Name1', 'Name4'))")
 		.matches("PASSTHRU('aaaaa' VALUES ('aaaa'))")
@@ -43,7 +43,7 @@ public class PassthruFunctionTest extends EsqlTreeModelTest<PassthruFunctionTree
 	}
 	
 	@Test
-	public void modelTest() throws Exception{
+	void modelTest() throws Exception{
 		PassthruFunctionTree tree = parse("PASSTHRU('aaaaa' VALUES ('aaaa', 'bbbb'))", Kind.PASSTHRU_FUNCTION);
 		assertThat(tree.passthruKeyword()).isNotNull();
 		assertThat(tree.openingParenthesis()).isNotNull();

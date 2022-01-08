@@ -18,26 +18,26 @@
 package com.exxeta.iss.sonar.esql.api.tree.statement;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.statement.InsertStatementTree;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class InsertStatementTest  extends EsqlTreeModelTest<InsertStatementTree> {
+class InsertStatementTest  extends EsqlTreeModelTest<InsertStatementTree> {
 
 
 	@Test
-	public void insertStatement(){
+	void insertStatement(){
 		assertThat(Kind.INSERT_STATEMENT)
 		.matches("INSERT INTO Database.{Source}.{Schema}.{Table} (Name, Value) values ('Joe', 12.34);");
 
 	}
 	
 	@Test
-	public void modelTest() throws Exception {
+	void modelTest() throws Exception {
 		InsertStatementTree tree = parse("INSERT INTO Database.{Source}.{Schema}.{Table} (Name, Value) values ('Joe', 12.34);", Kind.INSERT_STATEMENT);
 		assertNotNull(tree.insertKeyword());
 

@@ -45,6 +45,7 @@ import com.google.common.collect.Lists;
 import com.sonar.sslr.api.RecognitionException;
 import com.sonar.sslr.api.typed.ActionParser;
 import org.sonar.api.batch.InstantiationStrategy;
+import org.sonar.api.batch.Phase;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
@@ -78,8 +79,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-@ScannerSide
-@InstantiationStrategy(InstantiationStrategy.PER_PROJECT)
+@Phase(name = Phase.Name.PRE)
 public class EsqlSensor implements Sensor {
 
     private static final Logger LOG = Loggers.get(EsqlSensor.class);

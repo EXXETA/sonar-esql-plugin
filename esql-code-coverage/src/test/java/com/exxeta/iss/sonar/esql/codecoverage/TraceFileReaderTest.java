@@ -18,20 +18,21 @@
 package com.exxeta.iss.sonar.esql.codecoverage;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.File;
 import java.io.IOException;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.trace.InsertType;
 import com.exxeta.iss.sonar.esql.trace.UserTraceLog;
 import com.exxeta.iss.sonar.esql.trace.UserTraceType;
 
-public class TraceFileReaderTest {
+class TraceFileReaderTest {
 
 	ExecutionDataVisitor testVisitor = new ExecutionDataVisitor() {
 		private int moduleCount = 0;
@@ -46,7 +47,7 @@ public class TraceFileReaderTest {
 	};
 	
 	@Test
-	public void readerTest() {
+	void readerTest() {
 
 
 		TraceFileReader reader = new TraceFileReader(
@@ -61,14 +62,16 @@ public class TraceFileReaderTest {
 
 	}
 	
-	@Test(expected=RuntimeException.class)
-	public void testReaderWithNotExistingFile(){
-		new TraceFileReader(new File("src/test/resources/codecoverage/doesNotExist.txt")).readTrace(testVisitor);
+	@Test
+	void testReaderWithNotExistingFile(){
+		assertThrows(RuntimeException.class,()->{
+			new TraceFileReader(new File("src/test/resources/codecoverage/doesNotExist.txt")).readTrace(testVisitor);
+		});
 	}
 	
 
 	@Test
-	public void xmlReaderTest() {
+	void xmlReaderTest() {
 
 		ExecutionDataVisitor visitor = new ExecutionDataVisitor() {
 			private int moduleCount = 0;
@@ -91,14 +94,16 @@ public class TraceFileReaderTest {
 
 	}
 	
-	@Test(expected=RuntimeException.class)
-	public void xmlReaderTestCorruptFile(){
-		new TraceFileReader(new File("src/test/resources/codecoverage/corruptTrace.xml"))
-		.readTrace(testVisitor);
+	@Test
+	void xmlReaderTestCorruptFile(){
+		assertThrows(RuntimeException.class,()->{
+			new TraceFileReader(new File("src/test/resources/codecoverage/corruptTrace.xml"))
+					.readTrace(testVisitor);
+		});
 	}
 
 	@Test
-	public void parserTest() throws Exception {
+	void parserTest() throws Exception {
 		assertThat(new UserTraceLog().getUserTraceOrInformation()).isNotNull();
 		UserTraceLog trace = new TraceFileReader(new File("src/test/resources/codecoverage/trace.xml")).parseTraceXml();
 		assertThat(trace.getBufferSize()).isEqualTo(0);
@@ -132,7 +137,7 @@ public class TraceFileReaderTest {
 	}
 
 	@Test
-	public void indexOutOfBounds112() throws IOException {
+	void indexOutOfBounds112() throws IOException {
 		TraceFileReader trace = new TraceFileReader(new File("src/test/resources/codecoverage/tests/usertrace_112.xml")).readTrace(new ExecutionDataVisitor() {
 
 			@Override

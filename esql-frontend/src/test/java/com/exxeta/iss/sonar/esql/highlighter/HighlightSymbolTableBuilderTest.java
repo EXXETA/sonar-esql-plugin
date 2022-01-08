@@ -18,6 +18,7 @@
 package com.exxeta.iss.sonar.esql.highlighter;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,7 +26,7 @@ import java.io.FileNotFoundException;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.TextRange;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.DefaultTextPointer;
@@ -38,8 +39,9 @@ import org.sonar.api.batch.sensor.symbol.NewSymbolTable;
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 import com.google.common.io.Files;
+import org.sonar.api.notifications.AnalysisWarnings;
 
-public class HighlightSymbolTableBuilderTest extends EsqlTreeModelTest<Tree> {
+class HighlightSymbolTableBuilderTest extends EsqlTreeModelTest<Tree> {
 
   private SensorContextTester sensorContext;
   private DefaultInputFile inputFile;
@@ -51,7 +53,7 @@ public class HighlightSymbolTableBuilderTest extends EsqlTreeModelTest<Tree> {
       .setModuleBaseDir(moduleBaseDir.toPath())
       .setCharset(StandardCharsets.UTF_8)
       .build();
-    inputFile.setMetadata(new FileMetadata().readMetadata(new FileInputStream(inputFile.file()), inputFile.charset(), inputFile.absolutePath()));
+    inputFile.setMetadata(new FileMetadata(mock(AnalysisWarnings.class)).readMetadata(new FileInputStream(inputFile.file()), inputFile.charset(), inputFile.absolutePath()));
 
     return sensorContext.newSymbolTable().onFile(inputFile);
   }
@@ -65,7 +67,7 @@ public class HighlightSymbolTableBuilderTest extends EsqlTreeModelTest<Tree> {
   }
 
   @Test
-  public void sonar_symbol_table() throws Exception {
+  void sonar_symbol_table() throws Exception {
     String filename = "symbolHighlighting.esql";
     String key = "moduleKey:" + filename;
     HighlightSymbolTableBuilder.build(newSymbolTable(filename), context(inputFile));
@@ -82,7 +84,7 @@ public class HighlightSymbolTableBuilderTest extends EsqlTreeModelTest<Tree> {
   }
 
   @Test
-  public void byte_order_mark_should_not_increment_offset() throws Exception {
+  void byte_order_mark_should_not_increment_offset() throws Exception {
     String filename = "symbolHighlightingBom.esql";
 
     HighlightSymbolTableBuilder.build(newSymbolTable(filename), context(inputFile));

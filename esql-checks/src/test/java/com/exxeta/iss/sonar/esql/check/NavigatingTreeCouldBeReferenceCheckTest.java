@@ -18,7 +18,7 @@
 package com.exxeta.iss.sonar.esql.check;
 
 import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
@@ -27,11 +27,11 @@ import java.io.File;
  *
  * @author Sapna. singh
  */
-public class NavigatingTreeCouldBeReferenceCheckTest {
+class NavigatingTreeCouldBeReferenceCheckTest {
 
 
     @Test
-    public void test() {
+    void test() {
         NavigatingTreeCouldBeReferenceCheck check = new NavigatingTreeCouldBeReferenceCheck();
         EsqlCheckVerifier.issues(check, new File("src/test/resources/NavigatingTreeCouldBeReference.esql"))
                 .next().atLine(4).withMessage("Navigating message tree could be replaced by a reference.")
@@ -42,7 +42,7 @@ public class NavigatingTreeCouldBeReferenceCheckTest {
         EsqlCheckVerifier.issues(check, new File("src/test/resources/NavigatingTreeCouldBeReference.esql"))
                 .next().atLine(4).withMessage("Navigating message tree could be replaced by a reference.")
                 .noMore();
-		check.maximumAllowedPathElements = 2;
+        check.maximumAllowedPathElements = 2;
         check.allowedNumberOfFieldReferenceUses = 4;
         EsqlCheckVerifier.issues(check, new File("src/test/resources/NavigatingTreeCouldBeReference.esql"))
                 .next().atLine(16).withMessage("Navigating message tree could be replaced by a reference.")

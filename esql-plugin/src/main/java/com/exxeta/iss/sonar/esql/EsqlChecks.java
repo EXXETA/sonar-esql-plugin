@@ -42,7 +42,7 @@ public class EsqlChecks {
 	    return new EsqlChecks(checkFactory);
 	  }
 
-	  public EsqlChecks addChecks(String repositoryKey, Iterable<Class> checkClass) {
+	  public EsqlChecks addChecks(String repositoryKey, Iterable<Class<?>> checkClass) {
 	    checksByRepository.add(checkFactory
 	      .<EsqlCheck>create(repositoryKey)
 	      .addAnnotatedChecks(checkClass));

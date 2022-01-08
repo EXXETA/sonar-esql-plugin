@@ -6,9 +6,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,24 +19,23 @@ package com.exxeta.iss.sonar.esql.check;
 
 import java.io.File;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
 
-public class OneStatementPerLineCheckTest {
-	@Test
-	public void test() {
-	OneStatementPerLineCheck check = new OneStatementPerLineCheck();
-	
+class OneStatementPerLineCheckTest {
+    @Test
+    void test() {
+        OneStatementPerLineCheck check = new OneStatementPerLineCheck();
 
-	
-	EsqlCheckVerifier.issues(
-		      check,
-		      new File("src/test/resources/oneStatementPerLine.esql"))
-	.next().atLine(6).withMessage("Reformat the code to have only one statement per line.")
-	.next().atLine(7).withMessage("Reformat the code to have only one statement per line.")
-	.next().atLine(9).withMessage("Reformat the code to have only one statement per line.")
-	.next().atLine(12).withMessage("Reformat the code to have only one statement per line.")
-	.noMore();
-	}
+
+        EsqlCheckVerifier.issues(
+                        check,
+                        new File("src/test/resources/oneStatementPerLine.esql"))
+                .next().atLine(6).withMessage("Reformat the code to have only one statement per line.")
+                .next().atLine(7).withMessage("Reformat the code to have only one statement per line.")
+                .next().atLine(9).withMessage("Reformat the code to have only one statement per line.")
+                .next().atLine(12).withMessage("Reformat the code to have only one statement per line.")
+                .noMore();
+    }
 }

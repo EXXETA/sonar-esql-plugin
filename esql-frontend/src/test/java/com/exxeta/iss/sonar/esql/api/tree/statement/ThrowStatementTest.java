@@ -18,18 +18,18 @@
 package com.exxeta.iss.sonar.esql.api.tree.statement;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ThrowStatementTree;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class ThrowStatementTest extends EsqlTreeModelTest<ThrowStatementTree> {
+class ThrowStatementTest extends EsqlTreeModelTest<ThrowStatementTree> {
 	@Test
-	public void throwStatement() {
+	void throwStatement() {
 		assertThat(Kind.THROW_STATEMENT).matches("THROW USER EXCEPTION;")
 				.matches("THROW USER EXCEPTION CATALOG 'BIPmsgs' MESSAGE 2951 VALUES(1,2,3,4,5,6,7,8) ;")
 				.matches(
@@ -39,7 +39,7 @@ public class ThrowStatementTest extends EsqlTreeModelTest<ThrowStatementTree> {
 	}
 
 	@Test
-	public void modelTest() throws Exception {
+	void modelTest() throws Exception {
 		ThrowStatementTree tree = parse("THROW USER EXCEPTION CATALOG 'BIPmsgs' MESSAGE 2951 VALUES(1,2,3,4,5,6,7,8) ;",
 				Kind.THROW_STATEMENT);
 

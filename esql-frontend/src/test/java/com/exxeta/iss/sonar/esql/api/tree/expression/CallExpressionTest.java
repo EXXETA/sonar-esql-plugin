@@ -3,16 +3,16 @@ package com.exxeta.iss.sonar.esql.api.tree.expression;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.utils.Assertions;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class CallExpressionTest extends EsqlTreeModelTest<CallExpressionTree> {
+class CallExpressionTest extends EsqlTreeModelTest<CallExpressionTree> {
 
 	@Test
-	public void expression() {
+	void expression() {
 		Assertions.assertThat(Kind.CALL_EXPRESSION)
 		.matches("a(a)")
 		.matches("a")
@@ -20,7 +20,7 @@ public class CallExpressionTest extends EsqlTreeModelTest<CallExpressionTree> {
 	}
 	
 	@Test
-	public void modelTest() throws Exception {
+	void modelTest() throws Exception {
 		CallExpressionTree tree = parse("a(b,c,d,e)", Kind.CALL_EXPRESSION);
 
 		assertThat(tree.is(Kind.CALL_EXPRESSION)).isTrue();

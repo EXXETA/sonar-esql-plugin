@@ -65,7 +65,7 @@ public class EsqlProfilesDefinition implements BuiltInQualityProfilesDefinition 
         newProfile.done();
     }
 
-    private static Set<String> ruleKeys(List<Class> checks) {
+    private static Set<String> ruleKeys(List<Class<?>> checks) {
         return checks.stream()
                 .map(c -> ((Rule) c.getAnnotation(Rule.class)).key())
                 .collect(Collectors.toSet());

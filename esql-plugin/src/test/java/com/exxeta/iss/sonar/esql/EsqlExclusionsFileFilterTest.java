@@ -1,6 +1,6 @@
 package com.exxeta.iss.sonar.esql;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.config.internal.MapSettings;
@@ -8,11 +8,11 @@ import org.sonar.api.config.internal.MapSettings;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-public class EsqlExclusionsFileFilterTest {
+class EsqlExclusionsFileFilterTest {
    
 
     @Test
-    public void should_exclude_using_custom_path_regex() throws Exception {
+    void should_exclude_using_custom_path_regex() throws Exception {
         MapSettings settings = new MapSettings();
         settings.setProperty(
                 EsqlPlugin.ESQL_EXCLUSIONS_KEY, EsqlPlugin.ESQL_EXCLUSIONS_DEFAULT_VALUE + "," + "**/libs/**");
@@ -24,7 +24,7 @@ public class EsqlExclusionsFileFilterTest {
     }
 
     @Test
-    public void should_ignore_empty_path_regex() throws Exception {
+    void should_ignore_empty_path_regex() throws Exception {
         MapSettings settings = new MapSettings();
         settings.setProperty(EsqlPlugin.ESQL_EXCLUSIONS_KEY, "," + EsqlPlugin.ESQL_EXCLUSIONS_DEFAULT_VALUE + ",");
 

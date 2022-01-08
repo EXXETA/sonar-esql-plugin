@@ -19,18 +19,18 @@ package com.exxeta.iss.sonar.esql.api.tree.statement;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.statement.WhileStatementTree;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class WhileStatementTest extends EsqlTreeModelTest<WhileStatementTree>{
+class WhileStatementTest extends EsqlTreeModelTest<WhileStatementTree>{
 	@Test
-	public void whileStatement(){
+	void whileStatement(){
 		assertThat(Kind.WHILE_STATEMENT)
 		.matches("X : WHILE i <= 3 DO SET i = i + 1;  END WHILE X;")
 		.matches("WHILE i <= 3 DO SET i = i + 1;  END WHILE;")
@@ -39,7 +39,7 @@ public class WhileStatementTest extends EsqlTreeModelTest<WhileStatementTree>{
 	}
 	
 	@Test
-	public void modelTest() throws Exception{
+	void modelTest() throws Exception{
 		WhileStatementTree tree = parse("X : WHILE i <= 3 DO SET i = i + 1;  END WHILE X;", Kind.WHILE_STATEMENT);
 		assertNotNull(tree);
 		assertNotNull(tree.label());

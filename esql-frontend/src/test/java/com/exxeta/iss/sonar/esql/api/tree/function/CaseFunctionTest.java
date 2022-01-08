@@ -18,23 +18,23 @@
 package com.exxeta.iss.sonar.esql.api.tree.function;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.tree.impl.function.WhenClauseExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class CaseFunctionTest extends EsqlTreeModelTest<CaseFunctionTree> {
+class CaseFunctionTest extends EsqlTreeModelTest<CaseFunctionTree> {
 
 	@Test
-	public void whenClause() {
+	void whenClause() {
 		assertThat(Kind.WHEN_CLAUSE_EXPRESSION).matches("WHEN '01' THEN 'January'");
 	}
 
 	@Test
-	public void caseStatement() {
+	void caseStatement() {
 		assertThat(Kind.CASE_FUNCTION)
 				.matches("CASE CurrentMonth " + "WHEN '01' THEN 'January' " + "WHEN '02' THEN 'February' "
 						+ "WHEN '03' THEN 'March' " + "WHEN '04' THEN 'April' " + "WHEN '05' THEN 'May' "
@@ -47,7 +47,7 @@ public class CaseFunctionTest extends EsqlTreeModelTest<CaseFunctionTree> {
 	}
 	
 	@Test
-	public void modelTest() throws Exception{
+	void modelTest() throws Exception{
 		CaseFunctionTree tree = parse("CASE CurrentMonth " + "WHEN '01' THEN 'January' " + "WHEN '02' THEN 'February' "
 						+ "WHEN '03' THEN 'March' " + "WHEN '04' THEN 'April' " + "WHEN '05' THEN 'May' "
 						+ "WHEN '06' THEN 'June' " + "ELSE 'Second half of year' " + "END", Kind.CASE_FUNCTION);

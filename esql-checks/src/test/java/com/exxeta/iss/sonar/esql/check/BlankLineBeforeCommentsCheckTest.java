@@ -19,7 +19,7 @@ package com.exxeta.iss.sonar.esql.check;
 
 import java.io.File;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.EsqlCheck;
 import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
@@ -28,9 +28,9 @@ import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
  * @author C50679
  *
  */
-public class BlankLineBeforeCommentsCheckTest {
+class BlankLineBeforeCommentsCheckTest {
 	@Test
-	public void test() {
+	void test() {
 		EsqlCheck check = new BlankLineBeforeCommentsCheck();
 		EsqlCheckVerifier.issues(check, new File("src/test/resources/BlankLineBeforeComments.esql"))
 		.next().atLine(4).withMessage("Insert one blank line before this block or single-line comment.")

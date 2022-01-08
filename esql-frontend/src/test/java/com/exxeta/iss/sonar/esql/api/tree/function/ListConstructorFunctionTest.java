@@ -18,23 +18,23 @@
 package com.exxeta.iss.sonar.esql.api.tree.function;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.function.ListConstructorFunctionTree;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class ListConstructorFunctionTest extends EsqlTreeModelTest<ListConstructorFunctionTree>{
+class ListConstructorFunctionTest extends EsqlTreeModelTest<ListConstructorFunctionTree>{
 
 	@Test
-	public void listConstructorFunction() {
+	void listConstructorFunction() {
 		assertThat(Kind.LIST_CONSTRUCTOR_FUNCTION)
 		.matches("LIST{InputBody.Car.color, 'green', 'blue'}");
 	}
 	@Test
-	public void modelTest() throws Exception {
+	void modelTest() throws Exception {
 		ListConstructorFunctionTree tree = parse("LIST{InputBody.Car.color, 'green', 'blue'}", Kind.LIST_CONSTRUCTOR_FUNCTION);
 		assertNotNull(tree.listKeyword());
 		assertNotNull(tree.openingCurlyBrace());
