@@ -1,4 +1,4 @@
-# sonar-esql-plugin [![Build Status](https://travis-ci.org/EXXETA/sonar-esql-plugin.svg)](https://travis-ci.org/EXXETA/sonar-esql-plugin) [![codecov](https://codecov.io/gh/EXXETA/sonar-esql-plugin/branch/develop/graph/badge.svg)](https://codecov.io/gh/EXXETA/sonar-esql-plugin) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=EXXETA_sonar-esql-plugin&metric=alert_status)](https://sonarcloud.io/dashboard?id=EXXETA_sonar-esql-plugin)
+# sonar-esql-plugin [![Build Status](https://github.com/EXXETA/sonar-esql-plugin/actions/workflows/build.yml/badge.svg)](https://travis-ci.org/EXXETA/sonar-esql-plugin) [![codecov](https://codecov.io/gh/EXXETA/sonar-esql-plugin/branch/develop/graph/badge.svg)](https://codecov.io/gh/EXXETA/sonar-esql-plugin) [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=EXXETA_sonar-esql-plugin&metric=alert_status)](https://sonarcloud.io/dashboard?id=EXXETA_sonar-esql-plugin)
 
 This open source plugin can be used to analyze the ESQL-sourcecode of IBM App Connect Enterprise / IBM Websphere Message Broker / IBM Integration Bus projects. 
 
@@ -31,6 +31,7 @@ This open source plugin can be used to analyze the ESQL-sourcecode of IBM App Co
 
 ## History
 
+- 3.1.0 - Upgrade to SonarQube 9.2
 - 3.0.0 - Bugfixes, upgrade to sonar SonarQube 7.9
 - 2.3.0 - Additional rules, upgrade to SonarQube 6.7, copy paste detector
 - 2.2.0 - Code coverage analysis
