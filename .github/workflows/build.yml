@@ -24,6 +24,9 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
+      - name: Update maven version
+        if: startsWith(github.ref, 'refs/tags/')
+        run: mvn versions:set -DnewVersion=${{ github.ref }} && mvn versions:commit
       - name: Build with Maven
         run: mvn -B clean org.jacoco:jacoco-maven-plugin:prepare-agent verify  -P coverage-per-test
       - name: SonarCloud Scan
@@ -31,3 +34,24 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: Create Release candidate
+        id: create_release_candidate
+        if: startsWith(github.ref, 'refs/tags/') && contains(github.ref,'-RC')
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: true
+          prerelease: true
+      - name: Upload Release Asset
+        if: startsWith(github.ref, 'refs/tags/') && contains(github.ref,'-RC')
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release_candidate.outputs.upload_url }}
+          asset_path: ./target/esql-plugin-${{ github.ref }}.jar
+          asset_name: esql-plugin-${{ github.ref }}.jar
+          asset_content_type: application/java-archive
