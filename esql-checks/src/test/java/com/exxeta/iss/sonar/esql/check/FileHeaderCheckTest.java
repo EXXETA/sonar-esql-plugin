@@ -23,7 +23,6 @@ import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.EsqlCheck;
 import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
-import org.omg.CORBA.portable.ApplicationException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
