@@ -45,7 +45,7 @@ public class TraceFileReader {
 
     private Pattern pattern;
 
-    private static final String PATTERN_REGEX = ".* at \\('(.*)', '(\\w+)\\.\\w+'\\).*";
+    private static final String PATTERN_REGEX = ".{1,1000} at \\('(.{0,100})', '(\\w{1,5})\\.\\w{1,5}'\\).{0,1000}";
 
     //Contains the executionData per module
     private HashMap<String, ModuleExecutionData> moduleCache = new HashMap<>();
