@@ -4,7 +4,7 @@ This open source plugin can be used to analyze the ESQL-sourcecode of IBM App Co
 
 ## Features
 * \>75 rules
-* Support for Broker 7, 8, 9, 10
+* Support for Broker 7, 8, 9, 10, 11, 12
 * Metrics (complexity, number of lines, ...)
 * Import of traces as coverage reports
 

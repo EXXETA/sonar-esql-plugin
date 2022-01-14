@@ -55,3 +55,7 @@ jobs:
           asset_path: ./esql-plugin/target/esql-plugin-${{ github.ref_name }}.jar
           asset_name: esql-plugin-${{ github.ref_name }}.jar
           asset_content_type: application/java-archive
+      - name: Upload Codecoverage
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
