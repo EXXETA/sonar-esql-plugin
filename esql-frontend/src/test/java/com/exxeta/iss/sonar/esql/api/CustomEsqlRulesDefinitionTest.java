@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +17,7 @@
  */
 package com.exxeta.iss.sonar.esql.api;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinition.Param;
 import org.sonar.check.Rule;
@@ -27,7 +27,7 @@ import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitor;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CustomEsqlRulesDefinitionTest {
+class CustomEsqlRulesDefinitionTest {
 
   private static final String REPOSITORY_NAME = "Custom Rule Repository";
   private static final String REPOSITORY_KEY = "CustomRuleRepository";
@@ -36,8 +36,8 @@ public class CustomEsqlRulesDefinitionTest {
   private static final String RULE_KEY = "MyCustomRule";
 
   @Test
-  public void test() {
-    MyCustomEsqlRulesDefinition rulesDefinition = new MyCustomEsqlRulesDefinition();
+  void test() {
+    MyCustomJavaScriptRulesDefinition rulesDefinition = new MyCustomJavaScriptRulesDefinition();
     RulesDefinition.Context context = new RulesDefinition.Context();
     rulesDefinition.define(context);
     RulesDefinition.Repository repository = context.repository(REPOSITORY_KEY);
@@ -62,15 +62,15 @@ public class CustomEsqlRulesDefinitionTest {
     name = RULE_NAME,
     description = "desc",
     tags = {"bug"})
-  public class MyCustomRule extends DoubleDispatchVisitor {
+  class MyCustomRule extends DoubleDispatchVisitor {
     @RuleProperty(
       key = "customParam",
       description = "Custome parameter",
       defaultValue = "value")
-    public String customParam = "value";
+    String customParam = "value";
   }
 
-  public static class MyCustomEsqlRulesDefinition extends CustomEsqlRulesDefinition {
+  static class MyCustomJavaScriptRulesDefinition extends CustomEsqlRulesDefinition {
 
     @Override
     public String repositoryName() {

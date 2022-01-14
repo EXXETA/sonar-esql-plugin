@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,24 +18,24 @@
 package com.exxeta.iss.sonar.esql.api.tree.statement;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class ReturnStatementTest extends EsqlTreeModelTest<ReturnStatementTree> {
+class ReturnStatementTest extends EsqlTreeModelTest<ReturnStatementTree> {
 	@Test
-	public void returnStatement(){
+	void returnStatement(){
 		assertThat(Kind.RETURN_STATEMENT)
 		.matches("RETURN;")
 		.matches("RETURN (PriceTotal/NumItems> 42);");
 
 	}
 	@Test
-	public void modelTest() throws Exception {
+	void modelTest() throws Exception {
 		ReturnStatementTree tree = parse("RETURN;", Kind.RETURN_STATEMENT);
 		assertNotNull(tree.returnKeyword());
 		assertNull(tree.expression());

@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,18 +20,18 @@ package com.exxeta.iss.sonar.esql.api.tree.statement;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CallStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class CallStatementTest extends EsqlTreeModelTest<CallStatementTreeImpl> {
+class CallStatementTest extends EsqlTreeModelTest<CallStatementTreeImpl> {
 
     @Test
-    public void callStatement() {
+    void callStatement() {
         assertThat(Kind.CALL_STATEMENT)
                 .matches("CALL myProc1();")
                 .matches("CALL a.b.c.myProc1();")
@@ -45,7 +45,7 @@ public class CallStatementTest extends EsqlTreeModelTest<CallStatementTreeImpl> 
     }
 
     @Test
-    public void modelTest() throws Exception {
+    void modelTest() throws Exception {
         CallStatementTreeImpl tree = parse("CALL myProc1() INTO cursor;", Kind.CALL_STATEMENT);
         assertNotNull(tree);
         assertNotNull(tree.callKeyword());

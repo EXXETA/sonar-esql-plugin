@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,13 +17,13 @@
  */
 package com.exxeta.iss.sonar.esql.codecoverage;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class CodeCoverageExtensionTest {
+class CodeCoverageExtensionTest {
 	@Test
-	  public void testExtensions() {
+	  void testExtensions() {
 	    assertThat(CodeCoverageExtension.getExtensions().size()).isEqualTo(1);
 	  }
 }

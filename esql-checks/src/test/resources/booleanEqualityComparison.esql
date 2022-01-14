@@ -16,5 +16,6 @@ IF FALSE <> a THEN END IF;       -- Noncompliant
 IF a = foo(true) THEN END IF;    -- OK
 IF NOT (TRUE) THEN END IF;       -- Noncompliant
 IF a = (FALSE) THEN END IF;      -- Noncompliant
-
+IF a THEN END IF;                -- OK
+IF NOT A THEN END IF;            -- OK
 	END;

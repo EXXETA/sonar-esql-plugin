@@ -18,7 +18,7 @@
 package com.exxeta.iss.sonar.msgflow.check.verifier;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.util.ArrayList;

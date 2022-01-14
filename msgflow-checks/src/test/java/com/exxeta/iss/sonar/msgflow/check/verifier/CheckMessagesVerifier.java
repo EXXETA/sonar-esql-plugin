@@ -18,13 +18,14 @@
 package com.exxeta.iss.sonar.msgflow.check.verifier;
 import com.google.common.base.Objects;
 import com.google.common.collect.Ordering;
+import org.hamcrest.Matcher;
+
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import javax.annotation.Nullable;
-import org.hamcrest.Matcher;
+import static org.hamcrest.MatcherAssert.assertThat;
 
-import static org.junit.Assert.assertThat;
 /**
  * This class was copy&pasted from sslr-squid-bridge to avoid dependency on it
  * <p>

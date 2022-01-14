@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -42,7 +42,7 @@ public class EsqlChecks {
 	    return new EsqlChecks(checkFactory);
 	  }
 
-	  public EsqlChecks addChecks(String repositoryKey, Iterable<Class> checkClass) {
+	  public EsqlChecks addChecks(String repositoryKey, Iterable<Class<?>> checkClass) {
 	    checksByRepository.add(checkFactory
 	      .<EsqlCheck>create(repositoryKey)
 	      .addAnnotatedChecks(checkClass));

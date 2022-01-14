@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,19 +18,19 @@
 package com.exxeta.iss.sonar.esql.api.tree.statement;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.PassthruStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class PassthruStatementTest extends EsqlTreeModelTest<PassthruStatementTreeImpl> {
+class PassthruStatementTest extends EsqlTreeModelTest<PassthruStatementTreeImpl> {
 
 
 	@Test
-	public void passthruStatement(){
+	void passthruStatement(){
 		assertThat(Kind.PASSTHRU_STATEMENT)
 		.matches("PASSTHRU 'CREATE TABLE Shop.Customers (  CustomerNumber INTEGER,  FirstName      VARCHAR(256),  LastName       VARCHAR(256),  Street         VARCHAR(256),  City           VARCHAR(256),  Country        VARCHAR(256))' TO Database.DSN1;")
 		.matches("PASSTHRU ('', '');")
@@ -38,7 +38,7 @@ public class PassthruStatementTest extends EsqlTreeModelTest<PassthruStatementTr
 	}
 	
 	@Test
-	public void modelTest() throws Exception{
+	void modelTest() throws Exception{
 		PassthruStatementTreeImpl tree = parse("PASSTHRU '' TO Database.DSN1 VALUES ();", Kind.PASSTHRU_STATEMENT);
 		assertNotNull(tree);
 		assertNotNull(tree.passthruKeyword());

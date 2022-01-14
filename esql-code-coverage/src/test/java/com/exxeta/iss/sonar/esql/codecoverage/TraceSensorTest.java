@@ -1,6 +1,7 @@
 package com.exxeta.iss.sonar.esql.codecoverage;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,8 +12,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.InputFile.Type;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
@@ -24,10 +25,11 @@ import org.sonar.api.config.internal.MapSettings;
 import com.exxeta.iss.sonar.esql.codecoverage.TraceSensor.UnitTestsAnalyzer;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableSet;
+import org.sonar.api.notifications.AnalysisWarnings;
 
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -42,7 +44,7 @@ import com.google.common.collect.ImmutableSet;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public class TraceSensorTest {
+class TraceSensorTest {
 	private SensorContextTester context;
 	private MapSettings settings;
 
@@ -52,8 +54,8 @@ public class TraceSensorTest {
 
 	private TraceSensor sensor;
 
-	@Before
-	public void init() throws FileNotFoundException {
+	@BeforeEach
+	void init() throws FileNotFoundException {
 		settings = new MapSettings();
 		settings.setProperty("sonar.esql.trace.reportPaths", "TraceSensorTest/trace.txt");
 		context = SensorContextTester.create(moduleBaseDir);
@@ -78,14 +80,14 @@ public class TraceSensorTest {
 				.setModuleBaseDir(moduleBaseDir.toPath()).setLanguage("esql").setType(type).setCharset(Charsets.UTF_8)
 				.build();
 
-		inputFile.setMetadata(new FileMetadata().readMetadata(new FileReader(inputFile.file())));
+		inputFile.setMetadata(new FileMetadata(mock(AnalysisWarnings.class)).readMetadata(new FileReader(inputFile.file())));
 		context.fileSystem().add(inputFile);
 
 		return inputFile;
 	}
 
 	@Test
-	public void report_not_found() throws Exception {
+	void report_not_found() {
 
 		sensor.execute(context, linesOfCode, new String[] { "/fake/path/trace.txt" });
 
@@ -93,14 +95,14 @@ public class TraceSensorTest {
 	}
 
 	@Test
-	public void folder_test() {
+	void folder_test() {
 		sensor.execute(context, linesOfCode, new String[] { "TraceSensorTest" });
 		assertThat(sensor.toString()).isEqualTo("TraceSensor");
 		assertThat(context.conditions("moduleKey:file1.esql", 1)).isEqualTo(1);
 	}
 
 	@Test
-	public void test_overall_coverage() {
+	void test_overall_coverage() {
 		sensor.execute(context, linesOfCode, new String[] { "TraceSensorTest/trace.txt" });
 
 		Integer[] file1Expected = { 3, 3, 1, null };
@@ -113,7 +115,7 @@ public class TraceSensorTest {
 	}
 
 	@Test
-	public void regex_test() {
+	void regex_test() {
 		UnitTestsAnalyzer analyzer = new UnitTestsAnalyzer(null, null);
 		// (?i)\\s*CREATE\\s+(COMPUTE|FILTER|DATABASE)\\s+MODULE\\s+(.+)
 

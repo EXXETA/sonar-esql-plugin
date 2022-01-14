@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,13 +19,13 @@ package com.exxeta.iss.sonar.esql.tree.symbols;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 import com.exxeta.iss.sonar.esql.utils.TestUtils;
 
-public class ScopeTest extends EsqlTreeModelTest<EsqlTree> {
+class ScopeTest extends EsqlTreeModelTest<EsqlTree> {
 	private SymbolModelImpl SYMBOL_MODEL = symbolModel(
 			TestUtils.createTestInputFile("src/test/resources/ast/resolve/scope.esql"));
 
@@ -39,12 +39,12 @@ public class ScopeTest extends EsqlTreeModelTest<EsqlTree> {
 	}
 
 	@Test
-	public void scopes_number() throws Exception {
+	void scopes_number() throws Exception {
 		assertThat(SYMBOL_MODEL.getScopes()).hasSize(9);
 	}
 
 	@Test
-	public void test_global_scope() throws Exception {
+	void test_global_scope() throws Exception {
 		Scope scope = SYMBOL_MODEL.globalScope();
 
 		assertThat(scope.isGlobal()).isTrue();

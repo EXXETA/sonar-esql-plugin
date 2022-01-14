@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,13 +20,13 @@ package com.exxeta.iss.sonar.esql.check.naming;
 import java.io.File;
 
 import com.exxeta.iss.sonar.esql.check.naming.ModuleNameCheck;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
 
-public class ModuleNameCheckTest {
+class ModuleNameCheckTest {
 	@Test
-	public void test() throws Exception {
+	void test() throws Exception {
 		ModuleNameCheck check = new ModuleNameCheck();
 
 		EsqlCheckVerifier.issues(check, new File("src/test/resources/moduleName.esql"))

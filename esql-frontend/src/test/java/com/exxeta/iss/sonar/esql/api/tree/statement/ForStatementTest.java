@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,18 +18,18 @@
 package com.exxeta.iss.sonar.esql.api.tree.statement;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ForStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class ForStatementTest extends EsqlTreeModelTest<ForStatementTreeImpl>{
+class ForStatementTest extends EsqlTreeModelTest<ForStatementTreeImpl>{
 
 	@Test
-	public void forStatement() {
+	void forStatement() {
 		assertThat(Kind.FOR_STATEMENT)
 		.matches("FOR source AS Environment.SourceData.Folder[] DO END FOR;")
 		.matches("FOR source AS Environment.SourceData.Folder[] DO SET A = 1; SET B = 2; END FOR;");
@@ -38,7 +38,7 @@ public class ForStatementTest extends EsqlTreeModelTest<ForStatementTreeImpl>{
 	
 	
 	@Test
-	public void modelTest() throws Exception{
+	void modelTest() throws Exception{
 		ForStatementTreeImpl tree = parse("FOR source AS Environment.SourceData.Folder[] DO SET A = 1; SET B = 2; END FOR;", Kind.FOR_STATEMENT);
 		
 		assertNotNull(tree);

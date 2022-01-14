@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,12 +18,13 @@
 package com.exxeta.iss.sonar.esql.lexer;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class EsqlTokenTypeTest {
+class EsqlTokenTypeTest {
 	@Test
-	public void test() {
+	void test() {
 		assertThat(EsqlTokenType.values().length).isEqualTo(3);
 
 		for (EsqlTokenType type : EsqlTokenType.values()) {
@@ -32,8 +33,10 @@ public class EsqlTokenTypeTest {
 		}
 	}
 
-	@Test(expected = IllegalStateException.class)
-	public void hasToBeSkippedFromAst() throws Exception {
-		EsqlTokenType.IDENTIFIER.hasToBeSkippedFromAst(null);
+	@Test
+	void hasToBeSkippedFromAst() throws Exception {
+		assertThrows(IllegalStateException.class, () -> {
+			EsqlTokenType.IDENTIFIER.hasToBeSkippedFromAst(null);
+		});
 	}
 }

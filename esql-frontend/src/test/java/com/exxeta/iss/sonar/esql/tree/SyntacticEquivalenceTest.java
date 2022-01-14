@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,10 +18,11 @@
 package com.exxeta.iss.sonar.esql.tree;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
@@ -31,10 +32,10 @@ import com.exxeta.iss.sonar.esql.tree.impl.expression.IdentifierTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CallStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class SyntacticEquivalenceTest extends EsqlTreeModelTest<Tree> {
+class SyntacticEquivalenceTest extends EsqlTreeModelTest<Tree> {
 
 	@Test
-	public void test() throws Exception {
+	void test() throws Exception {
 		Tree tree1 = parse("if a then end if;", Tree.Kind.IF_STATEMENT);
 		Tree tree2 = parse("if a then end if;", Tree.Kind.IF_STATEMENT);
 
@@ -54,7 +55,7 @@ public class SyntacticEquivalenceTest extends EsqlTreeModelTest<Tree> {
 	}
 
 	@Test
-	public void test_equivalence_for_tree_list() throws Exception {
+	void test_equivalence_for_tree_list() throws Exception {
 		CallStatementTree tree1 = (CallStatementTree) parse("CALL f(a, b, c) ;", Tree.Kind.CALL_STATEMENT);
 		CallStatementTree tree2 = (CallStatementTree) parse("CALL f(a, b, c) ;", Tree.Kind.CALL_STATEMENT);
 		CallStatementTree tree3 = (CallStatementTree) parse("CALL f(a, b) ;", Tree.Kind.CALL_STATEMENT);
@@ -68,7 +69,7 @@ public class SyntacticEquivalenceTest extends EsqlTreeModelTest<Tree> {
 	}
 
 	@Test
-	public void test_equivalence_for_empty_tree_list() throws Exception {
+	void test_equivalence_for_empty_tree_list() throws Exception {
 		CallStatementTree tree1 = (CallStatementTree) parse("CALL f() ;", Tree.Kind.CALL_STATEMENT);
 		CallStatementTree tree2 = (CallStatementTree) parse("CALL f() ;", Tree.Kind.CALL_STATEMENT);
 
@@ -77,7 +78,7 @@ public class SyntacticEquivalenceTest extends EsqlTreeModelTest<Tree> {
 	}
 
 	@Test
-	public void test_equivalence_for_tokens() throws Exception {
+	void test_equivalence_for_tokens() throws Exception {
 		Tree tree1 = parse("IF TRUE THEN END IF;", Tree.Kind.IF_STATEMENT);
 		Tree tree2 = parse("IF FALSE THEN END IF;", Tree.Kind.IF_STATEMENT);
 
@@ -86,7 +87,7 @@ public class SyntacticEquivalenceTest extends EsqlTreeModelTest<Tree> {
 	}
 
 	@Test
-	public void test_skip_parenthesis() throws Exception {
+	void test_skip_parenthesis() throws Exception {
 		IfStatementTree tree1 = (IfStatementTree) parse("IF (TRUE) THEN END IF;", Tree.Kind.IF_STATEMENT);
 		IfStatementTree tree2 = (IfStatementTree) parse("IF TRUE THEN END IF;", Tree.Kind.IF_STATEMENT);
 
@@ -95,11 +96,14 @@ public class SyntacticEquivalenceTest extends EsqlTreeModelTest<Tree> {
 		assertNull(SyntacticEquivalence.skipParentheses(null));
 	}
 
-	@Test(expected = IllegalArgumentException.class)
-	public void are_leafs_equivalent() throws Exception {
+	@Test
+	void are_leafs_equivalent() throws Exception {
+		//(expected = IllegalArgumentException.class)
 		CallStatementTreeImpl tree1 = (CallStatementTreeImpl) parse("CALL f(a,a) ;", Tree.Kind.CALL_STATEMENT);
 		assertThat(SyntacticEquivalence.areLeafsEquivalent((IdentifierTreeImpl) tree1.parameterList().get(0), (IdentifierTreeImpl) tree1.parameterList().get(1))).isTrue();
-		SyntacticEquivalence.areLeafsEquivalent(null, null);
+		assertThrows(IllegalArgumentException.class,()->{
+			SyntacticEquivalence.areLeafsEquivalent(null, null);
+		});
 	}
 
 }

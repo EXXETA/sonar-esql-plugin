@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,10 +33,10 @@ import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
  * @author Sapna Singh
  *
  */
-@Rule(key = "ProcessInvokingItself")
-public class ProcessInvokingItselfCheck extends DoubleDispatchVisitorCheck {
+@Rule(key = "Recursion")
+public class RecursionCheck extends DoubleDispatchVisitorCheck {
 
-	private static final String MESSAGE = "process invoking itself.";
+	private static final String MESSAGE = "routine invoking itself.";
 	private String routineName;
 
 	@Override

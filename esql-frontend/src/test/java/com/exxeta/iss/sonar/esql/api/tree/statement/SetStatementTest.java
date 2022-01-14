@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,18 +18,18 @@
 package com.exxeta.iss.sonar.esql.api.tree.statement;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class SetStatementTest extends EsqlTreeModelTest<SetStatementTree> {
+class SetStatementTest extends EsqlTreeModelTest<SetStatementTree> {
 
 	@Test
-	public void setStatement() {
+	void setStatement() {
 		assertThat(Kind.SET_STATEMENT)
 		.matches("SET a=b;")
 		.matches("SET a = b.c;")
@@ -43,7 +43,7 @@ public class SetStatementTest extends EsqlTreeModelTest<SetStatementTree> {
 		
 	}
 	@Test
-	public void model() throws Exception{
+	void model() throws Exception{
 		SetStatementTree tree = parse("SET a=b;", Kind.SET_STATEMENT);
 		assertNotNull(tree);
 		assertNotNull(tree.setKeyword());

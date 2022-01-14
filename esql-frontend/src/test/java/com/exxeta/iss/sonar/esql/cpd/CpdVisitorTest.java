@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,13 +19,14 @@ package com.exxeta.iss.sonar.esql.cpd;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.UUID;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.TemporaryFolder;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.cpd.internal.TokensLine;
@@ -48,8 +49,8 @@ public class CpdVisitorTest {
 	  private DefaultInputFile inputFile;
 	  private SensorContextTester sensorContext;
 
-	  @Rule
-	  public TemporaryFolder tempFolder = new TemporaryFolder();
+	  @TempDir
+	  public File tempFolder;
 
 	  @Test
 	  public void test() throws Exception {
@@ -72,9 +73,9 @@ public class CpdVisitorTest {
 	  }
 
 	  private void scan(String source) throws IOException {
-	    inputFile = TestUtils.createTestInputFile(tempFolder.newFile(), source, CHARSET);
+	    inputFile = TestUtils.createTestInputFile(new File(tempFolder, "temp-"+ UUID.randomUUID()), source, CHARSET);
 
-	    sensorContext = SensorContextTester.create(tempFolder.getRoot().toPath());
+	    sensorContext = SensorContextTester.create(tempFolder.toPath());
 	    CpdVisitor cpdVisitor = new CpdVisitor(sensorContext);
 	    ProgramTree tree = (ProgramTree) p.parse(source);
 	    TreeVisitorContext visitorContext = new EsqlVisitorContext(tree, inputFile, null);

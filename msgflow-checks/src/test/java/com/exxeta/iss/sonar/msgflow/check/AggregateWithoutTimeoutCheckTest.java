@@ -2,10 +2,9 @@ package com.exxeta.iss.sonar.msgflow.check;
 
 import java.io.File;
 
-import org.junit.Test;
-
 import com.exxeta.iss.sonar.msgflow.api.MsgflowCheck;
 import com.exxeta.iss.sonar.msgflow.check.verifier.MsgflowCheckVerifier;
+import org.junit.jupiter.api.Test;
 
 public class AggregateWithoutTimeoutCheckTest {
 	@Test

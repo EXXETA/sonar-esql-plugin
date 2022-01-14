@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,16 +18,16 @@
 package com.exxeta.iss.sonar.esql.api.tree.function;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class ExtractFunctionTest extends EsqlTreeModelTest<ExtractFunctionTree>{
+class ExtractFunctionTest extends EsqlTreeModelTest<ExtractFunctionTree>{
 	@Test
-	public void extractFunction(){
+	void extractFunction(){
 		assertThat(Kind.EXTRACT_FUNCTION)
 		.matches("EXTRACT(YEAR FROM CURRENT_DATE)")
 		.matches("EXTRACT (DAYS FROM DATE '2000-02-29')")
@@ -36,7 +36,7 @@ public class ExtractFunctionTest extends EsqlTreeModelTest<ExtractFunctionTree>{
 	
 	
 	@Test
-	public void modelTest() throws Exception{
+	void modelTest() throws Exception{
 		ExtractFunctionTree tree = parse("EXTRACT(YEAR FROM CURRENT_DATE)", Kind.EXTRACT_FUNCTION);
 		
 		assertTrue(tree.extractKeyword()!=null);

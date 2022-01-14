@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,17 +18,17 @@
 package com.exxeta.iss.sonar.esql.api.tree.function;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class RoundFunctionTest extends EsqlTreeModelTest<RoundFunctionTree>{
+class RoundFunctionTest extends EsqlTreeModelTest<RoundFunctionTree>{
 
 	@Test
-	public void roundFunction() {
+	void roundFunction() {
 		assertThat(Kind.ROUND_FUNCTION)
 			.notMatches("ROUND(")
 			.matches("ROUND (1,1)")
@@ -36,7 +36,7 @@ public class RoundFunctionTest extends EsqlTreeModelTest<RoundFunctionTree>{
 	}
 	
 	@Test
-	public void modelTest() throws Exception{
+	void modelTest() throws Exception{
 		RoundFunctionTree tree = parse("ROUND(5.5, 0 MODE ROUND_FLOOR)", Kind.ROUND_FUNCTION);
 		
 		assertNotNull(tree.roundKeyword());

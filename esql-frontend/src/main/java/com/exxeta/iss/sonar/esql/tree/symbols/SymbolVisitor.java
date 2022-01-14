@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2020 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,6 +33,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.declaration.PathElementNamespaceTreeI
 import com.exxeta.iss.sonar.esql.tree.impl.declaration.PathElementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.IdentifierTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateRoutineTreeImpl;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
 
@@ -61,6 +62,7 @@ public class SymbolVisitor extends DoubleDispatchVisitor {
 	@Override
 	public void visitCreateFunctionStatement(CreateFunctionStatementTree tree) {
 		enterScope(tree);
+		tree.parameterList().forEach(param->declaredBlockScopeNames.put(currentScope, param.identifier().name()));
 		super.visitCreateFunctionStatement(tree);
 		leaveScope();
 	}
@@ -68,6 +70,7 @@ public class SymbolVisitor extends DoubleDispatchVisitor {
 	@Override
 	public void visitCreateProcedureStatement(CreateProcedureStatementTree tree) {
 		enterScope(tree);
+		tree.parameterList().forEach(param->declaredBlockScopeNames.put(currentScope, param.identifier().name()));
 		super.visitCreateProcedureStatement(tree);
 		leaveScope();
 	}
@@ -91,6 +94,11 @@ public class SymbolVisitor extends DoubleDispatchVisitor {
 					IdentifierTree identifierTree = new IdentifierTreeImpl(Tree.Kind.PROPERTY_IDENTIFIER, (InternalSyntaxToken) namespace.namespace().identifier());
 					addUsageFor(identifierTree, Usage.Kind.READ);
 				}
+			}
+		} else if (tree.is(Tree.Kind.BINDING_IDENTIFIER)){
+			if (tree.parent() != null && tree.parent().parent() instanceof CreateRoutineTreeImpl){
+				addUsageFor(tree, Usage.Kind.DECLARATION);
+
 			}
 		}
 		super.visitIdentifier(tree);
