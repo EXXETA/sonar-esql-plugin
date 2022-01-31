@@ -36,7 +36,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: Create Release candidate
         id: create_release_candidate
-        if: startsWith(github.ref, 'refs/tags/') && contains(github.ref,'-RC')
+        if: startsWith(github.ref, 'refs/tags/')
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
@@ -44,9 +44,9 @@ jobs:
           tag_name: ${{ github.ref_name }}
           release_name: Release ${{ github.ref_name }}
           draft: true
-          prerelease: true
+          prerelease: ${{contains(github.ref,'-RC')}}
       - name: Upload Release Asset
-        if: startsWith(github.ref, 'refs/tags/') && contains(github.ref,'-RC')
+        if: startsWith(github.ref, 'refs/tags/')
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
