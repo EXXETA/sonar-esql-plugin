@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,10 +18,10 @@
 package com.exxeta.iss.sonar.esql.api.tree.expression;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.symbols.type.TypableTree;
@@ -29,31 +29,31 @@ import com.exxeta.iss.sonar.esql.parser.EsqlLegacyGrammar;
 import com.exxeta.iss.sonar.esql.tree.symbols.type.RoutineType;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class UnaryExpressionTest extends EsqlTreeModelTest<UnaryExpressionTree>{
+class UnaryExpressionTest extends EsqlTreeModelTest<UnaryExpressionTree>{
 
 	@Test
-	public void plusPrefix() {
+	void plusPrefix() {
 		assertThat(EsqlLegacyGrammar.unaryExpression)
 		.matches("+10")
 		.matches("+1")
 		;
 	}
 	@Test
-	public void minusPrefix() {
+	void minusPrefix() {
 		assertThat(EsqlLegacyGrammar.unaryExpression)
 		.matches("+10")
 		.matches("+1")
 		;
 	}
 	@Test
-	public void notPrefix() {
+	void notPrefix() {
 		assertThat(EsqlLegacyGrammar.unaryExpression)
 		.matches("NOT TRUE")
 		;
 	}
 	
 	@Test
-	public void modelTest() throws Exception{
+	void modelTest() throws Exception{
 		UnaryExpressionTree tree = parse("+10", EsqlLegacyGrammar.unaryExpression, Kind.UNARY_PLUS);
 		assertNotNull(tree);
 		assertNotNull(tree.expression());

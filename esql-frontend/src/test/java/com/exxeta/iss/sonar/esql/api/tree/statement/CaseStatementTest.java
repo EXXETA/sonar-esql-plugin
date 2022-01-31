@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,25 +18,25 @@
 package com.exxeta.iss.sonar.esql.api.tree.statement;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CaseStatementTree;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class CaseStatementTest extends EsqlTreeModelTest<CaseStatementTree>{
+class CaseStatementTest extends EsqlTreeModelTest<CaseStatementTree>{
 
 	@Test
-	public void whenClause() {
+	void whenClause() {
 		assertThat(Kind.WHEN_CLAUSE).matches("WHEN minimum + 0 THEN").matches("WHEN minimum + 0 THEN SET a=1;")
 				.matches("WHEN minimum + 0 THEN SET a=1; SET b=3;");
 	}
 
 	@Test
-	public void caseStatement() {
+	void caseStatement() {
 		assertThat(Kind.CASE_STATEMENT)
 				.matches("CASE size\n  WHEN minimum + 0 THEN\n"
 						+ "    SET description = 'small';\n  WHEN minimum + 1 THEN\n"
@@ -49,7 +49,7 @@ public class CaseStatementTest extends EsqlTreeModelTest<CaseStatementTree>{
 	}
 	
 	@Test
-	public void modelTest() throws Exception{
+	void modelTest() throws Exception{
 		CaseStatementTree tree = parse("CASE" + " WHEN i <> 0 THEN\n" + "    CALL handleI(i);\n" + "  WHEN j> 1 THEN\n"
 						+ "    CALL handleIZeroAndPositiveJ(j);\n" + "  ELSE\n" + "    CALL handleAllOtherCases(j);\n"
 						+ "END CASE;", Kind.CASE_STATEMENT);

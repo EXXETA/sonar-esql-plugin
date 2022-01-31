@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,11 +18,11 @@
 package com.exxeta.iss.sonar.esql.api.tree;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.statement.CreateProcedureStatementTree;
@@ -32,11 +32,11 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.ExternalRoutineBodyTreeImpl
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
 
-public class CreateProcedureTest extends EsqlTreeModelTest<CreateProcedureStatementTree>{
+class CreateProcedureTest extends EsqlTreeModelTest<CreateProcedureStatementTree>{
 
 	
 	@Test
-	public void createProcedureStatement(){
+	void createProcedureStatement(){
 		assertThat(Kind.CREATE_PROCEDURE_STATEMENT)
 		.matches("CREATE PROCEDURE swapParms (  IN parm1 CHARACTER,  OUT parm2  CHARACTER,  INOUT parm3 CHARACTER )BEGIN   SET parm2 = parm3;   SET parm3 = parm1; END;")
 		.matches("CREATE PROCEDURE InsertVehicle(INOUT p_VehicleIdentifier CHARACTER,INOUT p_MMCAssignmentState CHARACTER,INOUT p_ResultCode INTEGER,INOUT p_ResultText CHARACTER)LANGUAGE DATABASE EXTERNAL NAME \"A.V.INSERT\";")
@@ -47,7 +47,7 @@ public class CreateProcedureTest extends EsqlTreeModelTest<CreateProcedureStatem
 	}
 
 	@Test
-	public void modelTest() throws Exception{
+	void modelTest() throws Exception{
 		CreateProcedureStatementTree tree = parse("CREATE PROCEDURE myProc1 (IN P1 INT, OUT P2 INT) LANGUAGE DATABASE DYNAMIC RESULT SETS 2 EXTERNAL NAME \"myschema.myproc1\";", Kind.CREATE_PROCEDURE_STATEMENT);
 		assertNotNull(tree);
 		assertNotNull(tree.createKeyword());

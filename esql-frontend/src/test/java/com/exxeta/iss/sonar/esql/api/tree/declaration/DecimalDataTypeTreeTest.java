@@ -1,17 +1,17 @@
 package com.exxeta.iss.sonar.esql.api.tree.declaration;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.DecimalDataTypeTree;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class DecimalDataTypeTreeTest extends EsqlTreeModelTest<DecimalDataTypeTree> {
+class DecimalDataTypeTreeTest extends EsqlTreeModelTest<DecimalDataTypeTree> {
 	@Test
-	public void fielReference() {
+	void fielReference() {
 		assertThat(Kind.DECIMAL_DATA_TYPE)
 		.matches("DECIMAL(1,2)")
 		.matches("DECIMAL")
@@ -20,7 +20,7 @@ public class DecimalDataTypeTreeTest extends EsqlTreeModelTest<DecimalDataTypeTr
 	}
 	
 	@Test
-	public void model() throws Exception{
+	void model() throws Exception{
 		DecimalDataTypeTree tree = parse("DECIMAL(1,2)", Kind.DECIMAL_DATA_TYPE);
 		assertNotNull(tree);
 		assertNotNull(tree.decimalKeyword());

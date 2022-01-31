@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +19,7 @@ package com.exxeta.iss.sonar.esql.api.tree.symbol;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.batch.fs.InputFile;
 
 import com.exxeta.iss.sonar.esql.api.symbols.Symbol;
@@ -30,13 +30,13 @@ import com.exxeta.iss.sonar.esql.tree.symbols.SymbolModelImpl;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 import com.exxeta.iss.sonar.esql.utils.TestUtils;
 
-public class SymbolModelImplTest extends EsqlTreeModelTest<ProgramTree> {
+class SymbolModelImplTest extends EsqlTreeModelTest<ProgramTree> {
 
   private static final InputFile INPUT_FILE = TestUtils.createTestInputFile("src/test/resources/ast/resolve/symbolModel.esql");
   private SymbolModelImpl SYMBOL_MODEL = symbolModel(INPUT_FILE);
 
   @Test
-  public void symbols_filtering() {
+  void symbols_filtering() {
     assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.FUNCTION)).extracting("name").containsOnly("f", "func");
     assertThat(SYMBOL_MODEL.getSymbols(Symbol.Kind.PROCEDURE)).extracting("name").containsOnly("p1", "p2");
 
@@ -44,13 +44,13 @@ public class SymbolModelImplTest extends EsqlTreeModelTest<ProgramTree> {
   }
 
   @Test
-  public void symbols_scope() {
+  void symbols_scope() {
     Symbol f = (Symbol) SYMBOL_MODEL.getSymbols("f").toArray()[0];
     assertThat(f.scope().tree().is(Tree.Kind.PROGRAM)).isTrue();
   }
 
   @Test
-  public void override_symbol_kind() throws Exception {
+  void override_symbol_kind() throws Exception {
     Symbol func = (Symbol) SYMBOL_MODEL.getSymbols("func").toArray()[0];
     assertThat(func.is(Kind.FUNCTION)).isTrue();
   }

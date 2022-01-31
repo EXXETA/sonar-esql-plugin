@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 /**
  * This class was copy&pasted from sslr-squid-bridge to avoid dependency on it

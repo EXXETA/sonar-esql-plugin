@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,25 +18,25 @@
 package com.exxeta.iss.sonar.esql.api.tree.function;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.function.OverlayFunctionTree;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class OverlayFunctionTest extends EsqlTreeModelTest<OverlayFunctionTree>{
+class OverlayFunctionTest extends EsqlTreeModelTest<OverlayFunctionTree>{
 
 	@Test
-	public void overlayFunction() {
+	void overlayFunction() {
 		assertThat(Kind.OVERLAY_FUNCTION)
 			.matches("OVERLAY ('ABCDEFGHIJ' PLACING '1234' FROM 4 FOR 3)");
 	}
 	
 	@Test
-	public void modelTest() throws Exception{
+	void modelTest() throws Exception{
 		OverlayFunctionTree tree = parse("OVERLAY ('ABCDEFGHIJ' PLACING '1234' FROM 4 FOR 3)", Kind.OVERLAY_FUNCTION);
 		assertNotNull(tree.overlayKeyword());
 		assertNotNull(tree.openingParenthesis());

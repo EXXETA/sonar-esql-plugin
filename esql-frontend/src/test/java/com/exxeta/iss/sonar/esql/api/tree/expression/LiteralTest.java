@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,26 +18,26 @@
 package com.exxeta.iss.sonar.esql.api.tree.expression;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.parser.EsqlLegacyGrammar;
 import com.exxeta.iss.sonar.esql.tree.expression.LiteralTree;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class LiteralTest extends EsqlTreeModelTest<LiteralTree> {
+class LiteralTest extends EsqlTreeModelTest<LiteralTree> {
 
 	@Test
-	public void stringLiteral() {
+	void stringLiteral() {
 		assertThat(Kind.STRING_LITERAL)
 		.matches("'a'")
 		.matches("''");
 	}
 	
 	@Test
-	public void numericalLiteral(){
+	void numericalLiteral(){
 		assertThat(Kind.NUMERIC_LITERAL)
 		.matches("1")
 		.matches("0")
@@ -46,25 +46,25 @@ public class LiteralTest extends EsqlTreeModelTest<LiteralTree> {
 	}
 	
 	@Test
-	public void lietral(){
+	void lietral(){
 		assertThat(EsqlLegacyGrammar.LITERAL)
 		.matches("0");
 	}
 	
 	@Test
-	public void timeLiteral(){
+	void timeLiteral(){
 		assertThat(Kind.TIME_LITERAL)
 		.matches("TIME '00:00:00'");
 	}
 	@Test
-	public void timestampLiteral(){
+	void timestampLiteral(){
 		assertThat(Kind.TIMESTAMP_LITERAL)
 		.matches("TIMESTAMP '2017-01-01 00:00:00'")
 		.notMatches("timestamp");
 	}
 	
 	@Test
-	public void stringLiteralModelTest() throws Exception{
+	void stringLiteralModelTest() throws Exception{
 		LiteralTree tree = parse("'a'", Kind.STRING_LITERAL);
 		assertNotNull(tree);
 		assertNotNull(tree.token());

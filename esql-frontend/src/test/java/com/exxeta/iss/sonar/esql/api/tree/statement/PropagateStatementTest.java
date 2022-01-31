@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,10 +18,10 @@
 package com.exxeta.iss.sonar.esql.api.tree.statement;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.statement.ControlsTree;
@@ -29,9 +29,9 @@ import com.exxeta.iss.sonar.esql.api.tree.statement.MessageSourceTree;
 import com.exxeta.iss.sonar.esql.api.tree.statement.PropagateStatementTree;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class PropagateStatementTest extends EsqlTreeModelTest<PropagateStatementTree>{
+class PropagateStatementTest extends EsqlTreeModelTest<PropagateStatementTree>{
 	@Test
-	public void propagateStatement(){
+	void propagateStatement(){
 		assertThat(Kind.PROPAGATE_STATEMENT)
 		.matches("PROPAGATE TO LABEL 'ABC';")
 		.matches("PROPAGATE;")
@@ -41,7 +41,7 @@ public class PropagateStatementTest extends EsqlTreeModelTest<PropagateStatement
 	}
 	
 	@Test
-	public void modelTest() throws Exception{
+	void modelTest() throws Exception{
 		PropagateStatementTree tree = parse("PROPAGATE TO LABEL 'abc' FINALIZE NONE DELETE NONE;", Kind.PROPAGATE_STATEMENT);
 		assertNotNull(tree.propagateKeyword());
 		assertNotNull(tree.toKeyword());

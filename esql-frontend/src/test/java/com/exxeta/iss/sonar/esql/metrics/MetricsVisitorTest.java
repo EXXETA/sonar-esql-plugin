@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,16 +18,16 @@
 package com.exxeta.iss.sonar.esql.metrics;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.eq;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.io.File;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
@@ -41,7 +41,7 @@ import com.exxeta.iss.sonar.esql.api.visitors.EsqlFileImpl;
 import com.exxeta.iss.sonar.esql.api.visitors.TreeVisitorContext;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class MetricsVisitorTest extends EsqlTreeModelTest {
+class MetricsVisitorTest extends EsqlTreeModelTest {
 
   private static final File MODULE_BASE_DIR = new File("src/test/resources/metrics/");
 
@@ -56,8 +56,8 @@ public class MetricsVisitorTest extends EsqlTreeModelTest {
   private SensorContextTester context;
   private TreeVisitorContext treeVisitorContext;
 
-  @Before
-  public void setUp() throws Exception {
+  @BeforeEach
+  void setUp() throws Exception {
     context = SensorContextTester.create(MODULE_BASE_DIR);
     context.fileSystem().add(INPUT_FILE);
     linesContext = mock(FileLinesContext.class);
@@ -67,7 +67,7 @@ public class MetricsVisitorTest extends EsqlTreeModelTest {
   }
 
   @Test
-  public void test() {
+  void test() {
     MetricsVisitor metricsVisitor = createMetricsVisitor();
     metricsVisitor.scanTree(treeVisitorContext);
     assertThat(context.measure(COMPONENT_KEY, CoreMetrics.FUNCTIONS).value()).isEqualTo(0);
@@ -78,7 +78,7 @@ public class MetricsVisitorTest extends EsqlTreeModelTest {
   }
 
   @Test
-  public void save_executable_lines() {
+  void save_executable_lines() {
     final MetricsVisitor metricsVisitorWithSave = createMetricsVisitor();
     metricsVisitorWithSave.scanTree(treeVisitorContext);
     Mockito.verify(linesContext, atLeastOnce()).setIntValue(eq(CoreMetrics.EXECUTABLE_LINES_DATA_KEY), any(Integer.class), any(Integer.class));

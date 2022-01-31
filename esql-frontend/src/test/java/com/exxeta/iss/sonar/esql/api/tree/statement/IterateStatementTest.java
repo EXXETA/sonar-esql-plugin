@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,25 +18,25 @@
 package com.exxeta.iss.sonar.esql.api.tree.statement;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class IterateStatementTest  extends EsqlTreeModelTest<IterateStatementTree> {
+class IterateStatementTest  extends EsqlTreeModelTest<IterateStatementTree> {
 
 
 	@Test
-	public void iterateStatement(){
+	void iterateStatement(){
 		assertThat(Kind.ITERATE_STATEMENT)
 		.matches("ITERATE A;");
 
 	}
 	
 	@Test
-	public void modelTest() throws Exception {
+	void modelTest() throws Exception {
 		IterateStatementTree tree = parse("ITERATE A;", Kind.ITERATE_STATEMENT);
 		assertNotNull(tree.iterateKeyword());
 

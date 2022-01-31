@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,6 +36,9 @@ import com.exxeta.iss.sonar.esql.api.visitors.EsqlVisitorContext;
 import com.exxeta.iss.sonar.esql.parser.EsqlParserBuilder;
 import com.exxeta.iss.sonar.esql.tree.impl.EsqlTree;
 import com.google.common.base.Throwables;
+import org.sonar.api.notifications.AnalysisWarnings;
+
+import static org.mockito.Mockito.mock;
 
 public class TestUtils {
 
@@ -51,7 +54,7 @@ public class TestUtils {
 	    final DefaultInputFile inputFile = new TestInputFileBuilder("module1", file.getName()).setCharset(encoding).build();
 	    try {
 	      Files.write(file.toPath(), contents.getBytes(encoding));
-	      inputFile.setMetadata(new FileMetadata().readMetadata(new FileInputStream(file), encoding, file.getAbsolutePath()));
+	      inputFile.setMetadata(new FileMetadata(mock(AnalysisWarnings.class)).readMetadata(new FileInputStream(file), encoding, file.getAbsolutePath()));
 	    } catch (IOException e) {
 	      throw Throwables.propagate(e);
 	    }

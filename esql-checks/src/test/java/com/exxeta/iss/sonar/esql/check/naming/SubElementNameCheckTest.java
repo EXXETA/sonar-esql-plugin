@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +20,7 @@ package com.exxeta.iss.sonar.esql.check.naming;
 
 import java.io.File;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.EsqlCheck;
 import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
@@ -29,10 +29,10 @@ import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
  * @author Sapna Singh
  *
  */
-public class SubElementNameCheckTest {
+class SubElementNameCheckTest {
 	
 	@Test
-	public void test() {
+	void test() {
 		EsqlCheck check = new SubElementNameCheck();
 		EsqlCheckVerifier.issues(check, new File("src/test/resources/SubElementName.esql"))
 				.next().atLine(5).withMessage("sub-elements should be in UpperCamel-case and elements containing simple value should be in lowercase.")

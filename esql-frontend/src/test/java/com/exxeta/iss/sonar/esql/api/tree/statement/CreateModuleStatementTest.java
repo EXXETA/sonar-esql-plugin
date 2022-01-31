@@ -3,22 +3,22 @@ package com.exxeta.iss.sonar.esql.api.tree.statement;
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateModuleStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class CreateModuleStatementTest extends EsqlTreeModelTest<CreateModuleStatementTreeImpl> {
+class CreateModuleStatementTest extends EsqlTreeModelTest<CreateModuleStatementTreeImpl> {
 
     @Test
-    public void createModule() {
+    void createModule() {
         assertThat(Kind.CREATE_MODULE_STATEMENT)
                 .matches("CREATE COMPUTE MODULE AB\n END MODULE;");
     }
 
     @Test
-    public void modelTest() throws Exception {
+    void modelTest() throws Exception {
         CreateModuleStatementTree tree = parse("CREATE COMPUTE MODULE abc END MODULE ;", Kind.CREATE_MODULE_STATEMENT);
         assertNotNull(tree);
         assertNotNull(tree.createKeyword());

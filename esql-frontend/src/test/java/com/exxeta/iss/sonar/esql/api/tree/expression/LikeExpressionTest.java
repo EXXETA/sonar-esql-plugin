@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,21 +18,21 @@
 package com.exxeta.iss.sonar.esql.api.tree.expression;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.tree.expression.LikeExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.symbols.type.PrimitiveType;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class LikeExpressionTest extends EsqlTreeModelTest<LikeExpressionTreeImpl>{
+class LikeExpressionTest extends EsqlTreeModelTest<LikeExpressionTreeImpl>{
 
 	@Test
-	public void expression() {
+	void expression() {
 		assertThat(Kind.LIKE_EXPRESSION)
 		.matches("Body.Trade.Company LIKE 'I__'")
 		.matches("Body.Trade.Company LIKE 'I%'")
@@ -42,7 +42,7 @@ public class LikeExpressionTest extends EsqlTreeModelTest<LikeExpressionTreeImpl
 	}
 	
 	@Test
-	public void modelTest() throws Exception{
+	void modelTest() throws Exception{
 		LikeExpressionTreeImpl tree = parse("Body.Trade.Company LIKE 'I__'", Kind.LIKE_EXPRESSION);
 		assertNotNull(tree);
 		assertNotNull(tree.source());

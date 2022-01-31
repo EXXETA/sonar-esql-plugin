@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,24 +18,23 @@
 package com.exxeta.iss.sonar.esql.api.tree.statement;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
-import com.exxeta.iss.sonar.esql.api.tree.statement.AttachStatementTree;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class AttachStatementTest extends EsqlTreeModelTest<AttachStatementTree> {
+class AttachStatementTest extends EsqlTreeModelTest<AttachStatementTree> {
 	@Test
-	public void attachStatement(){
+	void attachStatement(){
 		assertThat(Kind.ATTACH_STATEMENT)
 		.matches("ATTACH ref1 TO OutputRoot.XMLNSC.Data.Order[2] AS LASTCHILD;");
 
 	}
 	
 	@Test
-	public void modelTest() throws Exception {
+	void modelTest() throws Exception {
 		AttachStatementTree tree = parse("ATTACH ref1 TO OutputRoot.XMLNSC.Data.Order[2] AS LASTCHILD;", Kind.ATTACH_STATEMENT);
 		assertNotNull(tree);
 		

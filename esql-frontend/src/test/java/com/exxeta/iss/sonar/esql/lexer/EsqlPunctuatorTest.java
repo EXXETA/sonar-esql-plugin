@@ -1,14 +1,14 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,21 +17,26 @@
  */
 package com.exxeta.iss.sonar.esql.lexer;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class EsqlPunctuatorTest {
-	@Test
-	public void test() {
-		assertThat(EsqlPunctuator.values().length).isEqualTo(21);
+class EsqlPunctuatorTest {
+    @Test
+    void test() {
+        assertThat(EsqlPunctuator.values().length).isEqualTo(21);
 
-		for (EsqlPunctuator punctuator : EsqlPunctuator.values()) {
-			assertThat(punctuator.getName()).isEqualTo(punctuator.name());
-		}
-	}
+        for (EsqlPunctuator punctuator : EsqlPunctuator.values()) {
+            assertThat(punctuator.getName()).isEqualTo(punctuator.name());
+        }
+    }
 
-	@Test(expected = IllegalStateException.class)
-	public void hasToBeSkippedFromAst() throws Exception {
-		EsqlPunctuator.COMMA.hasToBeSkippedFromAst(null);
-	}
+    @Test
+    void hasToBeSkippedFromAst() {
+        assertThrows(IllegalStateException.class, () -> {
+            EsqlPunctuator.COMMA.hasToBeSkippedFromAst(null);
+        });
+
+    }
 }

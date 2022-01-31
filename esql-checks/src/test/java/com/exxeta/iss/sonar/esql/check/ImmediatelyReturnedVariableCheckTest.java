@@ -1,15 +1,15 @@
 package com.exxeta.iss.sonar.esql.check;
 
 import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class ImmediatelyReturnedVariableCheckTest {
+class ImmediatelyReturnedVariableCheckTest {
     @Test
-    public void test() {
+    void test() {
         EsqlCheckVerifier.verify(new ImmediatelyReturnedVariableCheck(), new File("src/test/resources/ImmediatelyReturnedVariable.esql"));
     }
 }

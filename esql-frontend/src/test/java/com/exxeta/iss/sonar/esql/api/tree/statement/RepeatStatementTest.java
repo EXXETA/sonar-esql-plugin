@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,17 +18,17 @@
 package com.exxeta.iss.sonar.esql.api.tree.statement;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.statement.RepeatStatementTree;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class RepeatStatementTest extends EsqlTreeModelTest<RepeatStatementTree>{
+class RepeatStatementTest extends EsqlTreeModelTest<RepeatStatementTree>{
 	@Test
-	public void repeatStatement(){
+	void repeatStatement(){
 		assertThat(Kind.REPEAT_STATEMENT)
 		.matches("X : REPEAT SET i = i + 1; UNTIL  i>= 3 END REPEAT X;")
 		.matches("REPEAT SET i = i + 1; UNTIL  i>= 3 END REPEAT;");
@@ -36,7 +36,7 @@ public class RepeatStatementTest extends EsqlTreeModelTest<RepeatStatementTree>{
 	}
 	
 	@Test
-	public void modelTest() throws Exception {
+	void modelTest() throws Exception {
 		RepeatStatementTree tree = parse("X : REPEAT SET i = i + 1; UNTIL  i>= 3 END REPEAT X;", Kind.REPEAT_STATEMENT);
 		assertNotNull(tree);
 		assertNotNull(tree.label());

@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +17,7 @@
  */
 package com.exxeta.iss.sonar.esql.rules;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.sonar.api.rules.RuleType;
 import org.sonar.api.server.debt.DebtRemediationFunction.Type;
 import org.sonar.api.server.rule.RuleParamType;
@@ -32,13 +32,13 @@ import com.exxeta.iss.sonar.esql.check.CheckList;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class EsqlRulesDefinitionTest {
+class EsqlRulesDefinitionTest {
 
   @Test
-  public void test() {
+  void test() {
     RulesDefinition.Repository repository = buildRepository();
 
-    assertThat(repository.name()).isEqualTo("SonarAnalyzer");
+    assertThat(repository.name()).isEqualTo("SonarQube");
     assertThat(repository.language()).isEqualTo("esql");
     assertThat(repository.rules()).hasSize(CheckList.getChecks().size());
 

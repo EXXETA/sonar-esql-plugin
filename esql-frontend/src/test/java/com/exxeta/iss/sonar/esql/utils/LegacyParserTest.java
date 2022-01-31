@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,7 +17,7 @@
  */
 package com.exxeta.iss.sonar.esql.utils;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.sonar.sslr.grammar.LexerlessGrammarBuilder;
 import org.sonar.sslr.parser.LexerlessGrammar;
 
@@ -33,7 +33,7 @@ public class LegacyParserTest {
 
   protected LexerlessGrammar g;
 
-  @Before
+  @BeforeEach
   public void setUp() throws Exception {
     LexerlessGrammarBuilder b = EsqlLegacyGrammar.createGrammarBuilder();
     // Only called to completed the grammar

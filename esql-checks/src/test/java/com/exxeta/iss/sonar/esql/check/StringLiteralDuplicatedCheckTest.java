@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,13 +19,13 @@
 package com.exxeta.iss.sonar.esql.check;
 
 import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
-public class StringLiteralDuplicatedCheckTest {
+class StringLiteralDuplicatedCheckTest {
     @Test
-    public void test() {
+    void test() {
         EsqlCheckVerifier.verify(new StringLiteralDuplicatedCheck(), new File("src/test/resources/StringLiteralDuplicated.esql"));
     }
 

@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,14 +19,14 @@ package com.exxeta.iss.sonar.esql.check;
 
 import java.io.File;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
 
-public class SleepCheckTest {
+class SleepCheckTest {
 
 	@Test
-	public void test(){
+	void test(){
 		EsqlCheckVerifier.verify(new SleepCheck(), new File("src/test/resources/sleep.esql"));
 	}
 }

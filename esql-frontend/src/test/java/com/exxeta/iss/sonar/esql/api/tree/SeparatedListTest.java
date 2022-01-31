@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,18 +22,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import org.junit.Test;
-import org.sonar.api.internal.google.common.collect.Lists;
+import com.google.common.collect.Lists;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.expression.ExpressionTree;
 import com.exxeta.iss.sonar.esql.tree.impl.SeparatedList;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CallStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class SeparatedListTest extends EsqlTreeModelTest<Tree> {
+class SeparatedListTest extends EsqlTreeModelTest<Tree> {
 
 	@Test
-	public void test() throws Exception {
+	void test() throws Exception {
 		CallStatementTreeImpl tree1 = (CallStatementTreeImpl) parse("CALL f(a,b) ;", Tree.Kind.CALL_STATEMENT);
 		SeparatedList<ExpressionTree> list = tree1.parameterList();
 		assertThat(list.toArray()).hasSize(2);

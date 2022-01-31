@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +20,6 @@ package com.exxeta.iss.sonar.esql;
 import com.exxeta.iss.sonar.esql.api.CustomEsqlRulesDefinition;
 import com.exxeta.iss.sonar.esql.api.EsqlCheck;
 import com.exxeta.iss.sonar.esql.api.tree.ProgramTree;
-import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.visitors.DoubleDispatchVisitorCheck;
 import com.exxeta.iss.sonar.esql.api.visitors.LineIssue;
 import com.exxeta.iss.sonar.esql.api.visitors.TreeVisitor;
@@ -29,10 +28,9 @@ import com.exxeta.iss.sonar.esql.check.CheckList;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableList;
 import com.sonar.sslr.api.RecognitionException;
-import org.apache.commons.lang.NotImplementedException;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.InputFile.Type;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
@@ -46,12 +44,15 @@ import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
 import org.sonar.api.batch.rule.internal.NewActiveRule;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.Issue;
+import org.sonar.api.batch.sensor.issue.internal.DefaultNoSonarFilter;
 import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.CoreMetrics;
 import org.sonar.api.measures.FileLinesContext;
 import org.sonar.api.measures.FileLinesContextFactory;
+import org.sonar.api.notifications.AnalysisWarnings;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.utils.log.LogTester;
+import org.sonar.api.utils.log.LogTesterJUnit5;
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
 import org.sonar.squidbridge.ProgressReport;
@@ -64,19 +65,17 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.contains;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class
-EsqlSensorTest {
+class EsqlSensorTest {
 
-    @org.junit.Rule
-    public final ExpectedException thrown = ExpectedException.none();
-
-    @org.junit.Rule
-    public LogTester logTester = new LogTester();
+    @RegisterExtension
+    public LogTesterJUnit5 logTester = new LogTesterJUnit5();
 
     private FileLinesContextFactory fileLinesContextFactory;
 
@@ -105,14 +104,14 @@ EsqlSensorTest {
     private SensorContextTester context = SensorContextTester.create(baseDir);
 
     private EsqlSensor createSensor() {
-        return new EsqlSensor(checkFactory, fileLinesContextFactory, context.fileSystem(), new NoSonarFilter());
+        return new EsqlSensor(checkFactory, fileLinesContextFactory, context.fileSystem(), new DefaultNoSonarFilter());
     }
 
     private EsqlSensor createSensorWithCustomRules() {
-        return new EsqlSensor(checkFactory, fileLinesContextFactory, context.fileSystem(), new NoSonarFilter(), CUSTOM_RULES);
+        return new EsqlSensor(checkFactory, fileLinesContextFactory, context.fileSystem(), new DefaultNoSonarFilter(), CUSTOM_RULES);
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         fileLinesContextFactory = mock(FileLinesContextFactory.class);
         FileLinesContext fileLinesContext = mock(FileLinesContext.class);
@@ -248,11 +247,10 @@ EsqlSensorTest {
         verify(progressReport).stop();
     }
 
-    @Test
+   @Test
     public void cancelled_analysis() throws Exception {
         EsqlCheck check = new ExceptionRaisingCheck(new IllegalStateException(new InterruptedException()));
         analyseFileWithException(check, inputFile("cpd/Person.esql"), "Analysis cancelled");
-        assertThat(context.allAnalysisErrors()).hasSize(1);
     }
 
     @Test
@@ -260,14 +258,12 @@ EsqlSensorTest {
         EsqlCheck check = new ExceptionRaisingCheck(
                 new RecognitionException(42, "message", new InterruptedIOException()));
         analyseFileWithException(check, inputFile("cpd/Person.esql"), "Analysis cancelled");
-        assertThat(context.allAnalysisErrors()).hasSize(1);
     }
 
     @Test
     public void exception_should_report_file_name() throws Exception {
         EsqlCheck check = new ExceptionRaisingCheck(new IllegalStateException(new InterruptedException()));
         analyseFileWithException(check, inputFile("cpd/Person.esql"), "Analysis cancelled");
-        assertThat(context.allAnalysisErrors()).hasSize(1);
     }
 
     @Test
@@ -285,10 +281,12 @@ EsqlSensorTest {
     private void analyseFileWithException(EsqlCheck check, InputFile inputFile,
                                           String expectedMessageSubstring) {
         EsqlSensor sensor = createSensor();
-        thrown.expectMessage(expectedMessageSubstring);
         try {
-            sensor.analyseFiles(context, ImmutableList.of((TreeVisitor) check), ImmutableList.of(inputFile),
-                    progressReport);
+            EsqlSensor.AnalysisException thrown = assertThrows(EsqlSensor.AnalysisException.class,()->{
+                sensor.analyseFiles(context, ImmutableList.of((TreeVisitor) check), ImmutableList.of(inputFile),
+                        progressReport);
+            });
+            assertThat(thrown.getMessage()).contains(expectedMessageSubstring);
         } finally {
             verify(progressReport).cancel();
         }
@@ -306,7 +304,7 @@ EsqlSensorTest {
         context.fileSystem().add(inputFile);
 
         try {
-            inputFile.setMetadata(new FileMetadata().readMetadata(new FileInputStream(inputFile.file()), Charsets.UTF_8, inputFile.absolutePath()));
+            inputFile.setMetadata(new FileMetadata(mock(AnalysisWarnings.class)).readMetadata(new FileInputStream(inputFile.file()), Charsets.UTF_8, inputFile.absolutePath()));
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

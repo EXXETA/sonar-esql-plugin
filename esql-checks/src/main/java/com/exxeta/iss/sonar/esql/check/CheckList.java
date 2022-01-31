@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -39,8 +39,8 @@ public final class CheckList {
   private CheckList() {
   }
 
-  public static List<Class> getChecks() {
-    return ImmutableList.<Class> of(
+  public static List<Class<?>> getChecks() {
+    return ImmutableList.<Class<?>> of(
             BinaryOperatorSeparatedBySpaceCheck.class,
             BlankLineBeforeCommentsCheck.class,
             BooleanEqualityComparisonCheck.class,

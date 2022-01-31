@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -65,7 +65,7 @@ public class EsqlProfilesDefinition implements BuiltInQualityProfilesDefinition 
         newProfile.done();
     }
 
-    private static Set<String> ruleKeys(List<Class> checks) {
+    private static Set<String> ruleKeys(List<Class<?>> checks) {
         return checks.stream()
                 .map(c -> ((Rule) c.getAnnotation(Rule.class)).key())
                 .collect(Collectors.toSet());

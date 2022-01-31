@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,21 +18,21 @@
 package com.exxeta.iss.sonar.esql.api.tree.expression;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.tree.impl.expression.InExpressionTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.symbols.type.PrimitiveType;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class InExpressionTest extends EsqlTreeModelTest<InExpressionTreeImpl>{
+class InExpressionTest extends EsqlTreeModelTest<InExpressionTreeImpl>{
 
 	@Test
-	public void expression() {
+	void expression() {
 		assertThat(Kind.IN_EXPRESSION)
 		.matches("a in (a,b,c)")
 		.matches("a not in (a,b,c)")
@@ -40,7 +40,7 @@ public class InExpressionTest extends EsqlTreeModelTest<InExpressionTreeImpl>{
 	}
 	
 	@Test
-	public void modelTest() throws Exception{
+	void modelTest() throws Exception{
 		InExpressionTreeImpl tree = parse("a in (a,b,c)", Kind.IN_EXPRESSION);
 		assertNotNull(tree);
 		assertNotNull(tree.expression());

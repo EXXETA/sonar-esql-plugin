@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,16 +17,16 @@
  */
 package com.exxeta.iss.sonar.esql.api.tree;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.parser.EsqlLegacyGrammar;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
 
-public class KeywordTest {
+class KeywordTest {
 
 	@Test
-	public void reservedKeywords(){
+	void reservedKeywords(){
 		assertThat(EsqlLegacyGrammar.reservedKeyword)
 		.matches("WHEN")
 		.matches("when")
@@ -34,14 +34,14 @@ public class KeywordTest {
 	}
 
 	@Test
-	public void nonReservedKeywords(){
+	void nonReservedKeywords(){
 		assertThat(EsqlLegacyGrammar.nonReservedKeyword)
 		.matches("CALL")
 		.matches("call")
 		;
 	}
 	@Test
-	public void keywords(){
+	void keywords(){
 		assertThat(EsqlLegacyGrammar.keyword)
 		.matches("CALL")
 		.matches("WHEN")

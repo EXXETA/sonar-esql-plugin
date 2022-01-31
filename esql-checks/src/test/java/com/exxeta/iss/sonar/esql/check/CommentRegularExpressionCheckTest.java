@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,13 +21,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
 
-public class CommentRegularExpressionCheckTest {
+class CommentRegularExpressionCheckTest {
 	@Test
-	public void test() {
+	void test() {
 		CommentRegularExpressionCheck check = new CommentRegularExpressionCheck();
 
 		check.setRegularExpression("(?i).*TODO.*");
@@ -39,7 +39,7 @@ public class CommentRegularExpressionCheckTest {
 	}
 
 	@Test
-	public void exception() {
+	void exception() {
 		CommentRegularExpressionCheck check = new CommentRegularExpressionCheck();
 
 		try {
@@ -51,7 +51,7 @@ public class CommentRegularExpressionCheckTest {
 	}
 
 	@Test
-	public void emptyPattern() {
+	void emptyPattern() {
 		CommentRegularExpressionCheck check = new CommentRegularExpressionCheck();
 
 		check.setRegularExpression("");
@@ -62,7 +62,7 @@ public class CommentRegularExpressionCheckTest {
 	}
 
 	@Test
-	public void noMatch() {
+	void noMatch() {
 		CommentRegularExpressionCheck check = new CommentRegularExpressionCheck();
 
 		check.setRegularExpression("(?i).*FIXME.*");

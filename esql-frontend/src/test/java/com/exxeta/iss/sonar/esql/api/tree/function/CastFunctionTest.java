@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,18 +18,18 @@
 package com.exxeta.iss.sonar.esql.api.tree.function;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class CastFunctionTest extends EsqlTreeModelTest<CastFunctionTree> {
+class CastFunctionTest extends EsqlTreeModelTest<CastFunctionTree> {
 
 	@Test
-	public void castFunction() {
+	void castFunction() {
 		assertThat(Kind.CAST_FUNCTION).matches("CAST(source AS DATE FORMAT pattern)").matches("CAST(7, 6, 5 AS DATE)")
 				.matches("CAST(7.4e0, 6.5e0, 5.6e0 AS DATE)")
 				.matches("CAST(3.1e0, 4.2e0, 5.3e0, 6.4e0, 7.5e0, 8.6789012e0 AS GMTTIMESTAMP)")
@@ -40,7 +40,7 @@ public class CastFunctionTest extends EsqlTreeModelTest<CastFunctionTree> {
 	}
 
 	@Test
-	public void modelTest() throws Exception {
+	void modelTest() throws Exception {
 		CastFunctionTree tree = parse("CAST(source AS DATE FORMAT pattern)", Kind.CAST_FUNCTION);
 
 		assertNotNull(tree.castKeyword());

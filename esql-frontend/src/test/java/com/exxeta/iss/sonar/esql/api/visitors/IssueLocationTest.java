@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,17 +19,17 @@ package com.exxeta.iss.sonar.esql.api.visitors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree;
 import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxTrivia;
 import com.exxeta.iss.sonar.esql.tree.impl.lexical.InternalSyntaxToken;
 import com.google.common.collect.ImmutableList;
 
-public class IssueLocationTest {
+class IssueLocationTest {
 
 	@Test
-	public void several_lines_token() throws Exception {
+	void several_lines_token() {
 		String tokenValue = "\"first line\\\n" + "second\"";
 
 		IssueLocation location = new IssueLocation(createToken(3, 2, tokenValue));
@@ -38,7 +38,7 @@ public class IssueLocationTest {
 	}
 
 	@Test
-	public void several_lines_comment() throws Exception {
+	void several_lines_comment() {
 		String tokenValue = "/*first line\n" + "second*/";
 
 		IssueLocation location = new IssueLocation(createToken(3, 2, tokenValue));

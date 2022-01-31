@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,25 +18,25 @@
 package com.exxeta.iss.sonar.esql.api.tree.statement;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.statement.DeleteStatementTree;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class DeleteStatementTest extends EsqlTreeModelTest<DeleteStatementTree> {
+class DeleteStatementTest extends EsqlTreeModelTest<DeleteStatementTree> {
 
 	@Test
-	public void deleteStatement() {
+	void deleteStatement() {
 		assertThat(Kind.DELETE_STATEMENT)
 		.matches("DELETE FIELD OutputRoot.XMLNS.Data.Folder1.Folder12;")
 		.matches("DELETE LASTCHILD OF Cursor;");
 	}
 	
 	@Test
-	public void modelTest() throws Exception{
+	void modelTest() throws Exception{
 		DeleteStatementTree tree = parse("DELETE LASTCHILD OF Cursor;", Kind.DELETE_STATEMENT);
 		assertNotNull(tree.deleteKeyword());
 		assertNotNull(tree.qualifier());

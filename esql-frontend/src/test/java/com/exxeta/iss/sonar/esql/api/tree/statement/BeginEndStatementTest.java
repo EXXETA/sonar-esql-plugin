@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,19 +17,18 @@
  */
 package com.exxeta.iss.sonar.esql.api.tree.statement;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
-import com.exxeta.iss.sonar.esql.api.tree.statement.BeginEndStatementTree;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class BeginEndStatementTest extends EsqlTreeModelTest<BeginEndStatementTree> {
+class BeginEndStatementTest extends EsqlTreeModelTest<BeginEndStatementTree> {
 
 	@Test
-	public void modelTest() throws Exception {
+	void modelTest() throws Exception {
 		BeginEndStatementTree tree = parse("BEGIN CALL A(); END;", Kind.BEGIN_END_STATEMENT);
 
 		assertNotNull(tree.beginKeyword());
@@ -41,7 +40,7 @@ public class BeginEndStatementTest extends EsqlTreeModelTest<BeginEndStatementTr
 	}
 
 	@Test
-	public void modelTestWithLabel() throws Exception {
+	void modelTestWithLabel() throws Exception {
 		BeginEndStatementTree tree = parse("A: BEGIN CALL A(); END A;", Kind.BEGIN_END_STATEMENT);
 
 		assertNotNull(tree.labelName1());

@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,28 +20,28 @@ package com.exxeta.iss.sonar.esql.check.naming;
 import java.io.File;
 
 import com.exxeta.iss.sonar.esql.check.naming.FileNameCheck;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
 
-public class FileNameCheckTest {
-	@Test
-	public void test_negative() {
-		FileNameCheck check = new FileNameCheck();
-		check.format = "^[a-z][a-zA-Z]{1,30}\\.esql$";
-		EsqlCheckVerifier.issues(check, new File("src/test/resources/test.esql"))
-				.noMore();
-	}
+class FileNameCheckTest {
+    @Test
+    void test_negative() {
+        FileNameCheck check = new FileNameCheck();
+        check.format = "^[a-z][a-zA-Z]{1,30}\\.esql$";
+        EsqlCheckVerifier.issues(check, new File("src/test/resources/test.esql"))
+                .noMore();
+    }
 
-	@Test
-	public void test_positive() {
-		FileNameCheck check = new FileNameCheck();
-		check.format = "^[A-Z][a-zA-Z]{1,30}\\.esql$";
-		EsqlCheckVerifier.issues(check, new File("src/test/resources/test.esql"))
-				.next()
-				.withMessage(
-						"Rename file \"test.esql\"  to match the regular expression ^[A-Z][a-zA-Z]{1,30}\\.esql$.")
-				.noMore();
-	}
+    @Test
+    void test_positive() {
+        FileNameCheck check = new FileNameCheck();
+        check.format = "^[A-Z][a-zA-Z]{1,30}\\.esql$";
+        EsqlCheckVerifier.issues(check, new File("src/test/resources/test.esql"))
+                .next()
+                .withMessage(
+                        "Rename file \"test.esql\"  to match the regular expression ^[A-Z][a-zA-Z]{1,30}\\.esql$.")
+                .noMore();
+    }
 
 }

@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,17 +18,17 @@
 package com.exxeta.iss.sonar.esql.api.tree.function;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class TrimFunctionTest  extends EsqlTreeModelTest<TrimFunctionTree> {
+class TrimFunctionTest  extends EsqlTreeModelTest<TrimFunctionTree> {
 
 	@Test
-	public void trimFunction() {
+	void trimFunction() {
 		assertThat(Kind.TRIM_FUNCTION)
 			.matches("TRIM(TRAILING 'b' FROM 'aaabBb')")
 			.matches("TRIM('  a  ')")
@@ -36,7 +36,7 @@ public class TrimFunctionTest  extends EsqlTreeModelTest<TrimFunctionTree> {
 	}
 
 	@Test
-	public void modelTest() throws Exception{
+	void modelTest() throws Exception{
 		TrimFunctionTree tree = parse("TRIM(TRAILING 'b' FROM 'aaabBb')", Kind.TRIM_FUNCTION);
 		
 		assertNotNull(tree.trimKeyword());

@@ -39,7 +39,6 @@
     "NonReservedKeyword",
     "OneStatementPerLine",
     "ParameterWithDirection",
-    "ParsingError",
     "PassThruStatement",
     "PropagateConsistency",
     "PropagateToLabel",

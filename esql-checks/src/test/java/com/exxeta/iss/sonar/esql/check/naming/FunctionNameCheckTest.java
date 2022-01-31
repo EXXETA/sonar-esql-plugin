@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,13 +20,13 @@ package com.exxeta.iss.sonar.esql.check.naming;
 import java.io.File;
 
 import com.exxeta.iss.sonar.esql.check.naming.FunctionNameCheck;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.checks.verifier.EsqlCheckVerifier;
 
-public class FunctionNameCheckTest {
+class FunctionNameCheckTest {
 	@Test
-	public void testIgnoreMain() throws Exception {
+	void testIgnoreMain() throws Exception {
 		FunctionNameCheck check = new FunctionNameCheck();
 
 		EsqlCheckVerifier.issues(check, new File("src/test/resources/functionName.esql")).next().atLine(2)
@@ -39,7 +39,7 @@ public class FunctionNameCheckTest {
 	}
 
 	@Test
-	public void test() throws Exception {
+	void test() throws Exception {
 		FunctionNameCheck check = new FunctionNameCheck();
 		check.ignoreMain=false;
 

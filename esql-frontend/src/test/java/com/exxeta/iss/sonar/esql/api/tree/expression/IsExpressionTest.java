@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,20 +19,20 @@ package com.exxeta.iss.sonar.esql.api.tree.expression;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
 import org.assertj.core.api.Assertions;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.symbols.type.TypableTree;
 import com.exxeta.iss.sonar.esql.tree.symbols.type.RoutineType;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class IsExpressionTest extends EsqlTreeModelTest<IsExpressionTree>{
+class IsExpressionTest extends EsqlTreeModelTest<IsExpressionTree>{
 
 	@Test
-	public void expression() {
+	void expression() {
 		assertThat(Kind.IS_EXPRESSION)
 		.matches("a is null")
 		.matches("a is not false")
@@ -43,7 +43,7 @@ public class IsExpressionTest extends EsqlTreeModelTest<IsExpressionTree>{
 	}
 	
 	@Test
-	public void modelTest() throws Exception {
+	void modelTest() throws Exception {
 		IsExpressionTree tree = parse("a IS NULL", Kind.IS_EXPRESSION);
 		assertNotNull(tree);
 		assertNotNull(tree.expression());

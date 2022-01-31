@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,19 +18,19 @@
 package com.exxeta.iss.sonar.esql.api.tree;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class FieldReferenceTest extends EsqlTreeModelTest<FieldReferenceTree> {
+class FieldReferenceTest extends EsqlTreeModelTest<FieldReferenceTree> {
 
 
 	@Test
-	public void pathElement(){
+	void pathElement(){
 		assertThat(Kind.PATH_ELEMENT)
 		.matches("a")
 		.matches("Field [> ]")
@@ -56,7 +56,7 @@ public class FieldReferenceTest extends EsqlTreeModelTest<FieldReferenceTree> {
 
 	}
 	@Test
-	public void fielReference() {
+	void fielReference() {
 		assertThat(Kind.FIELD_REFERENCE)
 		.matches("(XML.Element)NSpace1:Element1[2]")
 			.matches("a")
@@ -76,7 +76,7 @@ public class FieldReferenceTest extends EsqlTreeModelTest<FieldReferenceTree> {
 	}
 	
 	@Test
-	public void model() throws Exception{
+	void model() throws Exception{
 		FieldReferenceTree tree = parse("(XML.Element)NSpace1:Element1[<2].{nsexp()}:{nameexp()}.*:abc.:aaa.*", Kind.FIELD_REFERENCE);
 		assertNotNull(tree);
 		assertNotNull(tree.pathElement());

@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,24 +18,24 @@
 package com.exxeta.iss.sonar.esql.api.tree.statement;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.statement.LoopStatementTree;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class LoopStatementTest extends EsqlTreeModelTest<LoopStatementTree>{
+class LoopStatementTest extends EsqlTreeModelTest<LoopStatementTree>{
 	@Test
-	public void loopStatement(){
+	void loopStatement(){
 		assertThat(Kind.LOOP_STATEMENT)
 		.matches("X : LOOP  IF i>= 4 THEN LEAVE X; END IF;  SET i = i + 1;END LOOP X;")
 		.matches("LOOP  IF i>= 4 THEN LEAVE X; END IF;  SET i = i + 1;END LOOP;");
 	}
 	
 	@Test
-	public void modelTest() throws Exception{
+	void modelTest() throws Exception{
 		LoopStatementTree tree = parse("X : LOOP  IF i>= 4 THEN LEAVE X; END IF;  SET i = i + 1;END LOOP X;", Kind.LOOP_STATEMENT);
 		assertNotNull(tree.label());
 		assertNotNull(tree.colon());

@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2021 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,25 +18,25 @@
 package com.exxeta.iss.sonar.esql.api.tree.statement;
 
 import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
 import com.exxeta.iss.sonar.esql.api.tree.statement.IfStatementTree;
 import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
 
-public class IfStatementTest extends EsqlTreeModelTest<IfStatementTree> {
+class IfStatementTest extends EsqlTreeModelTest<IfStatementTree> {
 	@Test
-	public void ifStatement() {
+	void ifStatement() {
 		assertThat(Kind.IF_STATEMENT).matches("IF TRUE THEN CALL B(); END IF;");
 
 	}
 
 	@Test
-	public void modelTest() throws Exception {
+	void modelTest() throws Exception {
 		IfStatementTree tree = parse("IF TRUE THEN CALL A(); ELSEIF TRUE THEN CALL B(); ELSE CALL C(); END IF;", Kind.IF_STATEMENT);
 		assertNotNull(tree.ifKeyword());
 		assertNotNull(tree.condition());
