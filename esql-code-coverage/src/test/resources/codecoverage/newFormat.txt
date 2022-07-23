@@ -1,0 +1,1 @@
+2022-01-13 13:53:51.022424   498100  UserTrace   BIP2540I: Node '': Finished evaluating expression 'CARDINALITY(InputRoot.*:*[])' at (org.abhi.TransformXMLToJSON_Compute.CopyMessageHeaders, 4.11). The result was '2'.

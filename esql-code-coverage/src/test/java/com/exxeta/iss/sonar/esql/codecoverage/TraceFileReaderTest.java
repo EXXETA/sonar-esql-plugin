@@ -147,5 +147,15 @@ class TraceFileReaderTest {
 		});
 		assertThat(trace).isNotNull();
 	}
+	@Test
+	void readerTestNewFormat() {
 
+
+		TraceFileReader reader = new TraceFileReader(
+			new File("src/test/resources/codecoverage/newFormat.txt")).readTrace(testVisitor);
+		assertEquals(1, reader.getModuleCount());
+		assertNotNull(reader.getModuleExecutionData("org.abhi.TransformXMLToJSON_Compute"));
+		assertEquals(1, reader.getModuleExecutionData("org.abhi.TransformXMLToJSON_Compute").size());
+
+	}
 }
