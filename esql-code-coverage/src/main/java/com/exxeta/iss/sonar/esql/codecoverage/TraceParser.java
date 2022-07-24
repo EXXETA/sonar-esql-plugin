@@ -72,7 +72,7 @@ public class TraceParser extends DefaultHandler {
                 }
                 break;
             default:
-                LOG.warn("unsupported trace tag " + localName);
+                LOG.debug("unsupported trace tag " + localName);
         }
 
     }
@@ -86,7 +86,7 @@ public class TraceParser extends DefaultHandler {
             case "Insert":
                 insertType = null;
             default:
-                LOG.warn("unsupported trace tag " + localName);
+                LOG.debug("unsupported trace tag " + localName);
         }
     }
 
