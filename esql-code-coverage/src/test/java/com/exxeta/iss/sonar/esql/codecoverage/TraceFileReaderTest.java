@@ -54,9 +54,9 @@ class TraceFileReaderTest {
 				new File("src/test/resources/codecoverage/MessageRoutingSampleTrace.txt")).readTrace(testVisitor);
 		assertEquals(3, reader.getModuleCount());
 		assertNotNull(reader.getModuleExecutionData(""));
-		assertEquals(2, reader.getModuleExecutionData("").size());
+		assertEquals(1, reader.getModuleExecutionData("").size());
 		assertEquals(3, reader.getModuleExecutionData(".Refresh_memory_cache_Compute").size());
-		assertEquals(36, reader.getModuleExecutionData(".Routing_using_memory_cache_Compute").size());
+		assertEquals(15, reader.getModuleExecutionData(".Routing_using_memory_cache_Compute").size());
 
 		reader = new TraceFileReader(null).readTrace(testVisitor);
 
@@ -147,5 +147,15 @@ class TraceFileReaderTest {
 		});
 		assertThat(trace).isNotNull();
 	}
+	@Test
+	void readerTestNewFormat() {
 
+
+		TraceFileReader reader = new TraceFileReader(
+			new File("src/test/resources/codecoverage/newFormat.txt")).readTrace(testVisitor);
+		assertEquals(1, reader.getModuleCount());
+		assertNotNull(reader.getModuleExecutionData("org.abhi.TransformXMLToJSON_Compute"));
+		assertEquals(1, reader.getModuleExecutionData("org.abhi.TransformXMLToJSON_Compute").size());
+
+	}
 }

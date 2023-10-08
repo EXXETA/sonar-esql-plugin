@@ -1,0 +1,1 @@
+2022-01-13 13:53:51.022760   498100  UserTrace   BIP2537I: Node 'org.abhi.TransformXMLToJSON.CreateReqeustMessage': Executing statement   'SET OutputRoot.JSON.Data.address1 = InputRoot.XMLNSC.Input.Details.Address1;' at (org.abhi.TransformXMLToJSON_Compute.Main, 6.3).
