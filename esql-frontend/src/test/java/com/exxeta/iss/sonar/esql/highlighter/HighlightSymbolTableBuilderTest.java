@@ -88,7 +88,7 @@ class HighlightSymbolTableBuilderTest extends EsqlTreeModelTest<Tree> {
     String filename = "symbolHighlightingBom.esql";
 
     HighlightSymbolTableBuilder.build(newSymbolTable(filename), context(inputFile));
-    assertThat(Files.toString(inputFile.file(), inputFile.charset()).startsWith("\uFEFF")).isTrue();
+    assertThat(Files.asCharSource(inputFile.file(), inputFile.charset()).read().startsWith("\uFEFF")).isTrue();
     assertThat(references("moduleKey:" + filename, 1, 16)).containsOnly(textRange(2, 11, 12));
   }
 
