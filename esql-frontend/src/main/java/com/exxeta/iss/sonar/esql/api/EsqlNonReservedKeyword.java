@@ -58,6 +58,8 @@ public enum EsqlNonReservedKeyword implements TokenType, GrammarRuleKey {
 	CURRENT_TIMESTAMP("CURRENT_TIMESTAMP"),
 	//DATA("DATA"),
 	DATABASE("DATABASE"),
+
+	DATABASEEVENT("DATABASEEVENT"),
 	DATE("DATE"),
 	DAY("DAY"),
 	DAYOFWEEK("DAYOFWEEK"),

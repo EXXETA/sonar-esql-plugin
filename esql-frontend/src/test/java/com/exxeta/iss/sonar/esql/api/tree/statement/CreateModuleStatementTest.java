@@ -40,4 +40,10 @@ class CreateModuleStatementTest extends EsqlTreeModelTest<CreateModuleStatementT
 
 
     }
+
+    @Test
+    void createDatabaseEventModule() {
+        assertThat(Kind.CREATE_MODULE_STATEMENT)
+            .matches("CREATE DATABASEEVENT MODULE AB\n END MODULE;");
+    }
 }
