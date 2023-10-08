@@ -95,11 +95,6 @@ public class SymbolVisitor extends DoubleDispatchVisitor {
 					addUsageFor(identifierTree, Usage.Kind.READ);
 				}
 			}
-		} else if (tree.is(Tree.Kind.BINDING_IDENTIFIER)){
-			if (tree.parent() != null && tree.parent().parent() instanceof CreateRoutineTreeImpl){
-				addUsageFor(tree, Usage.Kind.DECLARATION);
-
-			}
 		}
 		super.visitIdentifier(tree);
 	}
