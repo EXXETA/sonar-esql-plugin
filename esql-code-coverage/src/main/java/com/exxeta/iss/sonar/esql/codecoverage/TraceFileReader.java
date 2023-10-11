@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2023 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -45,13 +45,11 @@ public class TraceFileReader {
 
     private Pattern pattern;
 
-    private static final String PATTERN_REGEX = ".{1,1000} at \\('(.{0,100})', '(\\w{1,5})\\.\\w{1,5}'\\).{0,1000}";
-
+    private static final String PATTERN_REGEX = ".{1,1000}Executing statement   ''?+(.{1,1000}?)''?+ at \\('?(.{0,100}?)'?+, '?(\\w{1,5})\\.\\w{1,5}'?\\).{0,1000}";
     //Contains the executionData per module
     private HashMap<String, ModuleExecutionData> moduleCache = new HashMap<>();
 
     public TraceFileReader(File traceFile) {
-
         pattern = Pattern.compile(PATTERN_REGEX);
         this.traceFile = traceFile;
     }
@@ -146,19 +144,15 @@ public class TraceFileReader {
     private void readLine(String line) {
         Matcher matcher = pattern.matcher(line);
         if (matcher.matches()) {
-            String function = matcher.group(1).trim();
-            String relativeLine = matcher.group(2).trim();
-            int statementBegin = line.indexOf("''") + 2;
-            int statementEnd = line.lastIndexOf("''", line.indexOf(" at "));
-            if (statementEnd > statementBegin) {
-                String statement = line.substring(statementBegin, statementEnd)
-                        .trim();
-                String schemaAndModuleName = "";
-                if (function.contains(".")) {
-                    schemaAndModuleName = function.substring(0, function.lastIndexOf('.')).trim();
-                }
-                addExecution(function, relativeLine, statement, schemaAndModuleName);
+            String function = matcher.group(2).trim();
+            String relativeLine = matcher.group(3).trim();
+
+            String statement = matcher.group(1);
+            String schemaAndModuleName = "";
+            if (function.contains(".")) {
+                schemaAndModuleName = function.substring(0, function.lastIndexOf('.')).trim();
             }
+            addExecution(function, relativeLine, statement, schemaAndModuleName);
         }
     }
 

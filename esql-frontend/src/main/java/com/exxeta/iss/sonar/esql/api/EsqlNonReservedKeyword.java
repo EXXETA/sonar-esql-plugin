@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2023 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -58,6 +58,8 @@ public enum EsqlNonReservedKeyword implements TokenType, GrammarRuleKey {
 	CURRENT_TIMESTAMP("CURRENT_TIMESTAMP"),
 	//DATA("DATA"),
 	DATABASE("DATABASE"),
+
+	DATABASEEVENT("DATABASEEVENT"),
 	DATE("DATE"),
 	DAY("DAY"),
 	DAYOFWEEK("DAYOFWEEK"),

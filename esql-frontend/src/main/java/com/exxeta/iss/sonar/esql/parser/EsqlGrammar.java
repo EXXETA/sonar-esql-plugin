@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2023 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -277,7 +277,7 @@ public class EsqlGrammar {
 		return b.<CreateModuleStatementTreeImpl>nonterminal(Kind.CREATE_MODULE_STATEMENT)
 				.is(f.createModuleStatement(b.token(EsqlNonReservedKeyword.CREATE),
 						b.firstOf(b.token(EsqlNonReservedKeyword.COMPUTE), b.token(EsqlNonReservedKeyword.DATABASE),
-								b.token(EsqlNonReservedKeyword.FILTER)),
+							b.token(EsqlNonReservedKeyword.FILTER),b.token(EsqlNonReservedKeyword.DATABASEEVENT)),
 						b.token(EsqlNonReservedKeyword.MODULE), BINDING_IDENTIFIER(),
 						b.zeroOrMore(b.firstOf(ROUTINE_DECLARATION(), DECLARE_STATEMENT())),
 						b.token(EsqlNonReservedKeyword.END), b.token(EsqlNonReservedKeyword.MODULE),

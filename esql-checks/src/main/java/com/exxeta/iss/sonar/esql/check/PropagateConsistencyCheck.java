@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2023 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -88,14 +88,14 @@ public class PropagateConsistencyCheck extends DoubleDispatchVisitorCheck {
             projectDirectory = projectDirectory.getParentFile();
         }
         while (projectDirectory != null) {
-            LOG.info("Checking " + projectDirectory.getAbsolutePath());
+            LOG.debug("Checking " + projectDirectory.getAbsolutePath());
             if (new File(projectDirectory, ".project").exists()) {
-                LOG.info("Returning " + projectDirectory.getAbsolutePath());
+                LOG.info("Project directory " + projectDirectory.getAbsolutePath());
                 return projectDirectory.toPath();
             }
             projectDirectory = projectDirectory.getParentFile();
         }
-        LOG.info("Nothing found.");
+        LOG.info("No .project file found");
         return null;
     }
 

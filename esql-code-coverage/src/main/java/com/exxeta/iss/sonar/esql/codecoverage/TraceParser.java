@@ -1,6 +1,6 @@
 /*
  * Sonar ESQL Plugin
- * Copyright (C) 2013-2022 Thomas Pohl and EXXETA AG
+ * Copyright (C) 2013-2023 Thomas Pohl and EXXETA AG
  * http://www.exxeta.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -72,7 +72,7 @@ public class TraceParser extends DefaultHandler {
                 }
                 break;
             default:
-                LOG.warn("unsupported trace tag " + localName);
+                LOG.debug("unsupported trace tag " + localName);
         }
 
     }
@@ -86,7 +86,7 @@ public class TraceParser extends DefaultHandler {
             case "Insert":
                 insertType = null;
             default:
-                LOG.warn("unsupported trace tag " + localName);
+                LOG.debug("unsupported trace tag " + localName);
         }
     }
 

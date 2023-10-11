@@ -31,6 +31,7 @@ This open source plugin can be used to analyze the ESQL-sourcecode of IBM App Co
 
 ## History
 
+- 3.4.0 - New coverage format, bugfixes, Sonar 9.4
 - 3.3.0 - Upgrade to SonarQube 8.9
 - 3.0.0 - Bugfixes, upgrade to sonar SonarQube 7.9
 - 2.3.0 - Additional rules, upgrade to SonarQube 6.7, copy paste detector
