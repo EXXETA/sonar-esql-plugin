@@ -65,7 +65,7 @@ public class CommitStatementTreeImpl extends EsqlTree implements CommitStatement
 
 	@Override
 	public Kind getKind() {
-		return Kind.ROLLBACK_STATEMENT;
+		return Kind.COMMIT_STATEMENT;
 	}
 
 	@Override

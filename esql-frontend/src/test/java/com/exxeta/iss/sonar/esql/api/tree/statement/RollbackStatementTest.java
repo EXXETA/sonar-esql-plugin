@@ -17,12 +17,32 @@
  */
 package com.exxeta.iss.sonar.esql.api.tree.statement;
 
-import com.exxeta.iss.sonar.esql.api.tree.FieldReferenceTree;
-import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
+import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public interface CommitStatementTree extends StatementTree{
+import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
+import org.junit.jupiter.api.Test;
 
-	SyntaxToken commitKeyword();
-	FieldReferenceTree databaseReference();
-	SyntaxToken semi();
+class RollbackStatementTest extends EsqlTreeModelTest<RollbackStatementTree> {
+
+
+	@Test
+	void commitStatement(){
+		assertThat(Kind.ROLLBACK_STATEMENT)
+		.matches("ROLLBACK;");
+
+	}
+	
+	@Test
+	void modelTest() throws Exception {
+		RollbackStatementTree tree = parse("ROLLBACK Database.{Source};", Kind.ROLLBACK_STATEMENT);
+		assertNotNull(tree.rollbackKeyword());
+
+		assertNotNull(tree.databaseReference());
+
+		assertNotNull(tree.semi());
+
+	}
+	
 }

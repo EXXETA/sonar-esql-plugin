@@ -17,12 +17,32 @@
  */
 package com.exxeta.iss.sonar.esql.api.tree.statement;
 
-import com.exxeta.iss.sonar.esql.api.tree.FieldReferenceTree;
-import com.exxeta.iss.sonar.esql.api.tree.lexical.SyntaxToken;
+import static com.exxeta.iss.sonar.esql.utils.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public interface CommitStatementTree extends StatementTree{
+import com.exxeta.iss.sonar.esql.api.tree.Tree.Kind;
+import com.exxeta.iss.sonar.esql.utils.EsqlTreeModelTest;
+import org.junit.jupiter.api.Test;
 
-	SyntaxToken commitKeyword();
-	FieldReferenceTree databaseReference();
-	SyntaxToken semi();
+class CommitStatementTest extends EsqlTreeModelTest<CommitStatementTree> {
+
+
+	@Test
+	void commitStatement(){
+		assertThat(Kind.COMMIT_STATEMENT)
+		.matches("COMMIT;");
+
+	}
+	
+	@Test
+	void modelTest() throws Exception {
+		CommitStatementTree tree = parse("COMMIT Database.{Source};", Kind.COMMIT_STATEMENT);
+		assertNotNull(tree.commitKeyword());
+
+		assertNotNull(tree.databaseReference());
+
+		assertNotNull(tree.semi());
+
+	}
+	
 }
