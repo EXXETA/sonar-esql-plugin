@@ -17,6 +17,8 @@
  */
 package com.exxeta.iss.sonar.esql.api.visitors;
 
+import com.exxeta.iss.sonar.esql.tree.impl.statement.CommitStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.RollbackStatementTreeImpl;
 import java.util.Iterator;
 import java.util.List;
 
@@ -606,4 +608,10 @@ public abstract class DoubleDispatchVisitor implements TreeVisitor {
 		scanChildren(tree);
 	}
 
+	public void visitRollbackStatement(RollbackStatementTreeImpl tree) {
+		scanChildren(tree);
+	}
+	public void visitCommitStatement(CommitStatementTreeImpl tree) {
+		scanChildren(tree);
+	}
 }

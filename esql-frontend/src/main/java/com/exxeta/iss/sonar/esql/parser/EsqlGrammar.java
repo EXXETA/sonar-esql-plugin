@@ -93,6 +93,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.AttachStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.BeginEndStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CallStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CaseStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.CommitStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ControlsTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateFunctionStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.CreateModuleStatementTreeImpl;
@@ -131,6 +132,7 @@ import com.exxeta.iss.sonar.esql.tree.impl.statement.ResignalStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ResultSetTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ReturnStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.ReturnTypeTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.RollbackStatementTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.RoutineBodyTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.SetColumnTreeImpl;
 import com.exxeta.iss.sonar.esql.tree.impl.statement.SetStatementTreeImpl;
@@ -453,7 +455,7 @@ public class EsqlGrammar {
 	}
 
 	private StatementTree DATABASE_UPDATE_STATEMENT() {
-		return b.firstOf(DELETE_FROM_STATEMENT(), INSERT_STATEMENT(), PASSTHRU_STATEMENT(), UPDATE_STATEMENT());
+		return b.firstOf(COMMIT_STATEMENT(), DELETE_FROM_STATEMENT(), INSERT_STATEMENT(), PASSTHRU_STATEMENT(), ROLLBACK_STATEMENT(), UPDATE_STATEMENT());
 	}
 
 	private StatementTree NODE_INTERACTION_STATEMENT() {
@@ -1097,7 +1099,15 @@ public class EsqlGrammar {
 				)
 		));
 	}
-	
+
+	public CommitStatementTreeImpl COMMIT_STATEMENT(){
+		return b.<CommitStatementTreeImpl>nonterminal(Kind.COMMIT_STATEMENT).is (f.commitStatement(
+			b.token(EsqlNonReservedKeyword.COMMIT),b.optional(FIELD_REFERENCE()),
+			b.token(EsqlLegacyGrammar.EOS)
+		));
+	}
+
+
 	public DeleteFromStatementTreeImpl DELETE_FROM_STATEMENT(){
 		return b.<DeleteFromStatementTreeImpl>nonterminal(Kind.DELETE_FROM_STATEMENT).is (f.deleteFromStatement(
 				b.token(EsqlNonReservedKeyword.DELETE),b.token(EsqlReservedKeyword.FROM),FIELD_REFERENCE(),
@@ -1125,7 +1135,13 @@ public class EsqlGrammar {
 				)), b.token(EsqlLegacyGrammar.EOS)
 		));
 	}
-	
+
+	public RollbackStatementTreeImpl ROLLBACK_STATEMENT(){
+		return b.<RollbackStatementTreeImpl>nonterminal(Kind.ROLLBACK_STATEMENT).is (f.rollbackStatement(
+			b.token(EsqlNonReservedKeyword.ROLLBACK),b.optional(FIELD_REFERENCE()),
+			b.token(EsqlLegacyGrammar.EOS)
+		));
+	}
 	public UpdateStatementTreeImpl UPDATE_STATEMENT(){
 		return b.<UpdateStatementTreeImpl>nonterminal(Kind.UPDATE_STATEMENT).is(f.updateStatement(
 				b.token(EsqlNonReservedKeyword.UPDATE), 

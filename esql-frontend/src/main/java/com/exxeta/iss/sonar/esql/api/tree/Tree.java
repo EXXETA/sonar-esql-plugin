@@ -17,6 +17,8 @@
  */
 package com.exxeta.iss.sonar.esql.api.tree;
 
+import com.exxeta.iss.sonar.esql.tree.impl.statement.CommitStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.RollbackStatementTreeImpl;
 import java.util.stream.Stream;
 
 import com.exxeta.iss.sonar.esql.api.tree.statement.JavaClassloaderServiceTree;
@@ -266,7 +268,9 @@ public interface Tree {
 		VARIABLE_REFERENCE(VariableReferenceTree.class), 
 		LIST_CONSTRUCTOR_FUNCTION(ListConstructorFunctionTree.class),
 		NULLABLE(NullableTree.class),
-		JAVA_CLASSLOADER_SERVICE(JavaClassloaderServiceTree.class);
+		JAVA_CLASSLOADER_SERVICE(JavaClassloaderServiceTree.class),
+		ROLLBACK_STATEMENT(RollbackStatementTreeImpl.class),
+		COMMIT_STATEMENT(CommitStatementTreeImpl.class);
 
 		final Class<? extends Tree> associatedInterface;
 

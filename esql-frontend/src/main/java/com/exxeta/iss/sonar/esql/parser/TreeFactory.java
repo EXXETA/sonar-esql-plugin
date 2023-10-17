@@ -17,6 +17,8 @@
  */
 package com.exxeta.iss.sonar.esql.parser;
 
+import com.exxeta.iss.sonar.esql.tree.impl.statement.CommitStatementTreeImpl;
+import com.exxeta.iss.sonar.esql.tree.impl.statement.RollbackStatementTreeImpl;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -1732,6 +1734,19 @@ public class TreeFactory {
 		return new InsertStatementTreeImpl(insertKeyword, intoKeyword, tableReference,
 				columns.isPresent() ? columns.get() : null, valuesKeyword, openingParenthesis,
 				expressionList(expression, restExpression), closingParenthesis, semi);
+	}
+
+	public CommitStatementTreeImpl commitStatement(InternalSyntaxToken commitKeyword,
+												   Optional<FieldReferenceTreeImpl> databaseReference,
+												   InternalSyntaxToken semi) {
+
+		return new CommitStatementTreeImpl(commitKeyword, databaseReference.orNull(), semi);
+	}
+	public RollbackStatementTreeImpl rollbackStatement(InternalSyntaxToken rollbackKeyword,
+													 Optional<FieldReferenceTreeImpl> databaseReference,
+													 InternalSyntaxToken semi) {
+
+		return new RollbackStatementTreeImpl(rollbackKeyword, databaseReference.orNull(), semi);
 	}
 
 	public PassthruStatementTreeImpl passthruExpressionList(ParameterListTreeImpl expressionList) {
