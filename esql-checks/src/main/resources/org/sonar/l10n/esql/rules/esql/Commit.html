@@ -1,0 +1,6 @@
+<p>Avoid using the COMMIT statement in ESQL code, as it can undermine the transaction
+    handling mechanism of the message flow.  Instead, consider restructuring the flow
+    to handle smaller transactions or committing all changes at once. This approach
+    helps ensure that the transaction handling mechanism operates correctly and reliably,
+    without risking unexpected behavior or data loss. By avoiding the use of COMMIT statements,
+    you can help maintain the integrity and consistency of the message flow's data.</p>
