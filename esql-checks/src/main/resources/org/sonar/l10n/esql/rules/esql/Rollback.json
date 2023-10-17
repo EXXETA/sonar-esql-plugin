@@ -1,0 +1,13 @@
+{
+  "title": "ROLLBACK should not be used.",
+  "type": "CODE_SMELL",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "20min"
+  },
+  "tags": [
+    "bad-practice"
+  ],
+  "defaultSeverity": "Major"
+}

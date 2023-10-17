@@ -1,0 +1,5 @@
+<p>Avoid using the ROLLBACK statement in ESQL code, as it can undermine the transaction
+    handling mechanism of the message flow. Instead, consider using the THROW statement to
+    raise an exception and trigger a rollback of the entire message flow. This approach helps
+    ensure that the transaction handling mechanism operates correctly and reliably, without
+    risking unexpected behavior or data loss.</p>
